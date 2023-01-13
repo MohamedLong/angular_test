@@ -1,0 +1,125 @@
+<div class="grid">
+    <div class="col-12">
+
+        <p-toast></p-toast>
+
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus" class="p-button-success mr-2 mb-2" (click)="openNew()"></button>
+                    <button pButton pRipple label="{{ 'operations.delete' | translate }}" icon="pi pi-trash" class="p-button-danger mb-2" (click)="deleteSelectedEntries()" [disabled]="!selectedEntries || !selectedEntries.length"></button>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{'operations.import' | translate}}" chooseLabel="Import" class="mr-2 mb-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="{{'operations.export' | translate}}" icon="pi pi-upload" class="p-button-help mb-2" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="currencies" [columns]="cols" [rows]="10" [paginator]="true" [globalFilterFields]="['id','currencyName','currencyCode','cuRate']"
+                     [(selection)]="selectedEntries" [rowHover]="true" dataKey="id"
+                     styleClass="p-datatable-customers"
+                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between table-header">
+                        <h5 class="m-0">{{ 'currency.title' | translate }}</h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="{{ 'operations.filter' | translate }}" />
+                    </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="id">Id <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="currencyCode">{{ 'currency.tableColumn.currencyCode' | translate }}<p-sortIcon field="currencyCode"></p-sortIcon>
+                        <p-columnFilter type="text" field="currencyCode" display="menu" placeholder="{{ 'currency.tableColumn.currencyCodeSearch' | translate }}"></p-columnFilter>
+                        </th>
+                        <th pSortableColumn="{{ 'currency.tableColumn.currencyName' | translate }}' | translate }}">Currency Name<p-sortIcon field="currencyName"></p-sortIcon>
+                        <p-columnFilter type="text" field="currencyName" display="menu" placeholder="{{ 'currency.tableColumn.currencyNameSearch' | translate }}"></p-columnFilter>
+                        </th>
+                        <th pSortableColumn="cuRate">{{ 'currency.tableColumn.currencyRate' | translate }} <p-sortIcon field="cuRate"></p-sortIcon></th>
+                        <th>{{ 'operations.title' | translate }}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-currency>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="currency"></p-tableCheckbox>
+                        </td>
+                        <td><span class="p-column-title">{{ 'currency.tableColumn.id' | translate }}</span>
+                            {{currency.id}}
+                        </td>
+                        <td><span class="p-column-title">{{ 'currency.tableColumn.currencyCode' | translate }}</span>
+                            {{currency.currencyCode}}
+                        </td>
+                        <td><span class="p-column-title">{{ 'currency.tableColumn.currencyName' | translate }}</span>
+                            {{currency.currencyName}}
+                        </td>
+                        <td><span class="p-column-title">Rate</span>
+                            {{currency.cuRate}}
+                        </td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editAction(currency)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteAction(currency)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">
+                        In total there are {{currencies ? currencies.length : 0 }} currencies.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="currencyDialog" [style]="{width: '450px'}" header="Currency Details" [modal]="true" styleClass="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="field">
+                    <label for="name">{{ 'currency.tableColumn.currencyCode' | translate }}</label>
+                    <input type="text" pInputText id="currencyCode" [(ngModel)]="currency.currencyCode" required autofocus />
+                    <small class="p-invalid" *ngIf="submitted && !currency.currencyCode">{{ 'currency.currencyDialog.currencyCodeRequired' | translate }}</small>
+                </div>
+                <div class="field">
+                    <label for="name">{{ 'currency.tableColumn.currencyName' | translate }}</label>
+                    <input type="text" pInputText id="currencyName" [(ngModel)]="currency.currencyName"/>
+                    <small class="p-invalid" *ngIf="submitted && !currency.currencyName">{{ 'currency.currencyDialog.currencyNameRequired' | translate }}</small>
+                </div>
+                <div class="field col">
+                    <label for="name">{{ 'currency.tableColumn.currencyRate' | translate }}</label>
+                    <p-inputNumber id="cuRate" [(ngModel)]="currency.cuRate" maxFractionDigits="2"></p-inputNumber>
+                    <small class="p-invalid" *ngIf="submitted && !currency.cuRate">{{ 'currency.tableName.currencyRateRequired' | translate }}</small>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="{{ 'operations.cancel' | translate }}" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="currency">{{ 'operations.deleteMessage' | translate }} <b>{{currency.currencyName}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteSingleDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteMultipleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>{{ 'operations.deleteAllMessage' | translate }}</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteMultipleDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
+</div>

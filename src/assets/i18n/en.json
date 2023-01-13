@@ -1,0 +1,460 @@
+{
+    "auth": {
+        "form": {
+            "name": "Username",
+            "firstname": "First Name",
+            "lastname": "Last Name",
+            "phone": "Phone",
+            "password": "Password",
+            "newPass": "New Password",
+            "email": "Email",
+            "tenant": "Tenant",
+            "login": "Login",
+            "signup": "Sign up"
+        },
+        "login": {
+            "header": "Welcome",
+            "footer_text": "dont't have an account?",
+            "header_text": "Please use the form to sign-in Xgarage"
+        },
+        "signup": {
+            "header": "Create Account",
+            "footer_text": "already have an account?",
+            "header_text": "Sign up with your email to get started!"
+        },
+        "resetpass": {
+            "header": "Reset Your Password",
+            "header_text": "Please enter your current and new password",
+            "reset": "Reset"
+        }
+    },
+    "TOPBAR": {
+        "TITLE": "X Garage Dashboard",
+        "SELECT": "Change language",
+        "MENU": {
+            "CHANGEPASSWORD": "Change Password",
+            "LOGOUT": "Logout"
+        }
+    },
+    "operations": {
+        "title": "Operations",
+        "new": "New",
+        "run": "Run",
+        "confirmAction": "Confirm Action",
+        "confirmCloneAction": "Confirm Clone Action",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "actions": "Actions",
+        "save": "Save",
+        "print": "Print",
+        "saveAll": "Save All",
+        "add": "Add",
+        "filter": "Search...",
+        "export": "Export",
+        "import": "Import",
+        "deleteMessage": "Are you sure you want to delete",
+        "deleteAllMessage": "Are you sure you want to delete selected entries?",
+        "confirmActionMessage": "Are you sure you want to do this action?",
+        "confirmCloneActionMessage": "Are you sure you want to do this action?",
+        "deleteConfirm": "Confirm",
+        "addPayment": "Add Payment",
+        "operations": "Operations",
+        "tableFilter": {
+            "clear": "Clear",
+            "apply": "Apply..."
+        }
+    },
+    "common": {
+        "id": "ID",
+        "description": "Description",
+        "customer": "Customer Name",
+        "customerRequired": "Customer name is required.",
+        "customerSearch": "Search by customer name",
+        "supplier": "Supplier Name",
+        "supplierRequired": "Supplier name is required",
+        "supplierSearch": "Search by supplier name",
+        "select": "Select a ",
+        "fixed": "Fixed",
+        "vatValue": " VAT Value",
+        "notes": "Notes",
+        "terms": "Terms and Conditions:  ",
+        "currency": "Currency",
+        "currencySearch": "Search by currency",
+        "currencyRequired": "Currency is required.",
+        "cuRate": "Currency Rate",
+        "cuRateRequired": "Currency rate is required.",
+        "cuRatePositiveConstraint": "Cu Rate should be > 0..",
+        "amount": "Amount",
+        "discountDialog": "Discount Details",
+        "vatDialog": " VAT Details",
+        "amountSeacrh": "Search by amount",
+        "amountRequired": "Amount is required.",
+        "qty": "Quantity",
+        "qtyRequired": "Quantity is required.",
+        "qtyPositiveConstraint": "Quantity should be >= 0.",
+        "qtySearch": "Search by Quantity",
+        "item": "Item Name",
+        "itemRequired": "Item is required.",
+        "itemSearch": "Search by item",
+        "metric": "Metric",
+        "metricRequired": "Metric is required.",
+        "metricSearch": "Search by metric",
+        "discount": "Discount",
+        "discountRequired": "Discount is required.",
+        "discountSearch": "Search by discount",
+        "discountType": "Discount Type",
+        "discountTypeRequired": "Discount type is required.",
+        "discountTypeSearch": "Search by discount type",
+        "debit": "Debit",
+        "stock": "Warehouse",
+        "stockRequired": "Warehouse is required.",
+        "stockSearch": "Search by warehouse",
+        "processId": "Process ID",
+        "processIdRequired": "Process id is required.",
+        "processIdSearch": "Search by process id",
+        "debitRequired": "Debit is required.",
+        "debitSearch": "Search by depit",
+        "credit": "Credit",
+        "creditRequired": "Credit is required.",
+        "creditSearch": "Search by credit",
+        "voucher": "Voucher",
+        "voucherType": "Voucher Type",
+        "payType": "Payment Type",
+        "payTypeRequired": "Payment type is required.",
+        "payTypeSearch": "Search by Payment Type",
+        "payMethod": "Payment Method",
+        "payMethodRequired": "Payment method is required.",
+        "payMethodSearch": "Search by payment method",
+        "famount": "Famount",
+        "famountSearch": "Search by famount",
+        "total": "Total",
+        "totalRequired": "Total is required.",
+        "totalSearch": "Search by total",
+        "unitPrice": "Unit Price",
+        "unitPriceRequired": "Unit price is required.",
+        "unitPricePositiveConstraint": "Unit price should be > 0.",
+        "unitPriceSearch": "Search by unit price",
+        "famountRequired": "Famount is required.",
+        "insertUser": "Insert User",
+        "insertUserSearch": "Search by insert user",
+        "status": "Status",
+        "statusSearch": "Search by status",
+        "insertDate": "Insert Date",
+        "insertDateSearch": "Search by insert date",
+        "tax": "TAX",
+        "taxRequired": "Tax is Required",
+        "vat": "VAT",
+        "subTotal": "Sub Total",
+        "grandTotal": "Grand Total",
+        "vatRequired": "Vat is Required",
+        "invoice": "invoice",
+        "netAmount": "Net Amount",
+        "payedStatus": "Payment Status",
+        "deliveryStatus": "Delivery Status",
+        "costCenter": "Cost Center",
+        "department": "Department",
+        "saleCost": "Sales Account"
+    },
+    "currency": {
+        "title": "Manage Currencies",
+        "export": "Export",
+        "tableColumn": {
+            "id": "ID",
+            "currencyCode": "Currency Code",
+            "currencyCodeSearch": "Search by currency code",
+            "currencyName": "Currency Name",
+            "currencyNameSearch": "Search by currency name",
+            "currencyRate": "Currency Rate"
+        },
+        "currencyDialog": {
+            "title": "Metric Details",
+            "currencyCodeRequired": "Currency Code is required.",
+            "currencyNameRequired": "Currency Name is required.",
+            "currencyRateRequired": "Currency Rate is Required."
+        }
+    },
+    "paymentMethod": {
+        "title": "Manage Payment Methods",
+        "export": "Export",
+        "tableColumn": {
+            "id": "ID",
+            "name": "Method Name",
+            "nameSearch": "Search by method name"
+        },
+        "paymentMethodDialog": {
+            "title": "Payment Method Details",
+            "nameRequired": "Method Name is required."
+        }
+    },
+    "paymentType": {
+        "title": "Manage Payment Types",
+        "export": "Export",
+        "tableColumn": {
+            "id": "ID",
+            "name": "Type Name",
+            "nameSearch": "Search by type name"
+        },
+        "paymentTypeDialog": {
+            "title": "Payment Types Details",
+            "nameRequired": "Type Name is required."
+        }
+    },
+    "status": {
+        "title": "Manage Status",
+        "export": "Export",
+        "tableColumn": {
+            "id": "ID",
+            "nameEn": "Status English Name",
+            "nameAr": "Status Arabic Name"
+        },
+        "statusDialog": {
+            "title": "Status Details",
+            "nameEnRequired": "Status English Name is required.",
+            "nameArRequired": "Status Arabic Name is required."
+        }
+    },
+    "metric": {
+        "title": "Manage Metrics",
+        "export": "Export",
+        "tableColumn": {
+            "id": "ID",
+            "metricCode": "Metric Code",
+            "metricCodeSearch": "Search by metric code",
+            "metricName": "Metric Name",
+            "metricNameSearch": "Search by metric name"
+        },
+        "metricDialog": {
+            "title": "Metric Details",
+            "metricCodeRequired": "Metric Code is required.",
+            "metricNameRequired": "Metric Name is required."
+        }
+    },
+    "item": {
+        "title": "Manage Items",
+        "export": "Export",
+        "tableColumn": {
+            "id": "ID",
+            "itemCode": "Item Code",
+            "itemCodeSearch": "Search by item code",
+            "itemName": "Item Name",
+            "itemNameSearch": "Search by item name",
+            "description": "Description",
+            "minQty": "Min Qty",
+            "maxQty": "Max Qty",
+            "price": "Price",
+            "margin": "Margin",
+            "metric": "Metric",
+            "itemType": "Item Type",
+            "itemOperation": ""
+        },
+        "itemDialog": {
+            "title": "Item Details",
+            "itemCodeRequired": "Item Code is required.",
+            "itemNameRequired": "Item Name is required.",
+            "itemPriceRequired": "Item Price is required."
+        }
+    },
+    "itemType": {
+        "title": "Manage Item Types",
+        "export": "Export",
+        "tableColumn": {
+            "id": "ID",
+            "typeName": "Item Type Name",
+            "itemTypeNameSearch": "Search by item type name",
+            "itemTypeOperation": ""
+        },
+        "itemTypeDialog": {
+            "title": "Item Type Details",
+            "itemTypeNameRequired": "Item Type Name is required."
+        }
+    },
+    "partyType": {
+        "title": "Manage Party Types",
+        "export": "Export",
+        "tableColumn": {
+            "id": "ID",
+            "typeName": "Party Type Name",
+            "partyTypeNameSearch": "Search by party type name",
+            "partyTypeOperation": ""
+        },
+        "partyTypeDialog": {
+            "title": "Party Type Details",
+            "partyTypeNameRequired": "Party Type Name is required."
+        }
+    },
+    "party": {
+        "title": "Manage Parties",
+        "export": "Export",
+        "tableColumn": {
+            "id": "ID",
+            "partyName": "Party Type Name",
+            "partyNameSearch": "Search by party name",
+            "partyCountry": "Party County",
+            "partyCountrySearch": "Search by party country",
+            "partyState": "Party State",
+            "partyStateSearch": "Search by party state",
+            "partyCity": "Party City",
+            "partyCitySearch": "Search by party city",
+            "partyPhone": "Party Phone",
+            "partyClass": "Party Class",
+            "partyClassSearch": "Search by party class",
+            "partyGroup": "Party Group",
+            "partyGroupSearch": "Search by party group",
+            "partyAcc": "Party Account",
+            "partyAccSearch": "Search by party account",
+            "partyStatus": "Party Status",
+            "partyStatusSearch": "Search by party status",
+            "partyDate": "Party Date",
+            "partyDateSearch": "Search by party date",
+            "jobName": "Job Name",
+            "jobNameSearch": "Search by job name",
+            "email": "Email",
+            "partyTypeOperation": ""
+        },
+        "partyDialog": {
+            "title": "Item Type Details",
+            "partyNameRequired": "Party Name is required.",
+            "partyCountryRequired": "Party County is required.",
+            "partyStateRequired": "Party State is required.",
+            "partyCityRequired": "Party City is required."
+        }
+    },
+    "USER": {
+        "TITLE": "Users",
+        "NEW": "New",
+        "EXPORT": "Export",
+        "TABLEFILTER": {
+            "CLEAR": "Clear",
+            "SEARCH": "Search Keyword"
+        },
+        "TABLECOLUMN": {
+            "ID": "ID",
+            "USERID": "User ID",
+            "USERIDFILTER": "Search by user id",
+            "FIRSTNAME": "First Name",
+            "FIRSTNAMEFILTER": "Search by first name",
+            "LASTNAME": "Last Name",
+            "LASTNAMEFILTER": "Search by last name",
+            "EMAIL": "Email",
+            "EMAILFILTER": "Search by email",
+            "PHONE": "Phone",
+            "PHONEFILTER": "Search by phone",
+            "CREATEDDATE": "Create Date",
+            "ENABLED": "Enabled",
+            "ENABLEDFILTER": "Search by enabled",
+            "EMPTYMESSAGE": "No users found.",
+            "LOADING": "Loading users data. Please wait."
+        },
+        "DIALOG": {
+            "TITLE": "User Details",
+            "FIRSTNAME": "First Name",
+            "FIRSTNAMEREQUIRED": "First Name is Required",
+            "LASTNAME": "Last Name",
+            "LASTNAMEREQUIRED": "Last Name is Required",
+            "PHONE": "Phone",
+            "PHONEREQUIRED": "Phone is Required",
+            "EMAIL": "Email",
+            "EMAILREQUIRED": "Email is Required",
+            "USERID": "User ID",
+            "USERIDREQUIRED": "User ID is Required",
+            "PASSWORD": "Password",
+            "PASSWORDREQUIRED": "Password is Required",
+            "ROLESELECTOR": "select a role",
+            "CANCEL": "Cancel",
+            "SAVE": "Save",
+            "DELETEPROMPT": "Are you sure you want to delete ",
+            "PROMPTNOOPTION": "No",
+            "PROMPTYESOPTION": "Yes"
+        }
+    },
+    "USERMAINMENU": {
+        "TITLE": "User Main Menues",
+        "NEW": "New",
+        "EXPORT": "Export",
+        "TABLEFILTER": {
+            "CLEAR": "Clear",
+            "SEARCH": "Search Keyword"
+        },
+        "TABLECOLUMN": {
+            "ID": "ID",
+            "ROLE": "Role",
+            "PAGE": "Page",
+            "PAGEFILTER": "Search by page name",
+            "EMPTYMESSAGE": "No user main menues found.",
+            "LOADING": "Loading user main menues data. Please wait."
+        },
+        "DIALOG": {
+            "TITLE": "User Main Menu Details",
+            "ROLE": "Role",
+            "ROLESELECTOR": "select a role",
+            "ROLEREQUIRED": "Role is Required",
+            "MODULE": "Module",
+            "MODULESELECTOR": "select a module",
+            "MODULEREQUIRED": "Module is Required",
+            "CANCEL": "Cancel",
+            "SAVE": "Save",
+            "DELETEPROMPT": "Are you sure you want to delete ",
+            "PROMPTNOOPTION": "No",
+            "PROMPTYESOPTION": "Yes"
+        }
+    },
+    "USERSUBMENU": {
+        "TITLE": "User Sub Menues",
+        "NEW": "New",
+        "EXPORT": "Export",
+        "TABLEFILTER": {
+            "CLEAR": "Clear",
+            "SEARCH": "Search Keyword"
+        },
+        "TABLECOLUMN": {
+            "ID": "ID",
+            "ROLE": "Role",
+            "PAGE": "Page",
+            "PAGEFILTER": "Search by page name",
+            "EMPTYMESSAGE": "No user sub menues found.",
+            "LOADING": "Loading user sub menues data. Please wait."
+        },
+        "DIALOG": {
+            "TITLE": "User Sub Menu Details",
+            "ROLE": "Role",
+            "ROLESELECTOR": "select a role",
+            "ROLEREQUIRED": "Role is Required",
+            "MODULE": "Module",
+            "MODULESELECTOR": "select a module",
+            "PAGE": "Page",
+            "PAGESELECTOR": "select a page",
+            "PAGEREQUIRED": "Page is Required",
+            "NEWAUTH": "New",
+            "DELETEAUTH": "Delete",
+            "EDITAUTH": "Edit",
+            "PRINTAUTH": "Print",
+            "CONFIRMAUTH": "Confirm",
+            "CONFIRMCANCELAUTH": "Confirm Cancel",
+            "CANCEL": "Cancel",
+            "SAVE": "Save",
+            "DELETEPROMPT": "Are you sure you want to delete ",
+            "PROMPTNOOPTION": "No",
+            "PROMPTYESOPTION": "Yes"
+        }
+    },
+    "CHANGEPASSWORD": {
+        "TITLE": "Change Password",
+        "FIELD": {
+            "OLDPASSWORD": "Old Password",
+            "NEWPASSWORD": "New Password",
+            "CONFIRMPASSWORD": "Confirm Password",
+            "MISMATCH": "new password and confirm password don't match",
+            "SAVE": "Save"
+        }
+    },
+    "LOGIN": {
+        "TITLE": "Welcome To Benasmaak Dashboard",
+        "TITLE2": "Sign in to continue",
+        "FIELD": {
+            "USERNAME": "Username",
+            "USERNAMEHOLDER": "Username",
+            "PASSWORD": "Password",
+            "SIGNIN": "Sign In"
+        }
+    }
+}

@@ -1,0 +1,31 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { config } from 'src/app/config';
+import { Role } from '../../common/model/role';
+import { DeleteMessage } from '../model/deleteMessage';
+
+@Injectable()
+export class RoleService {
+
+    constructor(private http: HttpClient) { }
+
+    getRoles() {
+        return this.http.get<Role[]>(`${config.dashboardUrl}/v1/role/all`)
+            .toPromise()
+            .then(res => res as Role[])
+            .then(data => data);
+    }
+
+    saveRole(role: Role) {
+        return this.http.post<Role>(`${config.dashboardUrl}/v1/role/save`,role)
+    }
+
+    updateRole(role: Role) {
+        return this.http.put<Role>(`${config.dashboardUrl}/v1/role/update`,role)
+    }
+
+    deleteRole(roleId: number) {
+        return this.http.delete<DeleteMessage>(`${config.dashboardUrl}/v1/role/delete/${roleId}`)
+    }
+
+}

@@ -1,0 +1,164 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card">
+      <p class="text-lg font-bold">Roles</p>
+      <p-toast key="tst" [baseZIndex]="99999"></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+              (click)="openNew()" [disabled]="!newAuth"></button>
+            <!-- <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedRoles()" [disabled]="!selectedRoles || !selectedRoles.length"></button> -->
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+          <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload> -->
+          <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+            (click)="dt.exportCSV()" [disabled]="!printAuth"></button>
+        </ng-template>
+      </p-toolbar>
+      <p-table #dt [value]="roles" [columns]="cols" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true"
+        styleClass="p-datatable-gridlines" [paginator]="true"
+        [globalFilterFields]="['roleDescription','roleName']" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+          <div class="flex justify-content-between flex-column sm:flex-row">
+            <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash"
+              (click)="clear(dt)"></button>
+            <span class="p-input-icon-left mb-2">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" #filter (input)="dt.filterGlobal($event.target.value, 'contains')"
+                placeholder="Search Keyword" class="w-full" />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th>
+              <div class="flex justify-content-between align-items-center">
+                Role Name
+                <p-columnFilter type="text" field="roleName" display="menu" placeholder="Search by name"></p-columnFilter>
+              </div>
+            </th>
+            <th>
+              <div class="flex justify-content-between align-items-center">
+                Role Description
+                <p-columnFilter type="text" field="roleDescription" display="menu"
+                  placeholder="Search by role description">
+                </p-columnFilter>
+              </div>
+            </th>
+            <th>
+              <div class="flex justify-content-between align-items-center">
+                Created At
+                <p-columnFilter type="date" field="createdAt" display="menu" placeholder="mm/dd/yyyy"></p-columnFilter>
+              </div>
+            </th>
+            <!-- <th>
+              <div class="flex justify-content-between align-items-center">
+                Permissions
+                <p-column field="permissions"></p-column>
+              </div>
+            </th> -->
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-role>
+          <tr>
+            <td style="min-width: 12rem;">
+              {{role.id}}
+            </td>
+            <td style="min-width: 12rem;">
+              {{role.roleName}}
+            </td>
+            <td style="min-width: 12rem;">
+              {{role.roleDescription}}
+            </td>
+            <td style="min-width: 12rem;">
+              {{role.createdAt | date:'medium'}}
+            </td>
+
+            <!-- <td style="min-width: 12rem;">
+              <button type="button" (click)="showPermissions(role.permissions)" pButton>
+                Permissions
+              </button>
+            </td> -->
+            <td>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
+                (click)="editRole(role)"></button>
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
+                (click)="deleteRole(role)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7">No roles found.</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="loadingbody">
+          <tr>
+            <td colspan="7">Loading roles data. Please wait.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+    <p-dialog [(visible)]="roleDialog" [style]="{width: '450px'}" header="Role Details" [modal]="true" class="p-fluid">
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="roleName">Role Name</label>
+          <input type="text" pInputText id="roleName" [(ngModel)]="role.roleName" required autofocus
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !role.roleName}" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !role.roleName">Role Name is required.</small>
+        </div>
+        <!-- <div class="field">
+          <label for="permissions">Permissions</label>
+          <p-multiSelect [options]="permissions" [(ngModel)]="selectedPermissions" defaultLabel="Select Permissions" optionLabel="permissionName"
+          display="chip"></p-multiSelect>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !role.permissions">pPermissions is
+            required.</small>
+        </div> -->
+        <div class="field">
+          <label for="roleDescription">Role Description</label>
+          <input type="text" pInputText id="roleDescription" [(ngModel)]="role.roleDescription" required autofocus
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !role.roleDescription}" />
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !role.roleDescription">Role Description is
+            required.</small>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveRole()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteRoleDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="role">Are you sure you want to delete <b>{{role.name}}</b>?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+          (click)="deleteRoleDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog [(visible)]="deleteRolesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span>Are you sure you want to delete selected roles?</span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+          (click)="deleteRolesDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+          (click)="confirmDeleteSelected()"></button>
+      </ng-template>
+    </p-dialog>
+  </div>
+</div>
