@@ -178,7 +178,7 @@ import { UserRolesComponent } from './xgarage/dashboard/component/user-roles/use
 import { UserMainMenuComponent } from './xgarage/dashboard/component/user-main-menu/user-main-menu.component';
 import { UserSubMenuComponent } from './xgarage/dashboard/component/user-sub-menu/user-sub-menu.component';
 import { ChangepasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
-import { PersmissionsComponent } from './xgarage/dashboard/component/persmissions/persmissions.component';
+import { PermissionsComponent } from './xgarage/dashboard/component/persmissions/permissions.component';
 import { RolesComponent } from './xgarage/dashboard/component/roles/roles.component';
 import { RolePermissionsComponent } from './xgarage/dashboard/component/role-permissions/role-permissions.component';
 import { PermissionService } from './xgarage/dashboard/service/permissionservice';
@@ -357,13 +357,13 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         UserMainMenuComponent,
         UserSubMenuComponent,
         ChangepasswordComponent,
-        PersmissionsComponent,
+        PermissionsComponent,
         RolesComponent,
         RolePermissionsComponent,
 
     ],
     providers: [
-        {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd,
+        {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService,
         CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService,
         PhotoService, ProductService, MenuService, AppBreadcrumbService, MetricService, StatusService, TenantService, CurrencyService,
         DialogService, UserSubMenuService, UserMainMenuService, MainMenuService, SubMenuService, PermissionService, RoleService, RolePermissionService

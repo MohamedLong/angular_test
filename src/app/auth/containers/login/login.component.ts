@@ -52,9 +52,9 @@ export class LoginComponent implements OnInit {
         {
           next: (success) => {
             console.log('login success');
-            // if(this.authService.isLoggedIn()){
+            if(this.authService.isLoggedIn()){
               this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
-            // }
+            }
           },
           error: (e) => {
             console.log("error : " + e.message);

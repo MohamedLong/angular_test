@@ -9,29 +9,29 @@ export class PermissionService {
     constructor(private http: HttpClient) { }
 
     getPermissions() {
-        return this.http.get<Permission[]>(`${config.dashboardUrl}/v1/permission/all`)
+        return this.http.get<Permission[]>(`${config.apiUrl}/v1/permission/all`)
             .toPromise()
             .then(res => res as Permission[])
             .then(data => data);
     }
 
     getRolePermissions(roleId: number) {
-      return this.http.get<Permission[]>(`${config.dashboardUrl}/v1/role/${roleId}`)
+      return this.http.get<Permission[]>(`${config.apiUrl}/v1/role/${roleId}`)
           .toPromise()
           .then(res => res as Permission[])
           .then(data => data);
   }
 
     savePermission(permission: Permission) {
-        return this.http.post<Permission>(`${config.dashboardUrl}/v1/permission/save`,permission)
+        return this.http.post<Permission>(`${config.apiUrl}/v1/permission/save`,permission)
     }
 
     updatePermission(permission: Permission) {
-        return this.http.put<Permission>(`${config.dashboardUrl}/v1/permission/update`,permission)
+        return this.http.put<Permission>(`${config.apiUrl}/v1/permission/update`,permission)
     }
 
     deletePermission(permissionId: number) {
-        return this.http.delete<{status: string}>(`${config.dashboardUrl}/v1/permission/delete/${permissionId}`)
+        return this.http.delete<{status: string}>(`${config.apiUrl}/v1/permission/delete/${permissionId}`)
     }
 
 

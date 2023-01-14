@@ -5,7 +5,7 @@ import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@an
 import { RoleService } from '../../service/roleservice';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { PersmissionsComponent } from '../persmissions/persmissions.component';
+import { PermissionsComponent } from '../persmissions/permissions.component';
 import { Permission } from 'src/app/xgarage/common/model/permission';
 import { PermissionService } from '../../service/permissionservice';
 import { Role } from 'src/app/xgarage/common/model/role';

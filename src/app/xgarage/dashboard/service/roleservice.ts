@@ -10,22 +10,22 @@ export class RoleService {
     constructor(private http: HttpClient) { }
 
     getRoles() {
-        return this.http.get<Role[]>(`${config.dashboardUrl}/v1/role/all`)
+        return this.http.get<Role[]>(`${config.apiUrl}/v1/role/all`)
             .toPromise()
             .then(res => res as Role[])
             .then(data => data);
     }
 
     saveRole(role: Role) {
-        return this.http.post<Role>(`${config.dashboardUrl}/v1/role/save`,role)
+        return this.http.post<Role>(`${config.apiUrl}/v1/role/save`,role)
     }
 
     updateRole(role: Role) {
-        return this.http.put<Role>(`${config.dashboardUrl}/v1/role/update`,role)
+        return this.http.put<Role>(`${config.apiUrl}/v1/role/update`,role)
     }
 
     deleteRole(roleId: number) {
-        return this.http.delete<DeleteMessage>(`${config.dashboardUrl}/v1/role/delete/${roleId}`)
+        return this.http.delete<DeleteMessage>(`${config.apiUrl}/v1/role/delete/${roleId}`)
     }
 
 }

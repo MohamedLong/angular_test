@@ -6,7 +6,7 @@ import { Permission } from 'src/app/xgarage/common/model/permission';
 
 @Component({
   selector: 'app-persmissions',
-  templateUrl: './persmissions.component.html',
+  templateUrl: './permissions.component.html',
   providers: [MessageService, ConfirmationService],
   styleUrls: ['../../../../demo/view/tabledemo.scss'],
   styles: [`
@@ -23,7 +23,7 @@ import { Permission } from 'src/app/xgarage/common/model/permission';
         }
     `]
 })
-export class PersmissionsComponent implements OnInit {
+export class PermissionsComponent implements OnInit {
 
   permissions: Permission[];
 

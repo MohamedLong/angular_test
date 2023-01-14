@@ -16,7 +16,7 @@ export class AuthService {
   private readonly JWT_TOKEN = 'JWT_TOKEN';
   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
   private loggedUser: string;
-  private apiUrl = config.apiUrl + '/api';
+  private apiUrl = config.apiUrl;
 
 
 
