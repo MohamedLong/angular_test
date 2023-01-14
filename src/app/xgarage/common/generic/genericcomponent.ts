@@ -66,7 +66,7 @@ export class GenericComponent{
 
     printAuth: boolean;
 
-    constructor(public route: ActivatedRoute, public datePipe: DatePipe, private breadcrumbService: AppBreadcrumbService, private tenantService: TenantService) {
+    constructor(public route: ActivatedRoute, public datePipe: DatePipe, private breadcrumbService: AppBreadcrumbService) {
                     this.extractPermissions();
     }
 
@@ -94,13 +94,6 @@ export class GenericComponent{
         this.minDate = year + '-' + month + '-' + day;
     }
 
-    getUserTenant() {
-        this.tenantService.getUserTenant().subscribe({
-            next: (tenant) => {
-                this.tenant = tenant;
-            }
-        });
-    }
 
     openNew() {
         this.master = {};
@@ -111,6 +104,13 @@ export class GenericComponent{
         this.masterDialog = true;
     }
 
+    editMaster(master: any) {
+        this.master = { ...master };
+        this.editable = true;
+        this.submitted = false;
+        this.masterDialog = true;
+      }
+    
 
     deleteSelectedEntries() {
         this.deleteMultipleDialog = true;
@@ -121,9 +121,9 @@ export class GenericComponent{
         this.submitted = false;
     }
 
-    deleteAction(masterDto: any) {
+    deleteAction(master: any) {
         this.deleteSingleDialog = true;
-        this.masterDto = { ...masterDto };
+        this.master = { ...master };
     }
 
 
@@ -142,7 +142,6 @@ export class GenericComponent{
         var currentDate = new Date();
         this.master.createdBy = insertUser;
         this.master.createdAt = currentDate;
-        this.getUserTenant();
     }
 
 

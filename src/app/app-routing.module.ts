@@ -58,6 +58,7 @@ import { UsersComponent } from './xgarage/dashboard/component/users/users.compon
 import { RolesComponent } from './xgarage/dashboard/component/roles/roles.component';
 import { ChangepasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
 import { PermissionsComponent } from './xgarage/dashboard/component/persmissions/permissions.component';
+import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
 
 const routes: Routes = [];
 
@@ -74,6 +75,7 @@ const routes: Routes = [];
                     {path: 'users', component: UsersComponent},
                     {path: 'roles', component: RolesComponent},
                     {path: 'permission', component: PermissionsComponent},
+                    {path: 'tenant', component: TenantComponent},
                     // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
                     // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},

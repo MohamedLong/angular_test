@@ -229,29 +229,21 @@
             "metricNameRequired": "Metric Name is required."
         }
     },
-    "item": {
+    "tenant": {
         "title": "Manage Items",
-        "export": "Export",
         "tableColumn": {
             "id": "ID",
-            "itemCode": "Item Code",
-            "itemCodeSearch": "Search by item code",
-            "itemName": "Item Name",
-            "itemNameSearch": "Search by item name",
-            "description": "Description",
-            "minQty": "Min Qty",
-            "maxQty": "Max Qty",
-            "price": "Price",
-            "margin": "Margin",
-            "metric": "Metric",
-            "itemType": "Item Type",
-            "itemOperation": ""
+            "name": "Tenant Name",
+            "nameSearch": "Search by tenant name",
+            "cr": "Tenant CR",
+            "crSearch": "Search by tenant cr",
+            "location": "Location"
         },
-        "itemDialog": {
-            "title": "Item Details",
-            "itemCodeRequired": "Item Code is required.",
-            "itemNameRequired": "Item Name is required.",
-            "itemPriceRequired": "Item Price is required."
+        "tenantDialog": {
+            "title": "Tenant Details",
+            "nameRequired": "Tenant name is required.",
+            "crRequired": "Tenant CR is required.",
+            "locationRequired": "Location is required."
         }
     },
     "itemType": {

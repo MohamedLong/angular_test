@@ -6,11 +6,12 @@ import { User } from '../../common/model/user';
 import { DeleteMessage } from '../model/deleteMessage';
 import { of } from 'rxjs';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserService {
 
   params: HttpParams;
   headers: HttpHeaders;
+
   constructor(private http: HttpClient) { }
 
   getUsers() {
