@@ -230,7 +230,7 @@
         }
     },
     "tenant": {
-        "title": "Manage Items",
+        "title": "Manage Tenants",
         "tableColumn": {
             "id": "ID",
             "name": "Tenant Name",
