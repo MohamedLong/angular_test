@@ -56,9 +56,10 @@ import { UserMainMenuComponent } from './xgarage/dashboard/component/user-main-m
 import { UserSubMenuComponent } from './xgarage/dashboard/component/user-sub-menu/user-sub-menu.component';
 import { UsersComponent } from './xgarage/dashboard/component/users/users.component';
 import { RolesComponent } from './xgarage/dashboard/component/roles/roles.component';
-import { ChangepasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
 import { PermissionsComponent } from './xgarage/dashboard/component/persmissions/permissions.component';
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
+import { ResetPasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
+import { SignupComponent } from './auth/containers/signup/signup.component';
 
 const routes: Routes = [];
 
@@ -71,7 +72,7 @@ const routes: Routes = [];
                     {path: '', component: DashboardComponent, canActivate: [RandomGuard]},
                     {path: 'mainmenu', component: UserMainMenuComponent},
                     {path: 'submenu', component: UserSubMenuComponent},
-                    {path: 'change-password', component: ChangepasswordComponent},
+                    {path: 'change-password', component: ResetPasswordComponent},
                     {path: 'users', component: UsersComponent},
                     {path: 'roles', component: RolesComponent},
                     {path: 'permission', component: PermissionsComponent},
@@ -137,7 +138,8 @@ const routes: Routes = [];
             // // {path: 'login', component: AppLoginComponent},
             // {path: 'landing', component: AppLandingComponent},
             // {path: 'pages/wizard', component: AppWizardComponent},
-            {path: 'login', component: LoginComponent, canActivate: [AuthGuard]}, //, canActivate: [AuthGuard]
+            {path: 'login', component: LoginComponent, canActivate: [AuthGuard]},
+            {path: 'signup', component: SignupComponent},
             {path: '**', redirectTo: ''},
         ], {scrollPositionRestoration: 'enabled'})
     ],

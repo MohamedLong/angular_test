@@ -24,6 +24,19 @@ export class AuthService {
   params: HttpParams;
   headers: HttpHeaders;
 
+  signup(body: { firstName: string, lasttName: string, phone: string, password: string, email: string, tenant: {id: number} }) {
+    return this.http.post(this.apiUrl + '/web/signup', body).pipe(
+        tap((tokens: Tokens) => {
+            this.storeTokens(tokens);
+        }),
+        mapTo(true),
+        catchError(error => {
+            console.log('error:', error)
+            return of(false);
+        })
+    )
+};
+
   login(user: { username: string, password: string }): Observable<boolean> {
     this.params = new HttpParams()
       .set("username", user.username)
@@ -128,4 +141,19 @@ export class AuthService {
   private removeUserFromStore() {
     localStorage.removeItem('user');
   }
+
+  changePassword(body: any) {
+    let user = this.getStoredUser();
+    let userEmail = JSON.parse(user).email;
+    return this.http.post(this.apiUrl + '/recoverPassword/' + userEmail, body).pipe(
+        tap(res => {
+            return res;
+        }),
+        mapTo(true),
+        catchError(error => {
+            console.log('error:', error)
+            return of(false);
+        })
+    )
+};
 }
