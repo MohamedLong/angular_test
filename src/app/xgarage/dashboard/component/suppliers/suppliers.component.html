@@ -1,1 +1,141 @@
-<p>suppliers works!</p>
+<div class="grid">
+    <div class="col-12">
+        <p-toast></p-toast>
+
+        <!-- //Tenant Components  -->
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
+                        class="p-button-success mr-2 mb-2" (click)="openNew()" [disabled]="newAuth===false"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <!-- <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['id','name','cr','location']"
+                [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                (onFilter)="onFilter($event, dt)"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between table-header">
+                        <h5 class="m-0">{{ 'tenant.title' | translate }}</h5>
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="{{ 'operations.filter' | translate }}" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id">{{ 'common.id' | translate }}<p-sortIcon field="id"></p-sortIcon>
+                        </th>
+                        <th pColumn="name">{{ 'tenant.tableColumn.name' | translate }}
+                        </th>
+                        <th pColumn="cr">{{ 'tenant.tableColumn.cr' | translate }}
+                        </th>
+                        <th pColumn="location">{{ 'tenant.tableColumn.location' | translate }}
+                        </th>
+                        <th pColumn="actions">Actions
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-tenant>
+                    <tr>
+                        <td>
+                            {{tenant.id}}
+                        </td>
+                        <td>
+                            {{tenant.name}}
+                        </td>
+                        <td>
+                            {{tenant.cr}}
+                        </td>
+                        <td>
+                            {{tenant.location}}
+                        </td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
+                              (click)="editMaster(tenant)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
+                              (click)="deleteAction(tenant)"></button>
+                          </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">
+                        In total there are {{masters ? masters.length : 0 }} Tenants.
+                    </div>
+                </ng-template>
+            </p-table> -->
+        </div>
+
+        <!-- add/update tenant dialog -->
+        <p-dialog [(visible)]="masterDialog" [style]="{width: '700px'}"
+            header="{{ 'supplier.supplierDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label for="name">{{ 'supplier.supplierDialog.name' | translate }}</label>
+                        <input type="text" pInputText id="name" #name="ngModel" [(ngModel)]="master.name" required
+                            autofocus />
+                        <!-- <small class="p-error" *ngIf="name.invalid && name.dirty">{{ 'tenant.tenantDialog.nameRequired' | translate }}</small> -->
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>{{ 'supplier.supplierDialog.phone' | translate }}</label>
+                        <input type="text" pInputText id="number" #name="ngModel" [(ngModel)]="master.number"
+                            required />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="cr">{{ 'supplier.supplierDialog.cr' | translate }}</label>
+                        <input type="text" pInputText id="cr" #cr="ngModel" [(ngModel)]="master.cr" required />
+                        <!-- <small class="p-error" *ngIf="cr.invalid && cr.dirty ">{{ 'tenant.tenantDialog.crRequired' | translate }}</small> -->
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="parts">{{ 'supplier.supplierDialog.part' | translate }}</label>
+                        <p-dropdown id="parts" [options]="partTypesList"
+                        optionLabel="partType" optionValue="id" [(ngModel)]="master.partTypes"></p-dropdown>
+                        <!-- <div class="text-left">
+                                <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
+                            </div> -->
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="services">{{ 'supplier.supplierDialog.service' | translate }}</label>
+                        <p-dropdown id="services" [options]="serviceTypesList"
+                        optionLabel="name" optionValue="id" [(ngModel)]="master.serviceTypes"></p-dropdown>
+                        <!-- <div class="text-left">
+                                <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
+                            </div> -->
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="brands">{{ 'supplier.supplierDialog.brand' | translate }}</label>
+                        <p-dropdown id="brands" [options]="brandsList"
+                        optionLabel="brandName" optionValue="id" [(ngModel)]="master.brand"></p-dropdown>
+                        <!-- <div class="text-left">
+                                <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
+                            </div> -->
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
+                    class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
+                    class="p-button-text" (click)="save()" [disabled]="!(editAuth && editable)"></button>
+            </ng-template>
+        </p-dialog>
+
+        <!-- <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="master">{{ 'operations.deleteMessage' | translate }} <b>{{master.name}}</b>?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteSingleDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog> -->
+    </div>
