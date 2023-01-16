@@ -15,7 +15,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsers() {
-    return this.http.get<User[]>(`${config.apiUrl}/v1/user/all`)
+    return this.http.get<User[]>(`${config.apiUrl}/user/all`)
       .toPromise()
       .then(res => res as User[])
       .then(data => data);
@@ -28,11 +28,15 @@ export class UserService {
   }
 
   saveUser(user: User) {
-    return this.http.post<User>(`${config.apiUrl}/v1/user/save/1`, user)
+    return this.http.post<User>(`${config.apiUrl}/user/save/1`, user)
+  }
+
+  saveNewUser(user: User) {
+    return this.http.post<User>(`${config.apiUrl}/web/signup`, user)
   }
 
   updateUser(user: User) {
-    return this.http.put<User>(`${config.apiUrl}/v1/user/update/1`, user)
+    return this.http.put<User>(`${config.apiUrl}/v1/user/update`, user)
   }
 
   deleteUser(userId: number) {

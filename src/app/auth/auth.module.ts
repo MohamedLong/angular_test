@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './containers/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AccordionModule } from 'primeng/accordion';
@@ -86,19 +86,21 @@ import { TreeModule } from 'primeng/tree';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeTableModule } from 'primeng/treetable';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
-// import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
-// import {AppLoginComponent} from '../pages/app.landing.component';
+import { SignupComponent } from './containers/signup/signup.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
 import { RandomGuard } from './guards/random.guard';
 import { TokenInterceptor } from './token.interceptor';
 import { BrowserModule } from '@angular/platform-browser';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatButtonModule } from '@angular/material/button';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(httpClient: HttpClient) {
+    return new TranslateHttpLoader(httpClient);
+}
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, SignupComponent],
   providers: [
     AuthGuard,
     AuthService,
@@ -197,7 +199,14 @@ import { BrowserModule } from '@angular/platform-browser';
     TreeModule,
     TreeSelectModule,
     TreeTableModule,
-    VirtualScrollerModule
+    VirtualScrollerModule,
+    TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+        }
+      })
   ]
 })
 export class AuthModule { }

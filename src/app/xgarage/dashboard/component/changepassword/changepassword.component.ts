@@ -1,62 +1,37 @@
-import { Router } from '@angular/router';
-import { UserService } from './../../service/userservice';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/auth/services/auth.service';
+import { MessageService } from 'primeng/api';
+import { AuthService } from '../../../../auth/services/auth.service';
 
 @Component({
-  selector: 'app-changepassword',
-  templateUrl: './changepassword.component.html',
-  styleUrls: ['../../../../demo/view/tabledemo.scss'],
+    selector: 'app-changepassword',
+    templateUrl: './changepassword.component.html',
+    providers: [MessageService]
 })
-export class ChangepasswordComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit {
 
-  passwordForm: FormGroup;
-  submitted = false;
-  userId: string;
+    constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService) { }
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private authService: AuthService, private router: Router) { }
+    resetPasswordForm: FormGroup = this.fb.group({
+        password: ['', Validators.required],
+        newPass: ['', Validators.required],
+    });
 
+    resetPasswordFormData: any = new FormData();
 
+    ngOnInit(): void {
+    }
 
-  ngOnInit() {
-    this.userId = JSON.parse(localStorage.getItem('user')).userId;
-    this.passwordForm = this.formBuilder.group({
-        oldPassword: ['', Validators.required],
-        password: [''],
-        confirm_password: ['']
-      }, {
-        validator: this.mustMatch('password', 'confirm_password')
-      }
-    );
+    onSubmit() {
+        //console.log(this.resetPasswordForm.value)
+        this.resetPasswordFormData.append('password', this.resetPasswordForm.get('password').value);
+        this.resetPasswordFormData.append('newPass', this.resetPasswordForm.get('newPass').value);
 
-  }
-
-  get c() { return this.passwordForm.controls; }
-
-  save() {
-    this.submitted = true;
-    this.userService.changePassword({userId:this.userId, oldPass:this.c.oldPassword.value, newPass:this.c.password.value})
-    console.log(this.passwordForm.value)
-  }
-
-  mustMatch(controlName: string, matchingControlName: string) {
-    return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
-
-      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
-        return;
-      }
-
-      // set error on matchingControl if validation fails
-      if (control.value !== matchingControl.value) {
-        matchingControl.setErrors({ mustMatch: true });
-      } else {
-        matchingControl.setErrors(null);
-      }
-      return null;
-    };
-  }
-
+        console.log(this.resetPasswordFormData)
+        this.authService.changePassword(this.resetPasswordFormData).subscribe(res => {
+            console.log(res)
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'your password was reset successfully' });
+            this.resetPasswordForm.reset('');
+        })
+    }
 }

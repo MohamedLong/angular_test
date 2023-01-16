@@ -110,7 +110,7 @@ export class GenericComponent{
         this.submitted = false;
         this.masterDialog = true;
       }
-    
+
 
     deleteSelectedEntries() {
         this.deleteMultipleDialog = true;

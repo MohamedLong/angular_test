@@ -153,6 +153,12 @@
                             </a>
                         </li>
                         <li class="layout-topbar-action-item">
+                            <a class="flex flex-row align-items-center" pRipple [routerLink]="['/change-password']">
+                                <i class="pi pi-key" [ngClass]="{'mr-2': !app.isRTL, 'ml-2': app.isRTL}"></i>
+                                <span>Change Password</span>
+                            </a>
+                        </li>
+                        <li class="layout-topbar-action-item">
                             <a class="flex flex-row align-items-center" pRipple>
                                 <i class="pi pi-file-o" [ngClass]="{'mr-2': !app.isRTL, 'ml-2': app.isRTL}"></i>
                                 <span>Terms of Usage</span>

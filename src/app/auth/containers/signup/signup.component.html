@@ -1,0 +1,70 @@
+<div class="pages-body login-page flex flex-column">
+    <p-toast></p-toast>
+
+    <div class="topbar p-3 flex justify-content-between flex-row align-items-center">
+        <div class="topbar-left ml-3 flex" routerLink="/">
+            <div class="logo">
+                <img src="assets/layout/images/xgarage_logo.png" alt="xgarage logo" />
+            </div>
+        </div>
+    </div>
+    <div class="align-self-center mt-auto mb-auto">
+        <div class="pages-panel card flex flex-column">
+            <h4>{{ 'auth.signup.header' | translate }}</h4>
+            <div class="pages-detail px-6">{{ 'auth.signup.header_text' | translate }}</div>
+            <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                <div class="input-panel flex flex-column px-3">
+                    <div class="p-inputgroup flex-column align-items-start mt-3">
+                        <span class="p-input-icon-left width-100">
+                            <i class="pi pi-user"></i>
+                            <input type="text" aria-describedby="username-help" id="firstName" pInputText
+                                formControlName="firstName" placeholder="{{ 'auth.form.firstname' | translate }}" required>
+                        </span>
+                        <small *ngIf="!signupForm.get('firstName').valid && signupForm.get('firstName').touched && signupForm.get('firstName').errors?.['required']" class="p-error block pt-1">First name is required.</small>
+                    </div>
+                    <div class="p-inputgroup mt-3 flex-column align-items-start">
+                        <span class="p-input-icon-left width-100">
+                            <i class="pi pi-user"></i>
+                            <input type="text" id="lastname" pInputText formControlName="lastName"
+                                placeholder="{{ 'auth.form.lastname' | translate }}" required>
+                        </span>
+                        <small *ngIf="!signupForm.get('lastName').valid && signupForm.get('lastName').touched && signupForm.get('lastName').errors?.['required']" class="p-error block pt-1">Last name is required.</small>
+                    </div>
+                    <div class="p-inputgroup mt-3 flex-column align-items-start">
+                        <span class="p-input-icon-left width-100">
+                            <i class="pi pi-phone"></i>
+                            <input type="number" id="phone"  pInputText formControlName="phone" placeholder="{{ 'auth.form.phone' | translate }}"
+                                required>
+                        </span>
+                        <small *ngIf="!signupForm.get('phone').valid && signupForm.get('phone').touched && signupForm.get('phone').errors?.['pattern']" class="p-error block pt-1">incorrect phone number.</small>
+                    </div>
+                    <div class="p-inputgroup mt-3 flex-column align-items-start">
+                        <span class="p-input-icon-left width-100">
+                            <i class="pi pi-at"></i>
+                            <input type="email" id="email" pInputText formControlName="email" placeholder="{{ 'auth.form.email' | translate }}"
+                                required>
+                        </span>
+                        <small *ngIf="!signupForm.get('email').valid && signupForm.get('email').touched && signupForm.get('email').errors?.['email']" class="p-error block pt-1">incorrect email.</small>
+                    </div>
+                    <div class="p-inputgroup mt-3 flex-column align-items-start">
+                        <span class="p-input-icon-left width-100">
+                            <i class="pi pi-lock"></i>
+                            <input type="password" id="password" pInputText formControlName="password"
+                                placeholder="{{ 'auth.form.password' | translate }}" required>
+                        </span>
+                        <small *ngIf="!signupForm.get('password').valid && signupForm.get('password').touched && signupForm.get('password').errors?.['required']" class="p-error block pt-1">please enter password.</small>
+                    </div>
+                    <div class="mt-3 mb-3 width-100">
+                        <p-dropdown id="tenant" formControlName="tenant" placeholder="{{ 'auth.form.tenant' | translate }}" [options]="tenanats"
+                            optionLabel="name" optionValue="id"></p-dropdown>
+                            <div class="text-left">
+                                <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
+                            </div>
+                    </div>
+                    <button type="submit" pButton pRipple label="{{ 'auth.form.signup' | translate | uppercase }}" class="w-full p-3 p-button-info"></button>
+                </div>
+            </form>
+            <p class="mt-2 uppercase">{{ 'auth.signup.footer_text' | translate }} <a class="fw-500" [ngStyle]="{color:'var(--blue-500)'}"
+                    [routerLink]="['']">{{ 'auth.form.login' | translate }}</a></p>
+        </div>
+    </div>

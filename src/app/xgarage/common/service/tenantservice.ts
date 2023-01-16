@@ -5,18 +5,20 @@ import { config } from "src/app/config";
 import { GenericService } from "../generic/genericservice";
 import { Tenant } from "../model/tenant";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class TenantService extends GenericService<Tenant>{
     constructor(http: HttpClient){
-        super(http, config.apiUrl);
+        super(http, config.apiUrl + '/tenant');
     }
 
     public getUserTenant(){
-        return this.http.get<Tenant>(this.apiServerUrl + '/api/tenant/user');
+        return this.http.get<Tenant>(this.apiServerUrl + '/tenant/user');
     }
 
     getAllTenants() {
-        return this.http.get<Tenant[]>(this.apiServerUrl + '/api/tenant/all').pipe(
+        return this.http.get<Tenant[]>(this.apiServerUrl + '/tenant/all').pipe(
             tap(res => {
                 return res;
             }), catchError(err => {
@@ -25,6 +27,5 @@ export class TenantService extends GenericService<Tenant>{
             })
         );
     }
-
 
 }

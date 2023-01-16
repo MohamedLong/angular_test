@@ -44,6 +44,8 @@
                         </th>
                         <th pColumn="location">{{ 'tenant.tableColumn.location' | translate }}
                         </th>
+                        <th pColumn="actions">Actions
+                        </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-tenant>
@@ -76,23 +78,27 @@
             </p-table>
         </div>
 
+        <!-- add/update tenant dialog -->
         <p-dialog [(visible)]="masterDialog" [style]="{width: '700px'}" header="{{ 'tenant.tenantDialog.title' | translate }}" [modal]="true"
             styleClass="p-fluid">
             <ng-template pTemplate="content">
                 <div class="formgrid grid">
                     <div class="field col-12 md:col-6">
                         <label for="name">{{ 'tenant.tableColumn.name' | translate }}</label>
-                        <input type="text" pInputText id="name" [(ngModel)]="master.name" required autofocus />
-                        <small class="p-error" *ngIf="submitted && !master.name">{{ 'tenant.tenantDialog.nameRequired' | translate }}</small>
+                        <input type="text" pInputText id="name" #name="ngModel" [(ngModel)]="master.name" required autofocus />
+                        <small class="p-error" *ngIf="name.invalid && name.dirty">{{ 'tenant.tenantDialog.nameRequired' | translate }}</small>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="cr">{{ 'tenant.tableColumn.cr' | translate }}</label>
-                        <input type="text" pInputText id="cr" [(ngModel)]="master.cr" required autofocus />
-                        <small class="p-error" *ngIf="submitted && !master.cr">{{ 'tenant.tenantDialog.crRequired' | translate }}</small>
+                        <input type="text" pInputText id="cr" #cr="ngModel" [(ngModel)]="master.cr" required />
+                        <small class="p-error" *ngIf="cr.invalid && cr.dirty ">{{ 'tenant.tenantDialog.crRequired' | translate }}</small>
                     </div>
                     <div class="field col-12">
                         <label>{{ 'tenant.tableColumn.location' | translate }}</label>
                         <textarea rows="1" cols="30" class="w-full" pInputTextarea [(ngModel)]="master.location"></textarea>
+                    </div>
+                    <div class="field col-12">
+                        <p-message severity="error" text="{{ 'tenant.tenantDialog.formRequired' | translate }}" *ngIf="submitted && (cr.invalid || name.invalid)"></p-message>
                     </div>
                 </div>
 

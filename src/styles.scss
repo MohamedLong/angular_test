@@ -5,3 +5,10 @@
 @import "../node_modules/@fullcalendar/daygrid/main.min.css";
 @import "../node_modules/@fullcalendar/timegrid/main.min.css";
 @import "./appdemo.scss";
+
+#tenant {
+    .p-dropdown {
+        width: 100%;
+        text-align: start;
+    }
+}

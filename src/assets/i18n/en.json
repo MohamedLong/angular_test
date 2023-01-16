@@ -243,7 +243,8 @@
             "title": "Tenant Details",
             "nameRequired": "Tenant name is required.",
             "crRequired": "Tenant CR is required.",
-            "locationRequired": "Location is required."
+            "locationRequired": "Location is required.",
+            "formRequired": "Please fill out required fields"
         }
     },
     "itemType": {

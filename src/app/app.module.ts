@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {BrowserModule} from '@angular/platform-browser';
-import {HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {CommonModule, HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -86,7 +86,6 @@ import {TooltipModule} from 'primeng/tooltip';
 import {TreeModule} from 'primeng/tree';
 import {TreeTableModule} from 'primeng/treetable';
 import {VirtualScrollerModule} from 'primeng/virtualscroller';
-
 import {AppCodeModule} from './app.code.component';
 import {AppComponent} from './app.component';
 import {AppMainComponent} from './app.main.component';
@@ -177,8 +176,8 @@ import { UsersComponent } from './xgarage/dashboard/component/users/users.compon
 import { UserRolesComponent } from './xgarage/dashboard/component/user-roles/user-roles.component';
 import { UserMainMenuComponent } from './xgarage/dashboard/component/user-main-menu/user-main-menu.component';
 import { UserSubMenuComponent } from './xgarage/dashboard/component/user-sub-menu/user-sub-menu.component';
-import { ChangepasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
 import { PermissionsComponent } from './xgarage/dashboard/component/persmissions/permissions.component';
+import { ResetPasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
 import { RolesComponent } from './xgarage/dashboard/component/roles/roles.component';
 import { RolePermissionsComponent } from './xgarage/dashboard/component/role-permissions/role-permissions.component';
 import { PermissionService } from './xgarage/dashboard/service/permissionservice';
@@ -198,6 +197,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 
 @NgModule({
     imports: [
+        CommonModule,
         AuthModule,
         BrowserModule,
         FormsModule,
@@ -357,12 +357,11 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         UserRolesComponent,
         UserMainMenuComponent,
         UserSubMenuComponent,
-        ChangepasswordComponent,
-        PermissionsComponent,
+        ResetPasswordComponent,
         RolesComponent,
         RolePermissionsComponent,
-        TenantComponent
-
+        TenantComponent,
+        PermissionsComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService,
