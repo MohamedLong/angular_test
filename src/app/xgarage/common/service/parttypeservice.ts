@@ -8,7 +8,7 @@ import { GenericService } from "../generic/genericservice";
 })
 export class PartTypesService extends GenericService<any>{
     constructor(http: HttpClient){
-        super(http, config.coreUrl + '/partTypes');
+        super(http, config.coreApiUrl + '/partTypes');
     }
 
 }

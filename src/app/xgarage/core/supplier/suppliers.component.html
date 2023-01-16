@@ -72,10 +72,10 @@
         </div>
 
         <!-- add/update tenant dialog -->
-        <p-dialog [(visible)]="masterDialog" [style]="{width: '700px'}"
-            header="{{ 'supplier.supplierDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
+        <p-dialog [(visible)]="masterDialog" [style]="{width: '700px', height: '80%'}"
+            header="{{ 'supplier.supplierDialog.title' | translate }}" [modal]="true" styleClass="p-fluid py-5">
             <ng-template pTemplate="content">
-                <div class="formgrid grid">
+                <div class="formgrid grid py-5">
                     <div class="field col-12 md:col-6">
                         <label for="name">{{ 'supplier.supplierDialog.name' | translate }}</label>
                         <input type="text" pInputText id="name" #name="ngModel" [(ngModel)]="master.name" required
@@ -84,7 +84,7 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label>{{ 'supplier.supplierDialog.phone' | translate }}</label>
-                        <input type="text" pInputText id="number" #name="ngModel" [(ngModel)]="master.number"
+                        <input type="text" pInputText id="number" #name="ngModel" [(ngModel)]="master.phoneNumber"
                             required />
                     </div>
                     <div class="field col-12 md:col-6">
@@ -94,24 +94,22 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="parts">{{ 'supplier.supplierDialog.part' | translate }}</label>
-                        <p-dropdown id="parts" [options]="partTypesList"
-                        optionLabel="partType" optionValue="id" [(ngModel)]="master.partTypes"></p-dropdown>
+                        <p-multiSelect id="parts" [virtualScroll]="true" [options]="partTypesList" optionValue="id" [(ngModel)]="master.partTypes" defaultLabel="Select part types" optionLabel="partType" selectedItemsLabel="{0} items selected"></p-multiSelect>
                         <!-- <div class="text-left">
                                 <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
                             </div> -->
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="services">{{ 'supplier.supplierDialog.service' | translate }}</label>
-                        <p-dropdown id="services" [options]="serviceTypesList"
-                        optionLabel="name" optionValue="id" [(ngModel)]="master.serviceTypes"></p-dropdown>
+                        <p-multiSelect id="services" [virtualScroll]="true" [options]="serviceTypesList" optionValue="id" [(ngModel)]="master.serviceTypes" defaultLabel="Select service types" optionLabel="name" selectedItemsLabel="{0} items selected"></p-multiSelect>
+
                         <!-- <div class="text-left">
                                 <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
                             </div> -->
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="brands">{{ 'supplier.supplierDialog.brand' | translate }}</label>
-                        <p-dropdown id="brands" [options]="brandsList"
-                        optionLabel="brandName" optionValue="id" [(ngModel)]="master.brand"></p-dropdown>
+                        <p-multiSelect id="brands" [options]="brandsList" optionValue="id" [(ngModel)]="master.brand" defaultLabel="Select brands" optionLabel="brandName" selectedItemsLabel="{0} items selected"></p-multiSelect>
                         <!-- <div class="text-left">
                                 <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
                             </div> -->
