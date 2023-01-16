@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { of, Observable } from 'rxjs';
+import { of, Observable, throwError } from 'rxjs';
 import { catchError, mapTo, tap } from 'rxjs/operators';
 import { Tokens } from '../models/tokens';
 import jwt_decode from "jwt-decode";
