@@ -20,7 +20,7 @@
             </p-toolbar>
             <p-table #dt [value]="users" [columns]="cols" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true"
                 styleClass="p-datatable-gridlines" [paginator]="true"
-                [globalFilterFields]="['email','enabled','firstName','lastName','phone','authProvider']"
+                [globalFilterFields]="['email','enabled','firstName','lastName','phone','authProvider', 'tenant.name']"
                 responsiveLayout="scroll">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -177,12 +177,12 @@
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.phone">Phone is required.</small>
                 </div>
 
-                <!-- <div class="field">
+                <div class="field">
                     <label for="userId">User ID</label>
                     <input type="text" pInputText id="userId" [(ngModel)]="user.userId" required
                         [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.userId}" />
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.userId">User ID is required.</small>
-                </div> -->
+                </div>
 
                 <div class="field">
                     <label for="password">Password</label>
@@ -195,6 +195,12 @@
                 <div class="field">
                     <p-dropdown [options]="roles" [(hidden)]="selectedRoleHidden" [(ngModel)]="selectedRole"
                         placeholder="Select a Role" optionLabel="roleName" [showClear]="true"></p-dropdown>
+                </div>
+
+                <div class="field">
+                    <label for="tenant">Tenant</label>
+                    <p-dropdown [options]="tenants" [(ngModel)]="selectedTenant"
+                        placeholder="Select a Tenant" optionLabel="name" [showClear]="true"></p-dropdown>
                 </div>
                 <br />
             </ng-template>

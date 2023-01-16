@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenuservice';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -55,14 +56,12 @@ export class LoginComponent implements OnInit {
       .subscribe(
         {
           next: (success) => {
-            console.log('login success');
             if(this.authService.isLoggedIn()){
               this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
             }
           },
           error: (e) => {
             this.isLoading = false;
-            console.log("error : " + e.message);
             this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
           }
         }

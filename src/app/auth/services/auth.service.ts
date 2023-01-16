@@ -1,11 +1,12 @@
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { of, Observable } from 'rxjs';
+import { of, Observable, Subject } from 'rxjs';
 import { catchError, mapTo, tap } from 'rxjs/operators';
 import { Tokens } from '../models/tokens';
 import jwt_decode from "jwt-decode";
 import { config } from 'src/app/config';
+import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenuservice';
 
 
 @Injectable({
@@ -20,7 +21,7 @@ export class AuthService {
 
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private usersubmenuservice: UserSubMenuService, private router: Router) {}
   params: HttpParams;
   headers: HttpHeaders;
 
@@ -31,7 +32,6 @@ export class AuthService {
         }),
         mapTo(true),
         catchError(error => {
-            console.log('error:', error)
             return of(false);
         })
     )
@@ -96,6 +96,7 @@ export class AuthService {
         {
           next: (data) => {
             this.storeUser(JSON.stringify(data));
+            this.getAuthorizedMenu();
             router.navigate(['', 1]);
           },
           error: (e) => {
@@ -156,4 +157,25 @@ export class AuthService {
         })
     )
 };
+
+getAuthorizedMenu() {
+  let userRole = JSON.parse(localStorage.getItem('user')).roles[0].id;
+  this.usersubmenuservice.getUserSubMenusByRoleId(userRole).then(subs => {
+    this.router.config.map(parent => {
+      if(parent.children && parent.children.length>0){
+        parent.children.map(r => {
+          const filtered = subs.filter(sub => r.path === sub.subMenu.routerLink);
+          if(filtered && filtered.length>0){
+            r.data = {newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth}
+          }else{
+            r.data = {newAuth: false, printAuth: false, editAuth: false, deleteAuth: false}
+          }
+          return ;
+        });
+      }
+      return parent;
+    })
+    this.router.resetConfig(this.router.config);
+  });
+  }
 }

@@ -34,7 +34,6 @@ export class AppMenuComponent implements OnInit {
     constructor(public app: AppComponent, private menuService: MainMenuService) {}
 
     ngOnInit() {
-        console.log('roles: ' + JSON.parse(localStorage.getItem('user')).roles[0].id);
         this.menuService.getMenues(JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).roles[0].id : null).then(menues => {
             this.model = menues;
         });
@@ -168,5 +167,5 @@ export class AppMenuComponent implements OnInit {
           nodeElement.click();
           event.preventDefault();
         }
-      }
+    }
 }

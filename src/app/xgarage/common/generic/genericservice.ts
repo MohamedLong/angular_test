@@ -21,6 +21,10 @@ export abstract class GenericService<T> {
         return this.http.get<T[]>(this.apiServerUrl + '/user/all');
     }
 
+    public getForUser() {
+        return this.http.get<T[]>(this.apiServerUrl + '/user');
+    }
+
     public getById(entityId: number) {
         return this.http.get<T>(this.apiServerUrl + '/id/' + entityId);
     }

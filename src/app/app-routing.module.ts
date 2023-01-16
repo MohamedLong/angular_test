@@ -76,7 +76,7 @@ const routes: Routes = [];
                     {path: 'users', component: UsersComponent},
                     {path: 'roles', component: RolesComponent},
                     {path: 'permission', component: PermissionsComponent},
-                    {path: 'tenant', component: TenantComponent},
+                    {path: 'tenant', component: TenantComponent}
                     // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
                     // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
@@ -148,29 +148,7 @@ const routes: Routes = [];
 export class AppRoutingModule {
   private routes = [];
   private subs: SubMenu[];
-  constructor(private router: Router, private usersubmenuservice: UserSubMenuService) {
-    // this.submenuservice.getSubMenusByRoleId(1).then(subs => {
-    //   this.subs = subs;
-    //   // this.routes = subs.map(sub => {component:sub.uiComponent; path:sub.routerLink.substring(1,sub.routerLink.length)})
-
-    // })
-    this.usersubmenuservice.getUserSubMenusByRoleId(1).then(subs => {
-      this.router.config.map(parent => {
-        if(parent.children && parent.children.length>0){
-          parent.children.map(r => {
-            const filtered = subs.filter(sub => r.path === sub.subMenu.routerLink);
-            if(filtered && filtered.length>0){
-              r.data = {newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth}
-            }else{
-              r.data = {newAuth: false, printAuth: false, editAuth: false, deleteAuth: false}
-            }
-            return ;
-          });
-        }
-        return parent;
-      })
-      this.router.resetConfig(this.router.config);
-    });
-
+  constructor(private router: Router) {
+    this.router.resetConfig(this.router.config);
   }
 }

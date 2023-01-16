@@ -1,3 +1,5 @@
+import { Tenant } from "./tenant";
+
 export interface User {
     id?: number;
     createdDate?: Date;
@@ -12,4 +14,5 @@ export interface User {
     userId?: string;
     documentId?: number;
     roleId?:number;
+    tenant?: Tenant;
 }

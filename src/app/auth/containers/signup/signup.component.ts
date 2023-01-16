@@ -30,7 +30,7 @@ export class SignupComponent implements OnInit {
     tenanats: Tenant[];
 
     ngOnInit(): void {
-        this.tenantService.getAllTenants().subscribe((res: Tenant[]) => {
+        this.tenantService.getAll().subscribe((res: Tenant[]) => {
             this.tenanats = res;
         })
     }
@@ -46,7 +46,7 @@ export class SignupComponent implements OnInit {
         if (this.signupForm.valid) {
             this.authService.signup(this.signupForm.value).subscribe(res => {
                 if (!res) {
-                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'error siging up' });
+                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Error signing up' });
                     return;
                 }
 
@@ -58,7 +58,7 @@ export class SignupComponent implements OnInit {
                 console.log(err)
             })
         } else {
-            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'please fill out all fields' })
+            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Please fill out all fields' })
         }
     }
 

@@ -6,6 +6,8 @@ import { Table, TableModule } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Role } from 'src/app/xgarage/common/model/role';
 import { User } from 'src/app/xgarage/common/model/user';
+import { TenantService } from 'src/app/xgarage/common/service/tenantservice';
+import { Tenant } from 'src/app/xgarage/common/model/tenant';
 
 @Component({
     selector: 'app-users',
@@ -72,11 +74,22 @@ export class UsersComponent implements OnInit {
 
     printAuth: boolean;
 
-    constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private messageService: MessageService, private roleService: RoleService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef) { }
+    tenants: Tenant[];
+
+    selectedTenant: Tenant;
+
+    constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private messageService: MessageService, private roleService: RoleService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef, private tenantService: TenantService) { }
 
 
     ngOnInit() {
         this.getUsers();
+        this.getTenants();
+    }
+
+    getTenants() {
+        this.tenantService.getAll().subscribe((res: Tenant[]) => {
+            this.tenants = res;
+        })
     }
 
     getUsers() {
@@ -106,6 +119,7 @@ export class UsersComponent implements OnInit {
     }
     openNew() {
         this.user = {};
+        this.selectedTenant = {};
         this.submitted = false;
         this.selectedRoleHidden = true;
         this.userDialog = true;
@@ -117,6 +131,7 @@ export class UsersComponent implements OnInit {
 
     editUser(user: User) {
         this.user = { ...user };
+        this.selectedTenant = this.user.tenant;
         this.roleService.getRoles().then(roles => this.roles = roles);
         this.selectedRoleHidden = false;
         this.userDialog = true;
@@ -173,7 +188,7 @@ export class UsersComponent implements OnInit {
 
         if (this.user.email.trim()) {
             this.user.provider = "local";
-            console.log(this.user)
+            this.user.tenant = this.selectedTenant;
             if (this.user.id) {
                 // @ts-ignore
                 this.userService.updateUser(this.user).subscribe(
@@ -181,8 +196,6 @@ export class UsersComponent implements OnInit {
                         next: (data) => {
                             this.user = data;
                             this.users[this.findIndexById(this.user.id)] = this.user;
-                            //this.userService.assignRoleToUSer(this.user.id, this.selectedRole.id);
-                            console.log('User Id :', this.user.id, ' Role Id: ', this.selectedRole.id)
                             this.userService.assignRoleToUSer(this.user.id, this.selectedRole.id).subscribe(
                                 {
                                     next: (data) => {
