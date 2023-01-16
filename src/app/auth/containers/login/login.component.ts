@@ -6,9 +6,9 @@ import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmen
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styles: [`
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styles: [`
     :host ::ng-deep .p-password input {
     width: 100%;
     padding:1rem;
@@ -26,24 +26,24 @@ import { AuthService } from '../../services/auth.service';
       color: var(--primary-color) !important;
     }
   `],
-  providers: [MessageService]
+    providers: [MessageService]
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;
-  decodedToken: string;
-  isLoading: boolean = false;
+    loginForm: FormGroup;
+    decodedToken: string;
+    isLoading: boolean = false;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private messageService: MessageService) { }
+    constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private messageService: MessageService) { }
 
-  ngOnInit() {
-    this.loginForm = this.formBuilder.group({
-      username: [''],
-      password: ['']
-    });
-  }
+    ngOnInit() {
+        this.loginForm = this.formBuilder.group({
+            username: [''],
+            password: ['']
+        });
+    }
 
-  get f() { return this.loginForm.controls; }
+    get f() { return this.loginForm.controls; }
 
   login() {
     this.isLoading = !this.isLoading;
