@@ -5,19 +5,18 @@ import { MessageService } from 'primeng/api';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
 import { BrandService } from 'src/app/xgarage/common/service/brandservice';
-import { PartTypesService } from 'src/app/xgarage/common/service/parttypeservice';
 import { ServiceTypesService } from 'src/app/xgarage/common/service/servicetypeservice';
+import { PartTypesService } from '../../common/service/parttypeservice';
 
 @Component({
   selector: 'app-suppliers',
   templateUrl: './suppliers.component.html',
-  styleUrls: ['./suppliers.component.scss'],
   providers: [MessageService, DatePipe]
 })
 export class SuppliersComponent extends GenericComponent implements OnInit {
 
   constructor(public route: ActivatedRoute, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService,
-    private partsService: PartTypesService,
+    private partTypeService: PartTypesService,
     private serviceTypesService: ServiceTypesService,
     private brandService: BrandService) {
     super(route, datePipe, breadcrumbService);
@@ -34,7 +33,7 @@ export class SuppliersComponent extends GenericComponent implements OnInit {
   }
 
   getPartTypes() {
-    this.partsService.getAll().subscribe(res => {
+    this.partTypeService.getAll().subscribe(res => {
         //console.log(res)
         this.partTypesList = res;
     }, err => console.log(err))

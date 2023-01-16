@@ -60,7 +60,7 @@ import { PermissionsComponent } from './xgarage/dashboard/component/persmissions
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
 import { ResetPasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
 import { SignupComponent } from './auth/containers/signup/signup.component';
-import { SuppliersComponent } from './xgarage/dashboard/component/suppliers/suppliers.component';
+import { SuppliersComponent } from './xgarage/core/supplier/suppliers.component';
 
 const routes: Routes = [];
 
