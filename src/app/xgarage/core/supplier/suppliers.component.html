@@ -94,14 +94,14 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="parts">{{ 'supplier.supplierDialog.part' | translate }}</label>
-                        <p-multiSelect id="parts" [virtualScroll]="true" [options]="partTypesList" optionValue="id" [(ngModel)]="master.partTypes" defaultLabel="Select part types" optionLabel="partType" selectedItemsLabel="{0} items selected"></p-multiSelect>
+                        <p-multiSelect id="parts" [options]="partTypesList" optionValue="id" [(ngModel)]="master.partTypes" defaultLabel="Select part types" optionLabel="partType" selectedItemsLabel="{0} items selected"></p-multiSelect>
                         <!-- <div class="text-left">
                                 <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
                             </div> -->
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="services">{{ 'supplier.supplierDialog.service' | translate }}</label>
-                        <p-multiSelect id="services" [virtualScroll]="true" [options]="serviceTypesList" optionValue="id" [(ngModel)]="master.serviceTypes" defaultLabel="Select service types" optionLabel="name" selectedItemsLabel="{0} items selected"></p-multiSelect>
+                        <p-multiSelect id="services"[virtualScroll]="true" [options]="serviceTypesList" optionValue="id" [(ngModel)]="master.serviceTypes" defaultLabel="Select service types" optionLabel="name" selectedItemsLabel="{0} items selected"></p-multiSelect>
 
                         <!-- <div class="text-left">
                                 <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
