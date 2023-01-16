@@ -23,7 +23,8 @@ export class SuppliersComponent extends GenericComponent implements OnInit {
         private partTypeService: PartTypesService,
         private serviceTypesService: ServiceTypesService,
         private brandService: BrandService,
-        private supplierService: SupplierService) {
+        private supplierService: SupplierService,
+        public messageService: MessageService) {
         super(route, datePipe, breadcrumbService);
     }
 
