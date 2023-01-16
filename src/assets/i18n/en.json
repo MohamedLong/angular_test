@@ -247,6 +247,21 @@
             "formRequired": "Please fill out required fields"
         }
     },
+    "supplier": {
+        "supplierDialog": {
+            "title": "Supplier Details",
+            "nameRequired": "Tenant name is required.",
+            "crRequired": "Tenant CR is required.",
+            "locationRequired": "Location is required.",
+            "formRequired": "Please fill out required fields",
+            "name": "Supplier name",
+            "cr": "Cr number",
+            "phone": "Phone number",
+            "part": "Part types",
+            "service": "Service types",
+            "brand": "Brand"
+        }
+    },
     "itemType": {
         "title": "Manage Item Types",
         "export": "Export",
