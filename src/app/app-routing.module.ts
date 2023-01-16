@@ -60,6 +60,7 @@ import { PermissionsComponent } from './xgarage/dashboard/component/persmissions
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
 import { ResetPasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
 import { SignupComponent } from './auth/containers/signup/signup.component';
+import { SuppliersComponent } from './xgarage/dashboard/component/suppliers/suppliers.component';
 
 const routes: Routes = [];
 
@@ -73,6 +74,7 @@ const routes: Routes = [];
                     {path: 'mainmenu', component: UserMainMenuComponent},
                     {path: 'submenu', component: UserSubMenuComponent},
                     {path: 'change-password', component: ResetPasswordComponent},
+                    {path: 'suppliers', component: SuppliersComponent},
                     {path: 'users', component: UsersComponent},
                     {path: 'roles', component: RolesComponent},
                     {path: 'permission', component: PermissionsComponent},
@@ -170,6 +172,7 @@ export class AppRoutingModule {
         return parent;
       })
       this.router.resetConfig(this.router.config);
+      //console.log(this.router.config)
     });
 
   }

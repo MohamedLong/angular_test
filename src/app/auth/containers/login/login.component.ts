@@ -5,9 +5,9 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styles: [`
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styles: [`
     :host ::ng-deep .p-password input {
     width: 100%;
     padding:1rem;
@@ -25,48 +25,49 @@ import { AuthService } from '../../services/auth.service';
       color: var(--primary-color) !important;
     }
   `],
-  providers: [MessageService]
+    providers: [MessageService]
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;
-  decodedToken: string;
-  isLoading: boolean = false;
+    loginForm: FormGroup;
+    decodedToken: string;
+    isLoading: boolean = false;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private messageService: MessageService) { }
+    constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private messageService: MessageService) { }
 
-  ngOnInit() {
-    this.loginForm = this.formBuilder.group({
-      username: [''],
-      password: ['']
-    });
-  }
+    ngOnInit() {
+        this.loginForm = this.formBuilder.group({
+            username: [''],
+            password: ['']
+        });
+    }
 
-  get f() { return this.loginForm.controls; }
+    get f() { return this.loginForm.controls; }
 
-  login() {
-    this.isLoading = !this.isLoading;
-    this.authService.login(
-      {
-        username: this.f.username.value,
-        password: this.f.password.value
-      }
-    )
-      .subscribe(
-        {
-          next: (success) => {
-            console.log('login success');
-            if(this.authService.isLoggedIn()){
-              this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
+    login() {
+        this.isLoading = !this.isLoading;
+        this.authService.login(
+            {
+                username: this.f.username.value,
+                password: this.f.password.value
             }
-          },
-          error: (e) => {
-            this.isLoading = false;
-            console.log("error : " + e.message);
-            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
-          }
-        }
-      );
-  }
+        )
+            .subscribe(res => {
+                this.isLoading = false;
+                if (!res) {
+                    //console.log('err res:', res)
+                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: res });
+                } else if (this.authService.isLoggedIn()) {
+                    //console.log(this.authService.isLoggedIn())
+                    this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
+                }
+
+            }, err => {
+                this.isLoading = false;
+                //console.log("error : " + err);
+                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err });
+            }
+            );
+    }
 
 }
