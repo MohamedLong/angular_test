@@ -6,7 +6,7 @@ import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
 import { BrandService } from 'src/app/xgarage/common/service/brandservice';
 import { ServiceTypesService } from 'src/app/xgarage/common/service/servicetypeservice';
-import { PartTypesService } from '../../common/service/parttypeservice';
+import { PartTypesService } from '../../../common/service/parttypeservice';
 
 @Component({
   selector: 'app-suppliers',

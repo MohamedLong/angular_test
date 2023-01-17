@@ -184,7 +184,7 @@ import { PermissionService } from './xgarage/dashboard/service/permissionservice
 import { RoleService } from './xgarage/dashboard/service/roleservice';
 import { RolePermissionService } from './xgarage/dashboard/service/rolepermissionservice';
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
-import { SuppliersComponent } from './xgarage/core/supplier/suppliers.component';
+import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
