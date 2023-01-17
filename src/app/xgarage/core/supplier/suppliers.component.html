@@ -11,15 +11,15 @@
                 </ng-template>
             </p-toolbar>
 
-            <!-- <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['id','name','cr','location']"
+            <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['id','name']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)"
                 [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between table-header">
-                        <h5 class="m-0">{{ 'tenant.title' | translate }}</h5>
+                        <h5 class="m-0">{{'supplier.title' | translat }}</h5>
                         <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
@@ -29,46 +29,38 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="id">{{ 'common.id' | translate }}<p-sortIcon field="id"></p-sortIcon>
+                        <th pSortableColumn="id">{{'common.id' | translat }}<p-sortIcon field="id"></p-sortIcon>
                         </th>
-                        <th pColumn="name">{{ 'tenant.tableColumn.name' | translate }}
+                        <th pColumn="name">{{'supplier.supplierDialog.name' | translat }}
                         </th>
-                        <th pColumn="cr">{{ 'tenant.tableColumn.cr' | translate }}
-                        </th>
-                        <th pColumn="location">{{ 'tenant.tableColumn.location' | translate }}
-                        </th>
-                        <th pColumn="actions">Actions
+                        <!-- <th pColumn="cr">{{ 'tenant.tableColumn.cr' | translate }}
+                        </th> -->
+                        <!-- <th pColumn="location">{{ 'tenant.tableColumn.location' | translate }}
+                        </th> -->
+                        <th pColumn="actions">{{'common.actions' | translat }}
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-tenant>
+                <ng-template pTemplate="body" let-supplier>
                     <tr>
                         <td>
-                            {{tenant.id}}
+                            {{supplier.id}}
                         </td>
                         <td>
-                            {{tenant.name}}
-                        </td>
-                        <td>
-                            {{tenant.cr}}
-                        </td>
-                        <td>
-                            {{tenant.location}}
+                            {{supplier.name}}
                         </td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
-                              (click)="editMaster(tenant)"></button>
-                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
-                              (click)="deleteAction(tenant)"></button>
+                              (click)="editMaster(supplier)"></button>
                           </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        In total there are {{masters ? masters.length : 0 }} Tenants.
+                        {{'supplier.table_footer' | translat: {length: masters ? masters.length : 0} }}
                     </div>
                 </ng-template>
-            </p-table> -->
+            </p-table>
         </div>
 
         <!-- add/update tenant dialog -->
@@ -123,17 +115,4 @@
                     class="p-button-text" (click)="save()" [disabled]="!(editAuth && editable)"></button>
             </ng-template>
         </p-dialog>
-
-        <!-- <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="master">{{ 'operations.deleteMessage' | translate }} <b>{{master.name}}</b>?</span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-                    (click)="deleteSingleDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
-                    (click)="confirmDelete()"></button>
-            </ng-template>
-        </p-dialog> -->
     </div>

@@ -153,7 +153,8 @@
         "deliveryStatus": "Delivery Status",
         "costCenter": "Cost Center",
         "department": "Department",
-        "saleCost": "Sales Account"
+        "saleCost": "Sales Account",
+        "actions": "Actions"
     },
     "currency": {
         "title": "Manage Currencies",
@@ -248,10 +249,12 @@
         }
     },
     "supplier": {
+        "title": "Suppliers",
+        "table_footer": "In total there are {{length}} Suppliers",
         "supplierDialog": {
             "title": "Supplier Details",
-            "nameRequired": "Tenant name is required.",
-            "crRequired": "Tenant CR is required.",
+            "nameRequired": "supplier name is required.",
+            "crRequired": "supplier CR is required.",
             "locationRequired": "Location is required.",
             "formRequired": "Please fill out required fields",
             "name": "Supplier name",

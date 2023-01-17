@@ -10,7 +10,7 @@ import { Brand } from '../../common/model/brand';
 import { PartType } from '../../common/model/parttype';
 import { ServiceType } from '../../common/model/servicetype';
 import { PartTypesService } from '../../common/service/parttypeservice';
-import { SupplierService } from '../supplier.service';
+import { SupplierService } from '../service/supplier.service';
 
 @Component({
     selector: 'app-suppliers',
@@ -33,10 +33,28 @@ export class SuppliersComponent extends GenericComponent implements OnInit {
     brandsList: Brand[];
 
     ngOnInit(): void {
+        this.getSuppliers();
         this.getPartTypes();
         this.getServiceTypes();
         this.getBrands();
     }
+
+    getSuppliers() {
+        this.supplierService.getAll().subscribe({
+            next: (masters) => {
+                this.masters = masters;
+                //console.log(this.masters)
+                this.loading = false;
+                this.cols = [
+                    { field: 'id', header: 'ID' },
+                    { field: 'name', header: 'Supplier Name' },
+                    // { field: 'location', header: 'Location' },
+                ];
+            },
+            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+        });
+    }
+
 
     getPartTypes() {
         this.partTypeService.getAll().subscribe(res => {
@@ -66,12 +84,12 @@ export class SuppliersComponent extends GenericComponent implements OnInit {
         console.log(this.master)
 
         this.supplierService.signupSupplier(this.master).subscribe(res => {
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Supplier successfully added!'});
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Supplier successfully added!' });
         }, err => {
-            if(err.status == 200) {
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Supplier successfully added!'})
+            if (err.status == 200) {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Supplier successfully added!' })
             } else {
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: err})
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: err })
             }
         });
 
