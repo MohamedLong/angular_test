@@ -4,13 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
+import { Brand } from 'src/app/xgarage/common/model/brand';
+import { PartType } from 'src/app/xgarage/common/model/parttype';
+import { ServiceType } from 'src/app/xgarage/common/model/servicetype';
 import { BrandService } from 'src/app/xgarage/common/service/brandservice';
 import { ServiceTypesService } from 'src/app/xgarage/common/service/servicetypeservice';
-import { Brand } from '../../common/model/brand';
-import { PartType } from '../../common/model/parttype';
-import { ServiceType } from '../../common/model/servicetype';
-import { PartTypesService } from '../../common/service/parttypeservice';
-import { SupplierService } from '../service/supplier.service';
+import { PartTypesService } from '../../../common/service/parttypeservice';
+import { SupplierService } from '../../service/supplier.service';
 
 @Component({
     selector: 'app-suppliers',
