@@ -94,6 +94,7 @@ export class UsersComponent implements OnInit {
 
     getUsers() {
         this.userService.getUsers().then(users => {
+            console.log(this.route)
             this.editAuth = this.route.routeConfig.data.editAuth;
             this.newAuth = this.route.routeConfig.data.newAuth;
             this.printAuth = this.route.routeConfig.data.printAuth;
