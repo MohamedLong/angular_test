@@ -74,7 +74,6 @@ export class TenantComponent extends GenericComponent implements OnInit {
                             this.master = data;
                             this.masters[this.findIndexById(this.master.id, this.masters)] = this.master;
                             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tenant Updated'});
-
                             this.getAll();
                         },
                         error: (e) => alert(e)

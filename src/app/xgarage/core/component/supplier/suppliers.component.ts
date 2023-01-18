@@ -10,7 +10,7 @@ import { ServiceType } from 'src/app/xgarage/common/model/servicetype';
 import { BrandService } from 'src/app/xgarage/common/service/brandservice';
 import { ServiceTypesService } from 'src/app/xgarage/common/service/servicetypeservice';
 import { PartTypesService } from '../../../common/service/parttypeservice';
-import { SupplierService } from '../../supplier.service';
+import { SupplierService } from '../../service/supplier.service';
 
 @Component({
     selector: 'app-suppliers',

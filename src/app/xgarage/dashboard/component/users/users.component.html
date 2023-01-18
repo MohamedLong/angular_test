@@ -1,12 +1,13 @@
 <div class="grid">
     <div class="col-12">
+        <p-toast></p-toast>
         <div class="card">
-            <p class="text-lg font-bold">Users</p>
-            <p-toast  [baseZIndex]="99999"></p-toast>
+            <p class="text-lg font-bold">Manage Users</p>
+            <!-- <p-toast  [baseZIndex]="99999"></p-toast> -->
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                        <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus" class="p-button-success mr-2"
                             [disabled]="!newAuth" (click)="openNew()"></button>
                         <!-- <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button> -->
                     </div>
@@ -14,13 +15,13 @@
 
                 <ng-template pTemplate="right">
                     <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload> -->
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+                    <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help"
                         (click)="dt.exportCSV()" [disabled]="!printAuth"></button>
                 </ng-template>
             </p-toolbar>
             <p-table #dt [value]="users" [columns]="cols" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true"
                 styleClass="p-datatable-gridlines" [paginator]="true"
-                [globalFilterFields]="['email','enabled','firstName','lastName','phone','authProvider', 'tenant.name']"
+                [globalFilterFields]="['email','enabled','firstName','lastName','phone','authProvider', 'tenant']"
                 responsiveLayout="scroll">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -40,6 +41,14 @@
                         </th>
                         <th>
                             <div class="flex justify-content-between align-items-center">
+                                {{ 'tenant.tableColumn.name' | translate }}
+                                <p-columnFilter type="text" field="lastName" display="menu"
+                                    placeholder="Search by last name">
+                                </p-columnFilter>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
                                 User ID
                                 <p-columnFilter type="text" field="userId" display="menu"
                                     placeholder="Search by user id">
@@ -51,14 +60,6 @@
                                 First Name
                                 <p-columnFilter type="text" field="firstName" display="menu"
                                     placeholder="Search by first name">
-                                </p-columnFilter>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Last Name
-                                <p-columnFilter type="text" field="lastName" display="menu"
-                                    placeholder="Search by last name">
                                 </p-columnFilter>
                             </div>
                         </th>
@@ -94,22 +95,22 @@
                         </th>
 
 
-                        <th></th>
+                        <th>{{ 'operations.title' | translate }}</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-user>
                     <tr>
-                        <td style="min-width: 12rem;">
+                        <td style="min-width: 6rem;">
                             {{user.id}}
                         </td>
                         <td style="min-width: 12rem;">
-                            {{user.userId}}
+                            {{user.tenant}}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{user.username}}
                         </td>
                         <td style="min-width: 12rem;">
                             {{user.firstName}}
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{user.lastName}}
                         </td>
                         <td style="min-width: 12rem;">
                             {{user.phone}}
@@ -122,7 +123,7 @@
                         </td>
 
                         <td style="min-width: 12rem;">
-                            <p-inputSwitch type="button" [(ngModel)]="user.enabled" (onChange)="changeStatus(user.id)">
+                            <p-inputSwitch type="button" [(ngModel)]="user.enabled" (onChange)="changeStatus(user.id, $event)">
                             </p-inputSwitch>
                         </td>
                         <td>
@@ -184,7 +185,7 @@
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.userId">User ID is required.</small>
                 </div>
 
-                <div class="field">
+                <div class="field" [(hidden)]="!selectedRoleHidden">
                     <label for="password">Password</label>
                     <input type="password" pInputText id="password" [(ngModel)]="user.password" placeholder="********"
                         required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.password}" />
@@ -193,6 +194,7 @@
                 </div>
 
                 <div class="field">
+                    <label for="password">Role</label>
                     <p-dropdown [options]="roles" [(hidden)]="selectedRoleHidden" [(ngModel)]="selectedRole"
                         placeholder="Select a Role" optionLabel="roleName" [showClear]="true"></p-dropdown>
                 </div>
@@ -216,7 +218,7 @@
         <p-dialog [(visible)]="deleteUserDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="user">Are you sure you want to delete <b>{{user.id}}</b>?</span>
+                <span *ngIf="user">Are you sure you want to delete <b>{{user.firstName}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"

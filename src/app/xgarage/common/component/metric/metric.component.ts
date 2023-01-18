@@ -127,7 +127,7 @@ confirmDelete(){
       next: (data) => {
         // this.currencies = this.currencies.filter(val => val.id !== this.currency.id);
         // this.messageService.add({severity: 'success', summary: 'Successful', detail: 'currency Deleted', life: 3000});
-        if (data.statusCode === 200) {
+        if (data.messageCode === 200) {
           this.metrics = this.metrics.filter(val => val.id !== this.metric.id);
           this.metric = {};
           this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Metric Deleted', life: 3000});

@@ -126,7 +126,7 @@ confirmDelete(){
       next: (data) => {
         //this.currencies = this.currencies.filter(val => val.id !== this.currency.id);
         // this.messageService.add({severity: 'success', summary: 'Successful', detail: 'currency Deleted', life: 3000});
-        if(data.statusCode === 200) {
+        if(data.messageCode === 200) {
           this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Currency Deleted', life: 3000});
           this.getAll();
           this.currency = {};
