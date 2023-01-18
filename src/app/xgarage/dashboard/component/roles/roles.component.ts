@@ -1,11 +1,9 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { RolePermissionsComponent } from './../role-permissions/role-permissions.component';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { RoleService } from '../../service/roleservice';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { PermissionsComponent } from '../persmissions/permissions.component';
 import { Permission } from 'src/app/xgarage/common/model/permission';
 import { PermissionService } from '../../service/permissionservice';
 import { Role } from 'src/app/xgarage/common/model/role';
@@ -69,15 +67,19 @@ export class RolesComponent implements OnInit {
 
   printAuth: boolean;
 
-  constructor(private route: ActivatedRoute, private router: Router, private permissionService: PermissionService, private roleService: RoleService, private messageService: MessageService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef, private dialogService: DialogService) { }
+  constructor(private route: ActivatedRoute, private roleService: RoleService, private messageService: MessageService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef, private dialogService: DialogService) {
+    this.extractPermissions();
+   }
 
 
+  extractPermissions() {
+    this.editAuth = this.route.routeConfig.data && this.route.routeConfig.data.editAuth ? this.route.routeConfig.data.editAuth : false;
+    this.newAuth = this.route.routeConfig.data && this.route.routeConfig.data.newAuth ? this.route.routeConfig.data.newAuth : false;
+    this.printAuth = this.route.routeConfig.data && this.route.routeConfig.data.printAuth ? this.route.routeConfig.data.printAuth : false;
+    this.deleteAuth = this.route.routeConfig.data && this.route.routeConfig.data.deleteAuth ? this.route.routeConfig.data.deleteAuth : false;
+}
   ngOnInit() {
     this.roleService.getRoles().then(roles => {
-      this.editAuth = this.route.routeConfig.data.editAuth;
-      this.newAuth = this.route.routeConfig.data.newAuth;
-      this.printAuth = this.route.routeConfig.data.printAuth;
-      this.deleteAuth = this.route.routeConfig.data.deleteAuth;
       this.roles = roles;
       this.loading = false;
 

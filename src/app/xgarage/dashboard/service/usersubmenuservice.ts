@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { config } from 'src/app/config';
-import { DeleteMessage } from '../model/deleteMessage';
+import { MessageResponse } from '../../common/dto/messageresponse';
 import { UserSubMenu } from '../model/usersubmenu';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class UserSubMenuService {
     }
 
     deleteUserSubMenu(usersubmenuId: number) {
-        return this.http.delete<DeleteMessage>('${config.dashboardUrl}/userSubMenu/delete/${usersubmenuId}')
+        return this.http.delete<MessageResponse>('${config.dashboardUrl}/userSubMenu/delete/${usersubmenuId}')
     }
 
 }

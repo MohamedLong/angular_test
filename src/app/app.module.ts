@@ -147,7 +147,7 @@ import {IconService} from './demo/service/iconservice';
 import {NodeService} from './demo/service/nodeservice';
 import {PhotoService} from './demo/service/photoservice';
 import {ProductService} from './demo/service/productservice';
-import { UserService } from '../app/xgarage/common/service/userservice';
+import { UserService } from './xgarage/dashboard/service/userservice';
 
 import {MenuService} from './app.menu.service';
 import {AppBreadcrumbService} from './app.breadcrumb.service';

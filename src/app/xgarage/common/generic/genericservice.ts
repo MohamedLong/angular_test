@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { ResponseDto } from '../dto/responsedto';
+import { MessageResponse } from '../dto/messageresponse';
 
 @Injectable()
 export abstract class GenericService<T> {
@@ -37,8 +37,8 @@ export abstract class GenericService<T> {
         return this.http.put<T>(this.apiServerUrl + '/update', t);
     }
 
-    public delete(entityId: number): Observable<ResponseDto> {
-        return this.http.delete<ResponseDto>(this.apiServerUrl + '/delete/' + entityId);
+    public delete(entityId: number): Observable<MessageResponse> {
+        return this.http.delete<MessageResponse>(this.apiServerUrl + '/delete/' + entityId);
     }
 
     public getByParent(parentId: number){

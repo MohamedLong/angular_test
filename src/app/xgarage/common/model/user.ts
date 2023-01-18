@@ -1,3 +1,4 @@
+import { Role } from "./role";
 import { Tenant } from "./tenant";
 
 export interface User {
@@ -12,7 +13,7 @@ export interface User {
     providerId?: string;
     token?: string;
     userId?: string;
-    documentId?: number;
-    roleId?:number;
+    document?: Document;
+    roles?: Role[];
     tenant?: Tenant;
 }
