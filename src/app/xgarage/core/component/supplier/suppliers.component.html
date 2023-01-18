@@ -7,19 +7,19 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
-                        class="p-button-success mr-2 mb-2" (click)="openNew()" [disabled]="newAuth===false"></button>
+                        class="p-button-success mr-2 mb-2" (click)="open()" [disabled]="newAuth===false"></button>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['id','name']"
+            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['id','name', 'cr', 'phone']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)"
                 [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between table-header">
-                        <h5 class="m-0">{{'supplier.title' | translat }}</h5>
+                        <h5 class="m-0">{{'supplier.title' | translate }}</h5>
                         <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
@@ -29,35 +29,46 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="id">{{'common.id' | translat }}<p-sortIcon field="id"></p-sortIcon>
+                        <th pSortableColumn="id">{{'common.id' | translate }}<p-sortIcon field="id"></p-sortIcon>
                         </th>
-                        <th pColumn="name">{{'supplier.supplierDialog.name' | translat }}
+                        <th pColumn="name">{{'supplier.supplierDialog.name' | translate }}
                         </th>
-                        <!-- <th pColumn="cr">{{ 'tenant.tableColumn.cr' | translate }}
-                        </th> -->
-                        <!-- <th pColumn="location">{{ 'tenant.tableColumn.location' | translate }}
-                        </th> -->
-                        <th pColumn="actions">{{'common.actions' | translat }}
+                        <th pColumn="cr">{{ 'supplier.supplierDialog.cr' | translate }}
+                        </th>
+                        <th pColumn="phone">{{ 'supplier.supplierDialog.phone' | translate }}
+                        </th>
+                        <th pColumn="status">{{'common.status' | translate }}
+                        </th>
+                        <th pColumn="actions">{{'common.actions' | translate }}
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-supplier>
+                <ng-template pTemplate="body" let-supplier let-rowIndex="rowIndex">
                     <tr>
                         <td>
-                            {{supplier.id}}
+                            {{rowIndex + 1}}
                         </td>
                         <td>
                             {{supplier.name}}
                         </td>
                         <td>
-                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
-                              (click)="editMaster(supplier)"></button>
+                            {{supplier.cr}}
+                        </td>
+                        <td>
+                            {{supplier.phone? supplier.phone : "-"}}
+                        </td>
+                        <td>
+                            <p-inputSwitch class="" [(ngModel)]="supplier.enabled" (onChange)="changeStatus(supplier.id, supplier.enabled)"></p-inputSwitch>
+                        </td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success" [disabled]="!editAuth"
+                              (click)="edit(supplier.id)"></button>
                           </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        {{'supplier.table_footer' | translat: {length: masters ? masters.length : 0} }}
+                        {{'supplier.table_footer' | translate: {length: masters ? masters.length : 0} }}
                     </div>
                 </ng-template>
             </p-table>
@@ -70,41 +81,40 @@
                 <div class="formgrid grid py-5">
                     <div class="field col-12 md:col-6">
                         <label for="name">{{ 'supplier.supplierDialog.name' | translate }}</label>
-                        <input type="text" pInputText id="name" #name="ngModel" [(ngModel)]="master.name" required
+                        <input type="text" pInputText #name="ngModel" [(ngModel)]="master.name" required
                             autofocus />
-                        <!-- <small class="p-error" *ngIf="name.invalid && name.dirty">{{ 'tenant.tenantDialog.nameRequired' | translate }}</small> -->
+                        <small class="p-error" *ngIf="name.invalid && name.dirty">{{ 'supplier.supplierDialog.nameRequired' | translate }}</small>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label>{{ 'supplier.supplierDialog.phone' | translate }}</label>
-                        <input type="text" pInputText id="number" #name="ngModel" [(ngModel)]="master.phoneNumber"
+                        <input type="text" pInputText #phone="ngModel" [(ngModel)]="master.phoneNumber"
                             required />
+                            <small class="p-error" *ngIf="phone.invalid && phone.dirty">{{ 'supplier.supplierDialog.poneRequired' | translate }}</small>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="cr">{{ 'supplier.supplierDialog.cr' | translate }}</label>
-                        <input type="text" pInputText id="cr" #cr="ngModel" [(ngModel)]="master.cr" required />
-                        <!-- <small class="p-error" *ngIf="cr.invalid && cr.dirty ">{{ 'tenant.tenantDialog.crRequired' | translate }}</small> -->
+                        <input type="text" pInputText #cr="ngModel" [(ngModel)]="master.cr" required />
+                        <small class="p-error" *ngIf="cr.invalid && cr.dirty">{{ 'supplier.supplierDialog.crRequired' | translate }}</small>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="parts">{{ 'supplier.supplierDialog.part' | translate }}</label>
-                        <p-multiSelect id="parts" [options]="partTypesList" optionValue="id" [(ngModel)]="master.partTypes" defaultLabel="Select part types" optionLabel="partType" selectedItemsLabel="{0} items selected"></p-multiSelect>
-                        <!-- <div class="text-left">
-                                <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
-                            </div> -->
+                        <p-multiSelect appendTo="body" #parts="ngModel" [options]="partTypesList" [(ngModel)]="selectedPartTypesList" defaultLabel="Select part types" optionLabel="partType" required></p-multiSelect>
+                        <div class="text-left">
+                                <small *ngIf="parts.invalid && parts.dirty" class="p-error block pt-1">{{ 'supplier.supplierDialog.partRequired' | translate }}</small>
+                            </div>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="services">{{ 'supplier.supplierDialog.service' | translate }}</label>
-                        <p-multiSelect id="services"[virtualScroll]="true" [options]="serviceTypesList" optionValue="id" [(ngModel)]="master.serviceTypes" defaultLabel="Select service types" optionLabel="name" selectedItemsLabel="{0} items selected"></p-multiSelect>
-
-                        <!-- <div class="text-left">
-                                <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
-                            </div> -->
+                        <p-multiSelect appendTo="body" #services="ngModel"  [options]="serviceTypesList" [(ngModel)]="selectedServiceTypesList" defaultLabel="Select service types" optionLabel="name" selectedItemsLabel="{0} items selected" required></p-multiSelect>
+                        <small *ngIf="services.invalid && services.dirty" class="p-error block pt-1">{{ 'supplier.supplierDialog.serviceRequired' | translate }}</small>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label for="brands">{{ 'supplier.supplierDialog.brand' | translate }}</label>
-                        <p-multiSelect id="brands" [options]="brandsList" optionValue="id" [(ngModel)]="master.brand" defaultLabel="Select brands" optionLabel="brandName" selectedItemsLabel="{0} items selected"></p-multiSelect>
-                        <!-- <div class="text-left">
-                                <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
-                            </div> -->
+                        <p-multiSelect appendTo="body" #brands="ngModel"  [options]="brandsList" [(ngModel)]="selectedBrandsList" defaultLabel="Select brand types" optionLabel="brandName" selectedItemsLabel="{0} items selected" required></p-multiSelect>
+                        <small *ngIf="brands.invalid && brands.dirty" class="p-error block pt-1">{{ 'supplier.supplierDialog.brandRequired' | translate }}</small>
+                    </div>
+                    <div class="field col-12">
+                        <p-message severity="error" text="{{ 'common.formRequired' | translate }}" *ngIf="submitted"></p-message>
                     </div>
                 </div>
             </ng-template>

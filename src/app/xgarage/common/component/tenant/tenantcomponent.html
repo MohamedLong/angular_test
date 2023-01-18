@@ -98,7 +98,7 @@
                         <textarea rows="1" cols="30" class="w-full" pInputTextarea [(ngModel)]="master.location"></textarea>
                     </div>
                     <div class="field col-12">
-                        <p-message severity="error" text="{{ 'tenant.tenantDialog.formRequired' | translate }}" *ngIf="submitted && (cr.invalid || name.invalid)"></p-message>
+                        <p-message severity="error" text="{{ 'common.formRequired' | translate }}" *ngIf="submitted && (cr.invalid || name.invalid)"></p-message>
                     </div>
                 </div>
 

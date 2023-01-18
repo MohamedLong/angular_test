@@ -154,7 +154,8 @@
         "costCenter": "Cost Center",
         "department": "Department",
         "saleCost": "Sales Account",
-        "actions": "Actions"
+        "actions": "Actions",
+        "formRequired": "Please fill out required fields"
     },
     "currency": {
         "title": "Manage Currencies",
@@ -244,8 +245,7 @@
             "title": "Tenant Details",
             "nameRequired": "Tenant name is required.",
             "crRequired": "Tenant CR is required.",
-            "locationRequired": "Location is required.",
-            "formRequired": "Please fill out required fields"
+            "locationRequired": "Location is required."
         }
     },
     "supplier": {
@@ -254,9 +254,12 @@
         "supplierDialog": {
             "title": "Supplier Details",
             "nameRequired": "supplier name is required.",
+            "poneRequired": "supplier phone is required.",
             "crRequired": "supplier CR is required.",
             "locationRequired": "Location is required.",
-            "formRequired": "Please fill out required fields",
+            "partRequired": "please select at least one part type",
+            "serviceRequired": "please select at least one service type",
+            "brandRequired": "please select at least one car brand",
             "name": "Supplier name",
             "cr": "Cr number",
             "phone": "Phone number",
