@@ -4,7 +4,7 @@ import { ConfirmationService } from 'primeng/api';
 import { Message, MessageService } from 'primeng/api';
 import {AppBreadcrumbService} from '../../../../app.breadcrumb.service';
 import { Metrics } from '../../model/metrics';
-import { MetricService } from '../../service/metricservice.service';
+import { MetricService } from '../../service/metric.service';
 
 @Component({
   templateUrl: './metric.component.html',

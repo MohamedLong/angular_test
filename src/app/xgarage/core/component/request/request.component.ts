@@ -4,9 +4,9 @@ import { Brand } from 'src/app/xgarage/common/model/brand';
 import { CarModel } from 'src/app/xgarage/common/model/carmodel';
 import { CarModelType } from 'src/app/xgarage/common/model/carmodeltype';
 import { CarModelYear } from 'src/app/xgarage/common/model/carmodelyear';
-import { BrandService } from 'src/app/xgarage/common/service/brandservice.service';
-import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypeservice.service';
-import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyearservice.service';
+import { BrandService } from 'src/app/xgarage/common/service/brand.service';
+import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypes.service';
+import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
 import { RequestService } from '../../service/request.service';
 
 @Component({

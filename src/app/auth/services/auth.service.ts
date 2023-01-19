@@ -6,7 +6,7 @@ import { catchError, mapTo, tap } from 'rxjs/operators';
 import { Tokens } from '../models/tokens';
 import jwt_decode from "jwt-decode";
 import { config } from 'src/app/config';
-import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenuservice.service';
+import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenu.service';
 
 
 @Injectable({

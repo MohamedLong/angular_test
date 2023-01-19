@@ -48,7 +48,7 @@ import { LoginComponent } from './auth/containers/login/login.component';
 import { RandomGuard } from './auth/guards/random.guard';
 import { MetricComponent } from './xgarage/common/component/metric/metric.component';
 import { AppCrudComponent } from './pages/app.crud.component';
-import { UserSubMenuService } from './xgarage/dashboard/service/usersubmenuservice.service';
+import { UserSubMenuService } from './xgarage/dashboard/service/usersubmenu.service';
 import { SubMenu } from './xgarage/dashboard/model/submenu';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { UserSubMenu } from './xgarage/dashboard/model/usersubmenu';

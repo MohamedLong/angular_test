@@ -1,12 +1,12 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { RoleService } from '../../service/roleservice.service';
+import { RoleService } from '../../service/role.service';
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { UserService } from '../../service/userservice.service';
+import { UserService } from '../../service/user.service';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Role } from 'src/app/xgarage/common/model/role';
 import { User } from 'src/app/xgarage/common/model/user';
-import { TenantService } from 'src/app/xgarage/common/service/tenantservice.service';
+import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 import { Tenant } from 'src/app/xgarage/common/model/tenant';
 import { UserDto } from 'src/app/xgarage/common/dto/userdto';
 import { DialogService } from 'primeng/dynamicdialog';

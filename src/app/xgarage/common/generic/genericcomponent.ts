@@ -7,7 +7,7 @@ import { Status } from '../model/status';
 import { Message } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { Tenant } from '../model/tenant';
-import { TenantService } from '../service/tenantservice.service';
+import { TenantService } from '../service/tenant.service';
 
 @Component({
     template: ''

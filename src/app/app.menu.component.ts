@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AppComponent} from './app.component';
 import { MainMenu } from './xgarage/dashboard/model/mainmenu';
-import { MainMenuService } from './xgarage/dashboard/service/mainmenuservice.service';
+import { MainMenuService } from './xgarage/dashboard/service/mainmenu.service';
 
 @Component({
     selector: 'app-menu',
