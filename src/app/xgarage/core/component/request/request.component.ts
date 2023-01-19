@@ -30,7 +30,7 @@ import { RequestService } from '../../service/request.service';
 })
 export class RequestComponent implements OnInit {
 
-    activeTab = 'register';
+    activeTab = 'car-info';
     isTyping: boolean = false;
     notFound: boolean;
     found: boolean;
@@ -189,6 +189,7 @@ export class RequestComponent implements OnInit {
         this.submitted = true;
         if(this.requestForm.valid) {
             this.submitted = false;
+            this.clickNext('request');
             console.log(this.requestForm.value)
         }
 
