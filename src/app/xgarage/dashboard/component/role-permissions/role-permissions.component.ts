@@ -1,6 +1,6 @@
 import { DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { RolePermissionService } from '../../service/rolepermissionservice';
+import { RolePermissionService } from '../../service/rolepermissionservice.service';
 import { Table } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Permission } from 'src/app/xgarage/common/model/permission';

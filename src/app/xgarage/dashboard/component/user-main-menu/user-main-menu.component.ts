@@ -1,8 +1,8 @@
 import { Router, ActivatedRoute } from '@angular/router';
-import { MainMenuService } from './../../service/mainmenuservice';
-import { RoleService } from './../../service/roleservice';
+import { MainMenuService } from '../../service/mainmenuservice.service';
+import { RoleService } from '../../service/roleservice.service';
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { UserMainMenuService } from '../../service/usermainmenuservice';
+import { UserMainMenuService } from '../../service/usermainmenuservice.service';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api'
 import { Role } from 'src/app/xgarage/common/model/role';

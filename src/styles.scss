@@ -6,9 +6,8 @@
 @import "../node_modules/@fullcalendar/timegrid/main.min.css";
 @import "./appdemo.scss";
 
-#tenant {
-    .p-dropdown {
-        width: 100%;
-        text-align: start;
-    }
+
+.p-dropdown {
+    width: 100%;
+    text-align: start;
 }

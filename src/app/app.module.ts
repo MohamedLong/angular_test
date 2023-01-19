@@ -147,7 +147,7 @@ import {IconService} from './demo/service/iconservice';
 import {NodeService} from './demo/service/nodeservice';
 import {PhotoService} from './demo/service/photoservice';
 import {ProductService} from './demo/service/productservice';
-import { UserService } from './xgarage/dashboard/service/userservice';
+import { UserService } from './xgarage/dashboard/service/userservice.service';
 
 import {MenuService} from './app.menu.service';
 import {AppBreadcrumbService} from './app.breadcrumb.service';
@@ -158,20 +158,20 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 // import timeGridPlugin from '@fullcalendar/timegrid';
 // import interactionPlugin from '@fullcalendar/interaction';
 import {CurrencyComponent} from './xgarage/common/component/currency/currency.component';
-import { CurrencyService } from './xgarage/common/service/currencyservice';
-import {MetricService} from './xgarage/common/service/metricservice';
+import { CurrencyService } from './xgarage/common/service/currencyservice.service';
+import {MetricService} from './xgarage/common/service/metricservice.service';
 import {MetricComponent} from './xgarage/common/component/metric/metric.component';
-import { StatusService } from './xgarage/common/service/statusservice';
+import { StatusService } from './xgarage/common/service/statusservice..service';
 import { StatusComponent } from './xgarage/common/component/status/status.component';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DataService } from './xgarage/common/generic/dataservice';
 import { AddRowDirective } from './add-row.directive';
 import { UnsavedChangesGaurd } from './unsaved.guard';
-import { UserSubMenuService } from './xgarage/dashboard/service/usersubmenuservice';
-import { MainMenuService } from './xgarage/dashboard/service/mainmenuservice';
-import { SubMenuService } from './xgarage/dashboard/service/submenuservice';
-import { UserMainMenuService } from './xgarage/dashboard/service/usermainmenuservice';
-import { TenantService } from './xgarage/common/service/tenantservice';
+import { UserSubMenuService } from './xgarage/dashboard/service/usersubmenuservice.service';
+import { MainMenuService } from './xgarage/dashboard/service/mainmenuservice.service';
+import { SubMenuService } from './xgarage/dashboard/service/submenuservice.service';
+import { UserMainMenuService } from './xgarage/dashboard/service/usermainmenuservice.service';
+import { TenantService } from './xgarage/common/service/tenantservice.service';
 import { UsersComponent } from './xgarage/dashboard/component/users/users.component';
 import { UserRolesComponent } from './xgarage/dashboard/component/user-roles/user-roles.component';
 import { UserMainMenuComponent } from './xgarage/dashboard/component/user-main-menu/user-main-menu.component';
@@ -180,11 +180,12 @@ import { PermissionsComponent } from './xgarage/dashboard/component/persmissions
 import { ResetPasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
 import { RolesComponent } from './xgarage/dashboard/component/roles/roles.component';
 import { RolePermissionsComponent } from './xgarage/dashboard/component/role-permissions/role-permissions.component';
-import { PermissionService } from './xgarage/dashboard/service/permissionservice';
-import { RoleService } from './xgarage/dashboard/service/roleservice';
-import { RolePermissionService } from './xgarage/dashboard/service/rolepermissionservice';
+import { PermissionService } from './xgarage/dashboard/service/permissionservice.service';
+import { RoleService } from './xgarage/dashboard/service/roleservice.service';
+import { RolePermissionService } from './xgarage/dashboard/service/rolepermissionservice.service';
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
 import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
+import { RequestComponent } from './xgarage/core/component/request/request.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -363,7 +364,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         RolePermissionsComponent,
         TenantComponent,
         PermissionsComponent,
-        SuppliersComponent
+        SuppliersComponent,
+        RequestComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService,

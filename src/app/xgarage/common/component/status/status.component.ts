@@ -4,7 +4,7 @@ import { ConfirmationService } from 'primeng/api'
 import { Message, MessageService } from 'primeng/api';
 import {AppBreadcrumbService} from '../../../../app.breadcrumb.service';
 import { Status } from '../../model/status';
-import { StatusService } from '../../service/statusservice';
+import { StatusService } from '../../service/statusservice..service';
 
 @Component({
   templateUrl: './status.component.html',

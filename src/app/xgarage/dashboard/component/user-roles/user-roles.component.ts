@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { UserRoleService } from '../../service/userroleservice';
+import { UserRoleService } from '../../service/userroleservice.service';
 import { Table } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { UserRole } from 'src/app/xgarage/common/model/userrole';
