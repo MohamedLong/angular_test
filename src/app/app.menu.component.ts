@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AppComponent} from './app.component';
 import { MainMenu } from './xgarage/dashboard/model/mainmenu';
-import { MainMenuService } from './xgarage/dashboard/service/mainmenuservice';
+import { MainMenuService } from './xgarage/dashboard/service/mainmenu.service';
 
 @Component({
     selector: 'app-menu',
@@ -13,7 +13,7 @@ import { MainMenuService } from './xgarage/dashboard/service/mainmenuservice';
                     <ul role="menu">
                         <li class="layout-menuitem-category" app-menuitem *ngFor="let child of model" [item]="child" [index]="i" role="none"></li>
                         <li app-menuitem [item]="child" [index]="i" [parentKey]="key" role="none"></li>
-                    </ul> 
+                    </ul>
                     <ul role="menu">
 			              	<ng-template ngFor let-child let-i="index" [ngForOf]="item.subMenus">
 			              		<li app-menuitem [item]="child" [index]="i" [parentKey]="key" role="none"></li>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { PermissionService } from '../../service/permissionservice';
+import { PermissionService } from '../../service/permission.service';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Permission } from 'src/app/xgarage/common/model/permission';

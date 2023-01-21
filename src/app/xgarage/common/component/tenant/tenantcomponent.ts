@@ -4,7 +4,7 @@ import { AppBreadcrumbService } from '../../../../app.breadcrumb.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
-import { TenantService } from '../../service/tenantservice';
+import { TenantService } from '../../service/tenant.service';
 import { Tenant } from '../../model/tenant';
 
 @Component({

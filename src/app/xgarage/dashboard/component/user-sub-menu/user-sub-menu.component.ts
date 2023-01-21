@@ -1,8 +1,8 @@
-import { SubMenuService } from './../../service/submenuservice';
-import { UserMainMenuService } from './../../service/usermainmenuservice';
-import { RoleService } from './../../service/roleservice';
+import { SubMenuService } from '../../service/submenu.service';
+import { UserMainMenuService } from '../../service/usermainmenu.service';
+import { RoleService } from '../../service/role.service';
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { UserSubMenuService } from '../../service/usersubmenuservice';
+import { UserSubMenuService } from '../../service/usersubmenu.service';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api'
 import { UserSubMenu } from '../../model/usersubmenu';

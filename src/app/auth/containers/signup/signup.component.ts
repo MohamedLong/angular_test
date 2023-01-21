@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Tenant } from 'src/app/xgarage/common/model/tenant';
-import { TenantService } from 'src/app/xgarage/common/service/tenantservice';
+import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({

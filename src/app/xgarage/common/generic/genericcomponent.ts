@@ -7,7 +7,7 @@ import { Status } from '../model/status';
 import { Message } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { Tenant } from '../model/tenant';
-import { TenantService } from '../service/tenantservice';
+import { TenantService } from '../service/tenant.service';
 
 @Component({
     template: ''
@@ -110,7 +110,7 @@ export class GenericComponent{
         this.submitted = false;
         this.masterDialog = true;
       }
-    
+
 
     deleteSelectedEntries() {
         this.deleteMultipleDialog = true;

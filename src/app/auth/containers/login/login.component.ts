@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenuservice';
+import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenu.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({

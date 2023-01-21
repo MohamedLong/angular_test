@@ -4,9 +4,11 @@ import { config } from "src/app/config";
 import { GenericService } from "../generic/genericservice";
 import { CarModelType } from "../model/carmodeltype";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CarModelTypeService extends GenericService<CarModelType>{
     constructor(http: HttpClient){
-        super(http, config.coreApiUrl);
+        super(http, config.coreApiUrl + '/carModelType');
     }
 }

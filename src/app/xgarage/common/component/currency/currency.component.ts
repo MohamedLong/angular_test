@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { Currency } from '../../model/currency';
-import { CurrencyService } from '../../service/currencyservice';
+import { CurrencyService } from '../../service/currency.service';
 import { Table } from 'primeng/table';
 import { ConfirmationService } from 'primeng/api'
 import { Message, MessageService } from 'primeng/api';

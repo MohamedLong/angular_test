@@ -48,7 +48,7 @@ import { LoginComponent } from './auth/containers/login/login.component';
 import { RandomGuard } from './auth/guards/random.guard';
 import { MetricComponent } from './xgarage/common/component/metric/metric.component';
 import { AppCrudComponent } from './pages/app.crud.component';
-import { UserSubMenuService } from './xgarage/dashboard/service/usersubmenuservice';
+import { UserSubMenuService } from './xgarage/dashboard/service/usersubmenu.service';
 import { SubMenu } from './xgarage/dashboard/model/submenu';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { UserSubMenu } from './xgarage/dashboard/model/usersubmenu';
@@ -62,6 +62,7 @@ import { ResetPasswordComponent } from './xgarage/dashboard/component/changepass
 import { SignupComponent } from './auth/containers/signup/signup.component';
 import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
 import { ClaimComponent } from './xgarage/core/component/claim/claim.component';
+import { RequestComponent } from './xgarage/core/component/request/request.component';
 
 const routes: Routes = [];
 

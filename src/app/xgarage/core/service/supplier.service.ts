@@ -52,4 +52,6 @@ export class SupplierService extends GenericService<Supplier> {
             })
         )
     }
+
+
 }

@@ -7,9 +7,9 @@ import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponen
 import { Brand } from 'src/app/xgarage/common/model/brand';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
 import { ServiceType } from 'src/app/xgarage/common/model/servicetype';
-import { BrandService } from 'src/app/xgarage/common/service/brandservice';
-import { ServiceTypesService } from 'src/app/xgarage/common/service/servicetypeservice';
-import { PartTypesService } from '../../../common/service/parttypeservice';
+import { BrandService } from 'src/app/xgarage/common/service/brand.service';
+import { ServiceTypesService } from 'src/app/xgarage/common/service/servicetype.service';
+import { PartTypesService } from '../../../common/service/parttype.service';
 // import { SupplierDto } from '../../dto/supplierdto';
 import { Supplier } from '../../model/supplier';
 import { SupplierService } from '../../service/supplier.service';

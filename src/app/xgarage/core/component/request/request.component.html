@@ -1,0 +1,93 @@
+<div class="wizard-body">
+    <div class="wizard-wrapper">
+        <div class="wizard-content">
+            <div class="wizard-card">
+                <div class="wizard-card-header">
+                    <div class="grid col py-3">
+                        <div class="col-6 tab flex align-items-center justify-content-center car-info-tab"
+                            [ngClass]="{'selected-tab': activeTab == 'car-info'}" (click)="clickNext('car-info')">
+                            <div class="title">Car Information</div>
+                        </div>
+                        <div class="col-6 tab flex align-items-center justify-content-center request-tab"
+                            [ngClass]="{'selected-tab': activeTab === 'request'}" (click)="clickNext('request')">
+                            <div class="title">Create Request</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="wizard-card-content car-info" [ngClass]="{'active-content': activeTab === 'car-info'}">
+                    <form [formGroup]="requestForm" (ngSubmit)="onCarFormSubmit()">
+                        <div class="grid">
+                            <div class="col-12">
+                                <label class="block">Chassis Number</label>
+                                <span class="p-input-icon-right width-100 my-2">
+                                    <i class="pi pi-spin pi-spinner" *ngIf="isTyping"></i>
+                                    <i class="pi pi-check text-green-500 font-bold" *ngIf="found && !isTyping"></i>
+                                    <input formControlName="chn" class="width-100" type="text" pInputText
+                                        (keyup)="onChnKeyup()" (keydown)="onChnKeydown()" placeholder="Ex: 291919AD1914"
+                                        required autofocus />
+                                </span>
+                                <div class="flex align-items-center justify-content-between">
+                                    <small
+                                        *ngIf="!requestForm.get('chn').valid && requestForm.get('chn').dirty && requestForm.get('chn').errors?.['minlength']"
+                                        class="p-error">Min Chassis Number is 13.</small>
+                                    <small
+                                        *ngIf="submitted && !requestForm.get('chn').valid  && requestForm.get('chn').errors?.['required']"
+                                        class="p-error">Chassis Number is Required.</small>
+                                    <!-- <small class="block" *ngIf="notFound">Car Chassis Number Not Found, Please Fill out
+                                        the Form to Create a New One.</small> -->
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">Brand</label>
+                                <p-dropdown [options]="brands" formControlName="brand" placeholder="Select a Brand"
+                                    optionValue="id" optionLabel="brandName"
+                                    (onChange)="getBrandCarModels($event.value)"></p-dropdown>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">Model</label>
+                                <p-dropdown [options]="carModels" formControlName="model" placeholder="Select a Model"
+                                    optionValue="id" optionLabel="name"
+                                    emptyMessage="Please Select Car Brand First"></p-dropdown>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">Year</label>
+                                <p-dropdown [options]="carModelYears" formControlName="year" placeholder="Select a Year"
+                                    optionValue="id" optionLabel="year"></p-dropdown>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">Specification</label>
+                                <p-dropdown [options]="carModelTypes" formControlName="spec"
+                                    placeholder="Select a Specification" optionValue="id"
+                                    optionLabel="type"></p-dropdown>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block">License Plate Number</label>
+                                <input formControlName="plate" class="width-100 my-2" type="text" pInputText
+                                    placeholder="EX: YA59811" required />
+                                <small
+                                    *ngIf="submitted && !requestForm.get('plate').valid &&  requestForm.get('plate').errors?.['required']"
+                                    class="p-error">Plate Number is Required.</small>
+                            </div>
+                            <!-- {{requestForm.get('chn').errors | json}}
+                                    (click)="clickNext('request')"-->
+                            <div class="col-12 text-center">
+                                <button class="width-100 md:w-20rem" pButton pRipple type="submit" label="NEXT"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'request'}">
+                    <div class="grid ">
+                        <p>seection 2</p>
+                        <div class="col-12">
+                            <button pButton pRipple class="continue-button" type="button" label="PREV"
+                                (click)="clickPrev('register')"></button>
+                            <button pButton pRipple class="continue-button" type="button" label="CONTINUE"
+                                (click)="clickNext('payment')"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

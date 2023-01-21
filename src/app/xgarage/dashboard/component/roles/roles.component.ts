@@ -1,11 +1,11 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
-import { RoleService } from '../../service/roleservice';
+import { RoleService } from '../../service/role.service';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Permission } from 'src/app/xgarage/common/model/permission';
-import { PermissionService } from '../../service/permissionservice';
+import { PermissionService } from '../../service/permission.service';
 import { Role } from 'src/app/xgarage/common/model/role';
 
 @Component({
