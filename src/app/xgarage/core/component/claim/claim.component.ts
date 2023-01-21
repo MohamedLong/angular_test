@@ -1,5 +1,5 @@
-import { StatusService } from './../../../common/service/statusservice';
-import { TenantService } from './../../../common/service/tenantservice';
+import { StatusConstants } from './../../model/statusconstatnts';
+
 import { ClaimDto } from './../../dto/claimdto';
 import { AuthService } from './../../../../auth/services/auth.service';
 import { DatePipe } from '@angular/common';
@@ -11,6 +11,8 @@ import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponen
 import { ClaimService } from '../../service/claimservice';
 import { Tenant } from 'src/app/xgarage/common/model/tenant';
 import { Status } from 'src/app/xgarage/common/model/status';
+import { StatusService } from 'src/app/xgarage/common/service/status.service';
+import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 
 @Component({
   selector: 'app-claim',
@@ -132,7 +134,7 @@ valid: boolean = false;
   this.openNew();
   var currentDate = new Date();
   this.master.claimDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
-  this.master.status = 1;
+  this.master.status = StatusConstants.OPEN_STATUS;
 }
   save() {
     this.submitted = true;
@@ -144,7 +146,7 @@ valid: boolean = false;
                     next: (data) => {
                         console.log(data)
                         this.master = data;
-                        this.masters[this.findIndexById(this.master.id, this.masters)] = this.master;
+                        this.getAll();
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Claim Updated'});
                     },
                     error: (e) => alert(e)
@@ -163,7 +165,6 @@ valid: boolean = false;
                 }
             );
         }
-        // this.masters = [...this.masters];
         this.masterDialog = false;
         this.master = {};
 

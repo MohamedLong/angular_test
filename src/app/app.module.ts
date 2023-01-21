@@ -1,3 +1,4 @@
+import { ClaimComponent } from './xgarage/core/component/claim/claim.component';
 import { ClaimService } from './xgarage/core/service/claimservice';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -364,7 +365,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         RolePermissionsComponent,
         TenantComponent,
         PermissionsComponent,
-        SuppliersComponent
+        SuppliersComponent,
+        ClaimComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService,

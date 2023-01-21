@@ -62,7 +62,7 @@ import { ResetPasswordComponent } from './xgarage/dashboard/component/changepass
 import { SignupComponent } from './auth/containers/signup/signup.component';
 import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
 import { ClaimComponent } from './xgarage/core/component/claim/claim.component';
-import { RequestComponent } from './xgarage/core/component/request/request.component';
+//import { RequestComponent } from './xgarage/core/component/request/request.component';
 
 const routes: Routes = [];
 
