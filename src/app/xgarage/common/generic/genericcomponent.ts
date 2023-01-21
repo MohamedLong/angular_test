@@ -130,17 +130,8 @@ export class GenericComponent{
     setDefaultParameters() {
         var userObject = localStorage.getItem('user');
         var user = JSON.parse(userObject);
-        const insertUser: User = {
-            id: 1,
-            userId: user.userId
-        };
-        const newStatus: Status = {
-            id: 1,
-            nameEn: 'Draft',
-            nameAr: 'مقتوح'
-        };
         var currentDate = new Date();
-        this.master.createdBy = insertUser;
+        this.master.createdBy = user.id;
         this.master.createdAt = currentDate;
     }
 

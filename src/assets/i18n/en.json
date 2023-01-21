@@ -248,6 +248,31 @@
             "locationRequired": "Location is required."
         }
     },
+
+    "claim": {
+        "title": "Manage Claims",
+        "tableColumn": {
+            "id": "ID",
+            "claimDate": "Claim Date",
+            "nameSearch": "Search by claim name",
+            "createdUser": "Creator User",
+            "tenantId": "Tenant",
+            "tenantName": "Tenant Name",
+            "statusDate": "Status Date",
+            "claimNo": "Claim No",
+            "status": "Status"
+
+
+        },
+        "claimDialog": {
+            "title": "Claim Details",
+            "claimDateRequired": "Claim date is required.",
+            "tenantRequired": "Tenant is required.",
+            "claimNoRequired": "Claim Number is required."
+
+        }
+    },
+
     "supplier": {
         "title": "Suppliers",
         "table_footer": "In total there are {{length}} Suppliers",

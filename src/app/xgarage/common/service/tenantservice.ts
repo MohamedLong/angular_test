@@ -9,6 +9,6 @@ import { Tenant } from "../model/tenant";
 })
 export class TenantService extends GenericService<Tenant>{
     constructor(http: HttpClient){
-        super(http, config.apiUrl + '/tenant');
+        super(http, config.apiUrl + '/v1/tenant');
     }
 }

@@ -67,7 +67,7 @@ export class TenantComponent extends GenericComponent implements OnInit {
         if (this.master.name && this.master.cr) {
             if (this.master.id) {
                 // @ts-ignore
-                this.tenantService.add(this.master).subscribe(
+                this.tenantService.update(this.master).subscribe(
                     {
                         next: (data) => {
                             console.log(data)

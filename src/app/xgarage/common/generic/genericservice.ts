@@ -26,11 +26,11 @@ export abstract class GenericService<T> {
     }
 
     public getById(entityId: number) {
-        return this.http.get<T>(this.apiServerUrl + '/id/' + entityId);
+        return this.http.get<T>(this.apiServerUrl + '/' + entityId);
     }
 
     public add(t: T): Observable<T> {
-        return this.http.post<T>(this.apiServerUrl + '/save', t);
+        return this.http.post<T>(this.apiServerUrl + '/add', t);
     }
 
     public update(t: T): Observable<T> {

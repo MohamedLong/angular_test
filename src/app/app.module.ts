@@ -1,3 +1,4 @@
+import { ClaimService } from './xgarage/core/service/claimservice';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
@@ -185,6 +186,7 @@ import { RoleService } from './xgarage/dashboard/service/roleservice';
 import { RolePermissionService } from './xgarage/dashboard/service/rolepermissionservice';
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
 import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
+import { ClaimComponent } from './xgarage/core/component/claim/claim.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -363,13 +365,15 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         RolePermissionsComponent,
         TenantComponent,
         PermissionsComponent,
-        SuppliersComponent
+        SuppliersComponent,
+        ClaimComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService,
         CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService,
         PhotoService, ProductService, MenuService, AppBreadcrumbService, MetricService, StatusService, TenantService, CurrencyService,
-        DialogService, UserSubMenuService, UserMainMenuService, MainMenuService, SubMenuService, PermissionService, RoleService, RolePermissionService
+        DialogService, UserSubMenuService, UserMainMenuService, MainMenuService, SubMenuService, PermissionService, RoleService, RolePermissionService,
+        ClaimService
     ],
     bootstrap: [AppComponent]
 })
