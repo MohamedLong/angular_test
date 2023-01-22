@@ -156,8 +156,6 @@ const routes: Routes = [];
     exports: [RouterModule]
 })
 export class AppRoutingModule {
-  private routes = [];
-  private subs: SubMenu[];
   constructor(private router: Router, private authService: AuthService) {
     if(this.authService.isLoggedIn()) {
         this.authService.getAuthorizedMenu();
