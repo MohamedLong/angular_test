@@ -31,7 +31,8 @@ export class AppMenuComponent implements OnInit {
 
     model: MainMenu[];
 
-    constructor(public app: AppComponent, private menuService: MainMenuService) {}
+    constructor(public app: AppComponent, private menuService: MainMenuService) {
+    }
 
     ngOnInit() {
         this.menuService.getMenues(JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).roles[0].id : null).then(menues => {

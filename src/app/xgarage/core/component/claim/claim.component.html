@@ -121,7 +121,6 @@
                         <p-dropdown [options]="tenants" [(ngModel)]="selectedTenant"
                            optionLabel="name" [showClear]="true" [autoDisplayFirst]="false" required autofocus></p-dropdown>
                          <small class="p-invalid" *ngIf="submitted && !master.tenant">{{ 'claim.claimDialog.tenantRequired' | translate }}</small>
-  
                     </div>
 
 

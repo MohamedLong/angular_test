@@ -30,7 +30,7 @@ export abstract class GenericService<T> {
     }
 
     public add(t: T): Observable<T> {
-        return this.http.post<T>(this.apiServerUrl + '/add', t);
+        return this.http.post<T>(this.apiServerUrl + '/save', t);
     }
 
     public update(t: T): Observable<T> {

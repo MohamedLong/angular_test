@@ -9,6 +9,7 @@
             "newPass": "New Password",
             "email": "Email",
             "tenant": "Tenant",
+            "tenantType": "Tenant Type",
             "login": "Login",
             "signup": "Sign up"
         },
@@ -239,16 +240,30 @@
             "nameSearch": "Search by tenant name",
             "cr": "Tenant CR",
             "crSearch": "Search by tenant cr",
-            "location": "Location"
+            "location": "Location",
+            "tenantType": "Tenant Type"
         },
         "tenantDialog": {
             "title": "Tenant Details",
             "nameRequired": "Tenant name is required.",
             "crRequired": "Tenant CR is required.",
-            "locationRequired": "Location is required."
+            "locationRequired": "Location is required.",
+            "tenanTypeRequired": "Tenant Type is required."
         }
     },
 
+    "tenantType": {
+        "title": "Manage Tenant Types",
+        "tableColumn": {
+            "id": "ID",
+            "name": "Type Name",
+            "nameSearch": "Search by type name"
+        },
+        "tenantTypeDialog": {
+            "title": "Tenant Type Details",
+            "nameRequired": "Type name is required."
+        }
+    },
     "claim": {
         "title": "Manage Claims",
         "tableColumn": {
