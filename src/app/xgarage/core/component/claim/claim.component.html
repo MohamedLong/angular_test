@@ -6,10 +6,8 @@
         <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                                        <!-- Fix the authentication of edit by  [disabled]="newAuth===true" after openNew() -->
-
                     <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        (click)="new()" [hidden]="false"></button>
+                        (click)="new()" [disabled]="newAuth===true" [hidden]="false"></button>
                 </ng-template>
 
                 <ng-template pTemplate="right">
@@ -21,7 +19,7 @@
             </p-toolbar>
 
             <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['id','claimNo','tenantName']"
+                [globalFilterFields]="['id','claimNo','tenantName','createdUser','status']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)"
@@ -42,7 +40,7 @@
                         </th>
                         <th pColumn="claimNo">{{ 'claim.tableColumn.claimNo' | translate }}
                         </th>
-                        <th pColumn="claimDate">{{ 'claim.tableColumn.claimDate' | translate }}
+                        <th pSortableColumn="claimDate">{{ 'claim.tableColumn.claimDate' | translate }}<p-sortIcon field="claimDate"></p-sortIcon>
                         </th>
                         <!-- <th pColumn="tenantId">{{ 'claim.tableColumn.tenantId' | translate }}
                         </th> -->
@@ -52,7 +50,7 @@
                         </th>
                         <th pColumn="statusDate">{{ 'claim.tableColumn.statusDate' | translate }}
                         </th>
-                        <th pColumn="status">{{ 'claim.tableColumn.status' | translate }}
+                        <th pSortableColumn="status">{{ 'claim.tableColumn.status' | translate }}<p-sortIcon field="claimDate"></p-sortIcon>
                         </th>
                         <th pColumn="actions">{{'common.actions' | translate }}
                         </th>
@@ -86,17 +84,16 @@
                             {{claim.status}}
                         </td>
                         <td>
-                            <!-- Fix the authentication of edit by !editAuth -->
-                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="editAuth"
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
                               (click)="edit(claim)"></button>
-                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" [disabled]="deleteAuth"
+                            <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
                               (click)="deleteAction(claim)"></button>
                           </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        In total there are {{masters ? masters.length : 0 }} Claims.
+                        {{'claim.table_footer' | translate: {length: masters ? masters.length : 0} }}
                     </div>
                 </ng-template>
             </p-table>
@@ -107,44 +104,29 @@
             styleClass="p-fluid">
             <ng-template pTemplate="content">
                 <div class="formgrid grid">
-
-
                     <div class="field col-12 md:col-9">
-                        <label for="claimNo">Claim Number</label>
+                        <label for="claimNo">{{ 'claim.tableColumn.claimNo' | translate }}</label>
                         <input type="text" pInputText id="claimNo" [(ngModel)]="master.claimNo" required autofocus/>
                         <small class="p-invalid" *ngIf="submitted && !master.claimNo">{{ 'claim.claimDialog.claimNoRequired' | translate }}</small>
-
                     </div>
-
-                    <div class="field col-12 md:col-5" >
-                        <label for="tenant">Tenant Name</label>
+                    <div class="field col-12 md:col-5">
+                        <label for="tenant">{{ 'claim.tableColumn.tenantName' | translate }}</label>
                         <p-dropdown [options]="tenants" [(ngModel)]="selectedTenant"
                            optionLabel="name" [showClear]="true" [autoDisplayFirst]="false" required autofocus></p-dropdown>
-                         <small class="p-invalid" *ngIf="submitted && !master.tenant">{{ 'claim.claimDialog.tenantRequired' | translate }}</small>
-  
+                         <small class="p-invalid" *ngIf="submitted && !master.tenant">{{ 'claim.claimDialog.tenantRequired' | translate }}</small>  
                     </div>
-
-
                     <div class="field col-12 md:col-4" >
-                        <label for="claimDate">Claim Date</label>
+                        <label for="claimDate">{{ 'claim.tableColumn.claimDate' | translate }}</label>
                         <input type="date" pInputText id="claimDate" [(ngModel)]="master.claimDate" required/>
                         <small class="p-invalid" *ngIf="submitted && !master.claimDate">{{ 'claim.claimDialog.claimDateRequired' | translate }}</small>
                     </div>
-
-
-                    <!-- <div class="field col-12">
-                        <p-message severity="error" text="{{ 'common.formRequired' | translate }}" *ngIf="submitted && (master.claimNo.invalid || selectedTenant.invalid)"></p-message>
-                    </div> -->
                 </div>
 
             </ng-template>
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times" class="p-button-text"
                     (click)="hideDialog()"></button>
-
-                    <!-- Fix the authentication of edit by !editAuth -->
-
-                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check" class="p-button-text" (click)="save()" [disabled]="(editAuth && editable)"></button>
+                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check" class="p-button-text" (click)="save()" [disabled]="(!editAuth && editable)"></button>
             </ng-template>
         </p-dialog>
 

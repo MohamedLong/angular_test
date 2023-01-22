@@ -251,6 +251,7 @@
 
     "claim": {
         "title": "Manage Claims",
+        "table_footer": "In total there are {{length}} Claims",
         "tableColumn": {
             "id": "ID",
             "claimDate": "Claim Date",
