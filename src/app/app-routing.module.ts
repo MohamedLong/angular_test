@@ -65,6 +65,7 @@ import { ClaimComponent } from './xgarage/core/component/claim/claim.component';
 import { AuthService } from './auth/services/auth.service';
 import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
 //import { RequestComponent } from './xgarage/core/component/request/request.component';
+//import { RequestComponent } from './xgarage/core/component/request/request.component';
 
 const routes: Routes = [];
 
@@ -85,6 +86,7 @@ const routes: Routes = [];
                     {path: 'tenanttype', component: TenantTypeComponent},
                     {path: 'tenant', component: TenantComponent},
                     {path: 'claims', component: ClaimComponent}
+                    //{path: 'request', component: RequestComponent}
                     // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
                     // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},

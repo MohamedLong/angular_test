@@ -1,6 +1,4 @@
 import { StatusConstants } from './../../model/statusconstatnts';
-
-import { ClaimDto } from './../../dto/claimdto';
 import { AuthService } from './../../../../auth/services/auth.service';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -39,21 +37,9 @@ valid: boolean = false;
   ngOnInit(): void {
     this.getAll();
     this.getAllTenants();
-    this.getAllStatuses();
     super.callInsideOnInit();
   }
 
-  
-  getAllStatuses() {
-    // this.statusService.getAll().subscribe(
-    //   {
-    //     next: (data) => {
-    //       this.statuses = data;
-    //     },
-    //     error: (e) => alert(e)
-    //   }
-    // )
-  }
 
   getAllTenants() {
     this.tenantService.getAll().subscribe(
