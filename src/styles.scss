@@ -8,6 +8,13 @@
 
 
 .p-dropdown {
-    width: 100%;
     text-align: start;
+}
+
+.p-dropdown, .p-fileupload-choose, .p-cascadeselect, .p-calendar, .p-multiselect {
+    width: 100%;
+}
+
+.car-info > .p-message.p-message-info {
+    border: none;
 }

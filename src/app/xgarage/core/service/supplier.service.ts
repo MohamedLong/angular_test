@@ -53,5 +53,14 @@ export class SupplierService extends GenericService<Supplier> {
         )
     }
 
+    getSupplierByBrandId(brandId: number) {
+        return this.http.get<Supplier[]>(`${config.coreApiUrl}/supplier/brand/${brandId}`).pipe(
+            tap(res => {
+                return res
+            }), catchError(err => {
+                return throwError(err)
+            })
+        )
+    }
 
 }
