@@ -1,21 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/auth/services/auth.service';
 import { Brand } from 'src/app/xgarage/common/model/brand';
 import { CarModel } from 'src/app/xgarage/common/model/carmodel';
 import { CarModelType } from 'src/app/xgarage/common/model/carmodeltype';
 import { CarModelYear } from 'src/app/xgarage/common/model/carmodelyear';
+import { Document } from 'src/app/xgarage/common/model/document';
+import { GearType } from 'src/app/xgarage/common/model/geartype';
+import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { BrandService } from 'src/app/xgarage/common/service/brand.service';
 import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypes.service';
 import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
+import { InsuranceType } from '../../model/insurancetype';
 import { Job } from '../../model/job';
-import { Supplier } from '../../model/supplier';
+import { StatusConstants } from '../../model/statusconstatnts';
 import { JobService } from '../../service/job.service';
 import { RequestService } from '../../service/request.service';
 import { SupplierService } from '../../service/supplier.service';
 
 @Component({
-    selector: 'app-request',
-    templateUrl: './request.component.html',
+    selector: 'app-job',
+    templateUrl: './job.component.html',
     styles: [`
     .wizard-card {width: 100% !important}
     .wizard-body {background: none; height: unset;}
@@ -32,7 +37,7 @@ import { SupplierService } from '../../service/supplier.service';
     }
     `]
 })
-export class RequestComponent implements OnInit {
+export class JobComponent implements OnInit {
 
     activeTab = 'car-info';
     isTyping: boolean = false;
@@ -40,34 +45,30 @@ export class RequestComponent implements OnInit {
     notFound: boolean;
     found: boolean;
     submitted: boolean = false;
-
+    gearType = Object.keys(GearType);
+    insuranceFrom = Object.keys(InsuranceType);
+    privacy = Object.keys(Privacy);
     carForm: FormGroup = this.formBuilder.group({
-        id: [null],
+       // id: [null],
         chassisNumber: ['', [Validators.minLength(13), Validators.required]],
         brandId: [''],
         carModelId: [''],
         carModelYearId: [''],
         carModelTypeId: [''],
         plateNumber: ['', Validators.required],
-        document: ['']
+        gearType: [''],
+        //document: ['']
     });
 
     claimForm: FormGroup = this.formBuilder.group({
         insuranceFrom: [''],
         claim: [''],
         job: [''],
-        loaction: [''],
+        location: [''],
         closingDate: [''],
         privacy: [''],
         carImages: ['']
     });
-
-    privacy: { cname: string, suppliers?: Supplier[] }[] = [
-        { cname: 'public' },
-        {
-            cname: 'private'
-        }
-    ];
 
     selectedPrivateSyppliers = [];
 
@@ -77,13 +78,14 @@ export class RequestComponent implements OnInit {
     carModels: CarModel[];
     carModelYears: CarModelYear[];
     carModelTypes: CarModelType[];
-    InsuranceType: string[] = ['OD', 'TP'];
+    InsuranceType = Object.keys(InsuranceType);
     jobFound: { found: boolean, multiple: boolean } = {
         found: false,
         multiple: false
     };
 
-    job: Job;
+    jobs: string[];
+    claimId: number;
 
     constructor(private formBuilder: FormBuilder,
         private requestService: RequestService,
@@ -91,12 +93,18 @@ export class RequestComponent implements OnInit {
         private carModelYearService: CarModelYearService,
         private carSpecService: CarModelTypeService,
         private supplierService: SupplierService,
-        private jobService: JobService) { }
+        private jobService: JobService,
+        private authService: AuthService) { }
 
     ngOnInit(): void {
+
         this.getBrands();
         this.getCarModelYear();
         this.getCarModelType();
+
+        //set location
+        let location = JSON.parse(this.authService.getStoredUser()).tenant.location;
+        this.claimForm.patchValue({ location });
     }
 
     clickNext(step: string) {
@@ -161,7 +169,8 @@ export class RequestComponent implements OnInit {
 
     setSelectedCar(carInfo) {
         // set car id
-        this.carForm.patchValue({ 'id': carInfo.id });
+        this.carForm.addControl('id', new FormControl(carInfo.id));
+        //this.carForm.patchValue({ 'id': carInfo.id });
 
         //set car brand
         let brandVal = this.setCarModel(carInfo.brandId);
@@ -224,13 +233,32 @@ export class RequestComponent implements OnInit {
         this.setCarModel(brand.id);
     }
 
+    //upload car images
+    onBasicUpload(e) {
+        //console.log(e)
+        let files: Document[] = [];
+
+        e.files.forEach((el: any) => {
+            files.push({ name: el.name, extention: el.objectURL.changingThisBreaksApplicationSecurity })
+        });
+
+        console.log(files)
+
+        // this.carForm.patchValue({
+        //     document: files,
+        // })
+
+        // console.log(this.carForm.getRawValue())
+    }
+
+    //car form submit
     onCarFormSubmit() {
         this.submitted = true;
         if (this.carForm.valid) {
             this.submitted = false;
             this.clickNext('request');
-            //this.carInfo = `${this.carForm.get('')}`;
             this.getSupplierByBrandId();
+
             console.log(this.carForm.getRawValue())
         }
 
@@ -260,14 +288,18 @@ export class RequestComponent implements OnInit {
                 console.log('res:', res)
                 // this.found = true;
                 //this.notFound = false;
-                if (res.jobNo) {
-                    this.jobFound.found = true;
-                    if (res.jobNo.length > 0) {
-                        this.jobFound.multiple = true;
-                        this.job = res.jobNo;
-                    }
+                this.claimId = res[0].claimId;
 
-                    this.claimForm.patchValue({ 'job': res.jobNo });
+                if (res.length > 1) {
+                    this.jobFound.multiple = true;
+                    this.jobFound.found = true;
+
+                    res.forEach(job => {
+                        this.jobs.push(job.jobNo)
+                    })
+
+                } else {
+                    this.claimForm.patchValue({ 'job': res[0].jobNo });
                 }
 
             }, err => {
@@ -289,15 +321,8 @@ export class RequestComponent implements OnInit {
     getSupplierByBrandId() {
         //console.log(this.carForm.get('brand').value)
         this.supplierService.getSupplierByBrandId(this.carForm.get('brandId').value.id).subscribe(res => {
-            console.log(res)
-            this.privacy[1].suppliers = res;
-        })
-    }
-
-    onBasicUpload(e) {
-        console.log(e)
-        this.carForm.patchValue({
-            document: e.files,
+            //console.log(res)
+            this.selectedPrivateSyppliers = res;
         })
     }
 
@@ -311,20 +336,38 @@ export class RequestComponent implements OnInit {
             carModelTypeId: this.carForm.get('carModelTypeId').value.id,
         })
 
+
         let jobBody = {
             jobNo: this.claimForm.get('job').value,
-            garage: 0,
-            claim: this.claimForm.get('claim').value,
-            status: 0,
-            car: this.carForm.getRawValue()
+            claim: this.claimId,
+            //status: StatusConstants.OPEN_STATUS,
+            car: this.carForm.getRawValue(),
+            insuranceType: this.claimForm.get('insuranceFrom').value
         }
 
-        console.log(jobBody)
-        this.jobService.addJob(jobBody).subscribe(res => {
-            console.log('res',res)
+        let jobFormData = new FormData();
+        for(let key in jobBody) {
+            if(key === 'car') {
+              // append nested object
+              for (let carKey in jobBody[key]) {
+                jobFormData.append(carKey, jobBody[key][carKey]);
+              }
+            }
+            else {
+              jobFormData.append(key, jobBody[key]);
+            }
+          };
+
+        console.log(jobFormData)
+        let stringBody = JSON.stringify(jobBody);
+        console.log(stringBody)
+        this.jobService.saveJob(stringBody).subscribe(res => {
+            console.log('res', res)
         }, err => {
             console.log('err', err)
         })
+
         //this.clickNext('requests');
     }
+
 }

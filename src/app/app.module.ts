@@ -187,8 +187,10 @@ import { RoleService } from './xgarage/dashboard/service/role.service';
 import { RolePermissionService } from './xgarage/dashboard/service/rolepermission.service';
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
 import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
+import { JobComponent } from './xgarage/core/component/job/job.component';
 import { TenantTypeService } from './xgarage/common/service/tenanttype.service';
 import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
+import { RouterModule } from '@angular/router';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -207,7 +209,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        AppRoutingModule,
         HttpClientModule,
         BrowserAnimationsModule,
         AccordionModule,
@@ -297,7 +298,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
               useFactory: HttpLoaderFactory,
               deps: [HttpClient]
             }
-          })
+          }),
+          AppRoutingModule
     ],
     // exports: [AppLoginComponent],
     declarations: [
@@ -369,7 +371,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         TenantTypeComponent,
         PermissionsComponent,
         SuppliersComponent,
-        ClaimComponent
+        ClaimComponent,
+        JobComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,

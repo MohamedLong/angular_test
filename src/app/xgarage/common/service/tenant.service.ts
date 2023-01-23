@@ -1,5 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { throwError } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
 import { config } from "src/app/config";
 import { GenericService } from "../generic/genericservice";
 import { Tenant } from "../model/tenant";
@@ -8,7 +10,7 @@ import { Tenant } from "../model/tenant";
     providedIn: 'root'
 })
 export class TenantService extends GenericService<Tenant>{
-    constructor(http: HttpClient){
+    constructor(http: HttpClient) {
         super(http, config.apiUrl + '/v1/tenant');
     }
 

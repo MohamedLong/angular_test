@@ -1,4 +1,4 @@
-export enum Privacy{
-    Public,
-    Private
+export enum Privacy {
+    Public = 'public',
+    Private = 'private'
 }
