@@ -64,6 +64,9 @@ import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.
 import { ClaimComponent } from './xgarage/core/component/claim/claim.component';
 import { RequestComponent } from './xgarage/core/component/request/request.component';
 import { JobComponent } from './xgarage/core/component/job/job.component';
+import { AuthService } from './auth/services/auth.service';
+import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
+//import { RequestComponent } from './xgarage/core/component/request/request.component';
 //import { RequestComponent } from './xgarage/core/component/request/request.component';
 
 const routes: Routes = [];
@@ -82,6 +85,7 @@ const routes: Routes = [];
                     {path: 'users', component: UsersComponent},
                     {path: 'roles', component: RolesComponent},
                     {path: 'permission', component: PermissionsComponent},
+                    {path: 'tenanttype', component: TenantTypeComponent},
                     {path: 'tenant', component: TenantComponent},
                     {path: 'claims', component: ClaimComponent},
                     {path: 'jobs', component: JobComponent},
@@ -155,9 +159,11 @@ const routes: Routes = [];
     exports: [RouterModule]
 })
 export class AppRoutingModule {
-  private routes = [];
-  private subs: SubMenu[];
-  constructor(private router: Router) {
-    this.router.resetConfig(this.router.config);
+  constructor(private router: Router, private authService: AuthService) {
+    if(this.authService.isLoggedIn()) {
+        this.authService.getAuthorizedMenu();
+    }else{
+        this.router.resetConfig(this.router.config);
+    }
   }
 }

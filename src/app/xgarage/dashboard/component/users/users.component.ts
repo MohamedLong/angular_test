@@ -36,6 +36,7 @@ export class UsersComponent implements OnInit {
     users: UserDto[];
 
     user: User;
+
     userDto: UserDto;
 
     roles: Role[];
@@ -134,6 +135,7 @@ export class UsersComponent implements OnInit {
             ];
         });
     }
+    
     openNew() {
         this.user = {};
         this.userDto = {};

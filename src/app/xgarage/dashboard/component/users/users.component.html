@@ -185,7 +185,7 @@
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.userId">User ID is required.</small>
                 </div>
 
-                <div class="field" [(hidden)]="!selectedRoleHidden">
+                <div class="field">
                     <label for="password">Password</label>
                     <input type="password" pInputText id="password" [(ngModel)]="user.password" placeholder="********"
                         required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.password}" />
@@ -193,8 +193,8 @@
                         required.</small>
                 </div>
 
-                <div class="field">
-                    <label for="password">Role</label>
+                <div class="field" [(hidden)]="selectedRoleHidden">
+                    <label for="role">Role</label>
                     <p-dropdown [options]="roles" [(hidden)]="selectedRoleHidden" [(ngModel)]="selectedRole"
                         placeholder="Select a Role" optionLabel="roleName" [showClear]="true"></p-dropdown>
                 </div>

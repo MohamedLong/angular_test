@@ -4,14 +4,11 @@ import { AppBreadcrumbService } from '../../../../app.breadcrumb.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
-import { TenantService } from '../../service/tenant.service';
 import { TenantTypeService } from '../../service/tenanttype.service';
-import { TenantType } from '../../model/tenanttype';
-import { Tenant } from '../../model/tenant';
 
 @Component({
-    selector: 'app-stock-order',
-    templateUrl: './tenantcomponent.html', styleUrls: ['../../../../demo/view/tabledemo.scss'],
+    selector: 'app-tenant-type',
+    templateUrl: './tenanttype.component.html', styleUrls: ['../../../../demo/view/tabledemo.scss'],
     styles: [`
       :host ::ng-deep .p-dialog .product-image {
           width: 150px;
@@ -32,55 +29,30 @@ import { Tenant } from '../../model/tenant';
   `],
     providers: [MessageService, ConfirmationService, DatePipe]
 })
-export class TenantComponent extends GenericComponent implements OnInit {
+export class TenantTypeComponent extends GenericComponent implements OnInit {
 
-    constructor(public route: ActivatedRoute, private router: Router, private tenantService: TenantService,
-        public messageService: MessageService, private tenantTypeService: TenantTypeService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
+    constructor(public route: ActivatedRoute, private router: Router, private tenantTypeService: TenantTypeService,
+        public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
         super(route, datePipe, breadcrumbService);
     }
 
     valid: boolean = false;
 
-    tenantTypes: TenantType[];
-    selectedTenantType: TenantType;
-
     ngOnInit(): void {
         this.getAll();
-        this.getTenantTypes();
         super.callInsideOnInit();
     }
 
-    new() {
-        this.selectedTenantType = {};
-        this.openNew();
-    }
-
-    edit(master: Tenant) {
-        this.selectedTenantType = master.tenantType;
-        this.editMaster(master);
-    }
-
     getAll() {
-        this.tenantService.getAll().subscribe({
+        this.tenantTypeService.getAll().subscribe({
             next: (masters) => {
                 this.masters = masters;
+                //console.log(this.masters)
                 this.loading = false;
                 this.cols = [
                     { field: 'id', header: 'ID' },
-                    { field: 'name', header: 'Tenant Name' },
-                    { field: 'cr', header: 'CR' },
-                    { field: 'location', header: 'Location' },
-                    { field: 'tenantType.name', header: 'Type Name' }
+                    { field: 'name', header: 'Type Name' }
                 ];
-            },
-            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
-        });
-    }
-
-    getTenantTypes() {
-        this.tenantTypeService.getAll().subscribe({
-            next: (data) => {
-                this.tenantTypes = data;
             },
             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
         });
@@ -88,28 +60,28 @@ export class TenantComponent extends GenericComponent implements OnInit {
 
     save() {
         this.submitted = true;
-        if (this.master.name && this.master.cr && this.selectedTenantType) {
-            this.master.tenantType = this.selectedTenantType;
+
+        if (this.master.name) {
             if (this.master.id) {
                 // @ts-ignore
-                this.tenantService.update(this.master).subscribe(
+                this.tenantTypeService.update(this.master).subscribe(
                     {
                         next: (data) => {
                             this.master = data;
                             this.masters[this.findIndexById(this.master.id, this.masters)] = this.master;
-                            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tenant Updated'});
+                            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tenant Type Updated'});
                             this.getAll();
                         },
                         error: (e) => alert(e)
                     }
                 );
-            } else {       
-                this.tenantService.add(this.master).subscribe(
+            } else {
+                this.tenantTypeService.add(this.master).subscribe(
                     {
                         next: (data) => {
                             this.master = data;
                             this.masters.push(this.master);
-                            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tenant created successfully' });
+                            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tenant Type created successfully' });
                         },
                         error: (e) => alert(e)
                     }
@@ -118,14 +90,16 @@ export class TenantComponent extends GenericComponent implements OnInit {
             this.masters = [...this.masters];
             this.masterDialog = false;
             this.master = {};
+
+            //this.ngOnInit();
         }
     }
 
     confirmDelete() {
-        this.tenantService.delete(this.master.id).subscribe(res => {
-            this.messageService.add({ severity: 'success', summary: 'Tenant deleted successfully' });
-            this.deleteSingleDialog = false;
+        this.tenantTypeService.delete(this.master.id).subscribe(res => {
             this.masters = this.masters.filter(val => val.id != this.master.id);
+            this.messageService.add({ severity: 'success', summary: 'Tenant Type deleted successfully' });
+            this.deleteSingleDialog = false;
         }, err => {
             this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err, life: 3000 });
         })

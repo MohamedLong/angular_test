@@ -14,13 +14,8 @@ export class TenantService extends GenericService<Tenant>{
         super(http, config.apiUrl + '/v1/tenant');
     }
 
-    getByTenantType() {
-        return this.http.get<any>(config.apiUrl + '/v1/tenant/type/2').pipe(
-            tap(res => {
-                return res
-            }), catchError(err => {
-                return throwError(err)
-            })
-        )
+    public getTenantsByType(typeId: number) {
+        return this.http.get<Tenant[]>(this.apiServerUrl + '/type/' + typeId);
     }
+
 }
