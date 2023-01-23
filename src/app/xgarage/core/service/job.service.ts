@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { config } from 'src/app/config';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GenericService } from '../../common/generic/genericservice';
 import { Job } from '../model/job';
 
@@ -16,7 +16,7 @@ export class JobService extends GenericService<Job> {
     }
 
     getJobByClaimNumber(cno: string) {
-        return this.http.get<any>(`${config.coreApiUrl}/job/claimNo/${cno}`).pipe(
+        return this.http.get<any>(config.coreApiUrl + '/job/claimNo/' + cno).pipe(
             tap(res => {
                 return res
             }), catchError(err => {
@@ -26,7 +26,7 @@ export class JobService extends GenericService<Job> {
     }
 
     saveJob(body: any) {
-        return this.http.post<any>(`${config.coreApiUrl}/job/saveJob?jobBody=${body}`, '').pipe(
+        return this.http.post<any>(config.coreApiUrl + '/job/saveJob', body).pipe(
             tap(res => {
                 return res
             }), catchError(err => {
@@ -36,7 +36,7 @@ export class JobService extends GenericService<Job> {
     }
 
     addJob(body: any) {
-        return this.http.post<any>(`${config.coreApiUrl}/job/saveJob?jobBody=${body}`, '').pipe(
+        return this.http.post<any>(config.coreApiUrl + '/job/saveJob?jobBody=' + body, '').pipe(
             tap(res => {
                 return res
             }), catchError(err => {
