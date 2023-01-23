@@ -49,7 +49,7 @@ export class JobComponent implements OnInit {
     insuranceFrom = Object.keys(InsuranceType);
     privacy = Object.keys(Privacy);
     carForm: FormGroup = this.formBuilder.group({
-       // id: [null],
+        // id: [null],
         chassisNumber: ['', [Validators.minLength(13), Validators.required]],
         brandId: [''],
         carModelId: [''],
@@ -86,6 +86,7 @@ export class JobComponent implements OnInit {
 
     jobs: string[];
     claimId: number;
+    carFiles: any[] = [];
 
     constructor(private formBuilder: FormBuilder,
         private requestService: RequestService,
@@ -236,13 +237,11 @@ export class JobComponent implements OnInit {
     //upload car images
     onBasicUpload(e) {
         //console.log(e)
-        let files: Document[] = [];
-
         e.files.forEach((el: any) => {
-            files.push({ name: el.name, extention: el.objectURL.changingThisBreaksApplicationSecurity })
+            this.carFiles.push(el.objectURL.changingThisBreaksApplicationSecurity)
         });
 
-        console.log(files)
+        console.log(this.carFiles)
 
         // this.carForm.patchValue({
         //     document: files,
@@ -345,13 +344,24 @@ export class JobComponent implements OnInit {
         }
 
         let stringJobBody = JSON.stringify(jobBody);
-        let updatedJobBody = {'jobBody': stringJobBody};
+        let updatedJobBody = { 'jobBody': stringJobBody };
+
+        if (this.carFiles.length > 0) {
+            this.carFiles.forEach(file => {
+                updatedJobBody['carDocument'] = file;
+            })
+        }
 
         let jobBodyFormData = new FormData();
-        for ( var key in updatedJobBody ) {
-            jobBodyFormData.append(key, updatedJobBody[key]);
+        for (var key in updatedJobBody) {
+            if (key == 'carDocument') {
+                jobBodyFormData.append(key, updatedJobBody[key]);
+            } else {
+                jobBodyFormData.append(key, updatedJobBody[key]);
+            }
+
         }
-        //console.log(updatedJobBody)
+        console.log(updatedJobBody)
 
         this.jobService.saveJob(jobBodyFormData).subscribe(res => {
             console.log('res', res)
