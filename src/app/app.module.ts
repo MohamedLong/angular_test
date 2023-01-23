@@ -190,6 +190,7 @@ import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.
 import { JobComponent } from './xgarage/core/component/job/job.component';
 import { TenantTypeService } from './xgarage/common/service/tenanttype.service';
 import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
+import { RouterModule } from '@angular/router';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -297,7 +298,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
               useFactory: HttpLoaderFactory,
               deps: [HttpClient]
             }
-          })
+          }),
+          AppRoutingModule
     ],
     // exports: [AppLoginComponent],
     declarations: [
