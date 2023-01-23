@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Brand } from 'src/app/xgarage/common/model/brand';
 import { CarModel } from 'src/app/xgarage/common/model/carmodel';
@@ -7,7 +7,6 @@ import { CarModelYear } from 'src/app/xgarage/common/model/carmodelyear';
 import { BrandService } from 'src/app/xgarage/common/service/brand.service';
 import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypes.service';
 import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
-import { SupplierDto } from '../../dto/supplierdto';
 import { Job } from '../../model/job';
 import { Supplier } from '../../model/supplier';
 import { JobService } from '../../service/job.service';

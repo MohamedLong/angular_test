@@ -1,5 +1,4 @@
 export const StatusConstants = {
-
     OPEN_STATUS : 1,
     INPROGRESS_STATUS : 2,
     ONHOLD_STATUS : 3,
