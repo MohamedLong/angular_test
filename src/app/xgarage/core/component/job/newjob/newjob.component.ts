@@ -11,13 +11,15 @@ import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { BrandService } from 'src/app/xgarage/common/service/brand.service';
 import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypes.service';
 import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
-import { InsuranceType } from '../../model/insurancetype';
-import { JobService } from '../../service/job.service';
-import { RequestService } from '../../service/request.service';
-import { SupplierService } from '../../service/supplier.service';
+import { InsuranceType } from '../../../model/insurancetype';
+import { Job } from '../../../model/job';
+import { StatusConstants } from '../../../model/statusconstatnts';
+import { JobService } from '../../../service/job.service';
+import { RequestService } from '../../../service/request.service';
+import { SupplierService } from '../../../service/supplier.service';
 
 @Component({
-    selector: 'app-job',
+    selector: 'app-newjob',
     templateUrl: './newjob.component.html',
     styles: [`
     .wizard-card {width: 100% !important}
@@ -47,7 +49,7 @@ export class NewJobComponent implements OnInit {
     insuranceFrom = Object.keys(InsuranceType);
     privacy = Object.keys(Privacy);
     carForm: FormGroup = this.formBuilder.group({
-       // id: [null],
+        // id: [null],
         chassisNumber: ['', [Validators.minLength(13), Validators.required]],
         brandId: [''],
         carModelId: [''],
@@ -84,6 +86,7 @@ export class NewJobComponent implements OnInit {
 
     jobs: string[];
     claimId: number;
+    carFiles: any[] = [];
 
     constructor(private formBuilder: FormBuilder,
         private requestService: RequestService,
@@ -234,13 +237,11 @@ export class NewJobComponent implements OnInit {
     //upload car images
     onBasicUpload(e) {
         //console.log(e)
-        let files: Document[] = [];
-
         e.files.forEach((el: any) => {
-            files.push({ name: el.name, extention: el.objectURL.changingThisBreaksApplicationSecurity })
+            this.carFiles.push(el.objectURL.changingThisBreaksApplicationSecurity)
         });
 
-        console.log(files)
+        console.log(this.carFiles)
 
         // this.carForm.patchValue({
         //     document: files,
@@ -325,7 +326,7 @@ export class NewJobComponent implements OnInit {
     }
 
     onClaimFormSubmit() {
-        console.log(this.selectedPrivateSyppliers)
+        //console.log(this.selectedPrivateSyppliers)
 
         this.carForm.patchValue({
             brandId: this.carForm.get('brandId').value.id,
@@ -338,28 +339,31 @@ export class NewJobComponent implements OnInit {
         let jobBody = {
             jobNo: this.claimForm.get('job').value,
             claim: this.claimId,
-            //status: StatusConstants.OPEN_STATUS,
+            insuranceType: this.claimForm.get('insuranceFrom').value,
             car: this.carForm.getRawValue(),
-            insuranceType: this.claimForm.get('insuranceFrom').value
         }
 
-        let jobFormData = new FormData();
-        for(let key in jobBody) {
-            if(key === 'car') {
-              // append nested object
-              for (let carKey in jobBody[key]) {
-                jobFormData.append(carKey, jobBody[key][carKey]);
-              }
-            }
-            else {
-              jobFormData.append(key, jobBody[key]);
-            }
-          };
+        let stringJobBody = JSON.stringify(jobBody);
+        let updatedJobBody = { 'jobBody': stringJobBody };
 
-        console.log(jobFormData)
-        let stringBody = JSON.stringify(jobBody);
-        console.log(stringBody)
-        this.jobService.saveJob(stringBody).subscribe(res => {
+        if (this.carFiles.length > 0) {
+            this.carFiles.forEach(file => {
+                updatedJobBody['carDocument'] = file;
+            })
+        }
+
+        let jobBodyFormData = new FormData();
+        for (var key in updatedJobBody) {
+            if (key == 'carDocument') {
+                jobBodyFormData.append(key, updatedJobBody[key]);
+            } else {
+                jobBodyFormData.append(key, updatedJobBody[key]);
+            }
+
+        }
+        console.log(updatedJobBody)
+
+        this.jobService.saveJob(jobBodyFormData).subscribe(res => {
             console.log('res', res)
         }, err => {
             console.log('err', err)

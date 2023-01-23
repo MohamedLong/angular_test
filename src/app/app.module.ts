@@ -188,12 +188,11 @@ import { RolePermissionService } from './xgarage/dashboard/service/rolepermissio
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
 import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
 import { JobComponent} from './xgarage/core/component/job/job.component';
-import { NewJobComponent } from './xgarage/core/component/job/newjob.component';
 import { TenantTypeService } from './xgarage/common/service/tenanttype.service';
 import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
 import { RouterModule } from '@angular/router';
 import { JobService } from './xgarage/core/service/job.service';
-
+import { NewJobComponent } from './xgarage/core/component/job/newjob/newjob.component';
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
 }
