@@ -62,6 +62,8 @@ import { ResetPasswordComponent } from './xgarage/dashboard/component/changepass
 import { SignupComponent } from './auth/containers/signup/signup.component';
 import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
 import { ClaimComponent } from './xgarage/core/component/claim/claim.component';
+import { RequestComponent } from './xgarage/core/component/request/request.component';
+import { JobComponent } from './xgarage/core/component/job/job.component';
 import { AuthService } from './auth/services/auth.service';
 import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
 //import { RequestComponent } from './xgarage/core/component/request/request.component';
@@ -85,8 +87,9 @@ const routes: Routes = [];
                     {path: 'permission', component: PermissionsComponent},
                     {path: 'tenanttype', component: TenantTypeComponent},
                     {path: 'tenant', component: TenantComponent},
-                    {path: 'claims', component: ClaimComponent}
-                    //{path: 'request', component: RequestComponent}
+                    {path: 'claims', component: ClaimComponent},
+                    {path: 'jobs', component: JobComponent},
+                    {path: 'request', component: RequestComponent}
                     // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
                     // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
