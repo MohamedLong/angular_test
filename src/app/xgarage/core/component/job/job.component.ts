@@ -327,7 +327,7 @@ export class JobComponent implements OnInit {
     }
 
     onClaimFormSubmit() {
-        console.log(this.selectedPrivateSyppliers)
+        //console.log(this.selectedPrivateSyppliers)
 
         this.carForm.patchValue({
             brandId: this.carForm.get('brandId').value.id,
@@ -340,28 +340,20 @@ export class JobComponent implements OnInit {
         let jobBody = {
             jobNo: this.claimForm.get('job').value,
             claim: this.claimId,
-            //status: StatusConstants.OPEN_STATUS,
+            insuranceType: this.claimForm.get('insuranceFrom').value,
             car: this.carForm.getRawValue(),
-            insuranceType: this.claimForm.get('insuranceFrom').value
         }
 
-        let jobFormData = new FormData();
-        for(let key in jobBody) {
-            if(key === 'car') {
-              // append nested object
-              for (let carKey in jobBody[key]) {
-                jobFormData.append(carKey, jobBody[key][carKey]);
-              }
-            }
-            else {
-              jobFormData.append(key, jobBody[key]);
-            }
-          };
+        let stringJobBody = JSON.stringify(jobBody);
+        let updatedJobBody = {'jobBody': stringJobBody};
 
-        console.log(jobFormData)
-        let stringBody = JSON.stringify(jobBody);
-        console.log(stringBody)
-        this.jobService.saveJob(stringBody).subscribe(res => {
+        let jobBodyFormData = new FormData();
+        for ( var key in updatedJobBody ) {
+            jobBodyFormData.append(key, updatedJobBody[key]);
+        }
+        //console.log(updatedJobBody)
+
+        this.jobService.saveJob(jobBodyFormData).subscribe(res => {
             console.log('res', res)
         }, err => {
             console.log('err', err)
