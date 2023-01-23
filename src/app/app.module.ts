@@ -187,6 +187,7 @@ import { RoleService } from './xgarage/dashboard/service/role.service';
 import { RolePermissionService } from './xgarage/dashboard/service/rolepermission.service';
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
 import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
+import { JobComponent } from './xgarage/core/component/job/job.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -366,7 +367,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         TenantComponent,
         PermissionsComponent,
         SuppliersComponent,
-        ClaimComponent
+        ClaimComponent,
+        JobComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService,
