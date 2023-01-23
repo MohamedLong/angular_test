@@ -7,7 +7,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        (click)="new()" [disabled]="newAuth===true" [hidden]="false"></button>
+                        (click)="new()" [disabled]="newAuth===false" [hidden]="false"></button>
                 </ng-template>
 
                 <ng-template pTemplate="right">
@@ -84,16 +84,18 @@
                             {{claim.status}}
                         </td>
                         <td>
-                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
-                              (click)="edit(claim)"></button>
-                            <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
-                              (click)="deleteAction(claim)"></button>
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" 
+                            [disabled]="!editAuth" (click)="edit(claim)"></button>
+                            <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" 
+                            [disabled]="!editAuth" (click)="deleteAction(claim)" *ngIf="claim.status !== 'cancelled'"></button>
+                            <!-- Hidden property to be checked above -->
+                            <!-- Also to use:  [ngStyle]="{'display': claim.status === 'cancelled' ? 'none' : 'block'}" -->
                           </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        {{'claim.table_footer' | translate: {length: masters ? masters.length : 0} }}
+                        {{'claim.table_footer' | translate: {length: masterDtos ? masterDtos.length : 0} }}
                     </div>
                 </ng-template>
             </p-table>
@@ -130,10 +132,13 @@
             </ng-template>
         </p-dialog>
 
+        
+        <!-- Delete Single Claim dialog  -->
+
         <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="master">{{ 'operations.deleteMessage' | translate }} <b>{{master.name}}</b>?</span>
+                <span *ngIf="master">{{ 'operations.cancelMessage' | translate }} <b>{{master.name}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
@@ -142,6 +147,9 @@
                     (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
+
+
+        <!-- Delete Multiple Claims dialog (Not Functioning) -->
 
         <p-dialog [(visible)]="deleteMultipleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
@@ -155,5 +163,7 @@
                     (click)="confirmDeleteSelected()"></button>
             </ng-template>
         </p-dialog>
+
+
     </div>
 
