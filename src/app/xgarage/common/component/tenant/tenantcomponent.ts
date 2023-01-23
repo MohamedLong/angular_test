@@ -131,4 +131,16 @@ export class TenantComponent extends GenericComponent implements OnInit {
         })
     }
 
+    changeStatus(id: number, event) {
+        if (id != null) {
+            this.tenantService.changeEnableStatus(id, event.checked).subscribe(
+                {
+                    next: (data) => {
+                        this.messageService.add({ severity: 'info', summary: 'Successful', detail: 'Tenant Status Changed', life: 3000});
+                    }
+                }
+            )
+        }
+    }
+
 }

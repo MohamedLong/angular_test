@@ -46,6 +46,8 @@
                         </th>
                         <th pColumn="tenantType">{{ 'tenant.tableColumn.tenantType' | translate }}
                         </th>
+                        <th pColumn="enabled">{{'tenant.tableColumn.enabled' | translate}}
+                        </th>
                         <th pColumn="actions">{{'operations.title' | translate}}
                         </th>
                     </tr>
@@ -66,6 +68,10 @@
                         </td>
                         <td>
                             {{master.tenantType.name}}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            <p-inputSwitch type="button" [(ngModel)]="master.enabled" (onChange)="changeStatus(master.id, $event)">
+                            </p-inputSwitch>
                         </td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
