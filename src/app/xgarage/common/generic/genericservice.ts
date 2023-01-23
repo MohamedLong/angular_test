@@ -18,11 +18,11 @@ export abstract class GenericService<T> {
     }
 
     public getAllForUser() {
-        return this.http.get<T[]>(this.apiServerUrl + '/user/all');
+        return this.http.get<any[]>(this.apiServerUrl + '/user/all');
     }
 
     public getForUser() {
-        return this.http.get<T[]>(this.apiServerUrl + '/user');
+        return this.http.get<any[]>(this.apiServerUrl + '/user');
     }
 
     public getById(entityId: number) {

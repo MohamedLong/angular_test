@@ -54,6 +54,7 @@
         "export": "Export",
         "import": "Import",
         "deleteMessage": "Are you sure you want to delete",
+        "cancelMessage": "Are you sure you want to cancel",
         "deleteAllMessage": "Are you sure you want to delete selected entries?",
         "confirmActionMessage": "Are you sure you want to do this action?",
         "confirmCloneActionMessage": "Are you sure you want to do this action?",

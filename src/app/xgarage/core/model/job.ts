@@ -1,8 +1,11 @@
 import { GenericEntity } from "../../common/generic/genericentity";
-import { Claim } from "./claim";
-import { InsuranceType } from "./insurancetype";
+import { Car } from "./car";
+import { InsuranceType } from "./insurancetyps";
 
 export interface Job extends GenericEntity{
-    claim?: Claim;
-    insuranceType: InsuranceType;
+    jobNO?: string;
+    claim?: number;
+    insuranceType?: InsuranceType,
+    car?: Car,
+    status?: number;
 }
