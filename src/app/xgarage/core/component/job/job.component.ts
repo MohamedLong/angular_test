@@ -10,9 +10,7 @@ import { ClaimService } from '../../service/claimservice';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { JobService } from '../../service/job.service';
-import { Job } from '../../model/job';
-import { Claim } from '../../model/claim';
-import { JobDto } from '../../dto/jobdto';
+
 
 @Component({
   selector: 'app-job',
@@ -29,8 +27,6 @@ export class JobComponent extends GenericComponent implements OnInit {
     super(route, datePipe, breadcrumbService);
 }
 
-jobs: JobDto[];
-job: JobDto;
 selectedStatus: Status;
 statuses: Status[];
 valid: boolean = false;
@@ -62,59 +58,22 @@ valid: boolean = false;
   });
     }
  }
-
-
- new(): void {
-  this.openNew();
-  var currentDate = new Date();
-  this.master.claimDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
-  this.master.status = StatusConstants.OPEN_STATUS;
-}
-  save() {
-    this.submitted = true;
-    if (this.master.claimNo && this.master.claimDate) {
-        if (this.master.id) {
-            this.claimService.update(this.master).subscribe(
-                {
-                    next: (data) => {
-                        console.log(data)
-                        this.master = data;
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Claim Updated'});
-                    },
-                    error: (e) => alert(e)
-                }
-            );
-        } else {
-
-            this.claimService.add(this.master).subscribe(
-                {
-                    next: (data) => {
-                        this.master = data;
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Claim created successfully' });
-                    },
-                    error: (e) => alert(e)
-                }
-            );
-        }
-        this.masterDialog = false;
-        this.master = {};
-
-    }
-}
+ 
+// We need to confirm the cancellation / deletion method
 
 confirmDelete() {
-  this.jobService.delete(this.master.id).subscribe(res => {
-    if(res.messageCode == 200){
-      this.messageService.add({ severity: 'success', summary: 'Job cancelled successfully' });
-      this.deleteSingleDialog = false;
-      this.getAllForUser();
-    }
-    else{
-      this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });     
-    }
-  }, err => {
-      this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
-  })
+  // this.jobService.delete(this.master.id).subscribe(res => {
+  //   if(res.messageCode == 200){
+  //     this.messageService.add({ severity: 'success', summary: 'Job cancelled successfully' });
+  //     this.deleteSingleDialog = false;
+  //     this.getAllForUser();
+  //   }
+  //   else{
+  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });     
+  //   }
+  // }, err => {
+  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
+  // })
 }
 
 
