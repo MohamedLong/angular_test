@@ -11,6 +11,8 @@ import { Status } from 'src/app/xgarage/common/model/status';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { JobService } from '../../service/job.service';
 import { Job } from '../../model/job';
+import { Claim } from '../../model/claim';
+import { JobDto } from '../../dto/jobdto';
 
 @Component({
   selector: 'app-job',
@@ -27,22 +29,21 @@ export class JobComponent extends GenericComponent implements OnInit {
     super(route, datePipe, breadcrumbService);
 }
 
-jobs: Job[];
+jobs: JobDto[];
+job: JobDto;
 selectedStatus: Status;
 statuses: Status[];
-
 valid: boolean = false;
 
   ngOnInit(): void {
     super.callInsideOnInit();
     this.getAllForUser();
+
   }
-
-
 
   getAllForUser() {
     let user = this.authService.getStoredUser();
-    if(JSON.parse(user).tenant.id !== null){
+    if(JSON.parse(user).tenant !== null){
       this.jobService.getForUser().subscribe({
       next: (masters) => {
           this.masterDtos = masters;
@@ -51,9 +52,10 @@ valid: boolean = false;
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
   });
     }else{
+      console.log();
       this.jobService.getAll().subscribe({
         next: (masters) => {
-          this.masterDtos = masters;
+          this.masters = masters;
           this.loading = false;
       },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
@@ -61,22 +63,6 @@ valid: boolean = false;
     }
  }
 
- edit(claimDto: any){
-  this.claimService.getById(claimDto.id).subscribe(
-    {
-      next: (data) => {
-
-          this.master = data;
-          this.master.claimDate = this.datePipe.transform(this.master.claimDate, 'yyyy-MM-dd');
-          this.editMaster(this.master);
-      },
-      error: (e) => alert(e)
-  }
-
-
-  )
-
- }
 
  new(): void {
   this.openNew();
@@ -116,16 +102,48 @@ valid: boolean = false;
     }
 }
 
-
 confirmDelete() {
-    this.claimService.delete(this.master.id).subscribe(res => {
-        console.log(res)
-
-        this.messageService.add({ severity: 'success', summary: 'Job deleted successfully' });
-        this.deleteSingleDialog = false;
-    }, err => {
-        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err, life: 3000 });
-    })
+  this.jobService.delete(this.master.id).subscribe(res => {
+    if(res.messageCode == 200){
+      this.messageService.add({ severity: 'success', summary: 'Job cancelled successfully' });
+      this.deleteSingleDialog = false;
+      this.getAllForUser();
+    }
+    else{
+      this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });     
+    }
+  }, err => {
+      this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
+  })
 }
+
+
+getStatusName(statusId: number) {
+  switch (statusId) {
+    case StatusConstants.OPEN_STATUS:
+      return 'Open';
+    case StatusConstants.INPROGRESS_STATUS:
+      return 'In Progress';
+    case StatusConstants.ONHOLD_STATUS:
+      return 'On Hold';
+    case StatusConstants.COMPLETED_STATUS:
+      return 'Completed';
+    case StatusConstants.REJECTED_STATUS:
+      return 'Rejected';
+    case StatusConstants.APPROVED_STATUS:
+      return 'Approved';
+    case StatusConstants.CANCELED_STATUS:
+      return 'Canceled';
+    case StatusConstants.REVISION_STATUS:
+      return 'Revision';
+    case StatusConstants.LOST_STATUS:
+      return 'Lost';
+    case StatusConstants.REVISED_STATUS:
+      return 'Revised';
+    default:
+      return 'Unknown';
+  }
+}
+
 
 }
