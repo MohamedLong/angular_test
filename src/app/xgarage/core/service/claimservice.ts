@@ -12,16 +12,16 @@ import { ClaimDto } from '../dto/claimdto';
 })
 export class ClaimService extends GenericService<Claim>{
 
-    constructor(http: HttpClient){
+    constructor(http: HttpClient) {
         super(http, config.coreApiUrl + '/claim');
     }
 
-    
-    public getByTenant(tenantId: number){
+
+    public getByTenant(tenantId: number) {
         return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant/' + tenantId);
     }
 
     cancel(id: number) {
         return this.http.post<MessageResponse>(config.coreApiUrl + '/claim/cancel/' + id, null);
-      }
+    }
 }

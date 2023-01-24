@@ -6,8 +6,8 @@
         <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        (click)="new()" [disabled]="newAuth===true" [hidden]="false"></button>
+                    <a pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
+                        [routerLink]="['jobs/new-jobs']" [hidden]="false"></a>
                 </ng-template>
 
                 <ng-template pTemplate="right">
@@ -113,7 +113,7 @@
                         <label for="tenant">{{ 'claim.tableColumn.tenantName' | translate }}</label>
                         <p-dropdown [options]="tenants" [(ngModel)]="selectedTenant"
                            optionLabel="name" [showClear]="true" [autoDisplayFirst]="false" required autofocus></p-dropdown>
-                         <small class="p-invalid" *ngIf="submitted && !master.tenant">{{ 'claim.claimDialog.tenantRequired' | translate }}</small>  
+                         <small class="p-invalid" *ngIf="submitted && !master.tenant">{{ 'claim.claimDialog.tenantRequired' | translate }}</small>
                     </div>
                     <div class="field col-12 md:col-4" >
                         <label for="claimDate">{{ 'claim.tableColumn.claimDate' | translate }}</label>
