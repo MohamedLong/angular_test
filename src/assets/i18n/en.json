@@ -253,7 +253,6 @@
             "tenanTypeRequired": "Tenant Type is required."
         }
     },
-
     "tenantType": {
         "title": "Manage Tenant Types",
         "tableColumn": {
@@ -290,7 +289,6 @@
 
         }
     },
-
     "supplier": {
         "title": "Suppliers",
         "table_footer": "In total there are {{length}} Suppliers",
@@ -512,6 +510,41 @@
             "USERNAMEHOLDER": "Username",
             "PASSWORD": "Password",
             "SIGNIN": "Sign In"
+        }
+    },
+    "job": {
+        "form": {
+            "insuranceFrom": "Insurance From",
+            "claimNo": "Claim Number",
+            "jobCardNo": "Job Card Number",
+            "addMoreDetails": "Add More Details",
+            "garageLocation": "Garage Location",
+            "bidDate": "Bid Closing Date",
+            "privateSuppliers": "Private Suppliers",
+            "privacy": "Privacy",
+            "createRequest": "Create Request",
+            "enterJob": "Enter Job Card Number",
+            "selectPrivateSuppliers": "Select Private Suppliers",
+            "enterclaimNo": "Enter Calim Number",
+            "ot/dp": "OD/TP"
+        }
+    },
+    "car": {
+        "title": "Car Information",
+        "form": {
+            "chassisNo": "Chassis Number",
+            "licencePlate": "Licence Plate",
+            "emptybrand": "Please Enter Chassis Number First",
+            "model": "Model",
+            "emptymodel": "Please Select Car Brand First",
+            "year": "Year",
+            "selectyear": "Select a Year",
+            "spec": "Specification",
+            "selectspec": "Select a Specification",
+            "gearbox": "Gear Box",
+            "plateRequired": "Plate Number is Required.",
+            "uploadCarImg": "Upload Car Image",
+            "addCar": "Add Car"
         }
     }
 }

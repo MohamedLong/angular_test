@@ -4,13 +4,15 @@
             <div class="wizard-card">
                 <div class="wizard-card-header">
                     <div class="grid col py-3">
+                        <!-- (click)="clickNext('car-info') -->
                         <div class="col-6 tab flex align-items-center justify-content-center car-info-tab"
-                            [ngClass]="{'selected-tab': activeTab == 'car-info'}" (click)="clickNext('car-info')">
-                            <div class="title">Car Information</div>
+                            [ngClass]="{'selected-tab': activeTab == 'car-info'}">
+                            <div class="title">{{ 'car.title' | translate }}</div>
                         </div>
+                        <!-- (click)="clickNext('request')" -->
                         <div class="col-6 tab flex align-items-center justify-content-center request-tab"
-                            [ngClass]="{'selected-tab': activeTab === 'request'}" (click)="clickNext('request')">
-                            <div class="title">Create Request</div>
+                            [ngClass]="{'selected-tab': activeTab === 'request'}">
+                            <div class="title">{{ 'job.form.createRequest' | translate }}</div>
                         </div>
                     </div>
                 </div>
@@ -19,74 +21,70 @@
                     <app-car type="new job" (carEvent)="onCarFormEvent($event)"></app-car>
                 </div>
                 <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'request'}">
-                    <form [formGroup]="requestForm" (ngSubmit)="onRequestFormSubmit()">
+                    <form [formGroup]="jobForm" (ngSubmit)="onjobFormSubmit()">
                         <div class="grid">
-                            <div class="col-12">
+                            <div class="col-12" *ngIf="car">
                                 <p-messages class="car-info" severity="info">
                                     <ng-template pTemplate>
-                                        <p *ngIf="car">
+                                        <p>
                                             {{car.carData.brandId.brandName}} {{car.carData.carModelId.name}}
                                             {{car.carData.carModelYearId.year}} {{car.carData.carModelTypeId.type}};
-                                            Chassis Number:
+                                            {{ 'car.form.chassisNo' | translate }}:
                                             {{car.carData.chassisNumber}};
-                                            Licence Plate: {{car.carData.plateNumber}}
+                                            {{ 'car.form.licencePlate' | translate }}: {{car.carData.plateNumber}}
                                         </p>
                                     </ng-template>
                                 </p-messages>
                             </div>
                             <div class="col-12 md:col-6">
-                                <label class="block mb-2">Insurance From</label>
+                                <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
                                 <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom" placeholder="OD/TP"></p-dropdown>
                             </div>
                             <div class="col-12  md:col-6">
-                                <label class="block">Claim Number</label>
+                                <label class="block">{{ 'job.form.claimNo' | translate }}</label>
                                 <span class="p-input-icon-right width-100 my-2">
                                     <i class="pi pi-spin pi-spinner" *ngIf="isTypingClaim"></i>
-                                    <!-- <i class="pi pi-check text-green-500 font-bold" *ngIf="found && !isTyping"></i> -->
+                                    <!-- <i class="pi pi-check text-green-500 font-bold" *ngIf="!isTypingClaim"></i> -->
                                     <input formControlName="claim" class="width-100" type="text" pInputText
                                         (keyup)="onClaimNumberKeyUp()" (keydown)="onClaimNumberKeyDown()"
-                                        placeholder="Enter Calim Number" required />
+                                        placeholder="{{ 'job.form.enterclaimNo' | translate }}" required />
                                 </span>
                             </div>
                             <div class="col-12 md:col-6">
-                                <label class="block mb-2">Job Card Number</label>
+                                <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
                                 <p-dropdown *ngIf="jobFound.multiple" [options]="jobs" formControlName="job"></p-dropdown>
                                 <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100" type="text" pInputText
-                                    placeholder="Enter Job Card Number" required />
+                                    placeholder="{{ 'job.form.enterJob' | translate }}" required />
                             </div>
-
                             <div class="col-12">
                                 <p-divider align="left">
-                                    <b class="bg-bluegray-50">Add More Details</b>
+                                    <b class="bg-bluegray-50">{{ 'job.form.addMoreDetails' | translate }}</b>
                                 </p-divider>
                             </div>
-
                             <div class="col-12 md:col-6">
-                                <label class="block mb-2">Garage Location</label>
+                                <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
                                 <input formControlName="location" class="width-100" type="text" pInputText required/>
                             </div>
                             <div class="col-12 md:col-6">
-                                <label class="block mb-2">Bid Closing Date</label>
+                                <label class="block mb-2">{{ 'job.form.bidDate' | translate }}</label>
                                 <p-calendar appendTo="body" formControlName="closingDate" dateFormat="mm-dd-yy"
                                     inputId="dateformat" [showIcon]="true"></p-calendar>
                             </div>
                             <div class="col-12 md:col-6">
-                                <label class="block mb-2">Privacy</label>
-                                <p-dropdown appendTo="body" formControlName="privacy" [options]="privacy"></p-dropdown>
+                                <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
+                                <p-dropdown appendTo="body" formControlName="privacy" [options]="privacy" (onChange)="onPrivacyChange()"></p-dropdown>
                             </div>
-                            <div class="col-12 md:col-6" *ngIf="requestForm.get('privacy').value == 'Private'">
-                                <label class="block mb-2">Private Suppliers</label>
+                            <div class="col-12 md:col-6" *ngIf="jobForm.get('privacy').value == 'Private'">
+                                <label class="block mb-2">{{ 'job.form.privateSuppliers' | translate }}</label>
                                 <p-multiSelect class="block" maxSelectedLabels="2" appendTo="body"
                                     selectedItemsLabel="{0} items selected" [options]="selectedPrivateSyppliers"
                                     optionLabel="name" optionValue="userId" [(ngModel)]="selectedPrivateSyppliers"
-                                    [ngModelOptions]="{standalone: true}" placehodler="Select Private Suppliers"
+                                    [ngModelOptions]="{standalone: true}" placehodler="{{ 'job.form.selectPrivateSuppliers' | translate }}"
                                     required></p-multiSelect>
                             </div>
-                            <!-- {{carForm.get('chn').errors | json}}
-                                    (click)="clickNext('request')"-->
                             <div class="col-12 text-center">
                                 <button class="width-100 md:w-20rem" pButton pRipple type="submit"
-                                    label="Create Request"></button>
+                                    label="{{ 'job.form.createRequest' | translate }}"></button>
                             </div>
                         </div>
                     </form>

@@ -16,6 +16,7 @@ import { Car } from '../../../model/car';
 import { InsuranceType } from '../../../model/insurancetype';
 import { Job } from '../../../model/job';
 import { StatusConstants } from '../../../model/statusconstatnts';
+import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
 import { JobService } from '../../../service/job.service';
 import { RequestService } from '../../../service/request.service';
@@ -53,7 +54,7 @@ export class NewJobComponent implements OnInit {
     privacy = Object.keys(Privacy);
     car: { carData: Car, file?: File };
 
-    requestForm: FormGroup = this.formBuilder.group({
+    jobForm: FormGroup = this.formBuilder.group({
         insuranceFrom: [''],
         claim: [''],
         job: [''],
@@ -63,7 +64,7 @@ export class NewJobComponent implements OnInit {
         carImages: ['']
     });
 
-    selectedPrivateSyppliers = [];
+    selectedPrivateSyppliers: Supplier[] = [];
     ClaimTypingTimer;  //timer identifier
     InsuranceType = Object.keys(InsuranceType);
     jobFound: { found: boolean, multiple: boolean } = {
@@ -83,7 +84,7 @@ export class NewJobComponent implements OnInit {
     ngOnInit(): void {
         //set location
         let location = JSON.parse(this.authService.getStoredUser()).tenant.location;
-        this.requestForm.patchValue({ location });
+        this.jobForm.patchValue({ location });
     }
 
     clickNext(step: string) {
@@ -98,7 +99,6 @@ export class NewJobComponent implements OnInit {
     onCarFormEvent(event) {
         console.log(event)
         this.car = event;
-        // this.getSupplierByBrandId();
         this.clickNext('request');
     }
 
@@ -106,10 +106,7 @@ export class NewJobComponent implements OnInit {
         this.isTypingClaim = true;
         clearTimeout(this.ClaimTypingTimer);
         this.ClaimTypingTimer = setTimeout(() => {
-            this.jobService.getJobByClaimNumber(this.requestForm.get('claim').value).subscribe(res => {
-                console.log('res:', res)
-                // this.found = true;
-                //this.notFound = false;
+            this.jobService.getJobByClaimNumber(this.jobForm.get('claim').value).subscribe(res => {
                 if (res.length > 0) {
                     this.claimId = res[0].claimId;
                     if (res.length > 1) {
@@ -121,19 +118,15 @@ export class NewJobComponent implements OnInit {
                         })
 
                     } else {
-                        this.requestForm.patchValue({ 'job': res[0].jobNo });
+                        this.jobForm.patchValue({ 'job': res[0].jobNo });
                     }
                 } else {
                     this.addNewClaim();
                 }
 
-
             }, err => {
-                // this.notFound = true;
-                // this.found = false;
-                // this.resetCarForm();
                 this.jobFound.multiple = false;
-                console.log('err:', err.error)
+                //console.log('err:', err.error)
             })
 
             this.isTypingClaim = false;
@@ -142,11 +135,11 @@ export class NewJobComponent implements OnInit {
 
     addNewClaim() {
         let tenantId = null;
-        if(JSON.parse(this.authService.getStoredUser()).tenant) {
+        if (JSON.parse(this.authService.getStoredUser()).tenant) {
             tenantId = JSON.parse(this.authService.getStoredUser()).tenant.id;
         }
         let claimBody = {
-            claimNo: this.requestForm.get('claim').value,
+            claimNo: this.jobForm.get('claim').value,
             tenant: tenantId
         }
         this.calimService.add(claimBody).subscribe(res => {
@@ -161,16 +154,21 @@ export class NewJobComponent implements OnInit {
         clearTimeout(this.ClaimTypingTimer);
     }
 
-    //need brand_id here
-    getSupplierByBrandId(){
-        //console.log(this.carForm.get('brand').value)
-        this.supplierService.getSupplierByBrandId(this.car.carData.brandId.id).subscribe(res => {
-            //console.log(res)
-            this.selectedPrivateSyppliers = res;
-        })
+    onPrivacyChange() {
+        this.getSupplierByBrandId();
     }
 
-    onRequestFormSubmit() {
+    //need brand_id here
+    getSupplierByBrandId() {
+        if (this.car) {
+            this.supplierService.getSupplierByBrandId(this.car.carData.brandId.id).subscribe(res => {
+                //console.log(res)
+                this.selectedPrivateSyppliers = res;
+            })
+        }
+    }
+
+    onjobFormSubmit() {
         //console.log(this.selectedPrivateSyppliers)
         let updatedCarData = {
             brandId: this.car.carData.brandId.id,
@@ -182,14 +180,14 @@ export class NewJobComponent implements OnInit {
             gearType: this.car.carData.gearType,
         }
 
-        if(this.car.carData.id) {
+        if (this.car.carData.id) {
             updatedCarData['id'] = this.car.carData.id;
         }
 
         let jobBody = {
-            jobNo: this.requestForm.get('job').value,
+            jobNo: this.jobForm.get('job').value,
             claim: this.claimId,
-            insuranceType: this.requestForm.get('insuranceFrom').value,
+            insuranceType: this.jobForm.get('insuranceFrom').value,
             car: updatedCarData,
         }
 

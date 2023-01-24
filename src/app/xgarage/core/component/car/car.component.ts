@@ -48,7 +48,7 @@ export class CarComponent implements OnInit {
     });
 
     @Input() type: string = 'new car';
-    @Output() carEvent = new EventEmitter<{carData: Car, file?: File}>();
+    @Output() carEvent = new EventEmitter<{ carData: Car, file?: File }>();
 
     ngOnInit(): void {
         this.getCarBrands();
@@ -58,8 +58,15 @@ export class CarComponent implements OnInit {
 
     onCarFormSubmit() {
         //console.log(this.carForm.getRawValue())
+        this.submitted = true;
         let file = this.carFile;
-        this.carEvent.emit({carData: this.carForm.getRawValue(), file});
+        if (this.carForm.valid) {
+            if (this.type = 'new job') {
+                this.carEvent.emit({ carData: this.carForm.getRawValue(), file });
+            } else {
+                //add new car
+            }
+        }
     }
 
     onChnKeyup() {
@@ -90,7 +97,6 @@ export class CarComponent implements OnInit {
 
     onCarImageUpload(e) {
         this.carFile = e.files;
-        console.log(this.carFile)
     }
 
     getBrandCarModels(brand: Brand) {

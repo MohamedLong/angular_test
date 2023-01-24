@@ -2,7 +2,7 @@
     <form [formGroup]="carForm" (ngSubmit)="onCarFormSubmit()">
         <div class="grid">
             <div class="col-12">
-                <label class="block">Chassis Number</label>
+                <label class="block">{{ 'car.form.chassisNo' | translate }}</label>
                 <span class="p-input-icon-right width-100 my-2">
                     <i class="pi pi-spin pi-spinner" *ngIf="isTyping"></i>
                     <i class="pi pi-check text-green-500 font-bold" *ngIf="found && !isTyping"></i>
@@ -22,41 +22,41 @@
                 </div>
             </div>
             <div class="col-12 md:col-6">
-                <label class="block mb-2">Brand</label>
+                <label class="block mb-2">{{ 'supplier.supplierDialog.brand' | translate }}</label>
                 <p-dropdown [options]="brands" formControlName="brandId" placeholder="Select a Brand"
-                    optionLabel="brandName" (onChange)="getBrandCarModels($event.value)"  emptyMessage="Please Enter Chassis Number First"></p-dropdown>
+                    optionLabel="brandName" (onChange)="getBrandCarModels($event.value)"  emptyMessage="{{ 'car.form.emptybrand' | translate }}"></p-dropdown>
             </div>
             <div class="col-12 md:col-6">
-                <label class="block mb-2">Model</label>
+                <label class="block mb-2">{{ 'car.form.model' | translate }}</label>
                 <p-dropdown [options]="carModels" formControlName="carModelId" placeholder="Select a Model"
-                    optionLabel="name" emptyMessage="Please Select Car Brand First"></p-dropdown>
+                    optionLabel="name" emptyMessage="{{ 'car.form.emptymodel' | translate }}"></p-dropdown>
             </div>
             <div class="col-12 md:col-6">
-                <label class="block mb-2">Year</label>
-                <p-dropdown [options]="carModelYears" formControlName="carModelYearId" placeholder="Select a Year"
+                <label class="block mb-2">{{ 'car.form.year' | translate }}</label>
+                <p-dropdown [options]="carModelYears" formControlName="carModelYearId" placeholder="{{ 'car.form.selectyear' | translate }}"
                     optionLabel="year"></p-dropdown>
             </div>
             <div class="col-12 md:col-6">
-                <label class="block mb-2">Specification</label>
+                <label class="block mb-2">{{ 'car.form.spec' | translate }}</label>
                 <p-dropdown [options]="carModelTypes" formControlName="carModelTypeId"
-                    placeholder="Select a Specification" optionLabel="type"></p-dropdown>
+                    placeholder="{{ 'car.form.selectspec' | translate }}" optionLabel="type"></p-dropdown>
             </div>
             <div class="col-12 md:col-6">
-                <label class="block mb-2">Gear Box</label>
+                <label class="block mb-2">{{ 'car.form.gearbox' | translate }}</label>
                 <p-dropdown [options]="gearType" formControlName="gearType"></p-dropdown>
             </div>
             <div class="col-12 md:col-6">
-                <label class="block">License Plate Number</label>
+                <label class="block">{{ 'car.form.licencePlate' | translate }}</label>
                 <input formControlName="plateNumber" class="width-100 my-2" type="text" pInputText
                     placeholder="EX: YA59811" required />
                 <small
                     *ngIf="submitted && !carForm.get('plateNumber').valid &&  carForm.get('plateNumber').errors?.['required']"
-                    class="p-error">Plate Number is Required.</small>
+                    class="p-error">{{ 'car.form.plateRequired' | translate }}</small>
             </div>
             <div class="col-12 flex align-items-center mt-3">
                 <p-fileUpload class="mt-2 width-100" name="carDocument[]" mode="advanced"
                     [chooseIcon]="'pi pi-cloud-upload'" url="http://letsgo-oman.com:6060" customUpload="true"
-                    accept="image/*" chooseLabel="Upload Car Image" auto="true"
+                    accept="image/*" chooseLabel="{{ 'car.form.uploadCarImg' | translate }}" auto="true"
                     (uploadHandler)="onCarImageUpload($event)"></p-fileUpload>
             </div>
             <div class="col-12 text-center">
