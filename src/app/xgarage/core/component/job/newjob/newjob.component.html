@@ -19,7 +19,7 @@
                     <app-car type="new job" (carEvent)="onCarFormEvent($event)"></app-car>
                 </div>
                 <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'request'}">
-                    <form [formGroup]="requestForm" (ngSubmit)="onrequestFormSubmit()">
+                    <form [formGroup]="requestForm" (ngSubmit)="onRequestFormSubmit()">
                         <div class="grid">
                             <div class="col-12">
                                 <p-messages class="car-info" severity="info">
@@ -44,7 +44,7 @@
                                     <i class="pi pi-spin pi-spinner" *ngIf="isTypingClaim"></i>
                                     <!-- <i class="pi pi-check text-green-500 font-bold" *ngIf="found && !isTyping"></i> -->
                                     <input formControlName="claim" class="width-100" type="text" pInputText
-                                        (keyup)="onClaimKeyup()" (keydown)="onClaimKeydown()"
+                                        (keyup)="onClaimNumberKeyUp()" (keydown)="onClaimNumberKeyDown()"
                                         placeholder="Enter Calim Number" required />
                                 </span>
                             </div>

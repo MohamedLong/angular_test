@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Brand } from 'src/app/xgarage/common/model/brand';
 import { CarModel } from 'src/app/xgarage/common/model/carmodel';
@@ -97,12 +98,11 @@ export class NewJobComponent implements OnInit {
     onCarFormEvent(event) {
         console.log(event)
         this.car = event;
-        this.getSupplierByBrandId();
+        // this.getSupplierByBrandId();
         this.clickNext('request');
     }
 
-
-    onClaimKeyup() {
+    onClaimNumberKeyUp() {
         this.isTypingClaim = true;
         clearTimeout(this.ClaimTypingTimer);
         this.ClaimTypingTimer = setTimeout(() => {
@@ -117,7 +117,7 @@ export class NewJobComponent implements OnInit {
                         this.jobFound.found = true;
 
                         res.forEach(job => {
-                            this.jobs.push(job.jobNo)
+                            this.jobs.push(job.jobNo);
                         })
 
                     } else {
@@ -141,7 +141,10 @@ export class NewJobComponent implements OnInit {
     }
 
     addNewClaim() {
-        let tenantId = JSON.parse(this.authService.getStoredUser()).tenant.id;
+        let tenantId = null;
+        if(JSON.parse(this.authService.getStoredUser()).tenant) {
+            tenantId = JSON.parse(this.authService.getStoredUser()).tenant.id;
+        }
         let claimBody = {
             claimNo: this.requestForm.get('claim').value,
             tenant: tenantId
@@ -154,12 +157,12 @@ export class NewJobComponent implements OnInit {
         })
     }
 
-    onClaimKeydown() {
+    onClaimNumberKeyDown() {
         clearTimeout(this.ClaimTypingTimer);
     }
 
     //need brand_id here
-    getSupplierByBrandId() {
+    getSupplierByBrandId(){
         //console.log(this.carForm.get('brand').value)
         this.supplierService.getSupplierByBrandId(this.car.carData.brandId.id).subscribe(res => {
             //console.log(res)
@@ -167,7 +170,7 @@ export class NewJobComponent implements OnInit {
         })
     }
 
-    onrequestFormSubmit() {
+    onRequestFormSubmit() {
         //console.log(this.selectedPrivateSyppliers)
         let updatedCarData = {
             brandId: this.car.carData.brandId.id,
