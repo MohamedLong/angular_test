@@ -1,5 +1,6 @@
+
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Tenant } from 'src/app/xgarage/common/model/tenant';
@@ -16,6 +17,8 @@ import { AuthService } from '../../services/auth.service';
 })
 export class SignupComponent implements OnInit {
 
+
+
     constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private messageService: MessageService, private tenantService: TenantService, private tenantTypeService: TenantTypeService) { }
 
     signupForm: FormGroup = this.fb.group({
@@ -27,11 +30,16 @@ export class SignupComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         provider: ['local'],
         tenantType: ['', Validators.required],
-        tenant: [null, Validators.required]
+        tenant: [null],
+        newTenant: [''],
+        newCr: ['']
     });
 
     tenants: Tenant[];
     tenantTypes: TenantType[];
+    selectedType: TenantType;    
+    tenant: Tenant = {};
+    newTenantTrigger = false;
 
     ngOnInit(): void {
         this.getTenantTypes();
@@ -54,12 +62,27 @@ export class SignupComponent implements OnInit {
         this.getTenantsByType(event.value);
     }
 
-    onSubmit() {
+    
+    createUserWithNewTenant(){
+        if (this.signupForm.controls.newTenant.value && this.signupForm.controls.newCr.value) {
+            this.selectedType = this.tenantTypes.find(val => val.id == this.signupForm.controls.tenantType.value);
+            this.tenant.tenantType = this.selectedType;
+            this.tenant.name = this.signupForm.controls.newTenant.value;
+            this.tenant.cr = this.signupForm.controls.newCr.value;
 
-        this.signupForm.patchValue({
-            tenant: { id: Number(this.signupForm.get('tenant').value) },
-            userId: this.signupForm.get('email').value
-        });
+            this.tenantService.add(this.tenant).subscribe(
+                {
+                    next: (data) => {
+                        this.tenant = data;
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'New Tenant Has Been Registered' });                    
+                        this.createUserOnExistingTenant();
+                    },
+                    error: (e) => alert(e)
+                }
+            );}        
+    }
+
+    createUserOnExistingTenant(){
         if (this.signupForm.valid) {
             this.authService.signup(this.signupForm.value).subscribe(res => {
                 if (!res) {
@@ -78,4 +101,20 @@ export class SignupComponent implements OnInit {
         }
     }
 
-}
+    onSubmit() {
+        if(this.newTenantTrigger){
+            this.tenant = {};
+            this.createUserWithNewTenant();
+        }
+        else if(!this.newTenantTrigger){
+            this.signupForm.patchValue({
+                tenant: { id: Number(this.signupForm.get('tenant').value) },
+                userId: this.signupForm.get('email').value
+            });
+            this.createUserOnExistingTenant();
+        }
+        else {
+            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Error in creating the user' })
+        }
+    }
+    }

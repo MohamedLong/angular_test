@@ -87,9 +87,7 @@
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" 
                             [disabled]="!editAuth" (click)="edit(claim)"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" 
-                            [disabled]="!editAuth" (click)="deleteAction(claim)" *ngIf="claim.status !== 'cancelled'"></button>
-                            <!-- Hidden property to be checked above -->
-                            <!-- Also to use:  [ngStyle]="{'display': claim.status === 'cancelled' ? 'none' : 'block'}" -->
+                            [disabled]="!editAuth" (click)="deleteAction(claim)"></button>
                           </td>
                     </tr>
                 </ng-template>

@@ -6,4 +6,5 @@ export interface Tenant extends GenericEntity{
     cr?: string;
     location?: string;
     tenantType?: TenantType;
+    enabled?: boolean;
 }

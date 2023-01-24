@@ -242,7 +242,8 @@
             "cr": "Tenant CR",
             "crSearch": "Search by tenant cr",
             "location": "Location",
-            "tenantType": "Tenant Type"
+            "tenantType": "Tenant Type",
+            "enabled": "Enabled"
         },
         "tenantDialog": {
             "title": "Tenant Details",
