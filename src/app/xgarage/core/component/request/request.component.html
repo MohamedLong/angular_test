@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="formgrid grid">
+        <div class="field col-12">
+            <label>Search Part</label>
+            <span class="p-input-icon-right block">
+                <i class="pi pi-search"></i>
+                <input placeholder="Ex: Break Shoe" class="width-100" type="text" pInputText />
+            </span>
+        </div>
+        <div class="col-12">
+            <p-divider align="center">
+                <span class="text-black-alpha-60">or Select Manually</span>
+            </p-divider>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label for="">Parts Category</label>
+            <p-dropdown [options]=""></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label for="">Parts Sub Category</label>
+            <p-dropdown [options]=""></p-dropdown>
+        </div>
+        <div class="field col-12">
+            <label>Parts Name</label>
+            <p-dropdown [options]=""></p-dropdown>
+        </div>
+        <div class="col-12">
+            <p-divider type="dashed"></p-divider>
+        </div>
+        <div class="field col-12">
+            <label>Preferred Parts Type</label>
+            <p-dropdown [options]=""></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label for="">Description</label>
+            <textarea placeholder="Add a short description about your parts" rows="6" class="width-100 block" type="text" pInputText required></textarea>
+        </div>
+        <div class="field col-12 md:col-6 mt-4">
+            <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" name="partImages[]" [customUpload]="true" [auto]="true" (uploadHandler)="uploadPartImages()"
+                multiple="multiple" accept="image/*">
+            </p-fileUpload>
+        </div>
+    </div>
+</div>
