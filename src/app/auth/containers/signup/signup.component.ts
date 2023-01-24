@@ -1,3 +1,4 @@
+import { User } from './../../../xgarage/common/model/user';
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -31,18 +32,19 @@ export class SignupComponent implements OnInit {
         provider: ['local'],
         tenantType: ['', Validators.required],
         tenant: [null],
-        newTenant: [''],
+        newTenantName: [''],
         newCr: ['']
     });
 
     tenants: Tenant[];
     tenantTypes: TenantType[];
     selectedType: TenantType;    
-    tenant: Tenant = {};
+    selectedTenant: Tenant = {};
     newTenantTrigger = false;
 
     ngOnInit(): void {
         this.getTenantTypes();
+        this.selectedTenant = {};
     }
 
     getTenantsByType(typeId: number) {
@@ -64,26 +66,36 @@ export class SignupComponent implements OnInit {
 
     
     createUserWithNewTenant(){
-        if (this.signupForm.controls.newTenant.value && this.signupForm.controls.newCr.value) {
-            this.selectedType = this.tenantTypes.find(val => val.id == this.signupForm.controls.tenantType.value);
-            this.tenant.tenantType = this.selectedType;
-            this.tenant.name = this.signupForm.controls.newTenant.value;
-            this.tenant.cr = this.signupForm.controls.newCr.value;
+        if (this.signupForm.controls.newTenantName.value && this.signupForm.controls.newCr.value) {
+            this.selectedTenant.tenantType = this.tenantTypes.find(val => val.id == this.signupForm.controls.tenantType.value);
+            this.selectedTenant.name = this.signupForm.controls.newTenantName.value;
+            this.selectedTenant.cr = this.signupForm.controls.newCr.value;
 
-            this.tenantService.add(this.tenant).subscribe(
+            this.tenantService.add(this.selectedTenant).subscribe(
                 {
                     next: (data) => {
-                        this.tenant = data;
+                        this.selectedTenant = data;
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'New Tenant Has Been Registered' });                    
+                        this.signupForm.patchValue({
+                            tenant: this.selectedTenant.id,
+                            userId: this.signupForm.get('email').value
+                        });
+                        console.log(this.signupForm);
+                        this.signupForm.removeControl('newCr');
+                        this.signupForm.removeControl('newTenantName');
+                        this.signupForm.removeControl('tenantType');
                         this.createUserOnExistingTenant();
                     },
                     error: (e) => alert(e)
                 }
-            );}        
+            );
+        }        
     }
 
     createUserOnExistingTenant(){
         if (this.signupForm.valid) {
+            
+            console.log(this.signupForm);
             this.authService.signup(this.signupForm.value).subscribe(res => {
                 if (!res) {
                     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Error signing up' });
@@ -103,14 +115,11 @@ export class SignupComponent implements OnInit {
 
     onSubmit() {
         if(this.newTenantTrigger){
-            this.tenant = {};
+            // this.tenant = {};
             this.createUserWithNewTenant();
         }
         else if(!this.newTenantTrigger){
-            this.signupForm.patchValue({
-                tenant: { id: Number(this.signupForm.get('tenant').value) },
-                userId: this.signupForm.get('email').value
-            });
+
             this.createUserOnExistingTenant();
         }
         else {
