@@ -20,7 +20,7 @@ export class TenantService extends GenericService<Tenant>{
     }
 
     changeEnableStatus(tenantId: number, status: boolean) {
-        return this.http.put<MessageResponse>(config.apiUrl + '/tenant/enable/' + tenantId + '/' + status, null);
+        return this.http.post<MessageResponse>(config.apiUrl + '/v1/tenant/changeStatus/' + tenantId + '/' + status, null);
       }
 
 }

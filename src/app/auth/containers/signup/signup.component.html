@@ -83,10 +83,10 @@
                         <div class="p-inputgroup mt-3 flex-column align-items-start">
                             <span class="p-input-icon-left width-100">
                                 <i class="pi pi-tag"></i>
-                                <input type="text" id="newTenant" pInputText formControlName="newTenant"
+                                <input type="text" id="newTenantName" pInputText formControlName="newTenantName"
                                     placeholder="Tenant Name" required>
                             </span>
-                            <small *ngIf="!signupForm.get('newTenant').valid && signupForm.get('newTenant').touched && signupForm.get('newTenant').errors?.['required']" class="p-error block pt-1">Tenant Name is required.</small>
+                            <small *ngIf="!signupForm.get('newTenantName').valid && signupForm.get('newTenantName').touched && signupForm.get('newTenantName').errors?.['required']" class="p-error block pt-1">Tenant Name is required.</small>
                         </div>
                         <div class="p-inputgroup mt-3 flex-column align-items-start">
                             <span class="p-input-icon-left width-100">

@@ -11,6 +11,7 @@ import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { BrandService } from 'src/app/xgarage/common/service/brand.service';
 import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypes.service';
 import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
+import { Car } from '../../../model/car';
 import { InsuranceType } from '../../../model/insurancetype';
 import { Job } from '../../../model/job';
 import { StatusConstants } from '../../../model/statusconstatnts';
@@ -41,23 +42,15 @@ import { SupplierService } from '../../../service/supplier.service';
 export class NewJobComponent implements OnInit {
 
     activeTab = 'car-info';
-    isTyping: boolean = false;
+
     isTypingClaim: boolean = false;
     notFound: boolean;
     found: boolean;
     submitted: boolean = false;
-    gearType = Object.keys(GearType);
+
     insuranceFrom = Object.keys(InsuranceType);
     privacy = Object.keys(Privacy);
-    carForm: FormGroup = this.formBuilder.group({
-        chassisNumber: ['', [Validators.minLength(13), Validators.required]],
-        brandId: [''],
-        carModelId: [''],
-        carModelYearId: [''],
-        carModelTypeId: [''],
-        plateNumber: ['', Validators.required],
-        gearType: ['Automatic'],
-    });
+    car: { carData: Car, file?: File };
 
     requestForm: FormGroup = this.formBuilder.group({
         insuranceFrom: [''],
@@ -70,13 +63,7 @@ export class NewJobComponent implements OnInit {
     });
 
     selectedPrivateSyppliers = [];
-
-    typingTimer;  //timer identifier
     ClaimTypingTimer;  //timer identifier
-    brands: Brand[];
-    carModels: CarModel[];
-    carModelYears: CarModelYear[];
-    carModelTypes: CarModelType[];
     InsuranceType = Object.keys(InsuranceType);
     jobFound: { found: boolean, multiple: boolean } = {
         found: false,
@@ -85,24 +72,14 @@ export class NewJobComponent implements OnInit {
 
     jobs: string[];
     claimId: number;
-    carFiles: File;
 
     constructor(private formBuilder: FormBuilder,
-        private requestService: RequestService,
-        private brandService: BrandService,
-        private carModelYearService: CarModelYearService,
-        private carSpecService: CarModelTypeService,
         private supplierService: SupplierService,
         private jobService: JobService,
         private authService: AuthService,
         private calimService: ClaimService) { }
 
     ngOnInit(): void {
-
-        this.getBrands();
-        this.getCarModelYear();
-        this.getCarModelType();
-
         //set location
         let location = JSON.parse(this.authService.getStoredUser()).tenant.location;
         this.requestForm.patchValue({ location });
@@ -116,158 +93,14 @@ export class NewJobComponent implements OnInit {
         this.activeTab = step;
     }
 
-    onChnKeyup() {
-        this.isTyping = true;
-        clearTimeout(this.typingTimer);
-        this.typingTimer = setTimeout(() => {
-            if (!this.carForm.get('chassisNumber').errors) {
-                this.requestService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
-                    console.log('res:', res)
-                    this.found = true;
-                    this.notFound = false;
-                    this.setSelectedCar(res);
-                }, err => {
-                    this.notFound = true;
-                    this.found = false;
-                    this.resetCarForm();
-                    //console.log('err:', err.error)
-                })
-            };
-
-            this.isTyping = false;
-        }, 2000);
+    //car form event
+    onCarFormEvent(event) {
+        console.log(event)
+        this.car = event;
+        this.getSupplierByBrandId();
+        this.clickNext('request');
     }
 
-    onChnKeydown() {
-        clearTimeout(this.typingTimer);
-    }
-
-    getBrands() {
-        this.brandService.getAll().subscribe(res => {
-            this.brands = res;
-        })
-    }
-
-    getCarModelYear(carModelYearId?: number) {
-        this.carModelYearService.getAll().subscribe(res => {
-            this.carModelYears = res;
-
-            if (carModelYearId) {
-                this.setCarModelYear(carModelYearId);
-            };
-
-        }, err => console.log(err));
-    }
-
-    getCarModelType(carModelTypeId?: number) {
-        this.carSpecService.getAll().subscribe(res => {
-            this.carModelTypes = res;
-            if (carModelTypeId) {
-                this.setCarModeltype(carModelTypeId)
-            };
-        }, err => console.log(err));
-    }
-
-    setSelectedCar(carInfo) {
-        // set car id
-        this.carForm.addControl('id', new FormControl(carInfo.id));
-        //this.carForm.patchValue({ 'id': carInfo.id });
-
-        //set car brand
-        let brandVal = this.setCarModel(carInfo.brandId);
-        this.carForm.patchValue({ 'brandId': brandVal });
-        this.carForm.get('brandId').disable();
-
-        //set car brand model
-        let selectedCarModel = this.carModels.filter(model => {
-            return model.id == carInfo.carModelId;
-        });
-
-        this.carForm.patchValue({ 'carModelId': selectedCarModel[0] });
-        this.carForm.get('carModelId').disable();
-
-        //set car model year
-        this.getCarModelYear(carInfo.carModelYearId);
-
-        //set car spec
-        this.getCarModelType(carInfo.carModelTypeId);
-
-        //set car plate number
-        if (carInfo.plateNumber) {
-            //console.log('not null')
-            this.carForm.patchValue({ 'plateNumber': carInfo.plateNumber });
-            this.carForm.get('plateNumber').disable();
-        }
-    }
-
-    setCarModel(id: number) {
-        //set selected car brand
-        let selectedBrand = this.brands.filter(brand => {
-            return brand.id == id;
-        });
-
-        //set car model
-        this.carModels = selectedBrand[0].carModels;
-        return selectedBrand[0];
-    }
-
-    setCarModelYear(id: number) {
-        let selectedCarModelYear = this.carModelYears.filter(year => {
-            return year.id == id;
-        });
-
-        this.carForm.patchValue({ 'carModelYearId': selectedCarModelYear[0] });
-        this.carForm.get('carModelYearId').disable();
-    }
-
-    setCarModeltype(id: number) {
-        let selectedCarModelType = this.carModelTypes.filter(type => {
-            return type.id == id;
-        });
-
-        this.carForm.patchValue({ 'carModelTypeId': selectedCarModelType[0] });
-        this.carForm.get('carModelTypeId').disable();
-    }
-
-    getBrandCarModels(brand: Brand) {
-        //console.log(id)
-        this.setCarModel(brand.id);
-    }
-
-    //upload car images
-    onCarImageUpload(e) {
-        this.carFiles = e.files;
-        //console.log(this.carFiles)
-    }
-
-    //car form submit
-    onCarFormSubmit() {
-        this.submitted = true;
-        if (this.carForm.valid) {
-            this.submitted = false;
-            this.clickNext('request');
-            this.getSupplierByBrandId();
-
-            console.log(this.carForm.getRawValue())
-        }
-
-    }
-
-    resetCarForm() {
-        this.carForm.reset({
-            chassisNumber: this.carForm.get('chassisNumber').value,
-            brandId: '',
-            carModelId: '',
-            carModelYearId: '',
-            carModelTypeId: '',
-            plateNumber: this.carForm.get('plateNumber').value,
-        });
-
-        this.carForm.get('brandId').enable();
-        this.carForm.get('carModelId').enable();
-        this.carForm.get('carModelYearId').enable();
-        this.carForm.get('carModelTypeId').enable();
-    }
 
     onClaimKeyup() {
         this.isTypingClaim = true;
@@ -325,9 +158,10 @@ export class NewJobComponent implements OnInit {
         clearTimeout(this.ClaimTypingTimer);
     }
 
+    //need brand_id here
     getSupplierByBrandId() {
         //console.log(this.carForm.get('brand').value)
-        this.supplierService.getSupplierByBrandId(this.carForm.get('brandId').value.id).subscribe(res => {
+        this.supplierService.getSupplierByBrandId(this.car.carData.brandId.id).subscribe(res => {
             //console.log(res)
             this.selectedPrivateSyppliers = res;
         })
@@ -335,27 +169,32 @@ export class NewJobComponent implements OnInit {
 
     onrequestFormSubmit() {
         //console.log(this.selectedPrivateSyppliers)
+        let updatedCarData = {
+            brandId: this.car.carData.brandId.id,
+            carModelId: this.car.carData.carModelId.id,
+            carModelYearId: this.car.carData.carModelYearId.id,
+            carModelTypeId: this.car.carData.carModelYearId.id,
+            chassisNumber: this.car.carData.chassisNumber,
+            plateNumber: this.car.carData.plateNumber,
+            gearType: this.car.carData.gearType,
+        }
 
-        this.carForm.patchValue({
-            brandId: this.carForm.get('brandId').value.id,
-            carModelId: this.carForm.get('carModelId').value.id,
-            carModelYearId: this.carForm.get('carModelYearId').value.id,
-            carModelTypeId: this.carForm.get('carModelTypeId').value.id,
-        })
-
+        if(this.car.carData.id) {
+            updatedCarData['id'] = this.car.carData.id;
+        }
 
         let jobBody = {
             jobNo: this.requestForm.get('job').value,
             claim: this.claimId,
             insuranceType: this.requestForm.get('insuranceFrom').value,
-            car: this.carForm.getRawValue(),
+            car: updatedCarData,
         }
 
         let stringJobBody = JSON.stringify(jobBody);
         let updatedJobBody = { 'jobBody': stringJobBody };
 
-        if (this.carFiles) {
-            updatedJobBody['carDocument'] = this.carFiles;
+        if (this.car.file) {
+            updatedJobBody['carDocument'] = this.car.file;
         }
 
         let jobBodyFormData = new FormData();
@@ -363,7 +202,6 @@ export class NewJobComponent implements OnInit {
             jobBodyFormData.append(key, updatedJobBody[key]);
         }
 
-        //console.log(updatedJobBody)
         this.jobService.saveJob(jobBodyFormData).subscribe(res => {
             console.log('job created', res)
             //send req

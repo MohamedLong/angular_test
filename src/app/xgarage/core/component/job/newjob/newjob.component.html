@@ -15,66 +15,8 @@
                     </div>
                 </div>
                 <div class="wizard-card-content car-info" [ngClass]="{'active-content': activeTab === 'car-info'}">
-                    <form [formGroup]="carForm" (ngSubmit)="onCarFormSubmit()">
-                        <div class="grid">
-                            <div class="col-12">
-                                <label class="block">Chassis Number</label>
-                                <span class="p-input-icon-right width-100 my-2">
-                                    <i class="pi pi-spin pi-spinner" *ngIf="isTyping"></i>
-                                    <i class="pi pi-check text-green-500 font-bold" *ngIf="found && !isTyping"></i>
-                                    <input formControlName="chassisNumber" class="width-100" type="text" pInputText
-                                        (keyup)="onChnKeyup()" (keydown)="onChnKeydown()" placeholder="Ex: 291919AD1914"
-                                        required autofocus />
-                                </span>
-                                <div class="flex align-items-center justify-content-between">
-                                    <small
-                                        *ngIf="!carForm.get('chassisNumber').valid && carForm.get('chassisNumber').dirty && carForm.get('chassisNumber').errors?.['minlength']"
-                                        class="p-error">Min Chassis Number is 13.</small>
-                                    <small
-                                        *ngIf="submitted && !carForm.get('chassisNumber').valid  && carForm.get('chassisNumber').errors?.['required']"
-                                        class="p-error">Chassis Number is Required.</small>
-                                    <!-- <small class="block" *ngIf="notFound">Car Chassis Number Not Found, Please Fill out
-                                        the Form to Create a New One.</small> -->
-                                </div>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">Brand</label>
-                                <p-dropdown [options]="brands" formControlName="brandId" placeholder="Select a Brand"
-                                    optionLabel="brandName" (onChange)="getBrandCarModels($event.value)"></p-dropdown>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">Model</label>
-                                <p-dropdown [options]="carModels" formControlName="carModelId" placeholder="Select a Model"
-                                    optionLabel="name" emptyMessage="Please Select Car Brand First"></p-dropdown>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">Year</label>
-                                <p-dropdown [options]="carModelYears" formControlName="carModelYearId" placeholder="Select a Year"
-                                    optionLabel="year"></p-dropdown>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">Specification</label>
-                                <p-dropdown [options]="carModelTypes" formControlName="carModelTypeId"
-                                    placeholder="Select a Specification" optionLabel="type"></p-dropdown>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">Gear Box</label>
-                                <p-dropdown [options]="gearType" formControlName="gearType"></p-dropdown>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block">License Plate Number</label>
-                                <input formControlName="plateNumber" class="width-100 my-2" type="text" pInputText
-                                    placeholder="EX: YA59811" required />
-                                <small
-                                    *ngIf="submitted && !carForm.get('plateNumber').valid &&  carForm.get('plateNumber').errors?.['required']"
-                                    class="p-error">Plate Number is Required.</small>
-                            </div>
-                            <div class="col-12 text-center">
-                                <button class="width-100 md:w-20rem" pButton pRipple type="submit"
-                                    label="NEXT"></button>
-                            </div>
-                        </div>
-                    </form>
+                    <!-- car component -->
+                    <app-car type="new job" (carEvent)="onCarFormEvent($event)"></app-car>
                 </div>
                 <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'request'}">
                     <form [formGroup]="requestForm" (ngSubmit)="onrequestFormSubmit()">
@@ -82,12 +24,12 @@
                             <div class="col-12">
                                 <p-messages class="car-info" severity="info">
                                     <ng-template pTemplate>
-                                        <p>
-                                            {{carForm.get('brandId').value.brandName}} {{carForm.get('carModelId').value.name}}
-                                            {{carForm.get('carModelYearId').value.year}} {{carForm.get('carModelTypeId').value.type}};
+                                        <p *ngIf="car">
+                                            {{car.carData.brandId.brandName}} {{car.carData.carModelId.name}}
+                                            {{car.carData.carModelYearId.year}} {{car.carData.carModelTypeId.type}};
                                             Chassis Number:
-                                            {{carForm.get('chassisNumber').value}};
-                                            Licence Plate: {{carForm.get('plateNumber').value}}
+                                            {{car.carData.chassisNumber}};
+                                            Licence Plate: {{car.carData.plateNumber}}
                                         </p>
                                     </ng-template>
                                 </p-messages>
@@ -112,11 +54,7 @@
                                 <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100" type="text" pInputText
                                     placeholder="Enter Job Card Number" required />
                             </div>
-                            <div class="col-12 md:col-6 flex align-items-center mt-3">
-                                <p-fileUpload class="mt-2 width-100" name="carDocument[]" mode="advanced"
-                                    [chooseIcon]="'pi pi-cloud-upload'" url="http://letsgo-oman.com:6060" customUpload="true" accept="image/*"
-                                    chooseLabel="Upload Car Image" auto="true" (uploadHandler)="onCarImageUpload($event)"></p-fileUpload>
-                            </div>
+
                             <div class="col-12">
                                 <p-divider align="left">
                                     <b class="bg-bluegray-50">Add More Details</b>
