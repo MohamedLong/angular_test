@@ -70,6 +70,7 @@ import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenan
 //import { RequestComponent } from './xgarage/core/component/request/request.component';
 import { JobService } from './xgarage/core/service/job.service';
 import { NewJobComponent } from './xgarage/core/component/job/newjob/newjob.component';
+import { CarComponent } from './xgarage/core/component/car/car.component';
 
 const routes: Routes = [];
 
@@ -92,7 +93,8 @@ const routes: Routes = [];
                     {path: 'claims', component: ClaimComponent},
                     {path: 'jobs', component: JobComponent},
                     {path: 'jobs/new-job', component: NewJobComponent},
-                    {path: 'request', component: RequestComponent}
+                    {path: 'request', component: RequestComponent},
+                    {path: 'cars', component: CarComponent}
                     // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
                     // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
