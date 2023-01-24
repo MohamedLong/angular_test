@@ -8,6 +8,7 @@ import { TenantService } from '../../service/tenant.service';
 import { TenantTypeService } from '../../service/tenanttype.service';
 import { TenantType } from '../../model/tenanttype';
 import { Tenant } from '../../model/tenant';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
     selector: 'app-stock-order',
@@ -34,7 +35,7 @@ import { Tenant } from '../../model/tenant';
 })
 export class TenantComponent extends GenericComponent implements OnInit {
 
-    constructor(public route: ActivatedRoute, private router: Router, private tenantService: TenantService,
+    constructor(public route: ActivatedRoute, private authService: AuthService ,private router: Router, private tenantService: TenantService,
         public messageService: MessageService, private tenantTypeService: TenantTypeService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
         super(route, datePipe, breadcrumbService);
     }
@@ -90,6 +91,8 @@ export class TenantComponent extends GenericComponent implements OnInit {
         this.submitted = true;
         if (this.master.name && this.master.cr && this.selectedTenantType) {
             this.master.tenantType = this.selectedTenantType;
+            this.master.updatedBy = JSON.parse(this.authService.getStoredUser()).id;
+            this.master.updatedAt = new Date();
             if (this.master.id) {
                 // @ts-ignore
                 this.tenantService.update(this.master).subscribe(
