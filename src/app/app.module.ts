@@ -190,11 +190,11 @@ import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.
 import { JobComponent} from './xgarage/core/component/job/job.component';
 import { TenantTypeService } from './xgarage/common/service/tenanttype.service';
 import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
-import { RouterModule } from '@angular/router';
 import { JobService } from './xgarage/core/service/job.service';
 import { NewJobComponent } from './xgarage/core/component/job/newjob/newjob.component';
 import { RequestComponent } from './xgarage/core/component/request/request.component';
 import { CarComponent } from './xgarage/core/component/car/car.component';
+import { NewCarComponent } from './xgarage/core/component/car/new-car/new-car.component';
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
 }
@@ -378,7 +378,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         JobComponent,
         NewJobComponent,
         RequestComponent,
-        CarComponent
+        CarComponent,
+        NewCarComponent,
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,

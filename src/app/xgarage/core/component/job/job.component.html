@@ -7,26 +7,18 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <a pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                    [routerLink]="['/jobs/new-job']" [hidden]="false"></a>
-                </ng-template>
-
-                <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
-                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help mb-2"
                         (click)="dt.exportCSV()"></button>
-                </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['id','claimNo','tenantName','createdUser','status']"
+            <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['id','jobNo','claimNo','insuranceType','carPlateNumber','jobStatus']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)"
                 [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between table-header">
-                        <h5 class="m-0">{{ 'claim.title' | translate }}</h5>
+                        <h5 class="m-0">{{ 'job.title' | translate }}</h5>
                         <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
@@ -38,102 +30,62 @@
                     <tr>
                         <th pSortableColumn="id">{{ 'common.id' | translate }}<p-sortIcon field="id"></p-sortIcon>
                         </th>
-                        <th pColumn="claimNo">{{ 'claim.tableColumn.claimNo' | translate }}
+                        <th pColumn="jobNo">{{ 'job.tableColumn.jobNo' | translate }}
                         </th>
-                        <th pSortableColumn="claimDate">{{ 'claim.tableColumn.claimDate' | translate }}<p-sortIcon field="claimDate"></p-sortIcon>
+                        <th pColumn="claimNo">{{ 'job.tableColumn.claimNo' | translate }}
                         </th>
-                        <!-- <th pColumn="tenantId">{{ 'claim.tableColumn.tenantId' | translate }}
-                        </th> -->
-                        <th pColumn="tenantName">{{ 'claim.tableColumn.tenantName' | translate }}
+                        <th pColumn="insuranceType">{{ 'job.tableColumn.insuranceType' | translate }}
                         </th>
-                        <th pColumn="createdUser">{{ 'claim.tableColumn.createdUser' | translate }}
+                        <th pColumn="carPlateNumber">{{ 'job.tableColumn.carPlateNumber' | translate }}
                         </th>
-                        <th pColumn="statusDate">{{ 'claim.tableColumn.statusDate' | translate }}
-                        </th>
-                        <th pSortableColumn="status">{{ 'claim.tableColumn.status' | translate }}<p-sortIcon field="claimDate"></p-sortIcon>
+                        <th pSortableColumn="jobStatus">{{ 'job.tableColumn.jobStatus' | translate }}<p-sortIcon field="jobStatus"></p-sortIcon>
                         </th>
                         <th pColumn="actions">{{'common.actions' | translate }}
                         </th>
 
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-claim>
+                <ng-template pTemplate="body" let-job>
                     <tr>
                         <td>
-                            {{claim.id}}
+                            {{job.id}}
                         </td>
                         <td>
-                            {{claim.claimNo}}
+                            {{job.jobNo}}
                         </td>
                         <td>
-                            {{claim.claimDate | date:'longDate'}}
-                        </td>
-                        <!-- <td>
-                            {{claim.tenantId}}
-                        </td> -->
-                        <td>
-                            {{claim.tenantName}}
+                            {{job.claim}}
                         </td>
                         <td>
-                            {{claim.createdUser}}
+                            {{job.insuranceType}}
                         </td>
                         <td>
-                            {{claim.statusDate  | date:'longDate'}}
+                            {{job.car.plateNumber}}
                         </td>
                         <td>
-                            {{claim.status}}
-                        </td>
+                            {{getStatusName(job.status)}}
+                        </td>                        
+
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
-                              (click)="edit(claim)"></button>
+                              (click)="edit(job)"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
-                              (click)="deleteAction(claim)"></button>
+                              (click)="deleteAction(job)"></button>
                           </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        {{'claim.table_footer' | translate: {length: masters ? masters.length : 0} }}
+                        {{'job.table_footer' | translate: {length: masterDtos ? masterDtos.length : 0} }}
                     </div>
                 </ng-template>
             </p-table>
         </div>
 
-        <!-- add/update Claim dialog -->
-        <p-dialog [(visible)]="masterDialog" [style]="{width: '700px'}" header="{{ 'claim.claimDialog.title' | translate }}" [modal]="true"
-            styleClass="p-fluid">
-            <ng-template pTemplate="content">
-                <div class="formgrid grid">
-                    <div class="field col-12 md:col-9">
-                        <label for="claimNo">{{ 'claim.tableColumn.claimNo' | translate }}</label>
-                        <input type="text" pInputText id="claimNo" [(ngModel)]="master.claimNo" required autofocus/>
-                        <small class="p-invalid" *ngIf="submitted && !master.claimNo">{{ 'claim.claimDialog.claimNoRequired' | translate }}</small>
-                    </div>
-                    <div class="field col-12 md:col-5">
-                        <label for="tenant">{{ 'claim.tableColumn.tenantName' | translate }}</label>
-                        <p-dropdown [options]="tenants" [(ngModel)]="selectedTenant"
-                           optionLabel="name" [showClear]="true" [autoDisplayFirst]="false" required autofocus></p-dropdown>
-                         <small class="p-invalid" *ngIf="submitted && !master.tenant">{{ 'claim.claimDialog.tenantRequired' | translate }}</small>
-                    </div>
-                    <div class="field col-12 md:col-4" >
-                        <label for="claimDate">{{ 'claim.tableColumn.claimDate' | translate }}</label>
-                        <input type="date" pInputText id="claimDate" [(ngModel)]="master.claimDate" required/>
-                        <small class="p-invalid" *ngIf="submitted && !master.claimDate">{{ 'claim.claimDialog.claimDateRequired' | translate }}</small>
-                    </div>
-                </div>
-
-            </ng-template>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times" class="p-button-text"
-                    (click)="hideDialog()"></button>
-                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check" class="p-button-text" (click)="save()" [disabled]="(!editAuth && editable)"></button>
-            </ng-template>
-        </p-dialog>
-
         <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="master">{{ 'operations.deleteMessage' | translate }} <b>{{master.name}}</b>?</span>
+                <span *ngIf="master">{{ 'operations.cancelMessage' | translate }} <b>{{master.name}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
