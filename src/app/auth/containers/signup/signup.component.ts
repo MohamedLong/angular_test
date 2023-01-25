@@ -33,7 +33,8 @@ export class SignupComponent implements OnInit {
         tenantType: ['', Validators.required],
         tenant: [null],
         newTenantName: [''],
-        newCr: ['']
+        newCr: [''],
+        location: []
     });
 
     tenants: Tenant[];
@@ -83,7 +84,7 @@ export class SignupComponent implements OnInit {
                         console.log(this.signupForm);
                         this.signupForm.removeControl('newCr');
                         this.signupForm.removeControl('newTenantName');
-                        this.signupForm.removeControl('tenantType');
+                        this.signupForm.removeControl('location');
                         this.createUserOnExistingTenant();
                     },
                     error: (e) => alert(e)

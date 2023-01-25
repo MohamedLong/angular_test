@@ -11,7 +11,9 @@
             "tenant": "Tenant",
             "tenantType": "Tenant Type",
             "login": "Login",
-            "signup": "Sign up"
+            "signup": "Sign up",
+            "newTenant": "Create New Tenant",
+            "selectTenant": "Select Existing Tenant"
         },
         "login": {
             "header": "Welcome",
