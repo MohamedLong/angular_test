@@ -7,6 +7,7 @@ import { Tokens } from '../models/tokens';
 import jwt_decode from "jwt-decode";
 import { config } from 'src/app/config';
 import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenu.service';
+import { User } from 'src/app/xgarage/common/model/user';
 
 
 @Injectable({
@@ -25,14 +26,14 @@ export class AuthService {
   params: HttpParams;
   headers: HttpHeaders;
 
-  signup(body: { firstName: string, lasttName: string, phone: string, password: string, email: string, tenant: {id: number} }) {
-    return this.http.post(this.apiUrl + '/web/signup', body).pipe(
+  signup(user: User) {
+    return this.http.post(this.apiUrl + '/web/signup', user).pipe(
         tap((tokens: Tokens) => {
             this.storeTokens(tokens);
         }),
-        mapTo(true),
+        mapTo("200"),
         catchError(error => {
-            return of(false);
+            return of(error.error);
         })
     )
 };
@@ -49,7 +50,6 @@ export class AuthService {
         tap(tokens => {this.doLoginUser(user.username, tokens)}),
         mapTo(true),
         catchError(error => {
-          //alert(error.error);
           return throwError(error.error);
         }));
   }
@@ -61,7 +61,6 @@ export class AuthService {
       tap(() => this.doLogoutUser()),
       mapTo(true),
       catchError(error => {
-        alert(error.error);
         return of(false);
       }));
   }

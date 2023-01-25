@@ -39,16 +39,15 @@ valid: boolean = false;
 
   getAllForUser() {
     let user = this.authService.getStoredUser();
-    if(JSON.parse(user).tenant !== null){
+    if(JSON.parse(user).tenant){
       this.jobService.getForUser().subscribe({
       next: (masters) => {
-          this.masterDtos = masters;
+          this.masters = masters;
           this.loading = false;
       },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
   });
     }else{
-      console.log();
       this.jobService.getAll().subscribe({
         next: (masters) => {
           this.masters = masters;
