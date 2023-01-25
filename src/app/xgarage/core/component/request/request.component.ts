@@ -29,8 +29,4 @@ export class RequestComponent implements OnInit {
         private jobService: JobService) { }
 
     ngOnInit(): void { }
-
-    uploadPartImages() {
-
-    }
 }

@@ -1,25 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { Brand } from 'src/app/xgarage/common/model/brand';
-import { CarModel } from 'src/app/xgarage/common/model/carmodel';
-import { CarModelType } from 'src/app/xgarage/common/model/carmodeltype';
-import { CarModelYear } from 'src/app/xgarage/common/model/carmodelyear';
-import { Document } from 'src/app/xgarage/common/model/document';
-import { GearType } from 'src/app/xgarage/common/model/geartype';
 import { Privacy } from 'src/app/xgarage/common/model/privacy';
-import { BrandService } from 'src/app/xgarage/common/service/brand.service';
-import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypes.service';
-import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
 import { Car } from '../../../model/car';
 import { InsuranceType } from '../../../model/insurancetype';
-import { Job } from '../../../model/job';
-import { StatusConstants } from '../../../model/statusconstatnts';
 import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
 import { JobService } from '../../../service/job.service';
-import { RequestService } from '../../../service/request.service';
 import { SupplierService } from '../../../service/supplier.service';
 
 @Component({

@@ -1,57 +1,10 @@
-import { UnsavedChangesGaurd } from './unsaved.guard';
 import {Router, RouterModule, Routes} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {DashboardComponent} from './demo/view/dashboard.component';
-import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
-import {FormLayoutDemoComponent} from './demo/view/formlayoutdemo.component';
-import {InvalidStateDemoComponent} from './demo/view/invalidstatedemo.component';
-import {PanelsDemoComponent} from './demo/view/panelsdemo.component';
-import {OverlaysDemoComponent} from './demo/view/overlaysdemo.component';
-import {MediaDemoComponent} from './demo/view/mediademo.component';
-import {MenusDemoComponent} from './demo/view/menusdemo.component';
-import {MessagesDemoComponent} from './demo/view/messagesdemo.component';
-import {MiscDemoComponent} from './demo/view/miscdemo.component';
-import {EmptyDemoComponent} from './demo/view/emptydemo.component';
-import {ChartsDemoComponent} from './demo/view/chartsdemo.component';
-import {FileDemoComponent} from './demo/view/filedemo.component';
-import {DocumentationComponent} from './demo/view/documentation.component';
 import {AppMainComponent} from './app.main.component';
-import {AppNotfoundComponent} from './pages/app.notfound.component';
-import {AppContactusComponent} from './pages/app.contactus.component';
-import {AppErrorComponent} from './pages/app.error.component';
-import {AppAccessdeniedComponent} from './pages/app.accessdenied.component';
-// import {AppLoginComponent} from './pages/.login.component';
-import {AppLandingComponent} from './pages/app.landing.component';
-import {InputDemoComponent} from './demo/view/inputdemo.component';
-import {FloatLabelDemoComponent} from './demo/view/floatlabeldemo.component';
-import {ButtonDemoComponent} from './demo/view/buttondemo.component';
-import {TableDemoComponent} from './demo/view/tabledemo.component';
-import {TabViewModule} from 'primeng/tabview';
-import {ListDemoComponent} from './demo/view/listdemo.component';
-import {AppTimelineDemoComponent} from './pages/app.timelinedemo.component';
-import {TreeDemoComponent} from './demo/view/treedemo.component';
-import {DisplayComponent} from './utilities/display.component';
-import {ElevationComponent} from './utilities/elevation.component';
-import {FlexboxComponent} from './utilities/flexbox.component';
-import {GridComponent} from './utilities/grid.component';
-import {IconsComponent} from './utilities/icons.component';
-import {WidgetsComponent} from './utilities/widgets.component';
-import {SpacingComponent} from './utilities/spacing.component';
-import {TypographyComponent} from './utilities/typography.component';
-import {TextComponent} from './utilities/text.component';
-import {AppCalendarComponent} from './pages/app.calendar.component';
-import {AppInvoiceComponent} from './pages/app.invoice.component';
-import {AppHelpComponent} from './pages/app.help.component';
-import {AppWizardComponent} from './pages/app.wizard.component';
-import {CurrencyComponent} from './xgarage/common/component/currency/currency.component';
 import { LoginComponent } from './auth/containers/login/login.component';
 import { RandomGuard } from './auth/guards/random.guard';
-import { MetricComponent } from './xgarage/common/component/metric/metric.component';
-import { AppCrudComponent } from './pages/app.crud.component';
-import { UserSubMenuService } from './xgarage/dashboard/service/usersubmenu.service';
-import { SubMenu } from './xgarage/dashboard/model/submenu';
 import { AuthGuard } from './auth/guards/auth.guard';
-import { UserSubMenu } from './xgarage/dashboard/model/usersubmenu';
 import { UserMainMenuComponent } from './xgarage/dashboard/component/user-main-menu/user-main-menu.component';
 import { UserSubMenuComponent } from './xgarage/dashboard/component/user-sub-menu/user-sub-menu.component';
 import { UsersComponent } from './xgarage/dashboard/component/users/users.component';
@@ -68,10 +21,11 @@ import { AuthService } from './auth/services/auth.service';
 import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
 //import { RequestComponent } from './xgarage/core/component/request/request.component';
 //import { RequestComponent } from './xgarage/core/component/request/request.component';
-import { JobService } from './xgarage/core/service/job.service';
 import { NewJobComponent } from './xgarage/core/component/job/newjob/newjob.component';
 import { CarComponent } from './xgarage/core/component/car/car.component';
 import { NewCarComponent } from './xgarage/core/component/car/new-car/new-car.component';
+import { PartComponent } from './xgarage/core/component/part/part.component';
+import { NewPartComponent } from './xgarage/core/component/part/new-part/new-part.component';
 
 const routes: Routes = [];
 
@@ -96,7 +50,9 @@ const routes: Routes = [];
                     {path: 'jobs/new-job', component: NewJobComponent},
                     {path: 'request', component: RequestComponent},
                     {path: 'cars', component: CarComponent},
-                    {path: 'cars/new-car', component: NewCarComponent}
+                    {path: 'cars/new-car', component: NewCarComponent},
+                    {path: 'parts', component: PartComponent},
+                    {path: 'parts/new-part', component: NewPartComponent}
                     // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
                     // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},

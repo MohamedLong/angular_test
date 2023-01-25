@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { InputMask } from 'primeng/inputmask';
 import { Brand } from 'src/app/xgarage/common/model/brand';
 import { CarModel } from 'src/app/xgarage/common/model/carmodel';
@@ -10,12 +11,14 @@ import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltype
 import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
 import { Car } from '../../../model/car';
 import { GearType } from '../../../model/geartype';
+import { CarService } from '../../../service/car.service';
 import { RequestService } from '../../../service/request.service';
 
 @Component({
   selector: 'app-new-car',
   templateUrl: './new-car.component.html',
-  styles: ['']
+  styles: [''],
+  providers: [MessageService]
 })
 export class NewCarComponent implements OnInit {
 
@@ -23,7 +26,9 @@ export class NewCarComponent implements OnInit {
         private requestService: RequestService,
         private brandService: BrandService,
         private carModelYearService: CarModelYearService,
-        private carSpecService: CarModelTypeService,) { }
+        private carSpecService: CarModelTypeService,
+        private carService: CarService,
+        private messageService: MessageService,) { }
 
     brands: Brand[];
     carModels: CarModel[];
@@ -64,7 +69,26 @@ export class NewCarComponent implements OnInit {
             if (this.type = 'new job') {
                 this.carEvent.emit({ carData: this.carForm.getRawValue(), file });
             } else {
-                //add new car
+                //add new/update car
+                let stringCarBody = JSON.stringify(this.carForm.getRawValue());
+                let carFormData = new FormData();
+
+                let updatedCarBody = { 'carBody': stringCarBody };
+
+                if (this.carFile) {
+                    updatedCarBody['carDocument'] = this.carFile;
+                }
+
+                for (var key in updatedCarBody) {
+                    carFormData.append(key, updatedCarBody[key]);
+                }
+
+                this.carService.add(carFormData as Car).subscribe(res => {
+                    console.log(res)
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!'});
+                }, err => {
+                    this.messageService.add({ severity: 'erorr', summary: 'Error', detail: 'Erorr Saving Car'});
+                })
             }
         }
     }
