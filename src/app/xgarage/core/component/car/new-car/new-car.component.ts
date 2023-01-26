@@ -66,7 +66,7 @@ export class NewCarComponent implements OnInit {
         let file = this.carFile;
         if (this.carForm.valid) {
             if (this.found && this.type == 'new job') {
-                this.carEvent.emit({ car: this.carForm.getRawValue() });
+                this.carEvent.emit(this.carForm.getRawValue());
             } else {
                 //add new/update car
                 let carBody = {

@@ -6,6 +6,7 @@ import { InsuranceType } from '../../../model/insurancetype';
 import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
 import { JobService } from '../../../service/job.service';
+import { RequestService } from '../../../service/request.service';
 import { SupplierService } from '../../../service/supplier.service';
 
 @Component({
@@ -64,8 +65,8 @@ export class NewJobComponent implements OnInit {
     @Output() request: EventEmitter<Supplier[]> = new EventEmitter();
 
     constructor(private formBuilder: FormBuilder,
-        private supplierService: SupplierService,
         private jobService: JobService,
+        private requestService: RequestService,
         private authService: AuthService,
         private calimService: ClaimService,
         private messageService: MessageService) { }
@@ -91,7 +92,7 @@ export class NewJobComponent implements OnInit {
             'car': event
         });
 
-        // console.log(this.jobForm.get('car').value);
+        //console.log(this.jobForm.get('car').value);
         this.clickNext('request');
     }
 
@@ -159,10 +160,10 @@ export class NewJobComponent implements OnInit {
     }
 
     onjobFormSubmit() {
-        console.log(this.jobForm.value)
         if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
             console.log('initiate req')
-            this.request.emit(this.jobForm.value);
+           // this.request.emit(this.jobForm.value);
+           this.requestService.info.next(this.jobForm.value);
         } else {
             console.log('add new job then initiate req')
             this.addNewJob();
@@ -184,7 +185,8 @@ export class NewJobComponent implements OnInit {
             this.jobForm.patchValue({ 'jobId': res });
 
             if (this.type == 'new req' && this.jobForm.get('jobId').value !== '') {
-                this.request.emit(this.jobForm.value);
+                // this.request.emit(this.jobForm.value);
+                this.requestService.info.next(this.jobForm.value);
             }
 
         }, err => {

@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
 import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { Part } from '../../model/parts';
 import { PartService } from '../../service/part.service';
 import { RequestService } from '../../service/request.service';
+import { SupplierService } from '../../service/supplier.service';
 
 @Component({
     selector: 'app-request',
@@ -15,16 +17,37 @@ export class RequestComponent implements OnInit {
 
     constructor(
         private requestService: RequestService,
-        private partService: PartService) { }
+        private partService: PartService,
+        private supplierService: SupplierService,
+        private formBuilder: FormBuilder,) { }
+
+    // requestForm: FormGroup = this.formBuilder.group({
+    //     description: [''],
+    //     // closingDate: [''],
+    //     privacy: ['Public'],
+    //     car: [''],
+    //     user: [''],
+    //     part: [''],
+    //     locationName: [''],
+    //     suppliers: [''],
+    //     partTypes: ['']
+    // });
 
     partTypes: PartType[];
+    partType: PartType;
     description: string;
     selectedPartType: Part;
-    privacy = Object.keys(Privacy);
+    privacyList = Object.keys(Privacy);
+    privacy: string = ''
     selectedPrivateSuppliers: Observable<any>;
+
+    data: any ='';
 
     ngOnInit(): void {
         this.getPartTypes();
+        this.requestService.info.subscribe(data => {
+           this.data = data;
+        })
     }
 
     getPartTypes() {
@@ -49,8 +72,8 @@ export class RequestComponent implements OnInit {
     }
 
     getSupplierByBrandId() {
-        // if (this.car) {
-        //     this.selectedPrivateSuppliers = this.supplierService.getSupplierByBrandId(this.car.carData.brandId.id);
-        // }
+        if (this.data.car) {
+            this.selectedPrivateSuppliers = this.supplierService.getSupplierByBrandId(this.data.car.brandId.id);
+        }
     }
 }

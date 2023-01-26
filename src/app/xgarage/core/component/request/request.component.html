@@ -2,13 +2,12 @@
 <div class="grid mb-3">
     <div [ngClass]="{'col-12 md:col-6': 'Private', 'col-12': 'Public'}">
         <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
-        <p-dropdown appendTo="body" [options]="privacy" (onChange)="onPrivacyChange()"></p-dropdown>
+        <p-dropdown appendTo="body" [(ngModel)]="privacy" [options]="privacyList" (onChange)="onPrivacyChange()"></p-dropdown>
     </div>
     <div class="col-12 md:col-6" *ngIf="'Private'">
         <label class="block mb-2">{{ 'job.form.privateSuppliers' | translate }}</label>
         <p-multiSelect class="block" maxSelectedLabels="2" appendTo="body" selectedItemsLabel="{0} items selected"
-            [options]="selectedPrivateSuppliers | async" optionLabel="name" optionValue="id"
-            placehodler="{{ 'job.form.selectPrivateSuppliers' | translate }}" required></p-multiSelect>
+            [options]="selectedPrivateSuppliers | async" optionLabel="name" placehodler="{{ 'job.form.selectPrivateSuppliers' | translate }}" required></p-multiSelect>
     </div>
 </div>
 <p-fieldset legend="PART 1">
@@ -22,7 +21,7 @@
         <div class="field col-12 md:col-6">
             <label>Preferred Parts Type</label>
             <p-dropdown (onChange)="onSelectPartType($event.value)" [options]="partTypes"
-                optionLabel="partType"></p-dropdown>
+                optionLabel="partType" [(ngModel)]="partType"></p-dropdown>
         </div>
         <div class="field col-12 md:col-6">
             <label for="">Description</label>
