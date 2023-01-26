@@ -1,4 +1,5 @@
 <div [ngClass]="{'card': type == 'new car'}">
+    <p-toast></p-toast>
     <form [formGroup]="carForm" (ngSubmit)="onCarFormSubmit()">
         <div class="grid">
             <div class="col-12">

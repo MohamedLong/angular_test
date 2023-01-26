@@ -39,8 +39,6 @@ export class NewJobComponent implements OnInit {
     submitted: boolean = false;
 
     insuranceFrom = Object.keys(InsuranceType);
-    car: { carData: Car, file?: File };
-
     jobForm: FormGroup = this.formBuilder.group({
         insuranceFrom: [''],
         claim: [''],
@@ -89,8 +87,12 @@ export class NewJobComponent implements OnInit {
 
     //car form event
     onCarFormEvent(event) {
-        console.log(event)
-        this.car = event;
+
+        this.jobForm.patchValue({
+            'car': event.car
+        });
+
+        console.log(this.jobForm.get('car').value);
         this.clickNext('request');
     }
 
@@ -110,10 +112,11 @@ export class NewJobComponent implements OnInit {
                         })
 
                     } else {
-                        this.jobForm.patchValue({'job': res[0].jobNo, 'jobId': res[0].id});
+                        //check if jobid is there first
+                        this.jobForm.patchValue({ 'job': res[0].jobNo, 'jobId': res[0].id });
                     }
                 } else {
-                    this.addNewClaim();
+                    //this.addNewClaim();
                 }
 
             }, err => {
@@ -147,75 +150,33 @@ export class NewJobComponent implements OnInit {
     }
 
     onjobFormSubmit() {
-        //update car
-        this.jobForm.patchValue({
-            'car': {
-                brandId: this.car.carData.brandId.id,
-                carModelId: this.car.carData.carModelId.id,
-                carModelYearId: this.car.carData.carModelYearId.id,
-                carModelTypeId: this.car.carData.carModelYearId.id,
-                chassisNumber: this.car.carData.chassisNumber,
-                plateNumber: this.car.carData.plateNumber,
-                gearType: this.car.carData.gearType,
-            }
-        })
-
-        //check if the car is already registerd
-        if (this.car.carData.id) {
-            this.jobForm.get('car').value['id'] = this.car.carData.id;
-        }
-
-        //check if the car has car image
-        if (this.car.file) {
-            this.jobForm.patchValue({'carDocument': this.car.file});
-        }
-
-        if(this.jobForm.get('suppliers').value) {
-            let updatedSuppliers = [];
-            this.jobForm.get('suppliers').value.forEach(supplier => {
-                updatedSuppliers.push({'id': supplier});
-            })
-
-            this.jobForm.patchValue({'suppliers': updatedSuppliers});
-        }
         console.log(this.jobForm.value)
-        // if (this.type == 'new job' || !this.jobForm.get('jobId').value) {
-        //     console.log('add new job then initiate req')
-        //     //add new job then initiate req
-        //     this.addNewJob();
-        // } else {
-        //     console.log('initiate req')
-        //     //initiate req
-        //     this.request.emit(this.jobForm.value);
-        // }
+        if (this.type == 'new job' || !this.jobForm.get('jobId').value) {
+            console.log('add new job then initiate req')
+            //add new job then initiate req
+            this.addNewJob();
+        } else {
+            console.log('initiate req')
+            //initiate req
+            //this.request.emit(this.jobForm.value);
+        }
     }
 
     addNewJob() {
         //prepare job body for request
+        console.log(this.claimId)
         let jobBody = {
             jobNo: this.jobForm.get('job').value,
             claim: this.claimId,
             insuranceType: this.jobForm.get('insuranceFrom').value,
-            car: this.jobForm.get('car').value,
+            car: {'id': this.jobForm.get('car').value.id},
         }
 
-        let stringJobBody = JSON.stringify(jobBody);
-        let updatedJobBody = { 'jobBody': stringJobBody };
+        this.jobService.saveJob(jobBody).subscribe(res => {
 
-        if (this.car.file) {
-            updatedJobBody['carDocument'] = this.car.file;
-        }
+            this.jobForm.patchValue({ 'jobId': res });
 
-        let jobBodyFormData = new FormData();
-        for (var key in updatedJobBody) {
-            jobBodyFormData.append(key, updatedJobBody[key]);
-        }
-
-        this.jobService.saveJob(jobBodyFormData).subscribe(res => {
-
-            this.jobForm.patchValue({'jobId': res});
-
-            if(this.type == 'new req' && this.jobForm.get('jobId').value) {
+            if (this.type == 'new req' && this.jobForm.get('jobId').value) {
                 this.request.emit(this.jobForm.value);
             }
 

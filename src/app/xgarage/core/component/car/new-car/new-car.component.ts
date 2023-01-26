@@ -52,7 +52,7 @@ export class NewCarComponent implements OnInit {
     });
 
     @Input() type: string = 'new car';
-    @Output() carEvent = new EventEmitter<{ carData: Car, file?: File }>();
+    @Output() carEvent = new EventEmitter<{ car: Car }>();
 
     ngOnInit(): void {
         this.getCarBrands();
@@ -61,15 +61,27 @@ export class NewCarComponent implements OnInit {
     }
 
     onCarFormSubmit() {
-       // console.log(this.carForm.getRawValue())
+        // console.log(this.carForm.getRawValue())
         this.submitted = true;
         let file = this.carFile;
         if (this.carForm.valid) {
-            if (this.type == 'new job') {
-                this.carEvent.emit({ carData: this.carForm.getRawValue(), file });
+            if (this.found && this.type == 'new job') {
+                this.carEvent.emit({ car: this.carForm.getRawValue() });
             } else {
                 //add new/update car
-                let stringCarBody = JSON.stringify(this.carForm.getRawValue());
+                let carBody = {
+                    "brandId": this.carForm.value.brandId.id,
+                    "carModelId": this.carForm.value.carModelId.id,
+                    "carModelTypeId": this.carForm.value.carModelTypeId.id,
+                    "carModelYearId": this.carForm.value.carModelYearId.id,
+                    "chassisNumber": this.carForm.value.chassisNumber,
+                    "plateNumber": this.carForm.value.plateNumber,
+                    "gearType": this.carForm.value.gearType
+                }
+
+                console.log(carBody)
+
+                let stringCarBody = JSON.stringify(carBody);
                 let carFormData = new FormData();
 
                 let updatedCarBody = { 'carBody': stringCarBody };
@@ -85,6 +97,7 @@ export class NewCarComponent implements OnInit {
                 this.carService.add(carFormData as Car).subscribe(res => {
                     console.log(res)
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
+                    this.resetCarForm();
                 }, err => {
                     this.messageService.add({ severity: 'erorr', summary: 'Error', detail: 'Erorr Saving Car' });
                 })
@@ -98,7 +111,7 @@ export class NewCarComponent implements OnInit {
         this.typingTimer = setTimeout(() => {
             if (!this.carForm.get('chassisNumber').errors) {
                 this.carService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
-                    // console.log('res:', res)
+                    console.log('res:', res)
                     this.found = true;
                     this.notFound = false;
                     this.setSelectedCar(res);
@@ -200,7 +213,7 @@ export class NewCarComponent implements OnInit {
         });
 
         //set car model
-        if(selectedBrand.length > 0) {
+        if (selectedBrand.length > 0) {
             this.carModels = selectedBrand[0].carModels;
             return selectedBrand[0];
         }

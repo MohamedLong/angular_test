@@ -23,15 +23,15 @@
                 <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'request'}">
                     <form [formGroup]="jobForm" (ngSubmit)="onjobFormSubmit()">
                         <div class="grid">
-                            <div class="col-12" *ngIf="car">
+                            <div class="col-12" *ngIf="jobForm.get('car').value">
                                 <p-messages class="car-info" severity="info">
                                     <ng-template pTemplate>
                                         <p>
-                                            {{car.carData.brandId.brandName}} {{car.carData.carModelId.name}}
-                                            {{car.carData.carModelYearId.year}} {{car.carData.carModelTypeId.type}};
+                                            {{jobForm.get('car').value.brandId.brandName}} {{jobForm.get('car').value.carModelId.name}}
+                                            {{jobForm.get('car').value.carModelYearId.year}} {{jobForm.get('car').value.carModelTypeId.type}};
                                             {{ 'car.form.chassisNo' | translate }}:
-                                            {{car.carData.chassisNumber}};
-                                            {{ 'car.form.licencePlate' | translate }}: {{car.carData.plateNumber}}
+                                            {{jobForm.get('car').value.chassisNumber}};
+                                            {{ 'car.form.licencePlate' | translate }}: {{jobForm.get('car').value.plateNumber}}
                                         </p>
                                     </ng-template>
                                 </p-messages>
