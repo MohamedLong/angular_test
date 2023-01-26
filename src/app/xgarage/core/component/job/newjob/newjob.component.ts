@@ -88,10 +88,10 @@ export class NewJobComponent implements OnInit {
     onCarFormEvent(event) {
 
         this.jobForm.patchValue({
-            'car': event.car
+            'car': event
         });
 
-        console.log(this.jobForm.get('car').value);
+        // console.log(this.jobForm.get('car').value);
         this.clickNext('request');
     }
 

@@ -79,8 +79,6 @@ export class NewCarComponent implements OnInit {
                     "gearType": this.carForm.value.gearType
                 }
 
-                console.log(carBody)
-
                 let stringCarBody = JSON.stringify(carBody);
                 let carFormData = new FormData();
 
@@ -95,9 +93,11 @@ export class NewCarComponent implements OnInit {
                 }
 
                 this.carService.add(carFormData as Car).subscribe(res => {
-                    console.log(res)
+                    //console.log(res)
                     if(this.type == "new job") {
-                        this.carEvent.emit({ car: res });
+                        this.setSelectedCar(res);
+                        //console.log(this.carForm.getRawValue())
+                        this.carEvent.emit(this.carForm.getRawValue());
                     }
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
                     this.resetCarForm();
@@ -114,7 +114,7 @@ export class NewCarComponent implements OnInit {
         this.typingTimer = setTimeout(() => {
             if (!this.carForm.get('chassisNumber').errors) {
                 this.carService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
-                    console.log('res:', res)
+                    //console.log('res:', res)
                     this.found = true;
                     this.notFound = false;
                     this.setSelectedCar(res);
