@@ -42,7 +42,7 @@ export class NewJobComponent implements OnInit {
         insuranceFrom: [''],
         claim: [''],
         job: [''],
-        jobId: [null],
+        jobId: [''],
         location: [''],
         // closingDate: [''],
         // privacy: ['Public'],
@@ -96,30 +96,42 @@ export class NewJobComponent implements OnInit {
     }
 
     onClaimNumberKeyUp() {
+
         this.isTypingClaim = true;
         clearTimeout(this.ClaimTypingTimer);
+
         this.ClaimTypingTimer = setTimeout(() => {
-            this.jobService.getJobByClaimNumber(this.jobForm.get('claim').value).subscribe(res => {
-                console.log(res)
-                this.claimId = res.claimId;
-                if (res.jobs.length > 0 && res.jobs.length == 1) {
+            if (this.jobForm.get('claim').value !== "") {
+                this.jobService.getJobByClaimNumber(this.jobForm.get('claim').value).subscribe(res => {
+                    console.log(res)
+                    this.claimId = res.claimId;
+                    if (res.jobs.length > 0) {
+                        if (res.jobs.length == 1) {
 
-                    this.jobForm.patchValue({ 'job': res.jobs[0].jobNo, 'jobId': res.jobs[0].id });
+                            this.jobForm.patchValue({ 'job': res.jobs[0].jobNo, 'jobId': res.jobs[0].id });
 
-                } else if(res.jobs.length > 1) {
-                    this.jobFound.multiple = true;
-                    this.jobFound.found = true;
+                        } else if (res.jobs.length > 1) {
+                            this.jobFound.multiple = true;
+                            this.jobFound.found = true;
 
-                    res.jobs.forEach(job => {
-                        this.jobs.push(job);
-                    })
-                }
+                            res.jobs.forEach(job => {
+                                this.jobs.push(job);
+                            })
+                        }
+                    } else {
+                        this.jobs = [];
+                        this.jobForm.patchValue({ 'job': "", 'jobId': 0 });
+                        this.jobFound.multiple = false;
+                        this.jobFound.found = false;
 
-            }, err => {
-                this.jobFound.multiple = false;
-                this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error });
-                //console.log('err:', err.error)
-            })
+                        console.log(this.jobs, this.jobForm.get('jobId').value)
+                    }
+                }, err => {
+                    this.jobFound.multiple = false;
+                    this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error });
+                    //console.log('err:', err.error)
+                })
+            }
 
             this.isTypingClaim = false;
         }, 2000);
@@ -148,14 +160,12 @@ export class NewJobComponent implements OnInit {
 
     onjobFormSubmit() {
         console.log(this.jobForm.value)
-        if (this.type == 'new job' || !this.jobForm.get('jobId').value) {
-            console.log('add new job then initiate req')
-            //add new job then initiate req
-            this.addNewJob();
-        } else {
+        if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
             console.log('initiate req')
-            //initiate req
-            //this.request.emit(this.jobForm.value);
+            this.request.emit(this.jobForm.value);
+        } else {
+            console.log('add new job then initiate req')
+            this.addNewJob();
         }
     }
 
@@ -166,14 +176,14 @@ export class NewJobComponent implements OnInit {
             jobNo: this.jobForm.get('job').value,
             claim: this.claimId,
             insuranceType: this.jobForm.get('insuranceFrom').value,
-            car: {'id': this.jobForm.get('car').value.id},
+            car: { 'id': this.jobForm.get('car').value.id },
         }
 
         this.jobService.saveJob(jobBody).subscribe(res => {
 
             this.jobForm.patchValue({ 'jobId': res });
 
-            if (this.type == 'new req' && this.jobForm.get('jobId').value) {
+            if (this.type == 'new req' && this.jobForm.get('jobId').value !== '') {
                 this.request.emit(this.jobForm.value);
             }
 

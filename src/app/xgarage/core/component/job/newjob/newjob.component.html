@@ -58,8 +58,9 @@
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
                                 <p-dropdown *ngIf="jobFound.multiple" [options]="jobs"
-                                    formControlName="job" optionLabel="jobNo" optionValue="id"></p-dropdown>
-                                <input *ngIf="!jobFound.multiple" formControlName="jobId" class="width-100" type="text"
+                                    formControlName="jobId" optionLabel="jobNo" optionValue="id"></p-dropdown>
+
+                                <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100" type="text"
                                     pInputText placeholder="{{ 'job.form.enterJob' | translate }}" required />
                             </div>
                             <div class="col-12 md:col-6">
