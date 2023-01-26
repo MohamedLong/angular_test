@@ -15,15 +15,14 @@ import { CarService } from '../../../service/car.service';
 import { RequestService } from '../../../service/request.service';
 
 @Component({
-  selector: 'app-new-car',
-  templateUrl: './new-car.component.html',
-  styles: [''],
-  providers: [MessageService]
+    selector: 'app-new-car',
+    templateUrl: './new-car.component.html',
+    styles: [''],
+    providers: [MessageService]
 })
 export class NewCarComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder,
-        private requestService: RequestService,
         private brandService: BrandService,
         private carModelYearService: CarModelYearService,
         private carSpecService: CarModelTypeService,
@@ -62,11 +61,11 @@ export class NewCarComponent implements OnInit {
     }
 
     onCarFormSubmit() {
-        //console.log(this.carForm.getRawValue())
+       // console.log(this.carForm.getRawValue())
         this.submitted = true;
         let file = this.carFile;
         if (this.carForm.valid) {
-            if (this.type = 'new job') {
+            if (this.type == 'new job') {
                 this.carEvent.emit({ carData: this.carForm.getRawValue(), file });
             } else {
                 //add new/update car
@@ -85,20 +84,20 @@ export class NewCarComponent implements OnInit {
 
                 this.carService.add(carFormData as Car).subscribe(res => {
                     console.log(res)
-                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!'});
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
                 }, err => {
-                    this.messageService.add({ severity: 'erorr', summary: 'Error', detail: 'Erorr Saving Car'});
+                    this.messageService.add({ severity: 'erorr', summary: 'Error', detail: 'Erorr Saving Car' });
                 })
             }
         }
     }
 
-    onChnKeyup() {
+    onChnKeyUp() {
         this.isTyping = true;
         clearTimeout(this.typingTimer);
         this.typingTimer = setTimeout(() => {
             if (!this.carForm.get('chassisNumber').errors) {
-                this.requestService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
+                this.carService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
                     // console.log('res:', res)
                     this.found = true;
                     this.notFound = false;
@@ -115,7 +114,7 @@ export class NewCarComponent implements OnInit {
         }, 2000);
     }
 
-    onChnKeydown() {
+    onChnKeyDown() {
         clearTimeout(this.typingTimer);
     }
 
@@ -136,23 +135,25 @@ export class NewCarComponent implements OnInit {
     }
 
     getCarModelYear(carModelYearId?: number) {
-        this.carModelYearService.getAll().subscribe(res => {
-            this.carModelYears = res;
+        if (carModelYearId) {
+            this.setCarModelYear(carModelYearId);
+        } else {
+            this.carModelYearService.getAll().subscribe(res => {
+                this.carModelYears = res;
+            }, err => console.log(err));
+        }
 
-            if (carModelYearId) {
-                this.setCarModelYear(carModelYearId);
-            };
-
-        }, err => console.log(err));
     }
 
     getCarModelType(carModelTypeId?: number) {
-        this.carSpecService.getAll().subscribe(res => {
-            this.carModelTypes = res;
-            if (carModelTypeId) {
-                this.setCarModeltype(carModelTypeId)
-            };
-        }, err => console.log(err));
+        if (carModelTypeId) {
+            this.setCarModelType(carModelTypeId)
+        } else {
+            this.carSpecService.getAll().subscribe(res => {
+                this.carModelTypes = res;
+            }, err => console.log(err));
+        }
+
     }
 
     setSelectedCar(carInfo) {
@@ -199,8 +200,12 @@ export class NewCarComponent implements OnInit {
         });
 
         //set car model
-        this.carModels = selectedBrand[0].carModels;
-        return selectedBrand[0];
+        if(selectedBrand.length > 0) {
+            this.carModels = selectedBrand[0].carModels;
+            return selectedBrand[0];
+        }
+
+        return selectedBrand;
     }
 
     setCarModelYear(id: number) {
@@ -208,17 +213,22 @@ export class NewCarComponent implements OnInit {
             return year.id == id;
         });
 
-        this.carForm.patchValue({ 'carModelYearId': selectedCarModelYear[0] });
-        this.carForm.get('carModelYearId').disable();
+        if (selectedCarModelYear.length > 0) {
+            this.carForm.patchValue({ 'carModelYearId': selectedCarModelYear[0] });
+            this.carForm.get('carModelYearId').disable();
+        }
     }
 
-    setCarModeltype(id: number) {
+    setCarModelType(id: number) {
         let selectedCarModelType = this.carModelTypes.filter(type => {
             return type.id == id;
         });
 
-        this.carForm.patchValue({ 'carModelTypeId': selectedCarModelType[0] });
-        this.carForm.get('carModelTypeId').disable();
+        if (selectedCarModelType.length > 0) {
+            this.carForm.patchValue({ 'carModelTypeId': selectedCarModelType[0] });
+            this.carForm.get('carModelTypeId').disable();
+        }
+
     }
 
     resetCarForm() {

@@ -7,7 +7,7 @@
                     <i class="pi pi-spin pi-spinner" *ngIf="isTyping"></i>
                     <i class="pi pi-check text-green-500 font-bold" *ngIf="found && !isTyping"></i>
                     <input formControlName="chassisNumber" class="width-100" type="text" pInputText
-                        (keyup)="onChnKeyup()" (keydown)="onChnKeydown()" placeholder="Ex: 291919AD1914" required
+                        (keyup)="onChnKeyUp()" (keydown)="onChnKeyDown()" placeholder="Ex: 291919AD1914" required
                         autofocus />
                 </span>
                 <div class="flex align-items-center justify-content-between">
@@ -56,7 +56,7 @@
             </div>
             <div class="col-12 flex align-items-center mt-3">
                 <p-fileUpload class="mt-2 width-100" name="carDocument[]" mode="advanced"
-                    [chooseIcon]="'pi pi-cloud-upload'" url="http://letsgo-oman.com:6060" customUpload="true"
+                    [chooseIcon]="'pi pi-cloud-upload'" customUpload="true"
                     accept="image/*" chooseLabel="{{ 'car.form.uploadCarImg' | translate }}" auto="true"
                     (uploadHandler)="onCarImageUpload($event)"></p-fileUpload>
             </div>

@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { Car } from '../../../model/car';
@@ -38,20 +39,21 @@ export class NewJobComponent implements OnInit {
     submitted: boolean = false;
 
     insuranceFrom = Object.keys(InsuranceType);
-    privacy = Object.keys(Privacy);
     car: { carData: Car, file?: File };
 
     jobForm: FormGroup = this.formBuilder.group({
         insuranceFrom: [''],
         claim: [''],
         job: [''],
+        jobId: [null],
         location: [''],
-        closingDate: [''],
-        privacy: ['Public'],
-        carImages: ['']
+        // closingDate: [''],
+        // privacy: ['Public'],
+        // suppliers: [''],
+        car: [''],
+        carDocument: [''],
     });
 
-    selectedPrivateSyppliers: Supplier[] = [];
     ClaimTypingTimer;  //timer identifier
     InsuranceType = Object.keys(InsuranceType);
     jobFound: { found: boolean, multiple: boolean } = {
@@ -61,6 +63,9 @@ export class NewJobComponent implements OnInit {
 
     jobs: string[];
     claimId: number;
+    // updatedCarData: any;
+    @Input() type: string = 'new job';
+    @Output() request: EventEmitter<Supplier[]> = new EventEmitter();
 
     constructor(private formBuilder: FormBuilder,
         private supplierService: SupplierService,
@@ -105,7 +110,7 @@ export class NewJobComponent implements OnInit {
                         })
 
                     } else {
-                        this.jobForm.patchValue({ 'job': res[0].jobNo });
+                        this.jobForm.patchValue({'job': res[0].jobNo, 'jobId': res[0].id});
                     }
                 } else {
                     this.addNewClaim();
@@ -141,41 +146,57 @@ export class NewJobComponent implements OnInit {
         clearTimeout(this.ClaimTypingTimer);
     }
 
-    onPrivacyChange() {
-        this.getSupplierByBrandId();
-    }
-
-    //need brand_id here
-    getSupplierByBrandId() {
-        if (this.car) {
-            this.supplierService.getSupplierByBrandId(this.car.carData.brandId.id).subscribe(res => {
-                //console.log(res)
-                this.selectedPrivateSyppliers = res;
-            })
-        }
-    }
-
     onjobFormSubmit() {
-        //console.log(this.selectedPrivateSyppliers)
-        let updatedCarData = {
-            brandId: this.car.carData.brandId.id,
-            carModelId: this.car.carData.carModelId.id,
-            carModelYearId: this.car.carData.carModelYearId.id,
-            carModelTypeId: this.car.carData.carModelYearId.id,
-            chassisNumber: this.car.carData.chassisNumber,
-            plateNumber: this.car.carData.plateNumber,
-            gearType: this.car.carData.gearType,
-        }
+        //update car
+        this.jobForm.patchValue({
+            'car': {
+                brandId: this.car.carData.brandId.id,
+                carModelId: this.car.carData.carModelId.id,
+                carModelYearId: this.car.carData.carModelYearId.id,
+                carModelTypeId: this.car.carData.carModelYearId.id,
+                chassisNumber: this.car.carData.chassisNumber,
+                plateNumber: this.car.carData.plateNumber,
+                gearType: this.car.carData.gearType,
+            }
+        })
 
+        //check if the car is already registerd
         if (this.car.carData.id) {
-            updatedCarData['id'] = this.car.carData.id;
+            this.jobForm.get('car').value['id'] = this.car.carData.id;
         }
 
+        //check if the car has car image
+        if (this.car.file) {
+            this.jobForm.patchValue({'carDocument': this.car.file});
+        }
+
+        if(this.jobForm.get('suppliers').value) {
+            let updatedSuppliers = [];
+            this.jobForm.get('suppliers').value.forEach(supplier => {
+                updatedSuppliers.push({'id': supplier});
+            })
+
+            this.jobForm.patchValue({'suppliers': updatedSuppliers});
+        }
+        console.log(this.jobForm.value)
+        // if (this.type == 'new job' || !this.jobForm.get('jobId').value) {
+        //     console.log('add new job then initiate req')
+        //     //add new job then initiate req
+        //     this.addNewJob();
+        // } else {
+        //     console.log('initiate req')
+        //     //initiate req
+        //     this.request.emit(this.jobForm.value);
+        // }
+    }
+
+    addNewJob() {
+        //prepare job body for request
         let jobBody = {
             jobNo: this.jobForm.get('job').value,
             claim: this.claimId,
             insuranceType: this.jobForm.get('insuranceFrom').value,
-            car: updatedCarData,
+            car: this.jobForm.get('car').value,
         }
 
         let stringJobBody = JSON.stringify(jobBody);
@@ -191,8 +212,13 @@ export class NewJobComponent implements OnInit {
         }
 
         this.jobService.saveJob(jobBodyFormData).subscribe(res => {
-            console.log('job created', res)
-            //send req
+
+            this.jobForm.patchValue({'jobId': res});
+
+            if(this.type == 'new req' && this.jobForm.get('jobId').value) {
+                this.request.emit(this.jobForm.value);
+            }
+
         }, err => {
             console.log('err', err)
         })

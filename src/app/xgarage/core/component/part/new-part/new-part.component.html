@@ -1,10 +1,11 @@
-<div class="card">
+<div  [ngClass]="{'card': type == 'new part'}">
     <div class="formgrid grid">
         <div class="field col-12">
             <label>Search Part</label>
             <span class="p-input-icon-right block">
-                <i class="pi pi-search"></i>
-                <input placeholder="Ex: Break Shoe" class="width-100" type="text" pInputText />
+                <i class="pi pi-search z-1" *ngIf="!isFetching"></i>
+                <p-autoComplete class="width-100" [suggestions]="parts"  field="name" (completeMethod)="onSerachPart($event)" (onSelect)="onSelectPart($event)" placeholder="Ex: Break Shoe"></p-autoComplete>
+                <!-- <input class="width-100" type="text" pInputText (input)="onSerachPart($event)"/> -->
             </span>
         </div>
         <div class="col-12">
@@ -14,29 +15,22 @@
         </div>
         <div class="field col-12 md:col-6">
             <label for="">Parts Category</label>
-            <p-dropdown [options]=""></p-dropdown>
+            <p-dropdown [options]="categories" optionLabel="name" optionValue="id" (onChange)="onCategoryChange($event.value)" placeholder="Select Category"></p-dropdown>
         </div>
         <div class="field col-12 md:col-6">
             <label for="">Parts Sub Category</label>
-            <p-dropdown [options]=""></p-dropdown>
+            <p-dropdown [options]="subCategories" optionLabel="name" optionValue="id" (onChange)="onSubCategoryChange($event.value)" placeholder="Select Sub Category"></p-dropdown>
         </div>
         <div class="field col-12">
             <label>Parts Name</label>
-            <p-dropdown [options]=""></p-dropdown>
+            <p-dropdown [options]="partNames" optionLabel="name" placeholder="Select Part Name" (onChange)="onSelectPart($event.value)"></p-dropdown>
         </div>
-        <div class="col-12">
-            <p-divider type="dashed"></p-divider>
+        <div class="field col-12 flex align-items-center">
+            <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"></p-checkbox>
+            <label for="binary" class="mb-0 ml-2">set as a new part name</label>
         </div>
         <div class="field col-12">
-            <label>Preferred Parts Type</label>
-            <p-dropdown [options]=""></p-dropdown>
-        </div>
-        <div class="field col-12 md:col-6">
-            <label for="">Description</label>
-            <textarea placeholder="Add a short description about your parts" rows="6" class="width-100 block" type="text" pInputText required></textarea>
-        </div>
-        <div class="field col-12 md:col-6 mt-4">
-            <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" name="partImages[]" [customUpload]="true" [auto]="true" (uploadHandler)="uploadPartImages()"
+            <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" [customUpload]="true" [auto]="true" (uploadHandler)="uploadPartImages($event)"
                 multiple="multiple" accept="image/*">
             </p-fileUpload>
         </div>

@@ -4,21 +4,21 @@
             <div class="wizard-card">
                 <div class="wizard-card-header">
                     <div class="grid col py-3">
-                        <!-- (click)="clickNext('car-info') -->
+                        <!-- (click)="clickNext('car-info')" -->
                         <div class="col-6 tab flex align-items-center justify-content-center car-info-tab"
-                            [ngClass]="{'selected-tab': activeTab == 'car-info'}">
+                            (click)="clickNext('car-info')" [ngClass]="{'selected-tab': activeTab == 'car-info'}">
                             <div class="title">{{ 'car.title' | translate }}</div>
                         </div>
                         <!-- (click)="clickNext('request')" -->
                         <div class="col-6 tab flex align-items-center justify-content-center request-tab"
-                            [ngClass]="{'selected-tab': activeTab === 'request'}">
+                            (click)="clickNext('request')" [ngClass]="{'selected-tab': activeTab === 'request'}">
                             <div class="title">{{ 'job.form.createRequest' | translate }}</div>
                         </div>
                     </div>
                 </div>
                 <div class="wizard-card-content car-info" [ngClass]="{'active-content': activeTab === 'car-info'}">
                     <!-- car component -->
-                    <app-car type="new job" (carEvent)="onCarFormEvent($event)"></app-car>
+                    <app-new-car type="new job" (carEvent)="onCarFormEvent($event)"></app-new-car>
                 </div>
                 <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'request'}">
                     <form [formGroup]="jobForm" (ngSubmit)="onjobFormSubmit()">
@@ -38,7 +38,8 @@
                             </div>
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
-                                <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom" placeholder="OD/TP"></p-dropdown>
+                                <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom"
+                                    placeholder="OD/TP"></p-dropdown>
                             </div>
                             <div class="col-12  md:col-6">
                                 <label class="block">{{ 'job.form.claimNo' | translate }}</label>
@@ -52,48 +53,32 @@
                             </div>
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
-                                <p-dropdown *ngIf="jobFound.multiple" [options]="jobs" formControlName="job"></p-dropdown>
-                                <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100" type="text" pInputText
-                                    placeholder="{{ 'job.form.enterJob' | translate }}" required />
+                                <p-dropdown *ngIf="jobFound.multiple" [options]="jobs"
+                                    formControlName="job"></p-dropdown>
+                                <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100" type="text"
+                                    pInputText placeholder="{{ 'job.form.enterJob' | translate }}" required />
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
+                                <input formControlName="location" class="width-100" type="text" pInputText required />
                             </div>
                             <div class="col-12">
                                 <p-divider align="left">
                                     <b class="bg-bluegray-50">{{ 'job.form.addMoreDetails' | translate }}</b>
                                 </p-divider>
                             </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
-                                <input formControlName="location" class="width-100" type="text" pInputText required/>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.bidDate' | translate }}</label>
-                                <p-calendar appendTo="body" formControlName="closingDate" dateFormat="mm-dd-yy"
-                                    inputId="dateformat" [showIcon]="true"></p-calendar>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
-                                <p-dropdown appendTo="body" formControlName="privacy" [options]="privacy" (onChange)="onPrivacyChange()"></p-dropdown>
-                            </div>
-                            <div class="col-12 md:col-6" *ngIf="jobForm.get('privacy').value == 'Private'">
-                                <label class="block mb-2">{{ 'job.form.privateSuppliers' | translate }}</label>
-                                <p-multiSelect class="block" maxSelectedLabels="2" appendTo="body"
-                                    selectedItemsLabel="{0} items selected" [options]="selectedPrivateSyppliers"
-                                    optionLabel="name" optionValue="userId" [(ngModel)]="selectedPrivateSyppliers"
-                                    [ngModelOptions]="{standalone: true}" placehodler="{{ 'job.form.selectPrivateSuppliers' | translate }}"
-                                    required></p-multiSelect>
-                            </div>
+                            <!-- request content -->
+                            <p-fieldset class="mt-3" legend="PART 1">
+                                <app-request></app-request>
+                            </p-fieldset>
                             <div class="col-12 text-center">
                                 <button class="width-100 md:w-20rem" pButton pRipple type="submit"
                                     label="{{ 'job.form.createRequest' | translate }}"></button>
                             </div>
                         </div>
                     </form>
-                    <div class="" *ngIf="activeTab == 'requests'">
-                        request
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-

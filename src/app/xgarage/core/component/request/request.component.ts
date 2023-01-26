@@ -1,17 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Brand } from 'src/app/xgarage/common/model/brand';
-import { CarModel } from 'src/app/xgarage/common/model/carmodel';
-import { CarModelType } from 'src/app/xgarage/common/model/carmodeltype';
-import { CarModelYear } from 'src/app/xgarage/common/model/carmodelyear';
-import { BrandService } from 'src/app/xgarage/common/service/brand.service';
-import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypes.service';
-import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
-import { Job } from '../../model/job';
-import { Supplier } from '../../model/supplier';
-import { JobService } from '../../service/job.service';
+import { Observable } from 'rxjs';
+import { PartType } from 'src/app/xgarage/common/model/parttype';
+import { Privacy } from 'src/app/xgarage/common/model/privacy';
+import { Part } from '../../model/parts';
+import { PartService } from '../../service/part.service';
 import { RequestService } from '../../service/request.service';
-import { SupplierService } from '../../service/supplier.service';
 
 @Component({
     selector: 'app-request',
@@ -20,13 +13,44 @@ import { SupplierService } from '../../service/supplier.service';
 })
 export class RequestComponent implements OnInit {
 
-    constructor(private formBuilder: FormBuilder,
+    constructor(
         private requestService: RequestService,
-        private brandService: BrandService,
-        private carModelYearService: CarModelYearService,
-        private carSpecService: CarModelTypeService,
-        private supplierService: SupplierService,
-        private jobService: JobService) { }
+        private partService: PartService) { }
 
-    ngOnInit(): void { }
+    partTypes: PartType[];
+    description: string;
+    selectedPartType: Part;
+    privacy = Object.keys(Privacy);
+    selectedPrivateSuppliers: Observable<any>;
+
+    ngOnInit(): void {
+        this.getPartTypes();
+    }
+
+    getPartTypes() {
+        this.partService.getPartTypes().subscribe(res => {
+            this.partTypes = res;
+        }, err => {
+            console.log(err)
+        })
+    }
+
+    onSelectPartType(part: Part) {
+        this.selectedPartType = part;
+        console.log(part)
+    }
+
+    onRequest(event) {
+        console.log(event)
+    }
+
+    onPrivacyChange() {
+        this.getSupplierByBrandId();
+    }
+
+    getSupplierByBrandId() {
+        // if (this.car) {
+        //     this.selectedPrivateSuppliers = this.supplierService.getSupplierByBrandId(this.car.carData.brandId.id);
+        // }
+    }
 }

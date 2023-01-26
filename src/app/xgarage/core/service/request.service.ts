@@ -14,14 +14,4 @@ export class RequestService extends GenericService<any> {
         super(http, config.coreApiUrl + '/');
     }
 
-    getCarByChn(chn: string) {
-        return this.http.get<{ brandId: number }>(`${config.coreApiUrl}/car/chassisNumber/${chn}`).pipe(
-            tap(res => {
-                return res
-            }), catchError(err => {
-                return throwError(err)
-            })
-        )
-    }
-
 }
