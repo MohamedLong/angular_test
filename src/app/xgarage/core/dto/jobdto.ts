@@ -9,6 +9,6 @@ export interface JobDto{
     carChassisNumber?: string;
     carPlateNumber?: string;
     carGearType?: string;
-    jobStatus?: number;
+    jobStatus?: string;
     statusDate?: Date;
 }

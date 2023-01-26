@@ -11,7 +11,9 @@
             "tenant": "Tenant",
             "tenantType": "Tenant Type",
             "login": "Login",
-            "signup": "Sign up"
+            "signup": "Sign up",
+            "newTenant": "Create New Tenant",
+            "selectTenant": "Select Existing Tenant"
         },
         "login": {
             "header": "Welcome",
@@ -513,6 +515,9 @@
         }
     },
     "job": {
+        
+        "title": "Jobs",
+        "table_footer": "In total there are {{length}} Jobs",
         "form": {
             "insuranceFrom": "Insurance From",
             "claimNo": "Claim Number",
@@ -527,6 +532,19 @@
             "selectPrivateSuppliers": "Select Private Suppliers",
             "enterclaimNo": "Enter Calim Number",
             "ot/dp": "OD/TP"
+        },
+
+        "tableColumn": {
+            "id": "ID",
+            "jobNo": "Job Number",
+            "claimNo": "Claim Number",
+            "insuranceType": "Insurance Type",
+            "carPlateNumber": "Plate Number",
+            "jobStatus": "Status"
+
+        },
+        "jobDialog": {
+            "title": "Job Details"
         }
     },
     "car": {

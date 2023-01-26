@@ -13,6 +13,7 @@ export interface User {
     providerId?: string;
     token?: string;
     userId?: string;
+    password?: string;
     document?: Document;
     roles?: Role[];
     tenant?: Tenant;

@@ -18,8 +18,6 @@ import { AuthService } from '../../services/auth.service';
 })
 export class SignupComponent implements OnInit {
 
-
-
     constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private messageService: MessageService, private tenantService: TenantService, private tenantTypeService: TenantTypeService) { }
 
     signupForm: FormGroup = this.fb.group({
@@ -33,7 +31,8 @@ export class SignupComponent implements OnInit {
         tenantType: ['', Validators.required],
         tenant: [null],
         newTenantName: [''],
-        newCr: ['']
+        newCr: [''],
+        location: []
     });
 
     tenants: Tenant[];
@@ -80,10 +79,6 @@ export class SignupComponent implements OnInit {
                             tenant: this.selectedTenant.id,
                             userId: this.signupForm.get('email').value
                         });
-                        console.log(this.signupForm);
-                        this.signupForm.removeControl('newCr');
-                        this.signupForm.removeControl('newTenantName');
-                        this.signupForm.removeControl('tenantType');
                         this.createUserOnExistingTenant();
                     },
                     error: (e) => alert(e)
@@ -94,11 +89,10 @@ export class SignupComponent implements OnInit {
 
     createUserOnExistingTenant(){
         if (this.signupForm.valid) {
-            
-            console.log(this.signupForm);
-            this.authService.signup(this.signupForm.value).subscribe(res => {
-                if (!res) {
-                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Error signing up' });
+            let user = this.createUserObjectFromSignupForm();
+            this.authService.signup(user).subscribe(res => {
+                if(res != "200") {
+                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail:  res.message });
                     return;
                 }
                 this.messageService.add({ severity: 'success', summary: 'Success' });
@@ -106,16 +100,30 @@ export class SignupComponent implements OnInit {
                     this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
                 }
             }, err => {
-                console.log(err)
+                this.messageService.add({ severity: 'error', summary: 'Erorr', detail:  err.message });
             })
         } else {
             this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Please fill out all fields' })
         }
     }
 
+    private createUserObjectFromSignupForm() {
+        let user: User = {
+            createdDate : new Date(),
+            email : this.signupForm.get('email').value,
+            firstName : this.signupForm.get('firstName').value,
+            lastName : this.signupForm.get('lastName').value,
+            phone : this.signupForm.get('phone').value,
+            userId : this.signupForm.get('userId').value,
+            password : this.signupForm.get('password').value,
+            provider : 'local',
+            tenant : this.selectedTenant,
+        }
+        return user;
+    }
+
     onSubmit() {
         if(this.newTenantTrigger){
-            // this.tenant = {};
             this.createUserWithNewTenant();
         }
         else if(!this.newTenantTrigger){
