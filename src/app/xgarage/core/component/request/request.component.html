@@ -1,34 +1,33 @@
-<!-- <app-newjob (request)="onRequest($event)">
-
-</app-newjob> -->
-<div class="grid">
-    <div
-        [ngClass]="{'col-12 md:col-6': 'Private', 'col-12': 'Public'}">
+<!-- <app-newjob (request)="onRequest($event)"></app-newjob> -->
+<div class="grid mb-3">
+    <div [ngClass]="{'col-12 md:col-6': 'Private', 'col-12': 'Public'}">
         <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
-        <p-dropdown appendTo="body" [options]="privacy"
-            (onChange)="onPrivacyChange()"></p-dropdown>
+        <p-dropdown appendTo="body" [options]="privacy" (onChange)="onPrivacyChange()"></p-dropdown>
     </div>
     <div class="col-12 md:col-6" *ngIf="'Private'">
         <label class="block mb-2">{{ 'job.form.privateSuppliers' | translate }}</label>
         <p-multiSelect class="block" maxSelectedLabels="2" appendTo="body" selectedItemsLabel="{0} items selected"
-            [options]="selectedPrivateSuppliers | async" optionLabel="name" optionValue="id" placehodler="{{ 'job.form.selectPrivateSuppliers' | translate }}" required></p-multiSelect>
+            [options]="selectedPrivateSuppliers | async" optionLabel="name" optionValue="id"
+            placehodler="{{ 'job.form.selectPrivateSuppliers' | translate }}" required></p-multiSelect>
     </div>
 </div>
-<div class="field col-12">
-    <app-new-part type="new req"></app-new-part>
-</div>
-<div class="col-12">
-    <p-divider type="dashed"></p-divider>
-</div>
-<div class="grid">
-    <div class="field col-12 md:col-6">
-        <label>Preferred Parts Type</label>
-        <p-dropdown (onChange)="onSelectPartType($event.value)" [options]="partTypes"
-            optionLabel="partType"></p-dropdown>
+<p-fieldset legend="PART 1">
+    <div class="field col-12">
+        <app-new-part type="new req"></app-new-part>
     </div>
-    <div class="field col-12 md:col-6">
-        <label for="">Description</label>
-        <textarea [(ngModel)]="description" placeholder="Add a short description about your parts"
-            class="width-100 block" type="text" pInputText required></textarea>
+    <div class="col-12">
+        <p-divider type="dashed"></p-divider>
     </div>
-</div>
+    <div class="grid">
+        <div class="field col-12 md:col-6">
+            <label>Preferred Parts Type</label>
+            <p-dropdown (onChange)="onSelectPartType($event.value)" [options]="partTypes"
+                optionLabel="partType"></p-dropdown>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label for="">Description</label>
+            <textarea [(ngModel)]="description" placeholder="Add a short description about your parts"
+                class="width-100 block" type="text" pInputText required></textarea>
+        </div>
+    </div>
+</p-fieldset>

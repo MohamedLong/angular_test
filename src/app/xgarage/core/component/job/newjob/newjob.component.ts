@@ -58,10 +58,9 @@ export class NewJobComponent implements OnInit {
         found: false,
         multiple: false
     };
-
-    jobs: string[];
+    jobs: any[] = [];
     claimId: number;
-    // updatedCarData: any;
+
     @Input() type: string = 'new job';
     @Output() request: EventEmitter<Supplier[]> = new EventEmitter();
 
@@ -101,22 +100,19 @@ export class NewJobComponent implements OnInit {
         clearTimeout(this.ClaimTypingTimer);
         this.ClaimTypingTimer = setTimeout(() => {
             this.jobService.getJobByClaimNumber(this.jobForm.get('claim').value).subscribe(res => {
-                if (res.length > 0) {
-                    this.claimId = res[0].claimId;
-                    if (res.length > 1) {
-                        this.jobFound.multiple = true;
-                        this.jobFound.found = true;
+                console.log(res)
+                this.claimId = res.claimId;
+                if (res.jobs.length > 0 && res.jobs.length == 1) {
+                    this.jobForm.patchValue({ 'job': res.jobs[0].jobNo, 'jobId': res.jobs[0].id });
 
-                        res.forEach(job => {
-                            this.jobs.push(job.jobNo);
-                        })
+                } else if(res.jobs.length > 1) {
 
-                    } else {
-                        //check if jobid is there first
-                        this.jobForm.patchValue({ 'job': res[0].jobNo, 'jobId': res[0].id });
-                    }
-                } else {
-                    //this.addNewClaim();
+                    this.jobFound.multiple = true;
+                    this.jobFound.found = true;
+
+                    res.jobs.forEach(job => {
+                        this.jobs.push(job);
+                    })
                 }
 
             }, err => {

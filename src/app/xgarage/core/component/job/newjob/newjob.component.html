@@ -27,11 +27,14 @@
                                 <p-messages class="car-info" severity="info">
                                     <ng-template pTemplate>
                                         <p>
-                                            {{jobForm.get('car').value.brandId.brandName}} {{jobForm.get('car').value.carModelId.name}}
-                                            {{jobForm.get('car').value.carModelYearId.year}} {{jobForm.get('car').value.carModelTypeId.type}};
+                                            {{jobForm.get('car').value.brandId.brandName}}
+                                            {{jobForm.get('car').value.carModelId.name}}
+                                            {{jobForm.get('car').value.carModelYearId.year}}
+                                            {{jobForm.get('car').value.carModelTypeId.type}};
                                             {{ 'car.form.chassisNo' | translate }}:
                                             {{jobForm.get('car').value.chassisNumber}};
-                                            {{ 'car.form.licencePlate' | translate }}: {{jobForm.get('car').value.plateNumber}}
+                                            {{ 'car.form.licencePlate' | translate }}:
+                                            {{jobForm.get('car').value.plateNumber}}
                                         </p>
                                     </ng-template>
                                 </p-messages>
@@ -54,7 +57,7 @@
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
                                 <p-dropdown *ngIf="jobFound.multiple" [options]="jobs"
-                                    formControlName="job"></p-dropdown>
+                                    formControlName="job" optionLabel="jobNo"></p-dropdown>
                                 <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100" type="text"
                                     pInputText placeholder="{{ 'job.form.enterJob' | translate }}" required />
                             </div>
@@ -68,9 +71,7 @@
                                 </p-divider>
                             </div>
                             <!-- request content -->
-                            <p-fieldset class="mt-3" legend="PART 1">
-                                <app-request></app-request>
-                            </p-fieldset>
+                            <app-request></app-request>
                             <div class="col-12 text-center">
                                 <button class="width-100 md:w-20rem" pButton pRipple type="submit"
                                     label="{{ 'job.form.createRequest' | translate }}"></button>

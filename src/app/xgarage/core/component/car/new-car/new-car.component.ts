@@ -96,6 +96,9 @@ export class NewCarComponent implements OnInit {
 
                 this.carService.add(carFormData as Car).subscribe(res => {
                     console.log(res)
+                    if(this.type == "new job") {
+                        this.carEvent.emit({ car: res });
+                    }
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
                     this.resetCarForm();
                 }, err => {
@@ -245,10 +248,11 @@ export class NewCarComponent implements OnInit {
     }
 
     resetCarForm() {
+        this.submitted = false;
         this.carForm.removeControl('id');
 
         this.carForm.patchValue({
-            chassisNumber: this.carForm.get('chassisNumber').value,
+            chassisNumber: this.type == 'new car'? "" : this.carForm.get('chassisNumber').value,
             brandId: '',
             carModelId: '',
             carModelYearId: '',
