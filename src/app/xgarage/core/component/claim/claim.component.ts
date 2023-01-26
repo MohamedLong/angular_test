@@ -56,7 +56,6 @@ valid: boolean = false;
         next: (masters) => {
           this.masterDtos = masters;
           this.loading = false;
-          // this.masterDtos = this.masterDtos.map(val => val.cancellable = (val.status == StatusConstants.OPEN_STATUS)); 
         },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
       }); 
