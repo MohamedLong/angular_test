@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { Privacy } from 'src/app/xgarage/common/model/privacy';
-import { Car } from '../../../model/car';
 import { InsuranceType } from '../../../model/insurancetype';
 import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
@@ -27,7 +25,8 @@ import { SupplierService } from '../../../service/supplier.service';
         height: auto;
         min-height: auto;
     }
-    `]
+    `],
+    providers: [MessageService]
 })
 export class NewJobComponent implements OnInit {
 
@@ -68,7 +67,8 @@ export class NewJobComponent implements OnInit {
         private supplierService: SupplierService,
         private jobService: JobService,
         private authService: AuthService,
-        private calimService: ClaimService) { }
+        private calimService: ClaimService,
+        private messageService: MessageService) { }
 
     ngOnInit(): void {
         //set location
@@ -103,10 +103,10 @@ export class NewJobComponent implements OnInit {
                 console.log(res)
                 this.claimId = res.claimId;
                 if (res.jobs.length > 0 && res.jobs.length == 1) {
+
                     this.jobForm.patchValue({ 'job': res.jobs[0].jobNo, 'jobId': res.jobs[0].id });
 
                 } else if(res.jobs.length > 1) {
-
                     this.jobFound.multiple = true;
                     this.jobFound.found = true;
 
@@ -117,6 +117,7 @@ export class NewJobComponent implements OnInit {
 
             }, err => {
                 this.jobFound.multiple = false;
+                this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error });
                 //console.log('err:', err.error)
             })
 
