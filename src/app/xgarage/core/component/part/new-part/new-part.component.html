@@ -1,33 +1,33 @@
 <div  [ngClass]="{'card': type == 'new part'}">
     <div class="formgrid grid">
         <div class="field col-12">
-            <label>Search Part</label>
+            <label>{{'part.tableColumn.partName' | translate}}</label>
             <span class="p-input-icon-right block">
                 <i class="pi pi-search z-1" *ngIf="!isFetching"></i>
-                <p-autoComplete class="width-100" [suggestions]="parts"  field="name" (completeMethod)="onSerachPart($event)" (onSelect)="onSelectPart($event)" placeholder="Ex: Break Shoe"></p-autoComplete>
+                <p-autoComplete class="width-100" [(ngModel)]="partName" [suggestions]="parts" field="name" (completeMethod)="onSearchPart($event)" (onSelect)="onChoosePart($event)" placeholder="Ex: Break Shoe"></p-autoComplete>
                 <!-- <input class="width-100" type="text" pInputText (input)="onSerachPart($event)"/> -->
             </span>
         </div>
         <div class="col-12">
             <p-divider align="center">
-                <span class="text-black-alpha-60">or Select Manually</span>
+                <span class="text-black-alpha-60">{{ 'part.dividerTitle' | translate }}</span>
             </p-divider>
         </div>
         <div class="field col-12 md:col-6">
-            <label for="">Parts Category</label>
-            <p-dropdown [options]="categories" optionLabel="name" optionValue="id" (onChange)="onCategoryChange($event.value)" placeholder="Select Category"></p-dropdown>
+            <label for="">{{ 'part.tableColumn.partCategory' | translate }}</label>
+            <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" [disabled] = "disableList" optionLabel="name" (onChange)="onCategoryChange(selectedCategory.id)" placeholder="{{ 'part.partDialog.categoryPlaceHolder' | translate }}"></p-dropdown>
         </div>
         <div class="field col-12 md:col-6">
-            <label for="">Parts Sub Category</label>
-            <p-dropdown [options]="subCategories" optionLabel="name" optionValue="id" (onChange)="onSubCategoryChange($event.value)" placeholder="Select Sub Category"></p-dropdown>
+            <label for="">{{ 'part.tableColumn.partSubCategory' | translate}}</label>
+            <p-dropdown [options]="subCategories" [(ngModel)]="selectedSubCategory" [disabled] = "disableList" optionLabel="name" (onChange)="onSubCategoryChange(selectedSubCategory.id)" placeholder="{{ 'part.partDialog.subCategoryPlaceHolder' | translate}}"></p-dropdown>
         </div>
         <div class="field col-12">
-            <label>Parts Name</label>
-            <p-dropdown [options]="partNames" optionLabel="name" placeholder="Select Part Name" (onChange)="onSelectPart($event.value)"></p-dropdown>
+            <label>{{ 'part.tableColumn.partName' | translate}}</label>
+            <p-dropdown [options]="parts" [(ngModel)]="selectedPart" optionLabel="name" [disabled] = "disableList" placeholder="{{ 'part.partDialog.partNamePlaceHolder' | translate}}" (onChange)="onSelectPart($event.value)"></p-dropdown>
         </div>
-        <div class="field col-12 flex align-items-center">
-            <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"></p-checkbox>
-            <label for="binary" class="mb-0 ml-2">set as a new part name</label>
+        <div class="field col-12 flex align-items-center" *ngIf="!selectedPart" >
+            <p-checkbox [(ngModel)]="checked" [binary]="true" (onChange)="createNewPart()"inputId="binary"></p-checkbox>
+            <label for="binary" class="mb-0 ml-2">Set as a new part</label>
         </div>
         <div class="field col-12">
             <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" [customUpload]="true" [auto]="true" (uploadHandler)="uploadPartImages($event)"
