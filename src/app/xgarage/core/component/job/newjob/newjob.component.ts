@@ -180,7 +180,7 @@ export class NewJobComponent implements OnInit {
             car: { 'id': this.jobForm.get('car').value.id },
         }
 
-        this.jobService.saveJob(jobBody).subscribe(res => {
+        this.jobService.add(jobBody).subscribe(res => {
 
             this.jobForm.patchValue({ 'jobId': res });
 
