@@ -19,16 +19,11 @@ export class NewPartComponent implements OnInit {
     subCategoryId: number;
     isFetching: boolean = false;
     checked: boolean;
-    partImages: File;
 
     @Input() type: string = 'new part';
 
     ngOnInit(): void {
         this.gerPartCategory()
-    }
-
-    uploadPartImages(e) {
-        this.partImages = e.files;
     }
 
     onSerachPart(event: any) {

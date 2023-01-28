@@ -57,23 +57,44 @@
                             </div>
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
-                                <p-dropdown *ngIf="jobFound.multiple" [options]="jobs"
-                                    formControlName="jobId" optionLabel="jobNo" optionValue="id" placeholder="select a job"></p-dropdown>
+                                <p-dropdown *ngIf="jobFound.multiple" [options]="jobs" formControlName="jobId"
+                                    optionLabel="jobNo" optionValue="id" placeholder="select a job"></p-dropdown>
 
                                 <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100" type="text"
                                     pInputText placeholder="{{ 'job.form.enterJob' | translate }}" required />
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
-                                <input formControlName="location" class="width-100" type="text" pInputText required />
                             </div>
                             <div class="col-12">
                                 <p-divider align="left">
                                     <b class="bg-bluegray-50">{{ 'job.form.addMoreDetails' | translate }}</b>
                                 </p-divider>
                             </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
+                                <p-dropdown appendTo="body" formControlName="privacy" [options]="privacyList"
+                                    (onChange)="onPrivacyChange($event.value)"></p-dropdown>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
+                                <input formControlName="location" class="width-100" type="text" pInputText required />
+                            </div>
+                            <p-dialog header="Private Suppliers" [modal]="true" [style]="{width: '50vw'}" [closable]="false"
+                                [(visible)]="displayPrivateSuppliers">
+                                <p-listbox (onChange)="selectSupplier($event.value)" [checkbox]="true" [options]="selectedPrivateSuppliers | async"
+                                    formControlName="suppliers" [multiple]="true" optionLabel="name"></p-listbox>
+                                <ng-template pTemplate="footer">
+                                    <p-button icon="pi pi-check" (click)="displayPrivateSuppliers=false" label="Ok"
+                                        styleClass="p-button-text" [disabled]="!supplierSelected"></p-button>
+                                </ng-template>
+                            </p-dialog>
                             <!-- request content -->
-                            <app-request></app-request>
+                            <div class="my-5 relative">
+                                <ng-container *ngFor="let _ of [].constructor(numberOfrequests); let requestNo = index">
+                                    <app-request part="{{'PART ' + (requestNo + 1)}}"></app-request>
+                                </ng-container>
+
+                                <p-image class="absolute add-part-img" src="assets/layout/images/add-part.png"
+                                    alt="Image" width="210" (click)="addRequest()"></p-image>
+                            </div>
                             <div class="col-12 text-center">
                                 <button class="width-100 md:w-20rem" pButton pRipple type="submit"
                                     label="{{ 'job.form.createRequest' | translate }}"></button>

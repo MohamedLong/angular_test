@@ -14,10 +14,10 @@
                 <div class="flex align-items-center justify-content-between">
                     <small
                         *ngIf="!carForm.get('chassisNumber').valid && carForm.get('chassisNumber').dirty && carForm.get('chassisNumber').errors?.['minlength']"
-                        class="p-error">Min Chassis Number is 13.</small>
+                        class="p-error">{{ 'car.form.minChassieErorr' | translate }}</small>
                     <small
                         *ngIf="submitted && !carForm.get('chassisNumber').valid  && carForm.get('chassisNumber').errors?.['required']"
-                        class="p-error">Chassis Number is Required.</small>
+                        class="p-error">{{ 'car.form.chassisNoRequired' | translate }}</small>
                     <!-- <small class="block" *ngIf="notFound">Car Chassis Number Not Found, Please Fill out
                         the Form to Create a New One.</small> -->
                 </div>

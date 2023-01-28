@@ -515,7 +515,7 @@
         }
     },
     "job": {
-        
+
         "title": "Jobs",
         "table_footer": "In total there are {{length}} Jobs",
         "form": {
@@ -550,7 +550,9 @@
     "car": {
         "title": "Car Information",
         "form": {
+            "minChassieErorr": "Min Chassis Number is 13.",
             "chassisNo": "Chassis Number",
+            "chassisNoRequired": "Chassis Number is Required.",
             "licencePlate": "Licence Plate",
             "emptybrand": "Please Enter Chassis Number First",
             "model": "Model",

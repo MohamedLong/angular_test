@@ -1,27 +1,26 @@
 <!-- <app-newjob (request)="onRequest($event)"></app-newjob> -->
-<div class="grid mb-3">
-    <div [ngClass]="{'col-12 md:col-6': 'Private', 'col-12': 'Public'}">
-        <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
-        <p-dropdown appendTo="body" [(ngModel)]="privacy" [options]="privacyList" (onChange)="onPrivacyChange()"></p-dropdown>
-    </div>
-    <div class="col-12 md:col-6" *ngIf="'Private'">
-        <label class="block mb-2">{{ 'job.form.privateSuppliers' | translate }}</label>
-        <p-multiSelect class="block" maxSelectedLabels="2" appendTo="body" selectedItemsLabel="{0} items selected"
-            [options]="selectedPrivateSuppliers | async" optionLabel="name" placehodler="{{ 'job.form.selectPrivateSuppliers' | translate }}" required></p-multiSelect>
-    </div>
-</div>
-<p-fieldset legend="PART 1">
+
+<p-fieldset [legend]="part" class="relative">
     <div class="field col-12">
-        <app-new-part type="new part"></app-new-part>
+        <app-new-part type="new req"></app-new-part>
+    </div>
+    <div class="field col-12">
+        <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" [customUpload]="true" [auto]="true" (uploadHandler)="uploadPartImages($event)"
+            multiple="multiple" accept="image/*">
+        </p-fileUpload>
     </div>
     <div class="col-12">
         <p-divider type="dashed"></p-divider>
     </div>
-    <div class="grid">
+    <div class="grid pb-3">
         <div class="field col-12 md:col-6">
-            <label>Preferred Parts Type</label>
-            <p-dropdown (onChange)="onSelectPartType($event.value)" [options]="partTypes"
-                optionLabel="partType" [(ngModel)]="partType"></p-dropdown>
+            <label class="mb-2">Preferred Parts Type</label>
+            <div class="flex align-items-center">
+                <ng-container *ngFor="let type of partTypes" class="field-checkbox">
+                    <p-checkbox name="types" value="type" [value]="type"  [(ngModel)]="selectedPartTypes" [inputId]="type.id"></p-checkbox>
+                    <label [for]="type.id" class="ml-2 mr-4">{{type.partType}}</label>
+                </ng-container>
+            </div>
         </div>
         <div class="field col-12 md:col-6">
             <label for="">Description</label>

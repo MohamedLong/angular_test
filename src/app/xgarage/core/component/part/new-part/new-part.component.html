@@ -29,11 +29,6 @@
             <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"></p-checkbox>
             <label for="binary" class="mb-0 ml-2">set as a new part name</label>
         </div>
-        <div class="field col-12">
-            <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" [customUpload]="true" [auto]="true" (uploadHandler)="uploadPartImages($event)"
-                multiple="multiple" accept="image/*">
-            </p-fileUpload>
-        </div>
     </div>
 </div>
 

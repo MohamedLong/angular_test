@@ -1,67 +1,80 @@
+import { JsonPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/auth/services/auth.service';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
-import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { Part } from '../../model/parts';
 import { PartService } from '../../service/part.service';
 import { RequestService } from '../../service/request.service';
-import { SupplierService } from '../../service/supplier.service';
 
 @Component({
     selector: 'app-request',
     templateUrl: './request.component.html',
-    styles: [``]
+    styles: [`:host {
+        margin-bottom: 1rem;
+        display: block;
+      }`]
 })
 export class RequestComponent implements OnInit {
 
     constructor(
         private requestService: RequestService,
         private partService: PartService,
-        private supplierService: SupplierService) { }
+        private authService: AuthService) { }
 
     partTypes: PartType[];
-    partType: PartType;
+    selectedPartTypes: PartType[];
     description: string;
-    selectedPartType: Part;
-    privacyList = Object.keys(Privacy);
-    privacy: string = ''
-    selectedPrivateSuppliers: Observable<any>;
+    responseBody: any = {};
+    partImages: File[] = [];
+    @Input() part: string = 'PART 1';
 
-    data: any = '';
- 
     ngOnInit(): void {
         this.getPartTypes();
+        let usrId = JSON.parse(this.authService.getStoredUser()).id;
         this.requestService.info.subscribe(data => {
             console.log(data)
-           this.data = data;
+            if (JSON.stringify(data) !== '{}') {
+                this.responseBody = {
+                    jobId: data.jobId,
+                    description: this.description,
+                    privacy: data.privacy,
+                    car: {'id': data.car.id},
+                    user: usrId,
+                    locationName: data.location,
+                    suppliers: data.suppliers,
+                    partTypes: this.selectedPartTypes
+                }
+
+                console.log(this.responseBody)
+            }
+
         })
     }
 
     getPartTypes() {
         this.partService.getPartTypes().subscribe(res => {
             this.partTypes = res;
+            //console.log(this.partTypes)
         }, err => {
             console.log(err)
         })
     }
 
-    onSelectPartType(part: Part) {
-        this.selectedPartType = part;
-        console.log(part)
+    uploadPartImages(e) {
+        //console.log(e.files)
+        this.partImages = e.files;
     }
 
-    onRequest(event) {
-        console.log(event)
-    }
+    sendRequest() {
+        let stringRequestBody = JSON.stringify(this.responseBody);
+        let req = {"requestBody": stringRequestBody, "subCategoryId": 1, "partImages": this.partImages}
 
-    onPrivacyChange() {
-        this.getSupplierByBrandId();
-    }
-
-    getSupplierByBrandId() {
-        if (this.data.car) {
-            this.selectedPrivateSuppliers = this.supplierService.getSupplierByBrandId(this.data.car.brandId.id);
+        let RequestFormData = new FormData();
+        for (var key in req) {
+            RequestFormData.append(key, req[key]);
         }
+
+        //call req service
     }
 }

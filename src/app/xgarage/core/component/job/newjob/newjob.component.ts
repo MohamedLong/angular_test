@@ -1,12 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { InsuranceType } from '../../../model/insurancetype';
 import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
 import { JobService } from '../../../service/job.service';
 import { RequestService } from '../../../service/request.service';
+import { SupplierService } from '../../../service/supplier.service';
 
 @Component({
     selector: 'app-newjob',
@@ -25,6 +28,11 @@ import { RequestService } from '../../../service/request.service';
         height: auto;
         min-height: auto;
     }
+    .add-part-img {
+        left: -8px;
+        bottom: 8px;
+        cursor: pointer;
+        }
     `],
     providers: [MessageService]
 })
@@ -36,7 +44,9 @@ export class NewJobComponent implements OnInit {
     notFound: boolean;
     found: boolean;
     submitted: boolean = false;
-
+    privacyList = Object.keys(Privacy);
+    selectedPrivateSuppliers: Observable<any>;
+    supplierSelected: boolean = false;
     insuranceFrom = Object.keys(InsuranceType);
     jobForm: FormGroup = this.formBuilder.group({
         insuranceFrom: [''],
@@ -45,7 +55,7 @@ export class NewJobComponent implements OnInit {
         jobId: [''],
         location: [''],
         privacy: ['Public'],
-        suppliers: [''],
+        suppliers: [],
         car: [''],
         carDocument: [''],
     });
@@ -58,27 +68,28 @@ export class NewJobComponent implements OnInit {
     };
     jobs: any[] = [];
     claimId: number;
-
+    displayPrivateSuppliers: boolean = false;
+    numberOfrequests: number = 1;
     @Input() type: string = 'new job';
-    @Output() request: EventEmitter<Supplier[]> = new EventEmitter();
 
     constructor(private formBuilder: FormBuilder,
         private jobService: JobService,
         private requestService: RequestService,
         private authService: AuthService,
         private calimService: ClaimService,
+        private supplierService: SupplierService,
         private messageService: MessageService) { }
 
     ngOnInit(): void {
         //set location
         let location = JSON.parse(this.authService.getStoredUser()).tenant.location;
         this.jobForm.patchValue({ location });
+        this.jobForm.get('location').disable();
     }
 
     clickToNavigate(step: string) {
         this.activeTab = step;
     }
-
 
     //car form event
     onCarFormEvent(event) {
@@ -157,8 +168,8 @@ export class NewJobComponent implements OnInit {
     onjobFormSubmit() {
         if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
             console.log('initiate req')
-           // this.request.emit(this.jobForm.value);
-           this.requestService.info.next(this.jobForm.value);
+            // this.request.emit(this.jobForm.value);
+            this.requestService.info.next(this.jobForm.getRawValue());
         } else {
             console.log('add new job then initiate req')
             this.addNewJob();
@@ -181,12 +192,42 @@ export class NewJobComponent implements OnInit {
 
             if (this.type == 'new req' && this.jobForm.get('jobId').value !== '') {
                 // this.request.emit(this.jobForm.value);
-                this.requestService.info.next(this.jobForm.value);
+                this.requestService.info.next(this.jobForm.getRawValue());
             }
 
         }, err => {
             console.log('err', err)
         })
+    }
+
+    onPrivacyChange(value) {
+        // console.log(value)
+        if (value == 'Private') {
+            this.getSupplierByBrandId();
+            this.displayPrivateSuppliers = true;
+        } else {
+            this.displayPrivateSuppliers = false;
+        }
+    }
+
+    getSupplierByBrandId() {
+        if (this.jobForm.get('car')) {
+            this.selectedPrivateSuppliers = this.supplierService.getSupplierByBrandId(this.jobForm.get('car').value.brandId.id);
+        }
+    }
+
+    addRequest() {
+        this.numberOfrequests++;
+        console.log(this.numberOfrequests)
+    }
+
+    selectSupplier(value: Supplier[]) {
+        //check if at least 1 supplier is slected
+        if(value.length > 0) {
+            this.supplierSelected = true;
+        } else {
+            this.supplierSelected = false;
+        }
     }
 
 }
