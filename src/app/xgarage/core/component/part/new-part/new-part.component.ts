@@ -14,35 +14,53 @@ export class NewPartComponent implements OnInit {
     parts: Part[];
     categories: any[];
     subCategories: any[];
-    partNames: any[];
     selectedPart: Part;
+    selectedCategory: any;
+    selectedSubCategory: any;
     subCategoryId: number;
+    categoryId: number;
     isFetching: boolean = false;
     checked: boolean;
+    disableList: boolean = false;
+    part: Part;
+    partName: string;
 
     @Input() type: string = 'new part';
 
     ngOnInit(): void {
-        this.gerPartCategory()
+        this.getPartCategory();
     }
 
-    onSerachPart(event: any) {
+    onSearchPart(event: any) {
         this.isFetching = true;
 
         this.partService.getPartByPartName(event.query).subscribe(res => {
             this.parts = res;
             this.isFetching = false;
         }, err => {
-            console.log(err)
+            console.log(err);
+            this.disableList = false;
+            this.selectedPart = null;
             this.isFetching = false;
         })
     }
 
-    onSelectPart(part: Part) {
+    onChoosePart(part: Part) {
         this.selectedPart = part;
+        this.selectedCategory = this.categories.find(c => c.id == this.selectedPart.categoryId);
+        this.onCategoryChange(this.selectedPart.categoryId);
+        this.selectedSubCategory = this.subCategories.find(c => c.id = this.selectedPart.subCategoryId);
+        this.disableList = true;
+        this.part = this.selectedPart;
+        this.part.subCategoryId = this.selectedSubCategory.id;
     }
 
-    gerPartCategory() {
+    onSelectPart(part: Part) {
+        this.part = this.selectedPart;
+        this.part.subCategoryId = this.selectedSubCategory.id;
+    }
+
+    getPartCategory() {
         this.partService.getAll().subscribe(res => {
             this.categories = res;
         })
@@ -65,6 +83,19 @@ export class NewPartComponent implements OnInit {
         })
 
         this.subCategoryId = selectedSubCategory[0].id;
-        this.partNames = selectedSubCategory[0].parts;
+        this.parts = selectedSubCategory[0].parts;
+    }
+
+    createNewPart() {
+        if(this.checked == true && !this.selectedPart) {
+            this.part.id = null;
+            this.part.name = this.partName;
+            this.part.status = 0;
+            this.part.subCategoryId = this.selectedSubCategory.id;
+        }else if(this.checked == false && this.selectedPart){
+            this.part = this.selectedPart;
+        }else{
+            this.part = {};
+        }
     }
 }

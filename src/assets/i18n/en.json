@@ -325,55 +325,28 @@
             "itemTypeNameRequired": "Item Type Name is required."
         }
     },
-    "partyType": {
-        "title": "Manage Party Types",
+    "part": {
+        "title": "Manage Parts",
         "export": "Export",
+        "dividerTitle": " Or Select Manually",
         "tableColumn": {
             "id": "ID",
-            "typeName": "Party Type Name",
-            "partyTypeNameSearch": "Search by party type name",
-            "partyTypeOperation": ""
+            "partName": "Part Name",
+            "partNameSearch": "Search by part name",
+            "partCategory": "Part Category",
+            "partCategorySearch": "Search by part category",
+            "partSubCategory": "Part Sub Category",
+            "partSubCategorySearch": "Search by part sub category"
         },
-        "partyTypeDialog": {
-            "title": "Party Type Details",
-            "partyTypeNameRequired": "Party Type Name is required."
-        }
-    },
-    "party": {
-        "title": "Manage Parties",
-        "export": "Export",
-        "tableColumn": {
-            "id": "ID",
-            "partyName": "Party Type Name",
-            "partyNameSearch": "Search by party name",
-            "partyCountry": "Party County",
-            "partyCountrySearch": "Search by party country",
-            "partyState": "Party State",
-            "partyStateSearch": "Search by party state",
-            "partyCity": "Party City",
-            "partyCitySearch": "Search by party city",
-            "partyPhone": "Party Phone",
-            "partyClass": "Party Class",
-            "partyClassSearch": "Search by party class",
-            "partyGroup": "Party Group",
-            "partyGroupSearch": "Search by party group",
-            "partyAcc": "Party Account",
-            "partyAccSearch": "Search by party account",
-            "partyStatus": "Party Status",
-            "partyStatusSearch": "Search by party status",
-            "partyDate": "Party Date",
-            "partyDateSearch": "Search by party date",
-            "jobName": "Job Name",
-            "jobNameSearch": "Search by job name",
-            "email": "Email",
-            "partyTypeOperation": ""
-        },
-        "partyDialog": {
-            "title": "Item Type Details",
-            "partyNameRequired": "Party Name is required.",
-            "partyCountryRequired": "Party County is required.",
-            "partyStateRequired": "Party State is required.",
-            "partyCityRequired": "Party City is required."
+        "partDialog": {
+            "title": "Part Details",
+            "partNamePlaceHolder": "Select Part Name",
+            "partNameRequired": "Part Name is required.",
+            "categoryPlaceHolder": "Select Part Category",
+            "partCategoryRequired": "Part category is required.",
+            "subCategoryPlaceHolder": "Select Sub Category",
+            "partSubCategoryRequired": "Part sub category is required.",
+            "searchTitle": "Search for Parts."
         }
     },
     "USER": {
