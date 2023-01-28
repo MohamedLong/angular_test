@@ -33,6 +33,7 @@ export class RequestComponent implements OnInit {
     ngOnInit(): void {
         this.getPartTypes();
         this.requestService.info.subscribe(data => {
+            console.log(data)
            this.data = data;
         })
     }
