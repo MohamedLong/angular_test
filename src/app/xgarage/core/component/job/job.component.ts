@@ -75,33 +75,4 @@ confirmDelete() {
   // })
 }
 
-
-getStatusName(statusId: number) {
-  switch (statusId) {
-    case StatusConstants.OPEN_STATUS:
-      return 'Open';
-    case StatusConstants.INPROGRESS_STATUS:
-      return 'In Progress';
-    case StatusConstants.ONHOLD_STATUS:
-      return 'On Hold';
-    case StatusConstants.COMPLETED_STATUS:
-      return 'Completed';
-    case StatusConstants.REJECTED_STATUS:
-      return 'Rejected';
-    case StatusConstants.APPROVED_STATUS:
-      return 'Approved';
-    case StatusConstants.CANCELED_STATUS:
-      return 'Canceled';
-    case StatusConstants.REVISION_STATUS:
-      return 'Revision';
-    case StatusConstants.LOST_STATUS:
-      return 'Lost';
-    case StatusConstants.REVISED_STATUS:
-      return 'Revised';
-    default:
-      return 'Unknown';
-  }
-}
-
-
 }

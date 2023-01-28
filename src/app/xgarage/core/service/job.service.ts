@@ -24,18 +24,8 @@ export class JobService extends GenericService<Job> {
             })
         )
     }
-
+    
     saveJob(body: any) {
-        return this.http.post<any>(config.coreApiUrl + '/job/saveJob', body).pipe(
-            tap(res => {
-                return res
-            }), catchError(err => {
-                return throwError(err)
-            })
-        )
-    }
-
-    addJob(body: any) {
         return this.http.post<any>(config.coreApiUrl + '/job/saveJob?jobBody=' + body, '').pipe(
             tap(res => {
                 return res

@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { InputMask } from 'primeng/inputmask';
 import { Brand } from 'src/app/xgarage/common/model/brand';
 import { CarModel } from 'src/app/xgarage/common/model/carmodel';
 import { CarModelType } from 'src/app/xgarage/common/model/carmodeltype';
@@ -12,7 +11,6 @@ import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear
 import { Car } from '../../../model/car';
 import { GearType } from '../../../model/geartype';
 import { CarService } from '../../../service/car.service';
-import { RequestService } from '../../../service/request.service';
 
 @Component({
     selector: 'app-new-car',
@@ -38,7 +36,6 @@ export class NewCarComponent implements OnInit {
     submitted: boolean = false;
     isTyping: boolean = false;
     typingTimer;
-    notFound: boolean;
     found: boolean;
 
     carForm: FormGroup = this.formBuilder.group({
@@ -63,7 +60,6 @@ export class NewCarComponent implements OnInit {
     onCarFormSubmit() {
         // console.log(this.carForm.getRawValue())
         this.submitted = true;
-        let file = this.carFile;
         if (this.carForm.valid) {
             if (this.found && this.type == 'new job') {
                 this.carEvent.emit(this.carForm.getRawValue());
@@ -88,7 +84,7 @@ export class NewCarComponent implements OnInit {
                     updatedCarBody['carDocument'] = this.carFile;
                 }
 
-                for (var key in updatedCarBody) {
+                for (let key in updatedCarBody) {
                     carFormData.append(key, updatedCarBody[key]);
                 }
 
@@ -116,10 +112,8 @@ export class NewCarComponent implements OnInit {
                 this.carService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
                     //console.log('res:', res)
                     this.found = true;
-                    this.notFound = false;
                     this.setSelectedCar(res);
                 }, err => {
-                    this.notFound = true;
                     this.found = false;
                     this.resetCarForm();
                     //console.log('err:', err.error)

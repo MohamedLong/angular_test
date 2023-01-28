@@ -18,20 +18,7 @@ export class RequestComponent implements OnInit {
     constructor(
         private requestService: RequestService,
         private partService: PartService,
-        private supplierService: SupplierService,
-        private formBuilder: FormBuilder,) { }
-
-    // requestForm: FormGroup = this.formBuilder.group({
-    //     description: [''],
-    //     // closingDate: [''],
-    //     privacy: ['Public'],
-    //     car: [''],
-    //     user: [''],
-    //     part: [''],
-    //     locationName: [''],
-    //     suppliers: [''],
-    //     partTypes: ['']
-    // });
+        private supplierService: SupplierService) { }
 
     partTypes: PartType[];
     partType: PartType;
@@ -41,8 +28,8 @@ export class RequestComponent implements OnInit {
     privacy: string = ''
     selectedPrivateSuppliers: Observable<any>;
 
-    data: any ='';
-
+    data: any = '';
+ 
     ngOnInit(): void {
         this.getPartTypes();
         this.requestService.info.subscribe(data => {
