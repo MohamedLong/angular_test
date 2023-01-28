@@ -6,12 +6,12 @@
                     <div class="grid col py-3">
                         <!-- (click)="clickNext('car-info')" -->
                         <div class="col-6 tab flex align-items-center justify-content-center car-info-tab"
-                            (click)="clickNext('car-info')" [ngClass]="{'selected-tab': activeTab == 'car-info'}">
+                            (click)="clickToNavigate('car-info')" [ngClass]="{'selected-tab': activeTab == 'car-info'}">
                             <div class="title">{{ 'car.title' | translate }}</div>
                         </div>
                         <!-- (click)="clickNext('request')" -->
                         <div class="col-6 tab flex align-items-center justify-content-center request-tab"
-                            (click)="clickNext('request')" [ngClass]="{'selected-tab': activeTab === 'request'}">
+                            (click)="clickToNavigate('request')" [ngClass]="{'selected-tab': activeTab === 'request'}">
                             <div class="title">{{ 'job.form.createRequest' | translate }}</div>
                         </div>
                     </div>
@@ -31,9 +31,9 @@
                                             {{jobForm.get('car').value.brandId.brandName}}
                                             {{jobForm.get('car').value.carModelId.name}}
                                             {{jobForm.get('car').value.carModelYearId.year}}
-                                            {{jobForm.get('car').value.carModelTypeId.type}};
+                                            {{jobForm.get('car').value.carModelTypeId.type}},
                                             {{ 'car.form.chassisNo' | translate }}:
-                                            {{jobForm.get('car').value.chassisNumber}};
+                                            {{jobForm.get('car').value.chassisNumber}},
                                             {{ 'car.form.licencePlate' | translate }}:
                                             {{jobForm.get('car').value.plateNumber}}
                                         </p>
@@ -58,7 +58,7 @@
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
                                 <p-dropdown *ngIf="jobFound.multiple" [options]="jobs"
-                                    formControlName="jobId" optionLabel="jobNo" optionValue="id" placeholder="select job"></p-dropdown>
+                                    formControlName="jobId" optionLabel="jobNo" optionValue="id" placeholder="select a job"></p-dropdown>
 
                                 <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100" type="text"
                                     pInputText placeholder="{{ 'job.form.enterJob' | translate }}" required />

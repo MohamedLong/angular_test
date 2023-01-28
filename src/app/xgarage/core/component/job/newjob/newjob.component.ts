@@ -7,7 +7,6 @@ import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
 import { JobService } from '../../../service/job.service';
 import { RequestService } from '../../../service/request.service';
-import { SupplierService } from '../../../service/supplier.service';
 
 @Component({
     selector: 'app-newjob',
@@ -45,9 +44,8 @@ export class NewJobComponent implements OnInit {
         job: [''],
         jobId: [''],
         location: [''],
-        // closingDate: [''],
-        // privacy: ['Public'],
-        // suppliers: [''],
+        privacy: ['Public'],
+        suppliers: [''],
         car: [''],
         carDocument: [''],
     });
@@ -77,13 +75,10 @@ export class NewJobComponent implements OnInit {
         this.jobForm.patchValue({ location });
     }
 
-    clickNext(step: string) {
+    clickToNavigate(step: string) {
         this.activeTab = step;
     }
 
-    clickPrev(step: string) {
-        this.activeTab = step;
-    }
 
     //car form event
     onCarFormEvent(event) {
@@ -93,7 +88,7 @@ export class NewJobComponent implements OnInit {
         });
 
         //console.log(this.jobForm.get('car').value);
-        this.clickNext('request');
+        this.clickToNavigate('request');
     }
 
     onClaimNumberKeyUp() {
@@ -180,9 +175,9 @@ export class NewJobComponent implements OnInit {
             car: { 'id': this.jobForm.get('car').value.id },
         }
 
-        this.jobService.saveJob(jobBody).subscribe(res => {
+        this.jobService.add(jobBody).subscribe(res => {
 
-            this.jobForm.patchValue({ 'jobId': res });
+            this.jobForm.patchValue({ 'jobId': res.id });
 
             if (this.type == 'new req' && this.jobForm.get('jobId').value !== '') {
                 // this.request.emit(this.jobForm.value);
