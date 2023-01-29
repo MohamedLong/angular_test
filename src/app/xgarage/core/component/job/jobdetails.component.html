@@ -1,0 +1,351 @@
+<div class="layout-invoice-page">
+    <p-toast></p-toast>
+    <p-confirmDialog key="cfmdialog" [style]="{width: '50vw'}" [baseZIndex]="10000"
+        rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+    <p-toolbar styleClass="mb-4" [hidden]="master.refernceMode===true">
+        <ng-template pTemplate="left">
+            <div class="formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <span class="p-buttonset">
+                        <button pButton pRipple label="{{ 'operations.addItem' | translate }}" icon="pi pi-plus"
+                        class="p-button-success mr-2 mb-3" (click)="openNew()" [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
+                    </span>
+                </div>
+            <div class="field col-12 md:col-6">
+                <div class="flex align-items-center">
+                    <p-chip label="Information" icon="pi pi-angle-double-right" styleClass="mr-2"></p-chip>
+                    <p-chip label="{{master.createdBy}}" icon="pi pi-user" tooltipPosition="top" pTooltip="{{ 'common.insertUser' | translate }}" styleClass="mr-2"></p-chip>
+                    <p-chip label="{{master.createdAt | date: 'dd/MM/yyyy'}}" icon="pi pi-history" tooltipPosition="top" pTooltip="{{ 'common.insertDate' | translate }}" styleClass="mr-2"></p-chip>
+                    <p-chip label="{{master.status.nameEn}}" icon="pi pi-check" pTooltip="{{ 'common.status' | translate }}" tooltipPosition="top" styleClass="mr-2"></p-chip>
+                </div>
+            </div>
+        </div>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+            <div class="field col">
+                <p-confirmPopup></p-confirmPopup>
+                <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
+                <button pButton pRipple [disabled]="(editable)" class="mb-3 p-button-warning" type="button" icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
+                    (click)="menu.toggle($event)"></button>
+            </div>
+            <div class="field col">
+                <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
+                    (click)="print()" [disabled]="(editable || master.status.id != 2)" class="mb-3"></button>
+            </div>
+        </ng-template>
+
+    </p-toolbar>
+            <div class="grid layout-invoice-content">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="flex justify-content-between">
+                                <h5>{{ 'performaDetails.title' | translate }} #{{master.id}} 
+                                </h5>  
+                                <div class="flex flex-column align-items-end">
+                                    <img src="assets/layout/images/extensions/prime-logo.svg" alt="invoice-logo"/>
+                                    <p class="mt-1">9137 3rd Lane California City, CA 93504.</p>
+                                </div>
+            </div>
+
+                <div class="p-3">
+                    <p-table [columns]="cols" [rows]="1" [value]="masters"
+                        styleClass="p-invoice-datatable-responsive pb-3">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th pColumn="customer">{{ 'performa.tableColumn.customer' | translate }}</th>
+                                <th pColumn="perfDate">{{ 'performa.tableColumn.perfDate' | translate }}</th>
+                                <th pColumn="dueDate">{{ 'performa.tableColumn.dueDate' | translate }}</th>
+                                <th pColumn="cu.CurrencyCode">{{ 'common.currency' | translate }}</th>
+                                <th pColumn="cuRate">{{ 'common.cuRate' | translate }}</th>
+                                <th [hidden]="printingMode===true || master.refernceMode===true">{{ 'operations.operations' | translate }}</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-invSalePerforma>
+                            <tr>
+                                <td>
+                                    {{invSalePerforma.customerName}}
+                                </td>
+                                <td>
+                                    {{invSalePerforma.orderDate | date:'dd/MM/yyyy' }}
+                                </td>
+                                <td>
+                                    {{invSalePerforma.dueDate | date: 'dd/MM/yyyy'}}
+                                </td>
+                                <td>
+                                    {{invSalePerforma.cuCode}}
+                                </td>
+                                <td>
+                                    {{invSalePerforma.cuRate}}
+                                </td>
+                                <td [hidden]="printingMode===true || master.refernceMode===true">
+                                    <button pButton pRipple icon="pi pi-pencil"
+                                        class="p-button-rounded p-button-success mr-2"
+                                        (click)="editParentAction()"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+
+                    <div class="pt-6">
+                        <h6>{{ 'performa.separatorTitle' | translate }}</h6>
+                    </div>
+
+                    <p-table dataKey="id" #dt [columns]="cols" [rows]="10" [value]="details"
+                    styleClass="p-invoice-datatable-responsive pb-3">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th pColumn="id">{{ 'common.id' | translate }}</th>
+                            <th pColumn="item">{{ 'common.item' | translate }}</th>
+                            <th pColumn="description">{{ 'common.description' | translate }}</th>
+                            <th pColumn="metric">{{ 'common.metric' | translate }}</th>
+                            <th pColumn="unitPrice">{{ 'common.unitPrice' | translate }}</th>
+                            <th pColumn="qty">{{ 'common.qty' | translate }}</th>
+                            <th pColumn="total">{{ 'common.total' | translate }}</th>
+                            <th [hidden]="(printingMode)" style="text-align:center">{{ 'operations.operations' | translate }}</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-performDetail>
+                        <tr>
+                            <td>
+                                {{performDetail.id}}
+                            </td>
+                            <td>
+                                {{performDetail.item.itemName}}
+                            </td>
+                            <td>
+                                {{performDetail.description}}
+                            </td>
+                            <td>
+                                {{performDetail.metric.metricName}}
+                            </td>
+                            <td>
+                                {{performDetail.unitPrice | number}}
+                            </td>
+                            <td>
+                                {{performDetail.qty}}
+                            </td>
+                            <td>
+                                {{performDetail.total | number}}
+                            </td>
+                            <ng-container>
+                                <td [hidden]="(printingMode)" style="text-align:center">
+                                    <button pButton pRipple type="button" icon="pi pi-pencil"
+                                        (click)="editAction(performDetail)" [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                        class="p-button-rounded p-button-text hidden-print"></button>
+                                    <button pButton pRipple type="button" icon="pi pi-trash"
+                                        (click)="deleteAction(performDetail)" [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                        class="p-button-rounded p-button-text hidden-print"></button>
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <tr>
+                            <td colspan="6" class="text-right">{{ 'common.subTotal' | translate }}</td>
+                            <td><span class="pink-color">{{master.amount | number}}</span></td>
+                            <td colspan="6" class="text-right"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="text-right">{{ 'common.discount' | translate }} ({{master.discountType==1 ? master.discount : 'common.fixed' | translate }}{{master.discountType==1 ? '%' : ''}})</td>
+                            <td><span class="pink-color">{{master.discountType==1 ? ((master.amount * master.discount)/100 | number) : master.discount}} </span>
+                            </td>
+                            <td [hidden]="(printingMode)" style="text-align:left">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    (click)="editDiscount()" [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                    class="p-button-rounded p-button-text hidden-print"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="text-right">{{ 'common.vat' | translate }} ({{master.vat | number}}%)</td>
+                            <td><span class="pink-color">{{vatValue | number}}</span></td>
+                            <td [hidden]="(printingMode)" style="text-align:left">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    (click)="editVat()" [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                    class="p-button-rounded p-button-text hidden-print"></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="text-right">{{ 'common.grandTotal' | translate }}</td>
+                            <td><span class="pink-color">{{master.netAmount | number}}</span></td>
+                            <td colspan="6" class="text-right"></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+
+                <p-dialog [(visible)]="masterDialog" [style]="{width: '700px'}"
+                    header="{{ 'performa.performaDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
+                    <ng-template pTemplate="content">
+                        <div class="formgrid grid">
+                            <!-- <div class="field col-12 md:col-4">
+                                <label for="orderId">{{ 'performa.tableColumn.perfId' | translate }}</label>
+                                <input type="number" pInputText id="orderId" [(ngModel)]="master.orderId" required
+                                    autofocus disabled="true"/>
+                                <small class="p-error" *ngIf="submitted && !master.orderId">{{
+                                    'performa.performaDialog.perfIdRequired' | translate }}</small>
+                            </div> -->
+                            <div class="field col-12 md:col-4">
+                                <label>{{ 'common.saleCost' | translate }}</label>
+                                <p-dropdown [options]="saleAccounts" [(ngModel)]="selectedSaleAccount" optionLabel="name"
+                                [showClear]="true" [autoDisplayFirst]="false" required autofocus></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label for="orderDate">{{ 'performa.tableColumn.perfDate' | translate }}</label>
+                                <input type="date" pInputText id="orderDate" [(ngModel)]="master.orderDate" required
+                                    autofocus />
+                                <small class="p-error" *ngIf="submitted && !master.orderDate">{{
+                                    'performa.performaDialog.perfDateRequired' | translate }}</small>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label for="dueDate">{{ 'performa.tableColumn.dueDate' | translate }}</label>
+                                <input [min]="minDate" type="date" pInputText id="dueDate" [(ngModel)]="master.dueDate"
+                                    required autofocus />
+                                <small class="p-error" *ngIf="submitted && !master.dueDate">{{
+                                    'performa.performaDialog.dueDateRequired' | translate }}</small>
+                            </div>
+                            <div class="field col-12 md:col-7">
+                                <label>{{ 'common.customer' | translate }}</label>
+                                <p-autoComplete [(ngModel)]="selectedParty" [suggestions]="filteredParties"
+                                    styleClass="w-full" (completeMethod)="filterParty($event)" field="partyName"
+                                    [dropdown]="true" required autofocus>
+                                </p-autoComplete>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label>{{ 'common.currency' | translate }}</label>
+                                <p-dropdown [options]="currencies" [(ngModel)]="selectedCurrency"
+                                    optionLabel="currencyCode" [showClear]="true" [autoDisplayFirst]="false" required
+                                    autofocus (onChange)="onSelectCurrency(selectedCurrency)"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-2">
+                                <label for="cuRate">{{ 'common.cuRate' | translate }}</label>
+                                <input type="number" pInputText id="number" [(ngModel)]="master.cuRate" required
+                                    autofocus />
+                                <small class="p-error" *ngIf="parentSubmitted && !master.cuRate">{{
+                                    'common.cuRateRequired' | translate }}</small>
+                            </div>
+                            <div class="field col-12">
+                                <label>{{ 'common.notes' | translate }}</label>
+                                <textarea rows="5" cols="30" class="w-full" pInputTextarea
+                                    [(ngModel)]="master.notes"></textarea>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
+                            class="p-button-text" (click)="hideParentDialog()"></button>
+                        <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
+                            class="p-button-text" (click)="saveAll()"
+                            [disabled]="!(selectedParty && selectedCurrency && selectedSaleAccount && master.status.id == 1 && editAuth===true)"></button>
+                    </ng-template>
+                </p-dialog>
+
+                <p-dialog [(visible)]="detailDialog" [style]="{width: '550px'}"
+                    header="{{ 'performaDetails.performaDetailsDialog.title' | translate }}" [modal]="true"
+                    styleClass="p-fluid">
+                    <ng-template pTemplate="content">
+                        <div class="field">
+                            <label>{{ 'common.item' | translate }}</label>
+                            <p-dropdown [options]="items" [(ngModel)]="selectedItem" optionLabel="itemName"
+                            [showClear]="true" [autoDisplayFirst]="false" required autofocus (onChange)="onSelectItem(selectedItem)"></p-dropdown>
+                        </div>
+                        <div class="field">
+                            <label>{{ 'common.description' | translate }}</label>
+                            <textarea rows="5" cols="30" class="w-full" pInputTextarea [(ngModel)]="detail.description"></textarea>
+                        </div>
+                        <div class="formgrid grid">
+                        <div class="field col-12 md:col-6">
+                            <label>{{ 'common.metric' | translate }}</label>
+                            <p-dropdown [options]="metrics" [(ngModel)]="selectedMetric" optionLabel="metricName"
+                            [showClear]="true" [autoDisplayFirst]="false" required autofocus></p-dropdown>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label for="unitPrice">{{ 'common.unitPrice' | translate }}</label>
+                            <p-inputNumber id="unitPrice" [(ngModel)]="detail.unitPrice" required autofocus (ngModelChange)="calculateTotalByUnitPrice(detail.unitPrice)"></p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !detail.unitPrice">{{'common.unitPriceRequired' | translate }}</small>
+                            <small class="p-error" *ngIf="detail.unitPrice <= 0">{{'common.unitPricePositiveConstraint' | translate }}</small>
+                        </div>
+                        </div>
+                        <div class="formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label for="qty">{{ 'common.qty' | translate }}</label>
+                                <p-inputNumber id="qty" [(ngModel)]="detail.qty" required autofocus (ngModelChange)="calculateTotalByQty(detail.qty)"></p-inputNumber>
+                                <small class="p-error" *ngIf="submitted && !detail.qty">{{'common.qtyRequired' | translate }}</small>
+                                <small class="p-error" *ngIf="detail.qty < 0">{{'common.qtyPositiveConstraint' | translate }}</small>
+                            </div>
+                        <div class="field col-12 md:col-6">
+                            <label for="total">{{ 'common.total' | translate }}</label>
+                            <p-inputNumber id="total" [(ngModel)]="detail.total" required autofocus [disabled]="true"></p-inputNumber>
+                            <small class="p-error" *ngIf="submitted && !detail.total">{{'common.totalRequired' | translate }}</small>
+                        </div>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
+                            class="p-button-text" (click)="hideDialog()"></button>
+                        <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
+                            class="p-button-text" (click)="save()" [disabled]="!(selectedItem && selectedMetric)"></button>
+                    </ng-template>
+                </p-dialog>
+
+                <p-dialog [(visible)]="discountDialog" [style]="{width: '400px'}"
+                header="{{ 'common.discountDialog' | translate }}" [modal]="true"
+                styleClass="p-fluid">
+                <ng-template pTemplate="content">
+                    <div class="field col-12">
+                        <label for="discountType">{{ 'common.discountType' | translate }}</label>
+                        <p-dropdown [options]="discountTypeList" [(ngModel)]="selectedDiscountType" optionLabel="label" [showClear]="true"
+                        [autoDisplayFirst]="false"></p-dropdown>
+                    </div>
+                    <div class="field col-12">
+                        <label for="discount">{{ 'common.discount' | translate }}</label>
+                        <p-inputNumber id="discount" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" min=0 [(ngModel)]="master.discount" (ngModelChange)="calculateNetAmount()" required autofocus></p-inputNumber>
+                        <small class="p-error" *ngIf="parentSubmitted && !master.discount">{{ 'common.discountRequired' | translate }}</small>
+                    </div>
+                    <div class="field col-12">
+                        <label for="netAmount">{{ 'common.grandTotal' | translate }}</label>
+                        <p-inputNumber id="netAmount" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" min=0 [(ngModel)]="master.netAmount" required autofocus [disabled]="true"></p-inputNumber>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
+                        class="p-button-text" (click)="hideDiscountDialog()"></button>
+                    <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
+                        class="p-button-text" (click)="saveAll()" [disabled]="!(selectedDiscountType && master.status.id == 1 && editAuth===true)"></button>
+                </ng-template>
+            </p-dialog>
+
+
+                <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}"
+                    [modal]="true" [style]="{width:'450px'}">
+                    <div class="flex align-items-center justify-content-center">
+                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                        <span *ngIf="detail">{{ 'operations.deleteMessage' | translate }} <b>{{
+                                'performaDetails.tableColumn.id' | translate }}
+                                {{detail.id}}</b>?</span>
+                    </div>
+                    <ng-template pTemplate="footer">
+                        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                            (click)="deleteSingleDialog = false"></button>
+                        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                            (click)="confirmDelete()"></button>
+                    </ng-template>
+                </p-dialog>
+
+                <p-dialog [(visible)]="confirmActionDialog" header="{{ 'operations.confirmAction' | translate}}"
+                    [modal]="true" [style]="{width:'450px'}">
+                    <div class="flex align-items-center justify-content-center">
+                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                        <span><b>{{ 'operations.confirmActionMessage' | translate }}</b></span>
+                    </div>
+                    <ng-template pTemplate="footer">
+                        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                            (click)="confirmActionDialog = false"></button>
+                        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                            (click)="confirm()"></button>
+                    </ng-template>
+                </p-dialog>
+            </div>
+        </div>
+    </div>
+</div>

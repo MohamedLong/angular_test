@@ -3,8 +3,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { Privacy } from 'src/app/xgarage/common/model/privacy';
+import { SharedJob } from '../../../dto/sharedjob';
 import { InsuranceType } from '../../../model/insurancetype';
+import { Job } from '../../../model/job';
 import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
 import { JobService } from '../../../service/job.service';
@@ -70,16 +73,17 @@ export class NewJobComponent implements OnInit {
     suppliersList = [];
     jobs: any[] = [];
     claimId: number;
+    requests: any[];
     displayPrivateSuppliers: boolean = false;
     numberOfrequests: number = 1;
     @Input() type: string = 'new job';
-    requests: any[] = [];
     constructor(private formBuilder: FormBuilder,
         private jobService: JobService,
         private requestService: RequestService,
         private authService: AuthService,
         private calimService: ClaimService,
         private supplierService: SupplierService,
+        private dataService: DataService<any>,
         private messageService: MessageService) { }
 
     ngOnInit(): void {
@@ -224,6 +228,15 @@ export class NewJobComponent implements OnInit {
     addRequest() {
         this.numberOfrequests++;
         // console.log('add part then init req')
+
+        let jobBody: SharedJob =  {
+            id: this.jobForm.get('jobId').value,
+            car: this.jobForm.get('car').value,
+            privacy: this.jobForm.get('privacy').value,
+            suppliers: this.jobForm.get('suppliers').value
+        }
+        this.dataService.changeObject(jobBody);
+
         this.requestService.newRequest.next(true);
 
         //this.requestService.info.next(this.jobForm.getRawValue());
@@ -261,6 +274,18 @@ export class NewJobComponent implements OnInit {
 
 
         // console.log(this.requests)
+    }
+
+    printRequest(event) {
+
+        this.dataService.name.subscribe({
+            next: (data) => {
+                this.requests.push(data);
+                console.log('incoming request from request component: ', data);
+            }
+        }).unsubscribe();
+        console.log('request coming from request component: ', event);
+        // this.requests.push(event);
     }
 
 }

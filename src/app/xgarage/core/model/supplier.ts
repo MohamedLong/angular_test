@@ -1,9 +1,9 @@
-import { GenericEntity } from "../../common/generic/genericentity";
+import { MasterEntity } from "../../common/generic/masterentity";
 import { Brand } from "../../common/model/brand";
 import { PartType } from "../../common/model/parttype";
 import { ServiceType } from "../../common/model/servicetype";
 
-export interface Supplier extends GenericEntity{
+export interface Supplier extends MasterEntity{
     name?: string;
     cr?: string;
     phoneNumber?: string;

@@ -513,6 +513,7 @@
             "claimNo": "Claim Number",
             "insuranceType": "Insurance Type",
             "carPlateNumber": "Plate Number",
+            "carChassisNumber": "Chassis Number",
             "jobStatus": "Status"
 
         },

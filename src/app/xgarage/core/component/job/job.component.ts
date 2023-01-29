@@ -10,6 +10,8 @@ import { ClaimService } from '../../service/claimservice';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { JobService } from '../../service/job.service';
+import { Job } from '../../model/job';
+import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 
 
 @Component({
@@ -22,7 +24,7 @@ import { JobService } from '../../service/job.service';
 export class JobComponent extends GenericComponent implements OnInit {
 
   constructor(public route: ActivatedRoute, private authService: AuthService, private claimService: ClaimService,
-    private statusService: StatusService, private router: Router, private jobService: JobService,
+    private statusService: StatusService, private router: Router, private jobService: JobService, private dataService: DataService<Job>,
     public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
     super(route, datePipe, breadcrumbService);
 }
@@ -73,6 +75,12 @@ confirmDelete() {
   // }, err => {
   //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
   // })
+}
+
+
+goDetails(job: Job) {
+  this.dataService.changeObject(job);
+  this.router.navigate(['job-details']);
 }
 
 }

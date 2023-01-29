@@ -125,7 +125,10 @@ valid: boolean = false;
 }
 
 confirmDelete() {
-    this.claimService.cancel(this.master.id).subscribe(res => {
+    let cancelStatus: Status = { 
+      id: StatusConstants.CANCELED_STATUS
+    }
+    this.claimService.changeStatus(this.master.id, cancelStatus).subscribe(res => {
       if(res.messageCode == 200){
         this.messageService.add({ severity: 'success', summary: 'Claim cancelled successfully' });
         this.deleteSingleDialog = false;

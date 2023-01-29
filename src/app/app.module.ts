@@ -197,6 +197,10 @@ import { CarComponent } from './xgarage/core/component/car/car.component';
 import { NewCarComponent } from './xgarage/core/component/car/new-car/new-car.component';
 import { PartComponent } from './xgarage/core/component/part/part.component';
 import { NewPartComponent } from './xgarage/core/component/part/new-part/new-part.component';
+import { JobDetailsComponent } from './xgarage/core/component/job/jobdetails.component';
+import { RequestService } from './xgarage/core/service/request.service';
+import { GenericService } from './xgarage/common/generic/genericservice';
+
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
 }
@@ -384,11 +388,12 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         NewCarComponent,
         PartComponent,
         NewPartComponent,
+        JobDetailsComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,
-        CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService, JobService,
-        PhotoService, ProductService, MenuService, AppBreadcrumbService, MetricService, StatusService, TenantService, CurrencyService,
+        CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService, JobService, DataService, 
+        PhotoService, ProductService, MenuService, AppBreadcrumbService, MetricService, StatusService, TenantService, CurrencyService, RequestService, 
         DialogService, UserSubMenuService, UserMainMenuService, MainMenuService, SubMenuService, PermissionService, RoleService, RolePermissionService,
         ClaimService
     ],

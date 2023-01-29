@@ -26,6 +26,7 @@ import { CarComponent } from './xgarage/core/component/car/car.component';
 import { NewCarComponent } from './xgarage/core/component/car/new-car/new-car.component';
 import { PartComponent } from './xgarage/core/component/part/part.component';
 import { NewPartComponent } from './xgarage/core/component/part/new-part/new-part.component';
+import { JobDetailsComponent } from './xgarage/core/component/job/jobdetails.component';
 
 const routes: Routes = [];
 
@@ -52,7 +53,8 @@ const routes: Routes = [];
                     {path: 'cars', component: CarComponent},
                     {path: 'cars/new-car', component: NewCarComponent},
                     {path: 'parts', component: PartComponent},
-                    {path: 'parts/new-part', component: NewPartComponent}
+                    {path: 'parts/new-part', component: NewPartComponent},
+                    {path: 'job-details', component: JobDetailsComponent}
                     // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
                     // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},

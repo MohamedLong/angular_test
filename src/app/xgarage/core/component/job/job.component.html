@@ -44,12 +44,14 @@
                         </th>
                         <th pColumn="insuranceType">{{ 'job.tableColumn.insuranceType' | translate }}
                         </th>
+                        <th pColumn="carChassisNumber">{{ 'job.tableColumn.carChassisNumber' | translate }}
+                        </th>
                         <th pColumn="carPlateNumber">{{ 'job.tableColumn.carPlateNumber' | translate }}
                         </th>
                         <th pSortableColumn="jobStatus">{{ 'job.tableColumn.jobStatus' | translate }}<p-sortIcon field="jobStatus"></p-sortIcon>
                         </th>
-                        <th pColumn="actions">{{'common.actions' | translate }}
-                        </th>
+                        <!-- <th pColumn="actions">{{'common.actions' | translate }}
+                        </th> -->
 
                     </tr>
                 </ng-template>
@@ -58,9 +60,7 @@
                         <td>
                             {{job.id}}
                         </td>
-                        <td>
-                            {{job.jobNo}}
-                        </td>
+                        <td><span><a (click)="goDetails(job)" [routerLink]="['/job-details']"><mark class="text-blue-400 hover:text-pink-500">{{job.jobNo}}</mark></a></span>
                         <td>
                             {{job.claim}}
                         </td>
@@ -68,18 +68,21 @@
                             {{job.insuranceType}}
                         </td>
                         <td>
+                            {{job.car.chassisNumber}}
+                        </td>
+                        <td>
                             {{job.car.plateNumber}}
                         </td>
                         <td>
-                            {{getStatusName(job.status)}}
+                            {{getStatusName(job.status.id)}}
                         </td>                        
-
+<!-- 
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
                               (click)="edit(job)"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
                               (click)="deleteAction(job)"></button>
-                          </td>
+                          </td> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">

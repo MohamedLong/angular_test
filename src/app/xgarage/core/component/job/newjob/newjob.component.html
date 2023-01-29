@@ -92,7 +92,7 @@
                             <!-- request content -->
                             <div class="my-5 relative">
                                 <ng-container *ngFor="let _ of [].constructor(numberOfrequests); let requestNo = index">
-                                    <app-request [numberOfReq]="numberOfrequests" part="{{'PART ' + (requestNo + 1)}}"></app-request>
+                                    <app-request [numberOfReq]="numberOfrequests" (request) ="printRequest($event)" part="{{'PART ' + (requestNo + 1)}}"></app-request>
                                 </ng-container>
 
                                 <p-image class="absolute add-part-img" src="assets/layout/images/add-part.png"

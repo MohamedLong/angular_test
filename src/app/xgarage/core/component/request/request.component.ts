@@ -1,7 +1,9 @@
 import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 // import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
+import { SharedJob } from '../../dto/sharedjob';
 import { PartService } from '../../service/part.service';
 import { RequestService } from '../../service/request.service';
 import { NewPartComponent } from '../part/new-part/new-part.component';
@@ -19,11 +21,19 @@ export class RequestComponent implements OnInit, OnChanges {
     constructor(
         private requestService: RequestService,
         private partService: PartService,
+        private dataService: DataService<any>,
         private authService: AuthService) {
         this.responseBody = {};
         this.subCategoryId = "";
+        this.dataService.name.subscribe({
+            next: (data) => {
+                this.sharedJob = data;
+                console.log('sharedJob coming from new-job component: ', this.sharedJob);
+            }
+        }).unsubscribe();
     }
 
+    sharedJob: SharedJob;
     partTypes: PartType[];
     selectedPartTypes: PartType[];
     description: string;
@@ -95,6 +105,7 @@ export class RequestComponent implements OnInit, OnChanges {
         // console.log(changes.numberOfReq.currentValue)
         if (changes.numberOfReq.currentValue) {
             console.log(changes.numberOfReq.currentValue)
+            this.sendRequest();
         }
     }
 
@@ -113,6 +124,10 @@ export class RequestComponent implements OnInit, OnChanges {
     }
 
     sendRequest() {
+        this.responseBody.job = this.sharedJob.id;
+        this.responseBody.car = this.sharedJob.car;
+        this.responseBody.suppliers = this.sharedJob.suppliers;
+        this.responseBody.privacy = this.sharedJob.privacy;
          this.requestService.part.subscribe(part => {
             this.subCategoryId = "";
 
@@ -124,15 +139,16 @@ export class RequestComponent implements OnInit, OnChanges {
                 };
 
                 this.subCategoryId = part.subCategoryId;
-                // console.log(this.responseBody)
             }
         });
         let stringRequestBody = JSON.stringify(this.responseBody);
         let req = { "requestBody": this.responseBody, "subCategoryId": this.subCategoryId, "partImages": this.partImages, 'description': this.description }
-
+    
+        this.dataService.changeObject(req);
+        console.log('request body inside requets component: ', this.responseBody);
         //console.log(req)
         this.request.emit(req);
-        this.disbaleData();
+        // this.disbaleData();
         // let RequestFormData = new FormData();
         // for (var key in req) {
         //     RequestFormData.append(key, req[key]);
