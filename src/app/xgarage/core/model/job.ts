@@ -1,11 +1,10 @@
-import { GenericEntity } from "../../common/generic/genericentity";
+import { MasterEntity } from "../../common/generic/masterentity";
 import { Car } from "./car";
 import { InsuranceType } from "./insurancetyps";
 
-export interface Job extends GenericEntity{
+export interface Job extends MasterEntity{
     jobNO?: string;
     claim?: number;
     insuranceType?: InsuranceType,
-    car?: Car,
-    status?: number;
+    car?: Car
 }

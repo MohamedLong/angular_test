@@ -21,7 +21,4 @@ export class ClaimService extends GenericService<Claim>{
         return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant/' + tenantId);
     }
 
-    cancel(id: number) {
-        return this.http.post<MessageResponse>(config.coreApiUrl + '/claim/cancel/' + id, null);
-    }
 }

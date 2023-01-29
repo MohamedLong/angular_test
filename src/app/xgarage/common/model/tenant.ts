@@ -1,5 +1,5 @@
 import { TenantType } from './tenanttype';
-import { GenericEntity } from "../generic/genericentity";
+import { GenericEntity } from '../generic/genericentity';
 
 export interface Tenant extends GenericEntity{
     name?: string;

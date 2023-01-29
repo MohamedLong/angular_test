@@ -1,6 +1,6 @@
-import { GenericEntity } from "../../common/generic/genericentity";
+import { MasterEntity } from "../../common/generic/masterentity";
 
-export interface Claim extends GenericEntity{
+export interface Claim extends MasterEntity{
     claimDate?: Date;
     tenant?: number;
 }
