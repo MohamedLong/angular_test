@@ -70,6 +70,7 @@ export class NewJobComponent implements OnInit, AfterViewInit {
         found: false,
         multiple: false
     };
+    suppliersList = [];
     jobs: any[] = [];
     claimId: number;
     requests: any[] = [];
@@ -261,8 +262,13 @@ export class NewJobComponent implements OnInit, AfterViewInit {
 
     selectSupplier(value: Supplier[]) {
         //check if at least 1 supplier is slected
+        console.log(value)
         if (value.length > 0) {
             this.supplierSelected = true;
+            value.forEach((val,i) => {
+                this.suppliersList.push(val[i].name)
+            })
+
         } else {
             this.supplierSelected = false;
         }
