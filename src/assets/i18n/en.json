@@ -488,7 +488,6 @@
         }
     },
     "job": {
-
         "title": "Jobs",
         "table_footer": "In total there are {{length}} Jobs",
         "form": {
@@ -510,7 +509,7 @@
         "tableColumn": {
             "id": "ID",
             "jobNo": "Job Number",
-            "claimNo": "Claim Number",
+            "claimNo": "Claim ID",
             "insuranceType": "Insurance Type",
             "carPlateNumber": "Plate Number",
             "carChassisNumber": "Chassis Number",

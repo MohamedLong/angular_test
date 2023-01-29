@@ -45,7 +45,7 @@ export class RequestComponent implements OnInit, OnChanges {
     @Input() part: string = 'PART 1';
     @Input() numberOfReq: number;
 
-    @Output() request = new EventEmitter<{}>();
+    // @Output() request = new EventEmitter<{}>();
 
     ngOnInit(): void {
         this.getPartTypes();
@@ -97,6 +97,8 @@ export class RequestComponent implements OnInit, OnChanges {
 
     }
 
+
+
     disbaleData() {
         this.requestService.newRequest.next(false);
     }
@@ -104,8 +106,8 @@ export class RequestComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         // console.log(changes.numberOfReq.currentValue)
         if (changes.numberOfReq.currentValue) {
-            console.log(changes.numberOfReq.currentValue)
-            this.sendRequest();
+            // console.log(changes.numberOfReq.currentValue)
+                    this.sendRequest();
         }
     }
 
@@ -144,10 +146,11 @@ export class RequestComponent implements OnInit, OnChanges {
         let stringRequestBody = JSON.stringify(this.responseBody);
         let req = { "requestBody": this.responseBody, "subCategoryId": this.subCategoryId, "partImages": this.partImages, 'description': this.description }
     
-        this.dataService.changeObject(req);
-        console.log('request body inside requets component: ', this.responseBody);
+        console.log('req inside request component: ', req);
+        // this.dataService.changeObject(req);
+        // console.log('request body inside requets component: ', this.responseBody);
         //console.log(req)
-        this.request.emit(req);
+        // this.request.emit(req);
         // this.disbaleData();
         // let RequestFormData = new FormData();
         // for (var key in req) {

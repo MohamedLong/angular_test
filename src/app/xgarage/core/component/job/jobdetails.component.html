@@ -40,7 +40,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="flex justify-content-between">
-                                <h5>{{ 'performaDetails.title' | translate }} #{{master.id}} 
+                                <h5>{{ 'job.jobDialog.title' | translate }} #{{master.id}} 
                                 </h5>  
                                 <div class="flex flex-column align-items-end">
                                     <img src="assets/layout/images/extensions/prime-logo.svg" alt="invoice-logo"/>
@@ -53,30 +53,30 @@
                         styleClass="p-invoice-datatable-responsive pb-3">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
-                                <th pColumn="customer">{{ 'performa.tableColumn.customer' | translate }}</th>
-                                <th pColumn="perfDate">{{ 'performa.tableColumn.perfDate' | translate }}</th>
-                                <th pColumn="dueDate">{{ 'performa.tableColumn.dueDate' | translate }}</th>
-                                <th pColumn="cu.CurrencyCode">{{ 'common.currency' | translate }}</th>
-                                <th pColumn="cuRate">{{ 'common.cuRate' | translate }}</th>
+                                <th pColumn="jobNo">{{ 'job.tableColumn.jobNo' | translate }}</th>
+                                <th pColumn="claim.claimNumber">{{ 'job.tableColumn.claimNo' | translate }}</th>
+                                <th pColumn="insuranceType">{{ 'job.tableColumn.insuranceType' | translate }}</th>
+                                <th pColumn="car.chassisNumber">{{ 'job.tableColumn.carChassisNumber' | translate }}</th>
+                                <th pColumn="car.plateNumber">{{ 'job.tableColumn.carPlateNumber' | translate }}</th>
                                 <th [hidden]="printingMode===true || master.refernceMode===true">{{ 'operations.operations' | translate }}</th>
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-invSalePerforma>
+                        <ng-template pTemplate="body" let-master>
                             <tr>
                                 <td>
-                                    {{invSalePerforma.customerName}}
+                                    {{master.jobNo}}
                                 </td>
                                 <td>
-                                    {{invSalePerforma.orderDate | date:'dd/MM/yyyy' }}
+                                    {{master.claim}}
                                 </td>
                                 <td>
-                                    {{invSalePerforma.dueDate | date: 'dd/MM/yyyy'}}
+                                    {{master.insuranceType}}
                                 </td>
                                 <td>
-                                    {{invSalePerforma.cuCode}}
+                                    {{master.car.chassisNumber}}
                                 </td>
                                 <td>
-                                    {{invSalePerforma.cuRate}}
+                                    {{master.car.plateNumber}}
                                 </td>
                                 <td [hidden]="printingMode===true || master.refernceMode===true">
                                     <button pButton pRipple icon="pi pi-pencil"
@@ -138,37 +138,6 @@
                                         class="p-button-rounded p-button-text hidden-print"></button>
                                 </td>
                             </ng-container>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="footer">
-                        <tr>
-                            <td colspan="6" class="text-right">{{ 'common.subTotal' | translate }}</td>
-                            <td><span class="pink-color">{{master.amount | number}}</span></td>
-                            <td colspan="6" class="text-right"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="6" class="text-right">{{ 'common.discount' | translate }} ({{master.discountType==1 ? master.discount : 'common.fixed' | translate }}{{master.discountType==1 ? '%' : ''}})</td>
-                            <td><span class="pink-color">{{master.discountType==1 ? ((master.amount * master.discount)/100 | number) : master.discount}} </span>
-                            </td>
-                            <td [hidden]="(printingMode)" style="text-align:left">
-                                <button pButton pRipple type="button" icon="pi pi-pencil"
-                                    (click)="editDiscount()" [disabled]="!(master.status.id == 1 && editAuth===true)"
-                                    class="p-button-rounded p-button-text hidden-print"></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="6" class="text-right">{{ 'common.vat' | translate }} ({{master.vat | number}}%)</td>
-                            <td><span class="pink-color">{{vatValue | number}}</span></td>
-                            <td [hidden]="(printingMode)" style="text-align:left">
-                                <button pButton pRipple type="button" icon="pi pi-pencil"
-                                    (click)="editVat()" [disabled]="!(master.status.id == 1 && editAuth===true)"
-                                    class="p-button-rounded p-button-text hidden-print"></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="6" class="text-right">{{ 'common.grandTotal' | translate }}</td>
-                            <td><span class="pink-color">{{master.netAmount | number}}</span></td>
-                            <td colspan="6" class="text-right"></td>
                         </tr>
                     </ng-template>
                 </p-table>
