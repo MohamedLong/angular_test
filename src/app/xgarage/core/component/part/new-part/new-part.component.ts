@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Part } from '../../../model/parts';
 import { PartService } from '../../../service/part.service';
+import { RequestService } from '../../../service/request.service';
 
 @Component({
     selector: 'app-new-part',
@@ -9,7 +10,7 @@ import { PartService } from '../../../service/part.service';
 })
 export class NewPartComponent implements OnInit {
 
-    constructor(private partService: PartService) { }
+    constructor(private partService: PartService, private requestService: RequestService) { }
 
     parts: Part[];
     categories: any[];
@@ -53,11 +54,15 @@ export class NewPartComponent implements OnInit {
         this.disableList = true;
         this.part = this.selectedPart;
         this.part.subCategoryId = this.selectedSubCategory.id;
+
+        this.requestService.part.next(this.part)
     }
 
     onSelectPart(part: Part) {
         this.part = this.selectedPart;
         this.part.subCategoryId = this.selectedSubCategory.id;
+
+        this.requestService.part.next(this.part)
     }
 
     getPartCategory() {
@@ -73,7 +78,7 @@ export class NewPartComponent implements OnInit {
         })
 
         this.subCategories = selectedCategory[0].subCategories;
-        console.log(this.subCategories)
+        //console.log(this.subCategories)
     }
 
     onSubCategoryChange(id: number) {
@@ -97,5 +102,7 @@ export class NewPartComponent implements OnInit {
         }else{
             this.part = {};
         }
+
+        this.requestService.part.next(this.part);
     }
 }

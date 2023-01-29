@@ -1,5 +1,3 @@
-<!-- <app-newjob (request)="onRequest($event)"></app-newjob> -->
-
 <p-fieldset [legend]="part" class="relative">
     <div class="field col-12">
         <app-new-part type="new req"></app-new-part>
@@ -17,7 +15,7 @@
             <label class="mb-2">Preferred Parts Type</label>
             <div class="flex align-items-center">
                 <ng-container *ngFor="let type of partTypes" class="field-checkbox">
-                    <p-checkbox name="types" value="type" [value]="type"  [(ngModel)]="selectedPartTypes" [inputId]="type.id"></p-checkbox>
+                    <p-checkbox [name]="part" value="type" [value]="type"  [(ngModel)]="selectedPartTypes" inputId="{{part + 1}}"></p-checkbox>
                     <label [for]="type.id" class="ml-2 mr-4">{{type.partType}}</label>
                 </ng-container>
             </div>

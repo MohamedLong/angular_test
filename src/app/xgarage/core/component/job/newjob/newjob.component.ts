@@ -51,6 +51,7 @@ export class NewJobComponent implements OnInit {
     jobForm: FormGroup = this.formBuilder.group({
         insuranceFrom: [''],
         claim: [''],
+        user: [''],
         job: [''],
         jobId: [''],
         location: [''],
@@ -71,7 +72,7 @@ export class NewJobComponent implements OnInit {
     displayPrivateSuppliers: boolean = false;
     numberOfrequests: number = 1;
     @Input() type: string = 'new job';
-
+    requests: any[] = [];
     constructor(private formBuilder: FormBuilder,
         private jobService: JobService,
         private requestService: RequestService,
@@ -83,6 +84,8 @@ export class NewJobComponent implements OnInit {
     ngOnInit(): void {
         //set location
         let location = JSON.parse(this.authService.getStoredUser()).tenant.location;
+        let user = JSON.parse(this.authService.getStoredUser()).id;
+        this.jobForm.patchValue({ user });
         this.jobForm.patchValue({ location });
         this.jobForm.get('location').disable();
     }
@@ -110,7 +113,7 @@ export class NewJobComponent implements OnInit {
         this.ClaimTypingTimer = setTimeout(() => {
             if (this.jobForm.get('claim').value !== "") {
                 this.jobService.getJobByClaimNumber(this.jobForm.get('claim').value).subscribe(res => {
-                    console.log(res)
+                    // console.log(res)
                     this.claimId = res.claimId;
                     if (res.jobs.length > 0) {
                         if (res.jobs.length == 1) {
@@ -165,6 +168,7 @@ export class NewJobComponent implements OnInit {
         clearTimeout(this.ClaimTypingTimer);
     }
 
+    //to review
     onjobFormSubmit() {
         if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
             console.log('initiate req')
@@ -218,16 +222,39 @@ export class NewJobComponent implements OnInit {
 
     addRequest() {
         this.numberOfrequests++;
-        console.log(this.numberOfrequests)
+        // console.log('add part then init req')
+        this.requestService.newRequest.next(true);
+
+        //this.requestService.info.next(this.jobForm.getRawValue());
+        //console.log(this.numberOfrequests)
     }
 
     selectSupplier(value: Supplier[]) {
         //check if at least 1 supplier is slected
-        if(value.length > 0) {
+        if (value.length > 0) {
             this.supplierSelected = true;
         } else {
             this.supplierSelected = false;
         }
+    }
+
+    onRequest(event) {
+        //console.log('this is coming from req:', event);
+        // let updatedRequests = [];
+
+        // if (this.requests.length > 0) {
+        //     this.requests.forEach(req => {
+        //         if (event.subCategoryId && req.subCategoryId !== event.subCategoryId) {
+        //             this.requests.push(event)
+        //         }
+        //     });
+        // } else {
+        //     this.requests.push(event);
+        // }
+
+
+
+        // console.log(this.requests)
     }
 
 }
