@@ -77,6 +77,9 @@
                                 <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
                                 <input formControlName="location" class="width-100" type="text" pInputText required />
                             </div>
+                            <div class="col-12 md:col-6">
+                                <p-chips [(ngModel)]="suppliersList" [ngModelOptions]="{standalone: true}"></p-chips>
+                            </div>
                             <p-dialog header="Private Suppliers" [modal]="true" [style]="{width: '50vw'}" [closable]="false"
                                 [(visible)]="displayPrivateSuppliers">
                                 <p-listbox (onChange)="selectSupplier($event.value)" [checkbox]="true" [options]="selectedPrivateSuppliers | async"

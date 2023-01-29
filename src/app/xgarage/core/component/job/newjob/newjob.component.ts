@@ -67,6 +67,7 @@ export class NewJobComponent implements OnInit {
         found: false,
         multiple: false
     };
+    suppliersList = [];
     jobs: any[] = [];
     claimId: number;
     displayPrivateSuppliers: boolean = false;
@@ -231,8 +232,13 @@ export class NewJobComponent implements OnInit {
 
     selectSupplier(value: Supplier[]) {
         //check if at least 1 supplier is slected
+        console.log(value)
         if (value.length > 0) {
             this.supplierSelected = true;
+            value.forEach((val,i) => {
+                this.suppliersList.push(val[i].name)
+            })
+
         } else {
             this.supplierSelected = false;
         }
