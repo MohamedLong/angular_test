@@ -14,4 +14,6 @@ export class RequestService extends GenericService<any> {
     }
 
     info: BehaviorSubject<any> = new BehaviorSubject({});
+    part: BehaviorSubject<any> = new BehaviorSubject({});
+    newRequest: BehaviorSubject<any> = new BehaviorSubject(false);
 }
