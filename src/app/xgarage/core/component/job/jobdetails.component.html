@@ -139,12 +139,12 @@
                 </p-table>
             </div>
 
-                <p-dialog [(visible)]="masterDialog" [style]="{width: '700px'}"
+                <p-dialog [(visible)]="masterDialog" [style]="{width: '300px'}"
                     header="{{ 'job.jobDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
                     <ng-template pTemplate="content">
                         <div class="formgrid grid">
                             <div class="field col-12">
-                                <label>{{ 'job.tableColumn.jobNo' | translate }}</label>
+                                <label>{{ 'job.tableColumn.insuranceType' | translate }}</label>
                                 <p-dropdown [options]="insuranceTypes" [(ngModel)]="selectedInsuranceType" required autofocus></p-dropdown>
                             </div>
                             <div class="field col-12">
