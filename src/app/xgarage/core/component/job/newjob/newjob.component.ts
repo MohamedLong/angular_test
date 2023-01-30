@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
@@ -7,12 +7,12 @@ import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { SharedJob } from '../../../dto/sharedjob';
 import { InsuranceType } from '../../../model/insurancetype';
-import { Job } from '../../../model/job';
 import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
 import { JobService } from '../../../service/job.service';
 import { RequestService } from '../../../service/request.service';
 import { SupplierService } from '../../../service/supplier.service';
+import { RequestComponent } from '../../request/request.component';
 
 @Component({
     selector: 'app-newjob',
@@ -48,7 +48,7 @@ import { SupplierService } from '../../../service/supplier.service';
     `],
     providers: [MessageService]
 })
-export class NewJobComponent implements OnInit {
+export class NewJobComponent implements OnInit, AfterViewInit {
 
     activeTab = 'car-info';
 
@@ -82,11 +82,13 @@ export class NewJobComponent implements OnInit {
     privateSuppliersList = [];
     jobs: any[] = [];
     claimId: number;
-    requests: any[];
+    requests: any[] = [];
     displayPrivateSuppliers: boolean = false;
     addOneMoreRequest: boolean = false;
     numberOfrequests: number = 1;
     @Input() type: string = 'new job';
+    @ViewChild(RequestComponent) RequestComponent;
+
     constructor(private formBuilder: FormBuilder,
         private jobService: JobService,
         private requestService: RequestService,
@@ -95,6 +97,10 @@ export class NewJobComponent implements OnInit {
         private supplierService: SupplierService,
         private dataService: DataService<any>,
         private messageService: MessageService) { }
+
+    ngAfterViewInit(): void {
+        this.RequestComponent.sendRequest();
+    }
 
     ngOnInit(): void {
         //set location
@@ -248,6 +254,17 @@ export class NewJobComponent implements OnInit {
     }
 
     addRequest() {
+
+        this.ngAfterViewInit();
+        // this.childComponent.sendRequest();
+
+        // this.dataService.name.subscribe({
+        //     next: (data) => {
+        //         this.requests.push(data);
+        //         console.log('incoming request from request component: ', data);
+        //     }
+        // }).unsubscribe();
+
         this.numberOfrequests++;
         this.addOneMoreRequest = false;
     }
