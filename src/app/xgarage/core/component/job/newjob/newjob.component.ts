@@ -30,6 +30,10 @@ import { RequestComponent } from '../../request/request.component';
         height: auto;
         min-height: auto;
     }
+
+    .wizard-body .wizard-wrapper .wizard-content .wizard-card {
+        height: 100%;
+    }
     .add-part-img {
         left: -14px;
         bottom: 8px;
