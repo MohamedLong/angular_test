@@ -27,6 +27,7 @@ export class NewPartComponent implements OnInit {
     partName: string;
 
     @Input() type: string = 'new part';
+    @Input() errMsg: string = "";
 
     ngOnInit(): void {
         this.getPartCategory();

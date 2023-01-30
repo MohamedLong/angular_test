@@ -16,7 +16,5 @@ export class RequestService extends GenericService<Request> {
         return this.http.get<Request[]>(this.apiServerUrl + '/job/' + jobId);
     }
 
-    info: BehaviorSubject<any> = new BehaviorSubject({});
     part: BehaviorSubject<any> = new BehaviorSubject({});
-    newRequest: BehaviorSubject<any> = new BehaviorSubject(false);
 }
