@@ -9,7 +9,6 @@ import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponen
 import { ClaimService } from '../../service/claimservice';
 import { Tenant } from 'src/app/xgarage/common/model/tenant';
 import { Status } from 'src/app/xgarage/common/model/status';
-import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 
 @Component({
@@ -22,7 +21,7 @@ import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 export class ClaimComponent extends GenericComponent implements OnInit {
 
   constructor(public route: ActivatedRoute, private authService: AuthService, private tenantService: TenantService, 
-    private statusService:StatusService, private router: Router, private claimService: ClaimService,
+    private claimService: ClaimService,
     public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
     super(route, datePipe, breadcrumbService);
 }

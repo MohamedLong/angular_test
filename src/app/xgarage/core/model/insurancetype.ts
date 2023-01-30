@@ -1,4 +1,4 @@
-export enum InsuranceType {
-    OD = 'od',
-    TP = 'tp'
+export enum InsuranceType{
+    TP = "TP",
+    OD = "OD"
 }
