@@ -107,8 +107,8 @@
                             <!-- request content -->
                             <div class="my-5 relative">
                                 <ng-container *ngFor="let _ of [].constructor(numberOfrequests); let requestNo = index">
-                                    <app-request [numberOfReq]="numberOfrequests" (request)="onJobFormSubmit()"
-                                        part="{{'PART ' + (requestNo + 1)}}"></app-request>
+                                    <app-new-request [numberOfReq]="numberOfrequests" (request)="onJobFormSubmit()"
+                                        part="{{'PART ' + (requestNo + 1)}}"></app-new-request>
                                 </ng-container>
 
                                 <button class="absolute add-part-img" (click)="addRequest()"

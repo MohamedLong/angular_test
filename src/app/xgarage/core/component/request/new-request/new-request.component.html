@@ -1,0 +1,38 @@
+<p-fieldset [legend]="part" class="relative">
+    <div class="field col-12">
+        <app-new-part type="new req" [errMsg]="partErrorMsg"></app-new-part>
+    </div>
+    <div class="field col-12">
+        <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" [customUpload]="true"
+            [auto]="true" (uploadHandler)="uploadPartImages($event)" multiple="multiple" accept="image/*">
+        </p-fileUpload>
+    </div>
+    <div class="col-12">
+        <p-divider type="dashed"></p-divider>
+    </div>
+    <div class="grid pb-3">
+        <div class="field col-12 md:col-6">
+            <label class="mb-2">{{ 'request.form.prefredTypes' | translate }}</label>
+            <div class="flex align-items-center">
+                <ng-container *ngFor="let type of partTypes" class="field-checkbox">
+                    <p-checkbox [name]="part" value="type" [value]="type" [(ngModel)]="selectedPartTypes"
+                        inputId="{{part + 1}}"></p-checkbox>
+                    <label [for]="type.id" class="ml-2 mr-4">{{type.partType}}</label>
+                </ng-container>
+            </div>
+            <small
+                *ngIf="submitted && selectedPartTypes.length == 0"
+                class="p-error mt-2">{{ 'request.form.prefredTypesrequired' | translate }}</small>
+        </div>
+        <div class="field col-12 md:col-6">
+            <label for="">{{ 'request.form.desc' | translate }}</label>
+            <textarea [(ngModel)]="description" placeholder="{{ 'request.form.descPlaceholder' | translate }}"
+                class="width-100 block" type="text" pInputText required></textarea>
+        </div>
+    </div>
+    <div class="col-12 text-right">
+        <button class="width-100 md:w-20rem" type="button" pButton pRipple (click)="sendRequest()"
+            label="{{ 'request.form.sendReq' | translate }}"></button>
+    </div>
+</p-fieldset>
+

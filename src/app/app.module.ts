@@ -200,6 +200,7 @@ import { NewPartComponent } from './xgarage/core/component/part/new-part/new-par
 import { JobDetailsComponent } from './xgarage/core/component/job/jobdetails.component';
 import { RequestService } from './xgarage/core/service/request.service';
 import { GenericService } from './xgarage/common/generic/genericservice';
+import { NewRequestComponent } from './xgarage/core/component/request/new-request/new-request.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -388,7 +389,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         NewCarComponent,
         PartComponent,
         NewPartComponent,
-        JobDetailsComponent
+        JobDetailsComponent,
+        NewRequestComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,

@@ -5,7 +5,6 @@ import { PartType } from 'src/app/xgarage/common/model/parttype';
 import { SharedJob } from '../../dto/sharedjob';
 import { PartService } from '../../service/part.service';
 import { RequestService } from '../../service/request.service';
-import { NewPartComponent } from '../part/new-part/new-part.component';
 
 @Component({
     selector: 'app-request',
