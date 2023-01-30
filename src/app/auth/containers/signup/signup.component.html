@@ -33,10 +33,10 @@
                     <div class="p-inputgroup mt-3 flex-column align-items-start">
                         <span class="p-input-icon-left width-100">
                             <i class="pi pi-phone"></i>
-                            <input type="number" id="phone"  pInputText formControlName="phone" placeholder="{{ 'auth.form.phone' | translate }}"
+                            <input type="phone" id="phone"  pInputText formControlName="phone" placeholder="{{ 'auth.form.phone' | translate }}"
                                 required>
                         </span>
-                        <small *ngIf="!signupForm.get('phone').valid && signupForm.get('phone').touched && signupForm.get('phone').errors?.['pattern']" class="p-error block pt-1">incorrect phone number.</small>
+                        <small *ngIf="!signupForm.get('phone').valid && signupForm.get('phone').touched && signupForm.get('phone').errors?.['pattern']" class="p-error block pt-1">Incorrect phone number.</small>
                     </div>
                     <div class="p-inputgroup mt-3 flex-column align-items-start">
                         <span class="p-input-icon-left width-100">
@@ -44,7 +44,7 @@
                             <input type="email" id="email" pInputText formControlName="email" placeholder="{{ 'auth.form.email' | translate }}"
                                 required>
                         </span>
-                        <small *ngIf="!signupForm.get('email').valid && signupForm.get('email').touched && signupForm.get('email').errors?.['email']" class="p-error block pt-1">incorrect email.</small>
+                        <small *ngIf="!signupForm.get('email').valid && signupForm.get('email').touched && signupForm.get('email').errors?.['email']" class="p-error block pt-1">Incorrect email.</small>
                     </div>
                     <div class="p-inputgroup mt-3 flex-column align-items-start">
                         <span class="p-input-icon-left width-100">
@@ -52,20 +52,20 @@
                             <input type="password" id="password" pInputText formControlName="password"
                                 placeholder="{{ 'auth.form.password' | translate }}" required>
                         </span>
-                        <small *ngIf="!signupForm.get('password').valid && signupForm.get('password').touched && signupForm.get('password').errors?.['required']" class="p-error block pt-1">please enter password.</small>
+                        <small *ngIf="!signupForm.get('password').valid && signupForm.get('password').touched && signupForm.get('password').errors?.['required']" class="p-error block pt-1">Please enter password.</small>
                     </div>
                     <div class="mt-3 width-100">
                         <p-dropdown id="tenantType" formControlName="tenantType" placeholder="{{ 'auth.form.tenantType' | translate }}" [options]="tenantTypes"
                             optionLabel="name" optionValue="id" (onChange)="changeTenants($event)"></p-dropdown>
                             <div class="text-left">
-                                <small *ngIf="!signupForm.get('tenantType').valid && signupForm.get('tenantType').touched && signupForm.get('tenantType').errors?.['required']" class="p-error block pt-1">please select a tenant type.</small>
+                                <small *ngIf="!signupForm.get('tenantType').valid && signupForm.get('tenantType').touched && signupForm.get('tenantType').errors?.['required']" class="p-error block pt-1">Please select a tenant type.</small>
                             </div>
                     </div>
                     <div class="mt-3 width-100"  *ngIf="!newTenantTrigger" >
                         <p-dropdown id="tenant" formControlName="tenant" placeholder="{{ 'auth.form.tenant' | translate }}" [options]="tenants"
                             optionLabel="name" optionValue="id" [disabled]="createTenant"></p-dropdown>
                             <div class="text-left">
-                                <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">please select a tenant.</small>
+                                <small *ngIf="!signupForm.get('tenant').valid && signupForm.get('tenant').touched && signupForm.get('tenant').errors?.['required']" class="p-error block pt-1">Please select a tenant.</small>
                             </div>
                     </div>
 

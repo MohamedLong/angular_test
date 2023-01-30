@@ -30,7 +30,7 @@ selectedTenant: Tenant;
 tenants: Tenant[];
 selectedStatus: Status;
 statuses: Status[];
-valid: boolean = false;
+active: boolean = true;
 
   ngOnInit(): void {
     this.getAll();
@@ -56,7 +56,7 @@ valid: boolean = false;
           this.masterDtos = masters;
           this.loading = false;
         },
-      error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+      error: (e) => this.messageService.add({ severity: 'error', summary: 'Error', detail: e.error.message, life: 3000 })
       }); 
     }
     else{
@@ -66,7 +66,7 @@ valid: boolean = false;
           this.loading = false;
           this.masterDtos.forEach(val => val.cancellable = (val.status != null && val.status == StatusConstants.OPEN_STATUS)); 
         },
-        error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+        error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
       }); 
     }
  }
@@ -79,6 +79,7 @@ valid: boolean = false;
           this.selectedTenant = this.tenants.find(val => val.id == this.master.tenant);
           this.master.claimDate = this.datePipe.transform(this.master.claimDate, 'yyyy-MM-dd');
           this.editMaster(this.master);
+          this.active = false;
       },
       error: (e) => alert(e)
     }
@@ -90,6 +91,9 @@ valid: boolean = false;
   var currentDate = new Date();
   this.master.claimDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
   this.master.status = StatusConstants.OPEN_STATUS;
+  let user = this.authService.getStoredUser();
+  this.selectedTenant = JSON.parse(user).tenant;
+  this.active = false;
   }
 
   save() {
@@ -99,13 +103,15 @@ valid: boolean = false;
         if (this.master.id) {
             this.claimService.update(this.master).subscribe({
                 next: (data) => {
-                    console.log(data)
                         this.master = data;
                         this.getAll();
                         this.messageService.add({ severity: 'success', summary: 'Successful', 
                         detail: 'Claim Updated'});
                 },
-                error: (e) => alert(e)
+                error: (e) => {
+                  this.messageService.add({ severity: 'error', summary: 'Error', 
+                  detail: e.error.message })
+                }
             });
         } else {
             this.claimService.add(this.master).subscribe({
@@ -115,7 +121,10 @@ valid: boolean = false;
                 this.messageService.add({ severity: 'success', summary: 'Successful', 
                 detail: 'Claim created successfully' });
               },
-              error: (e) => alert(e)
+              error: (e) => {
+                this.messageService.add({ severity: 'error', summary: 'Error', 
+                detail: e.error.message })
+              }
             });
           }
       this.masterDialog = false;
@@ -137,7 +146,7 @@ confirmDelete() {
         this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Claim', life: 3000 });     
       }
     }, err => {
-        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
+        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.error.message, life: 3000 });
     })
 }
 

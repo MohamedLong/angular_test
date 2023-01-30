@@ -1,7 +1,7 @@
 {
     "auth": {
         "form": {
-            "name": "Username",
+            "name": "Phone/Email",
             "firstname": "First Name",
             "lastname": "Last Name",
             "phone": "Phone",
@@ -17,12 +17,12 @@
         },
         "login": {
             "header": "Welcome",
-            "footer_text": "dont't have an account?",
+            "footer_text": "Dont't have an account?",
             "header_text": "Please use the form to sign-in Xgarage"
         },
         "signup": {
             "header": "Create Account",
-            "footer_text": "already have an account?",
+            "footer_text": "Already have an account?",
             "header_text": "Sign up with your email to get started!"
         },
         "resetpass": {
