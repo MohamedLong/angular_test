@@ -35,8 +35,8 @@
         <div class="field col-12 flex align-items-center" *ngIf="!selectedPart">
             <p-checkbox [(ngModel)]="checked" [binary]="true" (onChange)="createNewPart()"
                 inputId="binary"></p-checkbox>
-            <label for="binary" class="mb-0 ml-2">Set as a new part</label>
+            <label for="binary" class="mb-0 ml-2">{{ 'part.partDialog.setnew' | translate}}</label>
         </div>
     </div>
-    <small *ngIf="errMsg !== ''" class="p-error">{{errMsg}}</small>
+    <small *ngIf="errMsg !== ''" class="p-error">{{ 'part.partDialog.errMsg' | translate }}</small>
 </div>

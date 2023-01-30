@@ -56,7 +56,7 @@
                                 </span>
                                 <small
                                     *ngIf="submitted && !jobForm.get('claim').valid  && jobForm.get('claim').errors?.['required']"
-                                    class="p-error">claim number is required</small>
+                                    class="p-error">{{ 'job.form.Enter Calim Number' | translate }}</small>
                             </div>
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
@@ -65,13 +65,13 @@
                                     placeholder="select a job"></p-dropdown>
                                 <small
                                     *ngIf="jobFound.multiple && submitted && !jobForm.get('jobId').valid  && jobForm.get('jobId').errors?.['required']"
-                                    class="p-error">Job number is required</small>
+                                    class="p-error">{{ 'job.form.enterJob' | translate }}</small>
                                 <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100 mb-2"
                                     type="text" pInputText placeholder="{{ 'job.form.enterJob' | translate }}"
                                      />
                                 <small
                                     *ngIf="!jobFound.multiple && submitted && !jobForm.get('job').valid  && jobForm.get('job').errors?.['required']"
-                                    class="p-error">Job number is required</small>
+                                    class="p-error">{{ 'job.form.enterJob' | translate }}</small>
                             </div>
                             <div class="col-12">
                                 <p-divider align="left">
@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-12 md:col-6" *ngIf="privateSuppliersList.length > 0">
                                 <ng-container *ngFor="let supplier of privateSuppliersList">
-                                    <p-chip [removable]="true" (onRemove)="removePrivateSupplier(supplier)">
+                                    <p-chip class="mr-2" [removable]="true" (onRemove)="removePrivateSupplier(supplier)">
                                         {{supplier.name}}
                                     </p-chip>
                                 </ng-container>

@@ -346,7 +346,9 @@
             "partCategoryRequired": "Part category is required.",
             "subCategoryPlaceHolder": "Select Sub Category",
             "partSubCategoryRequired": "Part sub category is required.",
-            "searchTitle": "Search for Parts."
+            "searchTitle": "Search for Parts.",
+            "setnew": "Set as a new part",
+            "errMsg": "please select or enter a part"
         }
     },
     "USER": {
@@ -539,6 +541,16 @@
             "plateRequired": "Plate Number is Required.",
             "uploadCarImg": "Upload Car Image",
             "addCar": "Add Car"
+        }
+    },
+    "request": {
+        "title": "Request Information",
+        "form": {
+            "prefredTypes": "Preferred Parts Type",
+            "prefredTypesrequired": "please select part type",
+            "desc": "Description",
+            "descPlaceholder": "Add a short description about your parts",
+            "sendReq": "Send Request"
         }
     }
 }

@@ -12,7 +12,7 @@
     </div>
     <div class="grid pb-3">
         <div class="field col-12 md:col-6">
-            <label class="mb-2">Preferred Parts Type</label>
+            <label class="mb-2">{{ 'request.form.prefredTypes' | translate }}</label>
             <div class="flex align-items-center">
                 <ng-container *ngFor="let type of partTypes" class="field-checkbox">
                     <p-checkbox [name]="part" value="type" [value]="type" [(ngModel)]="selectedPartTypes"
@@ -22,16 +22,16 @@
             </div>
             <small
                 *ngIf="submitted && selectedPartTypes.length == 0"
-                class="p-error">please select part type</small>
+                class="p-error mt-2">{{ 'request.form.prefredTypesrequired' | translate }}</small>
         </div>
         <div class="field col-12 md:col-6">
-            <label for="">Description</label>
-            <textarea [(ngModel)]="description" placeholder="Add a short description about your parts"
+            <label for="">{{ 'request.form.desc' | translate }}</label>
+            <textarea [(ngModel)]="description" placeholder="{{ 'request.form.descPlaceholder' | translate }}"
                 class="width-100 block" type="text" pInputText required></textarea>
         </div>
     </div>
     <div class="col-12 text-right">
         <button class="width-100 md:w-20rem" type="button" pButton pRipple (click)="sendRequest()"
-            label="Send Request"></button>
+            label="{{ 'request.form.sendReq' | translate }}"></button>
     </div>
 </p-fieldset>
