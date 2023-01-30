@@ -1,5 +1,4 @@
 import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-// import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
@@ -16,7 +15,7 @@ import { NewPartComponent } from '../part/new-part/new-part.component';
         display: block;
       }`]
 })
-export class RequestComponent implements OnInit, OnChanges {
+export class RequestComponent implements OnInit {
 
     constructor(
         private requestService: RequestService,
@@ -25,88 +24,22 @@ export class RequestComponent implements OnInit, OnChanges {
         private authService: AuthService) {
         this.responseBody = {};
         this.subCategoryId = "";
-        this.dataService.name.subscribe({
-            next: (data) => {
-                this.sharedJob = data;
-                console.log('sharedJob coming from new-job component: ', this.sharedJob);
-            }
-        }).unsubscribe();
     }
 
+    submitted: boolean = false;
     sharedJob: SharedJob;
     partTypes: PartType[];
-    selectedPartTypes: PartType[];
-    description: string;
+    selectedPartTypes: PartType[] = [];
+    description: string = "";
     responseBody: any = {};
     partImages: File[] = [];
     subCategoryId: any;
-    // partElmodel: any = [];
-    req: any = {};
+    partErrorMsg: string = "";
     @Input() part: string = 'PART 1';
-    @Input() numberOfReq: number;
-
-    @Output() request = new EventEmitter<{}>();
+    @Output() request = new EventEmitter<null>();
 
     ngOnInit(): void {
         this.getPartTypes();
-        let usrId = JSON.parse(this.authService.getStoredUser()).id;
-
-        // this.requestService.newRequest.subscribe(data => {
-        //     if(data) {
-        //         console.log(data);
-        //         this.sendRequest();
-        //     }
-
-        //     // if (JSON.stringify(data) !== '{}') {
-        //     //     console.log(data)
-        //     //     // this.responseBody.jobId = data.jobId;
-        //     //     // this.responseBody.description = this.description;
-        //     //     // this.responseBody.privacy = data.privacy;
-        //     //     // this.responseBody.car = { 'id': data.car.id };
-        //     //     // this.responseBody.user = usrId;
-        //     //     // this.responseBody.locationName = data.location;
-        //     //     // this.responseBody.suppliers = data.suppliers;
-        //     //     // this.responseBody.partTypes = this.selectedPartTypes;
-
-        //     //     // this.sendRequest();
-        //     // }
-
-        // })
-
-        // this.requestService.part.subscribe(part => {
-        //     this.subCategoryId = "";
-
-        //     if (JSON.stringify(part) !== '{}') {
-        //         this.responseBody.part = {
-        //             'id': part.id,
-        //             'name': part.name,
-        //             'status': part.status
-        //         };
-
-        //         this.subCategoryId = part.subCategoryId;
-        //         // console.log(this.responseBody)
-        //     }
-        // });
-
-        // this.requestService.newRequest.subscribe(res => {
-        //     if(res) {
-        //         this.request.emit({ 'part': this.responseBody ,"subCategoryId": this.subCategoryId, "partImages": this.partImages, 'description': this.description });
-        //     }
-        // });
-
-
-    }
-
-    disbaleData() {
-        this.requestService.newRequest.next(false);
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        // console.log(changes.numberOfReq.currentValue)
-        if (changes.numberOfReq.currentValue) {
-            console.log(changes.numberOfReq.currentValue)
-            this.sendRequest();
-        }
     }
 
     getPartTypes() {
@@ -124,37 +57,78 @@ export class RequestComponent implements OnInit, OnChanges {
     }
 
     sendRequest() {
-        this.responseBody.job = this.sharedJob.id;
-        this.responseBody.car = this.sharedJob.car;
-        this.responseBody.suppliers = this.sharedJob.suppliers;
-        this.responseBody.privacy = this.sharedJob.privacy;
-         this.requestService.part.subscribe(part => {
-            this.subCategoryId = "";
+        this.request.emit();
+        this.submitted = true;
+        setTimeout(() => {
+            this.dataService.name.subscribe({
+                next: (data) => {
+                    //this.sharedJob = data;
+                    if (data && JSON.stringify(data) !== '{}') {
+                        let updatedSuppliers = [];
+                        if(data.suppliers.length > 0) {
+                            data.suppliers.forEach(element => {
+                                updatedSuppliers.push({'id': element.id})
+                            });
+                        }
 
-            if (JSON.stringify(part) !== '{}') {
-                this.responseBody.part = {
-                    'id': part.id,
-                    'name': part.name,
-                    'status': part.status
-                };
 
-                this.subCategoryId = part.subCategoryId;
-            }
-        });
-        let stringRequestBody = JSON.stringify(this.responseBody);
-        let req = { "requestBody": this.responseBody, "subCategoryId": this.subCategoryId, "partImages": this.partImages, 'description': this.description }
-    
-        this.dataService.changeObject(req);
-        console.log('request body inside requets component: ', this.responseBody);
-        //console.log(req)
-        this.request.emit(req);
-        // this.disbaleData();
-        // let RequestFormData = new FormData();
-        // for (var key in req) {
-        //     RequestFormData.append(key, req[key]);
-        // }
+                        this.responseBody.job = data.jobId;
+                        this.responseBody.description = this.description;
+                        this.responseBody.car = { 'id': data.car.id };
+                        this.responseBody.locationName = data.location;
+                        this.responseBody.suppliers = updatedSuppliers;
+                        this.responseBody.privacy = data.privacy;
+                        this.responseBody.requestTitle = data.requestTitle;
+                        this.responseBody.user = JSON.parse(this.authService.getStoredUser()).id;
+                        this.responseBody.partTypes = this.selectedPartTypes;
 
-        //call req service
+
+                        this.requestService.part.subscribe(part => {
+                            this.subCategoryId = "";
+
+                            if (JSON.stringify(part) !== '{}') {
+                                this.responseBody.part = {
+                                    'id': part.id,
+                                    'name': part.name,
+                                    'status': part.status
+                                };
+
+                                this.subCategoryId = part.subCategoryId;
+                            }
+                        });
+
+                        // console.log('req form is not valid')
+
+                        if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0) {
+                            //console.log('req form is valid')
+                            console.log('request body inside requets component: ', this.responseBody, this.subCategoryId);
+                            this.partErrorMsg = '';
+
+                            let stringRequestBody = JSON.stringify(this.responseBody);
+                            let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId, "partImages": this.partImages }
+
+
+                            let reqFormData = new FormData();
+                            for (var key in req) {
+                                reqFormData.append(key, req[key]);
+                            }
+
+
+                            this.requestService.add(reqFormData).subscribe(res => {
+                                console.log(res)
+                            }, err => {
+                                console.log(err)
+                            })
+                        }
+
+                        if(!this.responseBody.part) {
+                            this.partErrorMsg = 'please select or enter a part';
+                        }
+
+                    }
+                }
+            }).unsubscribe();
+        }, 1000);
     }
 }
 

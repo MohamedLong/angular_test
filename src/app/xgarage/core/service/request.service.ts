@@ -10,10 +10,8 @@ import { BehaviorSubject, throwError } from 'rxjs';
 })
 export class RequestService extends GenericService<any> {
     constructor(protected http: HttpClient) {
-        super(http, config.coreApiUrl + '/');
+        super(http, config.coreApiUrl + '/request');
     }
 
-    info: BehaviorSubject<any> = new BehaviorSubject({});
     part: BehaviorSubject<any> = new BehaviorSubject({});
-    newRequest: BehaviorSubject<any> = new BehaviorSubject(false);
 }

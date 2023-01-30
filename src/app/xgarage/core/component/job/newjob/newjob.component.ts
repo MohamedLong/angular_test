@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -32,9 +32,18 @@ import { SupplierService } from '../../../service/supplier.service';
         min-height: auto;
     }
     .add-part-img {
-        left: -8px;
+        left: -14px;
         bottom: 8px;
-        cursor: pointer;
+        border: none;
+        background-color: transparent;
+        }
+
+        .add-part-img:disabled {
+            cursor: not-allowed;
+        }
+
+        .p-chips .p-chips-multiple-container .p-chips-token {
+            margin-bottom: 0.25rem;
         }
     `],
     providers: [MessageService]
@@ -53,12 +62,12 @@ export class NewJobComponent implements OnInit {
     insuranceFrom = Object.keys(InsuranceType);
     jobForm: FormGroup = this.formBuilder.group({
         insuranceFrom: [''],
-        claim: [''],
+        claim: ['', Validators.required],
         user: [''],
         job: [''],
-        jobId: [''],
+        jobId: ['', Validators.required],
         location: [''],
-        privacy: ['Public'],
+        privacy: ['Public', Validators.required],
         suppliers: [],
         car: [''],
         carDocument: [''],
@@ -70,11 +79,12 @@ export class NewJobComponent implements OnInit {
         found: false,
         multiple: false
     };
-    suppliersList = [];
+    privateSuppliersList = [];
     jobs: any[] = [];
     claimId: number;
     requests: any[];
     displayPrivateSuppliers: boolean = false;
+    addOneMoreRequest: boolean = false;
     numberOfrequests: number = 1;
     @Input() type: string = 'new job';
     constructor(private formBuilder: FormBuilder,
@@ -89,8 +99,6 @@ export class NewJobComponent implements OnInit {
     ngOnInit(): void {
         //set location
         let location = JSON.parse(this.authService.getStoredUser()).tenant.location;
-        let user = JSON.parse(this.authService.getStoredUser()).id;
-        this.jobForm.patchValue({ user });
         this.jobForm.patchValue({ location });
         this.jobForm.get('location').disable();
     }
@@ -107,6 +115,10 @@ export class NewJobComponent implements OnInit {
         });
 
         //console.log(this.jobForm.get('car').value);
+        this.jobForm.addControl('requestTitle', new FormControl);
+        this.jobForm.patchValue({
+            'requestTitle': `${event.brandId.brandName} ${event.carModelId.name} ${event.carModelYearId.year}  ${event.carModelTypeId.type}`
+        })
         this.clickToNavigate('request');
     }
 
@@ -173,21 +185,28 @@ export class NewJobComponent implements OnInit {
         clearTimeout(this.ClaimTypingTimer);
     }
 
-    //to review
-    onjobFormSubmit() {
-        if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
-            console.log('initiate req')
-            // this.request.emit(this.jobForm.value);
-            this.requestService.info.next(this.jobForm.getRawValue());
+    onJobFormSubmit() {
+        //console.log('emitted')
+        this.submitted = true;
+        if(this.jobForm.valid) {
+            if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
+                console.log('initiate req')
+                this.dataService.changeObject(this.jobForm.getRawValue());
+            } else {
+                console.log('add new job then initiate req')
+                this.addNewJob();
+            }
+
+            this.addOneMoreRequest = true;
+            this.submitted = false;
         } else {
-            console.log('add new job then initiate req')
-            this.addNewJob();
+            console.log('form is not valid');
         }
+
     }
 
     addNewJob() {
         //prepare job body for request
-        console.log(this.claimId)
         let jobBody = {
             jobNo: this.jobForm.get('job').value,
             claim: this.claimId,
@@ -196,12 +215,11 @@ export class NewJobComponent implements OnInit {
         }
 
         this.jobService.add(jobBody).subscribe(res => {
-
             this.jobForm.patchValue({ 'jobId': res.id });
 
-            if (this.type == 'new req' && this.jobForm.get('jobId').value !== '') {
-                // this.request.emit(this.jobForm.value);
-                this.requestService.info.next(this.jobForm.getRawValue());
+            if (this.jobForm.get('jobId').value !== '') {
+
+                this.dataService.changeObject(this.jobForm.getRawValue());
             }
 
         }, err => {
@@ -215,6 +233,10 @@ export class NewJobComponent implements OnInit {
             this.getSupplierByBrandId();
             this.displayPrivateSuppliers = true;
         } else {
+            this.privateSuppliersList = [];
+            this.jobForm.patchValue({
+                'suppliers': []
+            });
             this.displayPrivateSuppliers = false;
         }
     }
@@ -227,20 +249,7 @@ export class NewJobComponent implements OnInit {
 
     addRequest() {
         this.numberOfrequests++;
-        // console.log('add part then init req')
-
-        let jobBody: SharedJob =  {
-            id: this.jobForm.get('jobId').value,
-            car: this.jobForm.get('car').value,
-            privacy: this.jobForm.get('privacy').value,
-            suppliers: this.jobForm.get('suppliers').value
-        }
-        this.dataService.changeObject(jobBody);
-
-        this.requestService.newRequest.next(true);
-
-        //this.requestService.info.next(this.jobForm.getRawValue());
-        //console.log(this.numberOfrequests)
+        this.addOneMoreRequest = false;
     }
 
     selectSupplier(value: Supplier[]) {
@@ -248,44 +257,43 @@ export class NewJobComponent implements OnInit {
         console.log(value)
         if (value.length > 0) {
             this.supplierSelected = true;
-            value.forEach((val,i) => {
-                this.suppliersList.push(val[i].name)
-            })
 
         } else {
             this.supplierSelected = false;
         }
+
+        this.privateSuppliersList = value;
     }
 
-    onRequest(event) {
-        //console.log('this is coming from req:', event);
-        // let updatedRequests = [];
+    removePrivateSupplier(value) {
+       // console.log(value)
+        let updatedPrivateSuplliers = this.jobForm.get('suppliers').value.filter(supplier => {
+            return supplier.id !== value.id;
+        });
 
-        // if (this.requests.length > 0) {
-        //     this.requests.forEach(req => {
-        //         if (event.subCategoryId && req.subCategoryId !== event.subCategoryId) {
-        //             this.requests.push(event)
-        //         }
-        //     });
-        // } else {
-        //     this.requests.push(event);
-        // }
+        this.jobForm.patchValue({
+            'suppliers': updatedPrivateSuplliers
+        });
 
+        this.privateSuppliersList = updatedPrivateSuplliers
 
+        if(this.jobForm.get('suppliers').value.length == 0) {
+            this.jobForm.patchValue({
+                'privacy': 'Public'
+            });
 
-        // console.log(this.requests)
+            this.supplierSelected = false;
+        }
     }
 
-    printRequest(event) {
-
-        this.dataService.name.subscribe({
-            next: (data) => {
-                this.requests.push(data);
-                console.log('incoming request from request component: ', data);
-            }
-        }).unsubscribe();
-        console.log('request coming from request component: ', event);
-        // this.requests.push(event);
+    resetPrivacy() {
+        //console.log(this.privateSuppliersList)
+        if(this.privateSuppliersList.length == 0) {
+            this.jobForm.patchValue({
+                'suppliers': this.privateSuppliersList,
+                'privacy': 'Public'
+            });
+        }
     }
 
 }
