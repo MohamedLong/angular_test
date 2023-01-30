@@ -525,26 +525,6 @@
         }
     },
 
-    "request": {
-        "title": "Requests",
-        "table_footer": "In total there are {{length}} Requests",
-        "tableColumn": {
-            "id": "ID",
-            "requestTitle": "Request Title",
-            "description": "Description",
-            "location": "Request Location",
-            "bidDate": "Bid Closing Date",
-            "interestedSuppliers": "Interested Suppliers",
-            "privacy": "Privacy",
-            "documents": "Documents",
-            "partName": "Part Name",
-            "partTypes": "Part Types",
-            "status": "Status"
-        },
-        "requestDialog": {
-            "title": "Request Details"
-        }
-    },
     "car": {
         "title": "Car Information",
         "form": {
@@ -565,14 +545,32 @@
             "addCar": "Add Car"
         }
     },
+  
     "request": {
         "title": "Request Information",
+        "table_footer": "In total there are {{length}} Requests",
         "form": {
             "prefredTypes": "Preferred Parts Type",
             "prefredTypesrequired": "please select part type",
             "desc": "Description",
             "descPlaceholder": "Add a short description about your parts",
             "sendReq": "Send Request"
+        },
+        "tableColumn": {
+            "id": "ID",
+            "requestTitle": "Request Title",
+            "description": "Description",
+            "location": "Request Location",
+            "bidDate": "Bid Closing Date",
+            "interestedSuppliers": "Interested Suppliers",
+            "privacy": "Privacy",
+            "documents": "Documents",
+            "partName": "Part Name",
+            "partTypes": "Part Types",
+            "status": "Status"
+        },
+        "requestDialog": {
+            "title": "Request Details"
         }
     }
 }
