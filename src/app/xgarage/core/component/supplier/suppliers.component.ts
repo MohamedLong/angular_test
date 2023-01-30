@@ -140,7 +140,6 @@ export class SuppliersComponent extends GenericComponent implements OnInit {
 
     edit(supplierId: number) {
         this.supplierService.getSupplierById(supplierId).subscribe((res: Supplier) => {
-            console.log(res, res.phoneNumber)
             this.selectedBrandsList = res.brand;
             this.selectedPartTypesList = res.partTypes;
             this.selectedServiceTypesList = res.serviceTypes;

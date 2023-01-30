@@ -7,10 +7,11 @@ import { DatePipe } from '@angular/common';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
-import { GenericService } from 'src/app/xgarage/common/generic/genericservice';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { RequestService } from '../../service/request.service';
 import { JobService } from '../../service/job.service';
+import { PartType } from 'src/app/xgarage/common/model/parttype';
+import { InsuranceType } from '../../model/insurancetyps';
 
 @Component({
   selector: 'job-details',
@@ -40,6 +41,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     ref: DynamicDialogRef;
     hasRef: boolean = false;
+    insuranceTypes = Object.values(InsuranceType);
+    selectedInsuranceType: string;
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe, public statusService: StatusService) {
@@ -65,7 +68,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
 
     getAllByParent() {
-        this.requestService.getByParent(this.master.id).subscribe({
+        this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
                 this.details = requests;
                 this.loading = false;
@@ -76,6 +79,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     editParentAction() {
         this.originalMaster = { ...this.master};
+        this.selectedInsuranceType = this.master.insuranceType;
         this.masterDialog = true;
     }
 
@@ -101,6 +105,20 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             );
     }  
 
+    getPartTypesAsString(partTypes: PartType[]) {
+        let partTypeNames: string = '';
+        partTypes.forEach(t => {
+            if(partTypeNames == '') {
+                partTypeNames = t.partType;
+            }else{
+                partTypeNames = partTypeNames + ', ' + t.partType;
+            }
+        })
+        if(partTypeNames == '')  {
+            partTypeNames = 'None';
+        }
+        return partTypeNames;
+    }
 
 }
 

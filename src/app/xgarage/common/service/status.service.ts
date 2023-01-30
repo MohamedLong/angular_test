@@ -7,6 +7,6 @@ import { Status } from "../model/status";
 @Injectable()
 export class StatusService extends GenericService<Status> {
     constructor(http: HttpClient){
-        super(http, config.apiUrl + '/v1/status');
+        super(http, config.coreApiUrl + '/status');
     }
 }
