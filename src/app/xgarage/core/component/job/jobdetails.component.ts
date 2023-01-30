@@ -120,6 +120,5 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         return partTypeNames;
     }
 
-
 }
 
