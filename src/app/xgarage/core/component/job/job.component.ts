@@ -24,7 +24,7 @@ import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 export class JobComponent extends GenericComponent implements OnInit {
 
   constructor(public route: ActivatedRoute, private authService: AuthService, private claimService: ClaimService,
-    private statusService: StatusService, private router: Router, private jobService: JobService, private dataService: DataService<Job>,
+    private router: Router, private jobService: JobService, private dataService: DataService<Job>,
     public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
     super(route, datePipe, breadcrumbService);
 }

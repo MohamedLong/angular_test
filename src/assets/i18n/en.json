@@ -494,6 +494,7 @@
             "insuranceFrom": "Insurance From",
             "claimNo": "Claim Number",
             "jobCardNo": "Job Card Number",
+            "jobNoRequired": "Job Number is required.",
             "addMoreDetails": "Add More Details",
             "garageLocation": "Garage Location",
             "bidDate": "Bid Closing Date",
@@ -517,7 +518,29 @@
 
         },
         "jobDialog": {
+            "newJob": "Add Job",
             "title": "Job Details"
+        }
+    },
+
+    "request": {
+        "title": "Requests",
+        "table_footer": "In total there are {{length}} Requests",
+        "tableColumn": {
+            "id": "ID",
+            "requestTitle": "Request Title",
+            "description": "Description",
+            "location": "Request Location",
+            "bidDate": "Bid Closing Date",
+            "interestedSuppliers": "Interested Suppliers",
+            "privacy": "Privacy",
+            "documents": "Documents",
+            "partName": "Part Name",
+            "partTypes": "Part Types",
+            "status": "Status"
+        },
+        "requestDialog": {
+            "title": "Request Details"
         }
     },
     "car": {

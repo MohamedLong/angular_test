@@ -7,8 +7,8 @@
             <div class="formgrid grid">
                 <div class="field col-12 md:col-6">
                     <span class="p-buttonset">
-                        <button pButton pRipple label="{{ 'operations.addItem' | translate }}" icon="pi pi-plus"
-                        class="p-button-success mr-2 mb-3" (click)="openNew()" [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
+                        <button pButton pRipple label="{{ 'job.jobDialog.newJob' | translate }}" icon="pi pi-plus"
+                        class="p-button-success mr-2 mb-3" [routerLink]="['/jobs/new-job']" [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
                     </span>
                 </div>
             <div class="field col-12 md:col-6">
@@ -88,7 +88,7 @@
                     </p-table>
 
                     <div class="pt-6">
-                        <h6>{{ 'performa.separatorTitle' | translate }}</h6>
+                        <h5>{{ 'request.title' | translate }}</h5>
                     </div>
 
                     <p-table dataKey="id" #dt [columns]="cols" [rows]="10" [value]="details"
@@ -96,45 +96,41 @@
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th pColumn="id">{{ 'common.id' | translate }}</th>
-                            <th pColumn="item">{{ 'common.item' | translate }}</th>
-                            <th pColumn="description">{{ 'common.description' | translate }}</th>
-                            <th pColumn="metric">{{ 'common.metric' | translate }}</th>
-                            <th pColumn="unitPrice">{{ 'common.unitPrice' | translate }}</th>
-                            <th pColumn="qty">{{ 'common.qty' | translate }}</th>
-                            <th pColumn="total">{{ 'common.total' | translate }}</th>
+                            <th pColumn="requestTitle">{{ 'request.tableColumn.requestTitle' | translate }}</th>
+                            <th pColumn="privacy">{{ 'request.tableColumn.privacy' | translate }}</th>
+                            <th pColumn="part.name">{{ 'request.tableColumn.partName' | translate }}</th>
+                            <th pColumn="part.partTypes">{{ 'request.tableColumn.partTypes' | translate }}</th>
+                            <th pColumn="status.nameEn">{{ 'common.status' | translate }}</th>
                             <th [hidden]="(printingMode)" style="text-align:center">{{ 'operations.operations' | translate }}</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-performDetail>
+                    <ng-template pTemplate="body" let-request>
                         <tr>
                             <td>
-                                {{performDetail.id}}
+                                {{request.id}}
                             </td>
                             <td>
-                                {{performDetail.item.itemName}}
+                                {{request.requestTitle}}
                             </td>
                             <td>
-                                {{performDetail.description}}
+                                {{request.privacy}}
                             </td>
                             <td>
-                                {{performDetail.metric.metricName}}
+                                {{request.part.name}}
                             </td>
                             <td>
-                                {{performDetail.unitPrice | number}}
+                                {{getPartTypesAsString(request.partTypes)}}
                             </td>
                             <td>
-                                {{performDetail.qty}}
-                            </td>
-                            <td>
-                                {{performDetail.total | number}}
+                                {{request.status.nameEn}}
                             </td>
                             <ng-container>
                                 <td [hidden]="(printingMode)" style="text-align:center">
                                     <button pButton pRipple type="button" icon="pi pi-pencil"
-                                        (click)="editAction(performDetail)" [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                        (click)="editAction(request)" [disabled]="!(master.status.id == 1 && editAuth===true)"
                                         class="p-button-rounded p-button-text hidden-print"></button>
                                     <button pButton pRipple type="button" icon="pi pi-trash"
-                                        (click)="deleteAction(performDetail)" [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                        (click)="deleteAction(request)" [disabled]="!(master.status.id == 1 && editAuth===true)"
                                         class="p-button-rounded p-button-text hidden-print"></button>
                                 </td>
                             </ng-container>
@@ -144,59 +140,19 @@
             </div>
 
                 <p-dialog [(visible)]="masterDialog" [style]="{width: '700px'}"
-                    header="{{ 'performa.performaDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
+                    header="{{ 'job.jobDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
                     <ng-template pTemplate="content">
                         <div class="formgrid grid">
-                            <!-- <div class="field col-12 md:col-4">
-                                <label for="orderId">{{ 'performa.tableColumn.perfId' | translate }}</label>
-                                <input type="number" pInputText id="orderId" [(ngModel)]="master.orderId" required
-                                    autofocus disabled="true"/>
-                                <small class="p-error" *ngIf="submitted && !master.orderId">{{
-                                    'performa.performaDialog.perfIdRequired' | translate }}</small>
-                            </div> -->
-                            <div class="field col-12 md:col-4">
-                                <label>{{ 'common.saleCost' | translate }}</label>
-                                <p-dropdown [options]="saleAccounts" [(ngModel)]="selectedSaleAccount" optionLabel="name"
-                                [showClear]="true" [autoDisplayFirst]="false" required autofocus></p-dropdown>
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="orderDate">{{ 'performa.tableColumn.perfDate' | translate }}</label>
-                                <input type="date" pInputText id="orderDate" [(ngModel)]="master.orderDate" required
-                                    autofocus />
-                                <small class="p-error" *ngIf="submitted && !master.orderDate">{{
-                                    'performa.performaDialog.perfDateRequired' | translate }}</small>
-                            </div>
-                            <div class="field col-12 md:col-4">
-                                <label for="dueDate">{{ 'performa.tableColumn.dueDate' | translate }}</label>
-                                <input [min]="minDate" type="date" pInputText id="dueDate" [(ngModel)]="master.dueDate"
-                                    required autofocus />
-                                <small class="p-error" *ngIf="submitted && !master.dueDate">{{
-                                    'performa.performaDialog.dueDateRequired' | translate }}</small>
-                            </div>
-                            <div class="field col-12 md:col-7">
-                                <label>{{ 'common.customer' | translate }}</label>
-                                <p-autoComplete [(ngModel)]="selectedParty" [suggestions]="filteredParties"
-                                    styleClass="w-full" (completeMethod)="filterParty($event)" field="partyName"
-                                    [dropdown]="true" required autofocus>
-                                </p-autoComplete>
-                            </div>
-                            <div class="field col-12 md:col-3">
-                                <label>{{ 'common.currency' | translate }}</label>
-                                <p-dropdown [options]="currencies" [(ngModel)]="selectedCurrency"
-                                    optionLabel="currencyCode" [showClear]="true" [autoDisplayFirst]="false" required
-                                    autofocus (onChange)="onSelectCurrency(selectedCurrency)"></p-dropdown>
-                            </div>
-                            <div class="field col-12 md:col-2">
-                                <label for="cuRate">{{ 'common.cuRate' | translate }}</label>
-                                <input type="number" pInputText id="number" [(ngModel)]="master.cuRate" required
-                                    autofocus />
-                                <small class="p-error" *ngIf="parentSubmitted && !master.cuRate">{{
-                                    'common.cuRateRequired' | translate }}</small>
+                            <div class="field col-12">
+                                <label>{{ 'job.tableColumn.jobNo' | translate }}</label>
+                                <p-dropdown [options]="insuranceTypes" optionLabel="name" [(ngModel)]="selectedInsuranceType" required autofocus></p-dropdown>
                             </div>
                             <div class="field col-12">
-                                <label>{{ 'common.notes' | translate }}</label>
-                                <textarea rows="5" cols="30" class="w-full" pInputTextarea
-                                    [(ngModel)]="master.notes"></textarea>
+                                <label for="jobNo">{{ 'job.tableColumn.jobNo' | translate }}</label>
+                                <input type="text" pInputText id="jobNo" [(ngModel)]="master.jobNo" required
+                                    autofocus />
+                                <small class="p-error" *ngIf="submitted && !master.jobNo">{{
+                                    'job.form.jobNoRequired' | translate }}</small>
                             </div>
                         </div>
                     </ng-template>
@@ -256,33 +212,6 @@
                             class="p-button-text" (click)="save()" [disabled]="!(selectedItem && selectedMetric)"></button>
                     </ng-template>
                 </p-dialog>
-
-                <p-dialog [(visible)]="discountDialog" [style]="{width: '400px'}"
-                header="{{ 'common.discountDialog' | translate }}" [modal]="true"
-                styleClass="p-fluid">
-                <ng-template pTemplate="content">
-                    <div class="field col-12">
-                        <label for="discountType">{{ 'common.discountType' | translate }}</label>
-                        <p-dropdown [options]="discountTypeList" [(ngModel)]="selectedDiscountType" optionLabel="label" [showClear]="true"
-                        [autoDisplayFirst]="false"></p-dropdown>
-                    </div>
-                    <div class="field col-12">
-                        <label for="discount">{{ 'common.discount' | translate }}</label>
-                        <p-inputNumber id="discount" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" min=0 [(ngModel)]="master.discount" (ngModelChange)="calculateNetAmount()" required autofocus></p-inputNumber>
-                        <small class="p-error" *ngIf="parentSubmitted && !master.discount">{{ 'common.discountRequired' | translate }}</small>
-                    </div>
-                    <div class="field col-12">
-                        <label for="netAmount">{{ 'common.grandTotal' | translate }}</label>
-                        <p-inputNumber id="netAmount" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" min=0 [(ngModel)]="master.netAmount" required autofocus [disabled]="true"></p-inputNumber>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="footer">
-                    <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
-                        class="p-button-text" (click)="hideDiscountDialog()"></button>
-                    <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
-                        class="p-button-text" (click)="saveAll()" [disabled]="!(selectedDiscountType && master.status.id == 1 && editAuth===true)"></button>
-                </ng-template>
-            </p-dialog>
 
 
                 <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}"

@@ -11,7 +11,7 @@ export interface Request extends MasterEntity{
     description?: string;
     privacy?: Privacy;
     part?: Part;
-    documents?: Document;
+    documents?: Document[];
     suppliers?: Supplier[];
     notInterestedSuppliers?: Supplier[];
     questions?: Mcq[];
