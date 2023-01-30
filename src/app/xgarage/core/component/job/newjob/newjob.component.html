@@ -6,7 +6,7 @@
                     <div class="grid col py-3">
                         <!-- (click)="clickToNavigate('car-info')" -->
                         <div class="col-6 tab flex align-items-center justify-content-center car-info-tab"
-                             [ngClass]="{'selected-tab': activeTab == 'car-info'}">
+                             [ngClass]="{'selected-tab': activeTab == 'car-info'}" (click)="clickToNavigate('car-info')">
                             <div class="title">{{ 'car.title' | translate }}</div>
                         </div>
                         <!-- (click)="clickToNavigate('request')"  -->

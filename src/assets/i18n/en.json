@@ -348,7 +348,7 @@
             "partSubCategoryRequired": "Part sub category is required.",
             "searchTitle": "Search for Parts.",
             "setnew": "Set as a new part",
-            "errMsg": "please select or enter a part"
+            "errMsg": "{{msg}}"
         }
     },
     "USER": {
@@ -524,7 +524,6 @@
             "title": "Job Details"
         }
     },
-
     "request": {
         "title": "Requests",
         "table_footer": "In total there are {{length}} Requests",
@@ -541,6 +540,13 @@
             "partTypes": "Part Types",
             "status": "Status"
         },
+        "form": {
+            "prefredTypes": "Preferred Parts Type",
+            "prefredTypesrequired": "please select part type",
+            "desc": "Description",
+            "descPlaceholder": "Add a short description about your parts",
+            "sendReq": "{{text}}"
+        },
         "requestDialog": {
             "title": "Request Details"
         }
@@ -551,6 +557,10 @@
             "minChassieErorr": "Min Chassis Number is 13.",
             "chassisNo": "Chassis Number",
             "chassisNoRequired": "Chassis Number is Required.",
+            "brandRequired": "Brand is Required.",
+            "modelRequired": "Brand Model is Required.",
+            "yearRequired": "Car Year is Required.",
+            "specRequired": "Car Specification is Required.",
             "licencePlate": "Licence Plate",
             "emptybrand": "Please Enter Chassis Number First",
             "model": "Model",
@@ -563,16 +573,6 @@
             "plateRequired": "Plate Number is Required.",
             "uploadCarImg": "Upload Car Image",
             "addCar": "Add Car"
-        }
-    },
-    "request": {
-        "title": "Request Information",
-        "form": {
-            "prefredTypes": "Preferred Parts Type",
-            "prefredTypesrequired": "please select part type",
-            "desc": "Description",
-            "descPlaceholder": "Add a short description about your parts",
-            "sendReq": "Send Request"
         }
     }
 }

@@ -40,10 +40,10 @@ export class NewCarComponent implements OnInit {
 
     carForm: FormGroup = this.formBuilder.group({
         chassisNumber: ['', [Validators.minLength(13), Validators.required]],
-        brandId: [''],
-        carModelId: [''],
-        carModelYearId: [''],
-        carModelTypeId: [''],
+        brandId: ['', Validators.required],
+        carModelId: ['', Validators.required],
+        carModelYearId: ['', Validators.required],
+        carModelTypeId: ['', Validators.required],
         plateNumber: ['', Validators.required],
         gearType: ['Automatic'],
     });

@@ -27,21 +27,33 @@
                 <p-dropdown [options]="brands" formControlName="brandId" placeholder="Select a Brand"
                     optionLabel="brandName" (onChange)="getBrandCarModels($event.value)"
                     emptyMessage="{{ 'car.form.emptybrand' | translate }}"></p-dropdown>
+                    <small
+                        *ngIf="submitted && !carForm.get('brandId').valid  && carForm.get('brandId').errors?.['required']"
+                        class="p-error">{{ 'car.form.brandRequired' | translate }}</small>
             </div>
             <div class="col-12 md:col-6">
                 <label class="block mb-2">{{ 'car.form.model' | translate }}</label>
                 <p-dropdown [options]="carModels" formControlName="carModelId" placeholder="Select a Model"
                     optionLabel="name" emptyMessage="{{ 'car.form.emptymodel' | translate }}"></p-dropdown>
+                    <small
+                        *ngIf="submitted && !carForm.get('carModelId').valid  && carForm.get('carModelId').errors?.['required']"
+                        class="p-error">{{ 'car.form.modelRequired' | translate }}</small>
             </div>
             <div class="col-12 md:col-6">
                 <label class="block mb-2">{{ 'car.form.year' | translate }}</label>
                 <p-dropdown [options]="carModelYears" formControlName="carModelYearId"
                     placeholder="{{ 'car.form.selectyear' | translate }}" optionLabel="year"></p-dropdown>
+                    <small
+                        *ngIf="submitted && !carForm.get('carModelYearId').valid  && carForm.get('carModelYearId').errors?.['required']"
+                        class="p-error">{{ 'car.form.yearRequired' | translate }}</small>
             </div>
             <div class="col-12 md:col-6">
                 <label class="block mb-2">{{ 'car.form.spec' | translate }}</label>
                 <p-dropdown [options]="carModelTypes" formControlName="carModelTypeId"
                     placeholder="{{ 'car.form.selectspec' | translate }}" optionLabel="type"></p-dropdown>
+                    <small
+                        *ngIf="submitted && !carForm.get('carModelTypeId').valid  && carForm.get('carModelTypeId').errors?.['required']"
+                        class="p-error">{{ 'car.form.specRequired' | translate }}</small>
             </div>
             <div class="col-12 md:col-6">
                 <label class="block mb-2">{{ 'car.form.gearbox' | translate }}</label>

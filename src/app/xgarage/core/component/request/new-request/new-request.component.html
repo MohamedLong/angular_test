@@ -31,8 +31,7 @@
         </div>
     </div>
     <div class="col-12 text-right">
-        <button class="width-100 md:w-20rem" type="button" pButton pRipple (click)="sendRequest()"
-            label="{{ 'request.form.sendReq' | translate }}"></button>
+        <button icon="{{isSending? 'pi pi-spin pi-spinner':'pi pi-check'}}" iconPos="right" class="width-100 md:w-20rem" type="button" pButton pRipple (click)="sendRequest()"
+            label="{{ 'request.form.sendReq' | translate: {'text': buttonTxt} }}" [disabled]="blocked"></button>
     </div>
 </p-fieldset>
-

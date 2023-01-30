@@ -96,6 +96,9 @@ export class NewJobComponent implements OnInit {
         private messageService: MessageService) { }
 
     ngOnInit(): void {
+        // set user id
+        let user = JSON.parse(this.authService.getStoredUser()).id;
+        this.jobForm.patchValue({ user });
         //set location
         let location = JSON.parse(this.authService.getStoredUser()).tenant.location;
         this.jobForm.patchValue({ location });
@@ -129,14 +132,26 @@ export class NewJobComponent implements OnInit {
         this.ClaimTypingTimer = setTimeout(() => {
             if (this.jobForm.get('claim').value !== "") {
                 this.jobService.getJobByClaimNumber(this.jobForm.get('claim').value).subscribe(res => {
-                    // console.log(res)
+                    console.log(res)
                     this.claimId = res.claimId;
                     if (res.jobs.length > 0) {
-                        if (res.jobs.length == 1) {
+                        let updatedJobs = res.jobs.filter(job => {
+                            return job.userId == this.jobForm.get('user').value;
+                        });
 
-                            this.jobForm.patchValue({ 'job': res.jobs[0].jobNo, 'jobId': res.jobs[0].id });
+                        // console.log(updatedJobs)
+                        if(updatedJobs.length == 0) {
+                            this.jobs = [];
+                            this.jobForm.patchValue({ 'job': "", 'jobId': 0 });
+                            this.jobFound.multiple = false;
+                            this.jobFound.found = false;
 
-                        } else if (res.jobs.length > 1) {
+                            console.log(this.jobs, this.jobForm.get('jobId').value)
+                        }
+                        else if(updatedJobs.length == 1) {
+                            this.jobForm.patchValue({ 'job': updatedJobs[0].jobNo, 'jobId': updatedJobs[0].id });
+                        }
+                        else if (updatedJobs.length > 1) {
                             this.jobFound.multiple = true;
                             this.jobFound.found = true;
 
@@ -200,6 +215,7 @@ export class NewJobComponent implements OnInit {
             this.submitted = false;
         } else {
             console.log('form is not valid');
+            console.log(this.jobForm.errors);
         }
 
     }
