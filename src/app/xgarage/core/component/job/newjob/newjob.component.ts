@@ -1,11 +1,10 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { Privacy } from 'src/app/xgarage/common/model/privacy';
-import { SharedJob } from '../../../dto/sharedjob';
 import { InsuranceType } from '../../../model/insurancetype';
 import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
@@ -48,7 +47,7 @@ import { RequestComponent } from '../../request/request.component';
     `],
     providers: [MessageService]
 })
-export class NewJobComponent implements OnInit, AfterViewInit {
+export class NewJobComponent implements OnInit {
 
     activeTab = 'car-info';
 
@@ -87,20 +86,14 @@ export class NewJobComponent implements OnInit, AfterViewInit {
     addOneMoreRequest: boolean = false;
     numberOfrequests: number = 1;
     @Input() type: string = 'new job';
-    @ViewChild(RequestComponent) RequestComponent;
 
     constructor(private formBuilder: FormBuilder,
         private jobService: JobService,
-        private requestService: RequestService,
         private authService: AuthService,
         private calimService: ClaimService,
         private supplierService: SupplierService,
         private dataService: DataService<any>,
         private messageService: MessageService) { }
-
-    ngAfterViewInit(): void {
-        this.RequestComponent.sendRequest();
-    }
 
     ngOnInit(): void {
         //set location
@@ -254,17 +247,6 @@ export class NewJobComponent implements OnInit, AfterViewInit {
     }
 
     addRequest() {
-
-        this.ngAfterViewInit();
-        // this.childComponent.sendRequest();
-
-        // this.dataService.name.subscribe({
-        //     next: (data) => {
-        //         this.requests.push(data);
-        //         console.log('incoming request from request component: ', data);
-        //     }
-        // }).unsubscribe();
-
         this.numberOfrequests++;
         this.addOneMoreRequest = false;
     }
