@@ -525,7 +525,7 @@
         }
     },
     "request": {
-        "title": "Requests",
+        "title": "Request Information",
         "table_footer": "In total there are {{length}} Requests",
         "tableColumn": {
             "id": "ID",
@@ -551,6 +551,7 @@
             "title": "Request Details"
         }
     },
+
     "car": {
         "title": "Car Information",
         "form": {
