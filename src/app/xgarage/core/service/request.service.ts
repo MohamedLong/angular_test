@@ -7,13 +7,13 @@ import { BehaviorSubject, throwError } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-export class RequestService extends GenericService<Request> {
+export class RequestService extends GenericService<any> {
     constructor(protected http: HttpClient) {
         super(http, config.coreApiUrl + '/request');
     }
 
     public getByJob(jobId: number){
-        return this.http.get<Request[]>(this.apiServerUrl + '/job/' + jobId);
+        return this.http.get<any[]>(this.apiServerUrl + '/job/' + jobId);
     }
 
     part: BehaviorSubject<any> = new BehaviorSubject({});
