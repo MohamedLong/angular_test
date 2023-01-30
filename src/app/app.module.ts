@@ -155,7 +155,7 @@ import {MenuService} from './app.menu.service';
 import {AppBreadcrumbService} from './app.breadcrumb.service';
 import {AppContactusComponent} from './pages/app.contactus.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-
+import {BlockUIModule} from 'primeng/blockui';
 // import dayGridPlugin from '@fullcalendar/daygrid';
 // import timeGridPlugin from '@fullcalendar/timegrid';
 // import interactionPlugin from '@fullcalendar/interaction';
@@ -214,6 +214,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 
 @NgModule({
     imports: [
+        BlockUIModule,
         CommonModule,
         AuthModule,
         BrowserModule,
@@ -394,8 +395,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,
-        CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService, JobService, DataService, 
-        PhotoService, ProductService, MenuService, AppBreadcrumbService, MetricService, StatusService, TenantService, CurrencyService, RequestService, 
+        CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService, JobService, DataService,
+        PhotoService, ProductService, MenuService, AppBreadcrumbService, MetricService, StatusService, TenantService, CurrencyService, RequestService,
         DialogService, UserSubMenuService, UserMainMenuService, MainMenuService, SubMenuService, PermissionService, RoleService, RolePermissionService,
         ClaimService
     ],

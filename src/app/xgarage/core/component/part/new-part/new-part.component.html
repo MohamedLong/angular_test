@@ -38,5 +38,5 @@
             <label for="binary" class="mb-0 ml-2">{{ 'part.partDialog.setnew' | translate}}</label>
         </div>
     </div>
-    <small *ngIf="errMsg !== ''" class="p-error">{{ 'part.partDialog.errMsg' | translate }}</small>
+    <small *ngIf="errMsg !== ''" class="p-error">{{ 'part.partDialog.errMsg' | translate: {'msg': errMsg} }}</small>
 </div>

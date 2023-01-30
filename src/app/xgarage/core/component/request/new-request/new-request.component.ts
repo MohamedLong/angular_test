@@ -1,5 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
 import { PartService } from '../../../service/part.service';
@@ -34,6 +35,9 @@ subCategoryId: any;
 partErrorMsg: string = "";
 @Input() part: string = 'PART 1';
 @Output() request = new EventEmitter<null>();
+blocked: boolean = false;
+isSending: boolean = false;
+buttonTxt = 'Send Request';
 
 ngOnInit(): void {
     this.getPartTypes();
@@ -56,13 +60,16 @@ uploadPartImages(e) {
 sendRequest() {
     this.request.emit();
     this.submitted = true;
+
     setTimeout(() => {
         this.dataService.name.subscribe({
             next: (data) => {
                 //this.sharedJob = data;
                 if (data && JSON.stringify(data) !== '{}') {
+                    console.log(data)
+
                     let updatedSuppliers = [];
-                    if(data.suppliers.length > 0) {
+                    if(data.suppliers && data.suppliers.length > 0) {
                         data.suppliers.forEach(element => {
                             updatedSuppliers.push({'id': element.id})
                         });
@@ -76,7 +83,7 @@ sendRequest() {
                     this.responseBody.suppliers = updatedSuppliers;
                     this.responseBody.privacy = data.privacy;
                     this.responseBody.requestTitle = data.requestTitle;
-                    this.responseBody.user = JSON.parse(this.authService.getStoredUser()).id;
+                    this.responseBody.user = data.user;
                     this.responseBody.partTypes = this.selectedPartTypes;
 
 
@@ -110,12 +117,18 @@ sendRequest() {
                             reqFormData.append(key, req[key]);
                         }
 
-
-                        this.requestService.add(reqFormData).subscribe(res => {
-                            console.log(res)
+                        this.isSending = true;
+                        this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
+                            if(res.messageCode == 200) {
+                                this.blocked = true;
+                                this.isSending = false;
+                                this.buttonTxt = 'Request Sent Successfully';
+                            }
                         }, err => {
                             console.log(err)
-                        })
+                            this.isSending = false;
+                            this.blocked = false;
+                        });
                     }
 
                     if(!this.responseBody.part) {
