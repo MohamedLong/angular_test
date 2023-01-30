@@ -9,9 +9,7 @@ import { InsuranceType } from '../../../model/insurancetype';
 import { Supplier } from '../../../model/supplier';
 import { ClaimService } from '../../../service/claimservice';
 import { JobService } from '../../../service/job.service';
-import { RequestService } from '../../../service/request.service';
 import { SupplierService } from '../../../service/supplier.service';
-import { RequestComponent } from '../../request/request.component';
 
 @Component({
     selector: 'app-newjob',

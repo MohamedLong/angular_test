@@ -1,10 +1,10 @@
 import { MasterEntity } from "../../common/generic/masterentity";
 import { Car } from "./car";
-import { InsuranceType } from "./insurancetyps";
+import { InsuranceType } from "./insurancetype";
 
 export interface Job extends MasterEntity{
     jobNO?: string;
     claim?: number;
-    insuranceType?: InsuranceType,
+    insuranceType: InsuranceType;
     car?: Car
 }

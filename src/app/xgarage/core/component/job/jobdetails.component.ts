@@ -11,7 +11,7 @@ import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { RequestService } from '../../service/request.service';
 import { JobService } from '../../service/job.service';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
-import { InsuranceType } from '../../model/insurancetyps';
+import { InsuranceType } from '../../model/insurancetype';
 
 @Component({
   selector: 'job-details',

@@ -3,7 +3,6 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
-import { SharedJob } from '../../../dto/sharedjob';
 import { PartService } from '../../../service/part.service';
 import { RequestService } from '../../../service/request.service';
 
@@ -27,7 +26,6 @@ export class NewRequestComponent implements OnInit {
 }
 
 submitted: boolean = false;
-sharedJob: SharedJob;
 partTypes: PartType[];
 selectedPartTypes: PartType[] = [];
 description: string = "";

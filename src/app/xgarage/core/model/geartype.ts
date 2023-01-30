@@ -1,4 +1,4 @@
 export enum GearType{
-    Automatic = 'auto',
-    Manual = 'manual'
+    Automatic = 'Automatic',
+    Manual = 'Manual'
 }
