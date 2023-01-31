@@ -43,7 +43,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     hasRef: boolean = false;
     insuranceTypes = Object.values(InsuranceType);
     selectedInsuranceType: string;
-
+    updateRequest: boolean = false;
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe, public statusService: StatusService) {
             super(route, router, requestService, datePipe, statusService, breadcrumbService);
@@ -53,7 +53,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 this.master = data;
                 this.masters.push(this.master);
                 this.getMinDate();
-            }, 
+            },
             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
         }).unsubscribe();
     }
@@ -88,8 +88,20 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.details = this.details.filter(val => !this.details.includes(val));
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Request Deleted', life: 3000 });
         this.selectedEntries = null;
-    }  
-    
+    }
+
+    confirmCancel(id: number) {
+        console.log(id);
+        this.requestService.cancelRequest(id).subscribe(res => {
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Request Canceled' });
+        }, err => {
+            console.log(err.error.message);
+            this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: err.error.message });
+        });
+
+        this.deleteSingleDialog = false;
+    }
+
 
     updateParent() {
         this.parentSubmitted = true;
@@ -106,8 +118,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                     error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
                     }
                 );
-        }    
-    }  
+        }
+    }
 
     getPartTypesAsString(partTypes: PartType[]) {
         let partTypeNames: string = '';

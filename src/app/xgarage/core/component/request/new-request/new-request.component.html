@@ -15,8 +15,8 @@
             <label class="mb-2">{{ 'request.form.prefredTypes' | translate }}</label>
             <div class="flex align-items-center">
                 <ng-container *ngFor="let type of partTypes" class="field-checkbox">
-                    <p-checkbox [name]="part" value="type" [value]="type" [(ngModel)]="selectedPartTypes"
-                        inputId="{{part + 1}}"></p-checkbox>
+                    <p-checkbox name="group1" value="type" [value]="type" [(ngModel)]="selectedPartTypes"
+                        [inputId]="type.id"></p-checkbox>
                     <label [for]="type.id" class="ml-2 mr-4">{{type.partType}}</label>
                 </ng-container>
             </div>
@@ -30,7 +30,7 @@
                 class="width-100 block" type="text" pInputText required></textarea>
         </div>
     </div>
-    <div class="col-12 text-right">
+    <div class="col-12 text-right" *ngIf="type == 'new req'">
         <button icon="{{isSending? 'pi pi-spin pi-spinner':'pi pi-check'}}" iconPos="right" class="width-100 md:w-20rem" type="button" pButton pRipple (click)="sendRequest()"
             label="{{ 'request.form.sendReq' | translate: {'text': buttonTxt} }}" [disabled]="blocked"></button>
     </div>

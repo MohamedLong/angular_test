@@ -165,17 +165,17 @@
                     </ng-template>
                 </p-dialog>
 
-                <p-dialog [(visible)]="detailDialog" [style]="{width: '550px'}"
-                    header="{{ 'performaDetails.performaDetailsDialog.title' | translate }}" [modal]="true"
+                <p-dialog [(visible)]="detailDialog" [style]="{width: '600px'}"
+                    header="{{ 'request.requestDialog.title' | translate }}" [modal]="true"
                     styleClass="p-fluid">
                     <ng-template pTemplate="content">
-                       <app-new-request [type]="'edit req'" [requestDetails]="detail"></app-new-request>
+                       <app-new-request [type]="'edit req'" [requestDetails]="detail" [edit]="updateRequest"></app-new-request>
                     </ng-template>
                     <ng-template pTemplate="footer">
                         <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
                             class="p-button-text" (click)="hideDialog()"></button>
                         <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
-                            class="p-button-text" (click)="save()" [disabled]="!(selectedItem && selectedMetric)"></button>
+                            class="p-button-text" (click)="updateRequest = !updateRequest"></button>
                     </ng-template>
                 </p-dialog>
 
@@ -192,7 +192,7 @@
                         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
                             (click)="deleteSingleDialog = false"></button>
                         <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
-                            (click)="confirmDelete()"></button>
+                            (click)="confirmCancel(detail.id)"></button>
                     </ng-template>
                 </p-dialog>
 
