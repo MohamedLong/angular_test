@@ -1,4 +1,3 @@
-import { StatusConstants } from '../../model/statusconstatnts';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -6,11 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
-import { ClaimService } from '../../service/claimservice';
 import { Status } from 'src/app/xgarage/common/model/status';
-import { StatusService } from 'src/app/xgarage/common/service/status.service';
-import { JobService } from '../../service/job.service';
-import { Job } from '../../model/job';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { RequestService } from '../../service/request.service';
 import { PartType } from 'src/app/xgarage/common/model/parttype';

@@ -5,6 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { config } from 'src/app/config';
 import { GenericService } from '../../common/generic/genericservice';
 import { PartType } from '../../common/model/parttype';
+import { Part } from '../model/parts';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +13,11 @@ import { PartType } from '../../common/model/parttype';
 export class PartService extends GenericService<any> {
 
   constructor(protected http: HttpClient) {
-      super(http, config.coreApiUrl + '/category');
+      super(http, config.coreApiUrl + '/part');
   }
 
   getPartByPartName(partName: string) {
-    return this.http.get<{id: number, name: string, status: number}[]>(config.coreApiUrl + '/part/' + partName).pipe(
+    return this.http.get<Part[]>(this.apiServerUrl + '/' + partName).pipe(
         tap(res => {
             return res
         }), catchError(err => {

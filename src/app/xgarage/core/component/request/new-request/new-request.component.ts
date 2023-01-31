@@ -19,8 +19,7 @@ export class NewRequestComponent implements OnInit {
   constructor(
     private requestService: RequestService,
     private partService: PartService,
-    private dataService: DataService<any>,
-    private authService: AuthService) {
+    private dataService: DataService<any>) {
     this.responseBody = {};
     this.subCategoryId = "";
 }
@@ -44,7 +43,6 @@ buttonTxt = 'Send Request';
 
 ngOnInit(): void {
     this.getPartTypes();
-    console.log(this.requestDetails)
 }
 
 getPartTypes() {

@@ -19,7 +19,7 @@
             </p-toolbar>
 
             <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['id','jobNo','claimNo','insuranceType','carPlateNumber','jobStatus']"
+                [globalFilterFields]="['id','requestTitle','privacy','submissionDate','carPlateNumber','jobStatus']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)"
