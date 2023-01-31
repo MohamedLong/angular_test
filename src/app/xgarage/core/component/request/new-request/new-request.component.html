@@ -1,6 +1,6 @@
-<p-fieldset [legend]="part" class="relative">
+<p-fieldset legend="{{type == 'new req'? part : requestDetails.requestTitle}}" class="relative">
     <div class="field col-12">
-        <app-new-part type="new req" [errMsg]="partErrorMsg"></app-new-part>
+        <app-new-part [type]="type" [errMsg]="partErrorMsg" [partDetails]="requestDetails.part"></app-new-part>
     </div>
     <div class="field col-12">
         <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" [customUpload]="true"

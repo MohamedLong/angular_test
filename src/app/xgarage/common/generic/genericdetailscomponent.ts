@@ -62,9 +62,9 @@ export class GenericDetailsComponent{
     newAuth: boolean;
 
     editAuth: boolean;
-  
+
     deleteAuth: boolean;
-  
+
     printAuth: boolean;
 
     constructor(public route: ActivatedRoute, public router: Router, public changeStatusService: GenericService<any>, public datePipe: DatePipe,
@@ -97,8 +97,8 @@ export class GenericDetailsComponent{
             {
                 label: 'Draft', icon: 'pi pi-pencil', visible: (this.master.status.id!=1), command: (event: any) => {
                     const newStatus: Status = {
-                        id: 1, 
-                        nameEn: 'Draft', 
+                        id: 1,
+                        nameEn: 'Draft',
                         nameAr: 'مقتوح'
                     }
                     this.confirmStatus = newStatus;
@@ -109,8 +109,8 @@ export class GenericDetailsComponent{
                 label: 'Confirm', icon: 'pi pi-check', visible: (this.master.status.id!=2), command: (event: any) => {
 
                     const confirmStatus: Status = {
-                        id: 2, 
-                        nameEn: 'Confirmed', 
+                        id: 2,
+                        nameEn: 'Confirmed',
                         nameAr: 'مؤكد'
                     }
                     this.confirmStatus = confirmStatus;
@@ -120,8 +120,8 @@ export class GenericDetailsComponent{
             {
                 label: 'Cancel', icon: 'pi pi-times', visible: (this.master.status.id!=2), command: (event: any) => {
                     const cancelStatus: Status = {
-                        id: 3, 
-                        nameEn: 'Canceled', 
+                        id: 3,
+                        nameEn: 'Canceled',
                         nameAr: 'ملغي'
                     }
                     this.confirmStatus = cancelStatus;
@@ -131,8 +131,8 @@ export class GenericDetailsComponent{
             {
                 label: 'Cancel Confirm', icon: 'pi pi-times-circle', visible: (this.master.status.id!=2), command: (event: any) => {
                     const cancelConfirmStatus: Status = {
-                        id: 4, 
-                        nameEn: 'Cancel Confirmed', 
+                        id: 4,
+                        nameEn: 'Cancel Confirmed',
                         nameAr: 'ملغي مؤكد'
                     }
                     this.confirmStatus = cancelConfirmStatus;
@@ -155,15 +155,15 @@ export class GenericDetailsComponent{
             {
                 label: 'Delete', icon: 'pi pi-trash', visible: (this.master.status.id!=2), command: (event: any) => {
                     const deleteStatus: Status = {
-                        id: 6, 
-                        nameEn: 'Deleted', 
+                        id: 6,
+                        nameEn: 'Deleted',
                         nameAr: 'محذوف'
                     }
                     this.confirmStatus = deleteStatus;
                     this.confirmActionDialog = true;
                 }
             }
-            
+
         ];
     }
 
@@ -242,7 +242,7 @@ export class GenericDetailsComponent{
         this.masters[this.findIndexById(this.master.id, this.masters)] = this.master;
     }
 
-    
+
     hideParentDialog() {
         this.resetMaster();
         this.masterDialog = false;
@@ -266,7 +266,7 @@ export class GenericDetailsComponent{
             this.masters[this.findIndexById(this.master.id, this.masters)] = this.master;
             this.editable = true;
             this.details = [...this.details];
-            this.detailDialog = false;  
+            this.detailDialog = false;
             this.detail = {};
             this.submitted = false;
         }
@@ -303,7 +303,7 @@ export class GenericDetailsComponent{
         var currentDate = new Date();
         this.master.orderDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
     }
-        
+
 
     findIndexById(id: Number, myList: any[]): number {
         let index = -1;
@@ -327,8 +327,8 @@ export class GenericDetailsComponent{
     }
 
 
-    onFilter(event, dt) { 
-        this.filteredValues = event.filteredValue; 
+    onFilter(event, dt) {
+        this.filteredValues = event.filteredValue;
       }
 
     filterByMonth(event, dt, list: any) {
@@ -341,7 +341,7 @@ export class GenericDetailsComponent{
         }
         if(filtered.length > 0) {
             list = filtered;
-            this.filteredValues = event.filteredValue; 
+            this.filteredValues = event.filteredValue;
         }
     }
 

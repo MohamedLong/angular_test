@@ -27,6 +27,7 @@ export class NewPartComponent implements OnInit {
     partName: string;
 
     @Input() type: string = 'new part';
+    @Input() partDetails: Part = {};
     @Input() errMsg: string = "";
 
     ngOnInit(): void {
@@ -47,12 +48,12 @@ export class NewPartComponent implements OnInit {
         })
     }
 
-    onChoosePart(part: Part) {
+    onChoosePart(part: Part, disable: boolean = true) {
         this.selectedPart = part;
         this.selectedCategory = this.categories.find(c => c.id == this.selectedPart.categoryId);
         this.onCategoryChange(this.selectedPart.categoryId);
         this.selectedSubCategory = this.subCategories.find(c => c.id = this.selectedPart.subCategoryId);
-        this.disableList = true;
+        this.disableList = disable;
         this.part = this.selectedPart;
         this.part.subCategoryId = this.selectedSubCategory.id;
 

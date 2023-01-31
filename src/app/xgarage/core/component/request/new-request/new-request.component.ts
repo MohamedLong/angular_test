@@ -34,13 +34,17 @@ partImages: File[] = [];
 subCategoryId: any;
 partErrorMsg: string = "";
 @Input() part: string = 'PART 1';
+@Input() type: string = 'new req';
+@Input() requestDetails: any = '';
 @Output() request = new EventEmitter<null>();
+
 blocked: boolean = false;
 isSending: boolean = false;
 buttonTxt = 'Send Request';
 
 ngOnInit(): void {
     this.getPartTypes();
+    console.log(this.requestDetails)
 }
 
 getPartTypes() {
