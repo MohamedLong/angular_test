@@ -40,8 +40,8 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="flex justify-content-between">
-                                <h5>{{ 'job.jobDialog.title' | translate }} #{{master.id}} 
-                                </h5>  
+                                <h5>{{ 'job.jobDialog.title' | translate }} #{{master.id}}
+                                </h5>
                                 <div class="flex flex-column align-items-end">
                                     <img src="assets/layout/images/extensions/prime-logo.svg" alt="invoice-logo"/>
                                     <p class="mt-1">9137 3rd Lane California City, CA 93504.</p>
@@ -169,41 +169,7 @@
                     header="{{ 'performaDetails.performaDetailsDialog.title' | translate }}" [modal]="true"
                     styleClass="p-fluid">
                     <ng-template pTemplate="content">
-                        <div class="field">
-                            <label>{{ 'common.item' | translate }}</label>
-                            <p-dropdown [options]="items" [(ngModel)]="selectedItem" optionLabel="itemName"
-                            [showClear]="true" [autoDisplayFirst]="false" required autofocus (onChange)="onSelectItem(selectedItem)"></p-dropdown>
-                        </div>
-                        <div class="field">
-                            <label>{{ 'common.description' | translate }}</label>
-                            <textarea rows="5" cols="30" class="w-full" pInputTextarea [(ngModel)]="detail.description"></textarea>
-                        </div>
-                        <div class="formgrid grid">
-                        <div class="field col-12 md:col-6">
-                            <label>{{ 'common.metric' | translate }}</label>
-                            <p-dropdown [options]="metrics" [(ngModel)]="selectedMetric" optionLabel="metricName"
-                            [showClear]="true" [autoDisplayFirst]="false" required autofocus></p-dropdown>
-                        </div>
-                        <div class="field col-12 md:col-6">
-                            <label for="unitPrice">{{ 'common.unitPrice' | translate }}</label>
-                            <p-inputNumber id="unitPrice" [(ngModel)]="detail.unitPrice" required autofocus (ngModelChange)="calculateTotalByUnitPrice(detail.unitPrice)"></p-inputNumber>
-                            <small class="p-error" *ngIf="submitted && !detail.unitPrice">{{'common.unitPriceRequired' | translate }}</small>
-                            <small class="p-error" *ngIf="detail.unitPrice <= 0">{{'common.unitPricePositiveConstraint' | translate }}</small>
-                        </div>
-                        </div>
-                        <div class="formgrid grid">
-                            <div class="field col-12 md:col-6">
-                                <label for="qty">{{ 'common.qty' | translate }}</label>
-                                <p-inputNumber id="qty" [(ngModel)]="detail.qty" required autofocus (ngModelChange)="calculateTotalByQty(detail.qty)"></p-inputNumber>
-                                <small class="p-error" *ngIf="submitted && !detail.qty">{{'common.qtyRequired' | translate }}</small>
-                                <small class="p-error" *ngIf="detail.qty < 0">{{'common.qtyPositiveConstraint' | translate }}</small>
-                            </div>
-                        <div class="field col-12 md:col-6">
-                            <label for="total">{{ 'common.total' | translate }}</label>
-                            <p-inputNumber id="total" [(ngModel)]="detail.total" required autofocus [disabled]="true"></p-inputNumber>
-                            <small class="p-error" *ngIf="submitted && !detail.total">{{'common.totalRequired' | translate }}</small>
-                        </div>
-                        </div>
+                       <app-new-request [type]="'edit req'" [requestDetails]="detail"></app-new-request>
                     </ng-template>
                     <ng-template pTemplate="footer">
                         <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
