@@ -100,7 +100,6 @@ active: boolean = true;
     this.submitted = true;
     if (this.master.claimNo && this.master.claimDate && this.selectedTenant) {
         this.master.tenant = this.selectedTenant.id;
-        console.log('this.master: ', this.master);
         if (this.master.id) {
             this.claimService.update(this.master).subscribe({
                 next: (data) => {

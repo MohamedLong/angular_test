@@ -50,7 +50,8 @@ const routes: Routes = [];
                     {path: 'claims', component: ClaimComponent},
                     {path: 'jobs', component: JobComponent},
                     {path: 'jobs/new-job', component: NewJobComponent},
-                    {path: 'request', component: RequestComponent},
+                    {path: 'requests', component: RequestComponent},
+                    // {path: 'job-details', component: RequestDetailsComponent}
                     {path: 'request/new-request', component: NewRequestComponent},
                     {path: 'cars', component: CarComponent},
                     {path: 'cars/new-car', component: NewCarComponent},

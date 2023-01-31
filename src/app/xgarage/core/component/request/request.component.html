@@ -1,37 +1,102 @@
-<p-fieldset [legend]="part" class="relative">
-    <div class="field col-12">
-        <app-new-part type="new req" [errMsg]="partErrorMsg"></app-new-part>
-    </div>
-    <div class="field col-12">
-        <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" [customUpload]="true"
-            [auto]="true" (uploadHandler)="uploadPartImages($event)" multiple="multiple" accept="image/*">
-        </p-fileUpload>
-    </div>
+<div class="grid">
     <div class="col-12">
-        <p-divider type="dashed"></p-divider>
-    </div>
-    <div class="grid pb-3">
-        <div class="field col-12 md:col-6">
-            <label class="mb-2">{{ 'request.form.prefredTypes' | translate }}</label>
-            <div class="flex align-items-center">
-                <ng-container *ngFor="let type of partTypes" class="field-checkbox">
-                    <p-checkbox [name]="part" value="type" [value]="type" [(ngModel)]="selectedPartTypes"
-                        inputId="{{part + 1}}"></p-checkbox>
-                    <label [for]="type.id" class="ml-2 mr-4">{{type.partType}}</label>
-                </ng-container>
+        <p-toast></p-toast>
+
+       <!-- //Request Components  -->
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <a pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
+                        [routerLink]="['/jobs/new-job']" [hidden]="false"></a>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
+                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help mb-2"
+                        (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['id','jobNo','claimNo','insuranceType','carPlateNumber','jobStatus']"
+                [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                (onFilter)="onFilter($event, dt)"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between table-header">
+                        <h5 class="m-0">{{ 'job.title' | translate }}</h5>
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="{{ 'operations.filter' | translate }}" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pColumn="id">{{ 'common.id' | translate }}</th>
+                        <th pColumn="requestTitle">{{ 'request.tableColumn.requestTitle' | translate }}</th>
+                        <th pColumn="privacy">{{ 'request.tableColumn.privacy' | translate }}</th>
+                        <th pColumn="part.name">{{ 'request.tableColumn.partName' | translate }}</th>
+                        <th pColumn="part.partTypes">{{ 'request.tableColumn.partTypes' | translate }}</th>
+                        <th pColumn="status.nameEn">{{ 'common.status' | translate }}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-request>
+                    <tr>
+                        <td>
+                            {{request.id}}
+                        </td>
+                        <td><span><a (click)="goDetails(request)" [routerLink]="['/request-details']"><mark class="text-blue-400 hover:text-pink-500">{{request.id}}</mark></a></span>
+                        <td>
+                            {{request.requestTitle}}
+                        </td>
+                        <td>
+                            {{request.privacy}}
+                        </td>
+                        <td>
+                            {{request.part.name}}
+                        </td>
+                        <td>
+                            {{getPartTypesAsString(request.partTypes)}}
+                        </td>
+                        <td>
+                            {{request.status.nameEn}}
+                        </td>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">
+                        {{'request.table_footer' | translate: {length: masters ? masters.length : 0} }}
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="master">{{ 'operations.cancelMessage' | translate }} <b>{{master.name}}</b>?</span>
             </div>
-            <small
-                *ngIf="submitted && selectedPartTypes.length == 0"
-                class="p-error mt-2">{{ 'request.form.prefredTypesrequired' | translate }}</small>
-        </div>
-        <div class="field col-12 md:col-6">
-            <label for="">{{ 'request.form.desc' | translate }}</label>
-            <textarea [(ngModel)]="description" placeholder="{{ 'request.form.descPlaceholder' | translate }}"
-                class="width-100 block" type="text" pInputText required></textarea>
-        </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteSingleDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteMultipleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>{{ 'operations.deleteAllMessage' | translate }}</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deleteMultipleDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
     </div>
-    <div class="col-12 text-right">
-        <button class="width-100 md:w-20rem" type="button" pButton pRipple (click)="sendRequest()"
-            label="{{ 'request.form.sendReq' | translate }}"></button>
-    </div>
-</p-fieldset>
