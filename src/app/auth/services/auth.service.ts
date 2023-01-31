@@ -8,6 +8,7 @@ import jwt_decode from "jwt-decode";
 import { config } from 'src/app/config';
 import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenu.service';
 import { User } from 'src/app/xgarage/common/model/user';
+import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 
 
 @Injectable({
@@ -27,16 +28,8 @@ export class AuthService {
   headers: HttpHeaders;
 
   signup(user: User) {
-    return this.http.post(this.apiUrl + '/web/signup', user).pipe(
-        tap((tokens: Tokens) => {
-            this.storeTokens(tokens);
-        }),
-        mapTo("200"),
-        catchError(error => {
-            return of(error.error);
-        })
-    )
-};
+    return this.http.post<MessageResponse>(this.apiUrl + '/web/signup', user);
+  };
 
   login(user: { username: string, password: string }): Observable<any> {
     this.params = new HttpParams()

@@ -22,7 +22,7 @@
                 <div class="p-inputgroup mt-3 mb-5">
                     <span class="p-input-icon-left width-100">
                         <i class="pi pi-lock"></i>
-                        <input type="text" pInputText id="password" pInputText formControlName="password" placeholder="{{ 'auth.form.password' | translate }}" required>
+                        <input type="password" pInputText id="password" pInputText formControlName="password" placeholder="{{ 'auth.form.password' | translate }}" required>
                     </span>
                 </div>
                 <button type="submit" [loading]="isLoading" [disabled]="!loginForm.valid" pButton pRipple label="{{ 'auth.form.login' | translate | uppercase}}" class="w-full p-3 p-button-info"></button>
