@@ -206,10 +206,8 @@ export class NewJobComponent implements OnInit {
         this.submitted = true;
         if(this.jobForm.valid) {
             if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
-                console.log('initiate req')
                 this.dataService.changeObject(this.jobForm.getRawValue());
             } else {
-                console.log('add new job then initiate req')
                 this.addNewJob();
             }
 
@@ -230,15 +228,11 @@ export class NewJobComponent implements OnInit {
             insuranceType: this.jobForm.get('insuranceFrom').value,
             car: { 'id': this.jobForm.get('car').value.id },
         }
-
         this.jobService.add(jobBody).subscribe(res => {
             this.jobForm.patchValue({ 'jobId': res.id });
-
             if (this.jobForm.get('jobId').value !== '') {
-
                 this.dataService.changeObject(this.jobForm.getRawValue());
             }
-
         }, err => {
             console.log('err', err)
         })

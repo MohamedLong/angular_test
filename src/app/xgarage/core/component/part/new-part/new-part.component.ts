@@ -59,7 +59,7 @@ export class NewPartComponent implements OnInit {
         this.requestService.part.next(this.part)
     }
 
-    onSelectPart(part: Part) {
+    onSelectPart() {
         this.part = this.selectedPart;
         this.part.subCategoryId = this.selectedSubCategory.id;
 
