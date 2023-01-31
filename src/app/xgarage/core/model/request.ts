@@ -3,7 +3,7 @@ import { PartType } from "../../common/model/parttype";
 import { Privacy } from "../../common/model/privacy";
 import { Car } from "./car";
 import { Mcq } from "./mcq";
-import { Part } from "./parts";
+import { Part } from "./part";
 import { Supplier } from "./supplier";
 
 export interface Request extends MasterEntity{

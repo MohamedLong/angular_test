@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Category } from '../../../model/category';
-import { Part } from '../../../model/parts';
+import { Part } from '../../../model/part';
 import { SubCategory } from '../../../model/subcategory';
 import { CategoryService } from '../../../service/category.service';
 import { PartService } from '../../../service/part.service';
@@ -54,7 +54,7 @@ export class NewPartComponent implements OnInit {
         this.subCategoryService.getSubCategoriesByCategory(part.categoryId).subscribe(res => {
             this.subCategories = res;      
             //this.selectedSubCategory is not showen yet, still under fixing..
-            
+
             // this.selectedSubCategory = this.subCategories.find(c => c.id = part.subCategoryId);
             this.onSubCategoryChange(part.subCategoryId);
             this.selectedPart = this.parts.find(s => s.id == part.id);

@@ -5,7 +5,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { config } from 'src/app/config';
 import { GenericService } from '../../common/generic/genericservice';
 import { PartType } from '../../common/model/parttype';
-import { Part } from '../model/parts';
+import { Part } from '../model/part';
 
 @Injectable({
   providedIn: 'root'

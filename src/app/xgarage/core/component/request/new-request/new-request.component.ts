@@ -3,6 +3,7 @@ import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
 import { PartService } from '../../../service/part.service';
+import { PartTypeService } from '../../../service/parttype.service';
 import { RequestService } from '../../../service/request.service';
 
 @Component({
@@ -17,7 +18,7 @@ export class NewRequestComponent implements OnInit, OnChanges {
 
     constructor(
         private requestService: RequestService,
-        private partService: PartService,
+        private partTypeService: PartTypeService,
         private dataService: DataService<any>) {
         this.responseBody = {};
         this.subCategoryId = "";
@@ -50,7 +51,7 @@ export class NewRequestComponent implements OnInit, OnChanges {
     }
 
     getPartTypes() {
-        this.partService.getPartTypes().subscribe(res => {
+        this.partTypeService.getAll().subscribe(res => {
             this.partTypes = res;
             //console.log(this.partTypes)
         }, err => {
