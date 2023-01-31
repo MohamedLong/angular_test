@@ -1,131 +1,103 @@
-import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { AuthService } from 'src/app/auth/services/auth.service';
+import { StatusConstants } from '../../model/statusconstatnts';
+import { AuthService } from '../../../../auth/services/auth.service';
+import { DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
+import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
+import { ClaimService } from '../../service/claimservice';
+import { Status } from 'src/app/xgarage/common/model/status';
+import { StatusService } from 'src/app/xgarage/common/service/status.service';
+import { JobService } from '../../service/job.service';
+import { Job } from '../../model/job';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
-import { PartType } from 'src/app/xgarage/common/model/parttype';
-import { PartService } from '../../service/part.service';
 import { RequestService } from '../../service/request.service';
+import { PartType } from 'src/app/xgarage/common/model/parttype';
+
 
 @Component({
-    selector: 'app-request',
-    templateUrl: './request.component.html',
-    styles: [`:host {
-        margin-bottom: 1rem;
-        display: block;
-      }`]
+  selector: 'app-job',
+  templateUrl: './request.component.html',
+  styleUrls: ['../../../../demo/view/tabledemo.scss'],
+
+  providers: [MessageService, ConfirmationService, DatePipe]
 })
-export class RequestComponent implements OnInit {
+export class RequestComponent extends GenericComponent implements OnInit {
 
-    constructor(
-        private requestService: RequestService,
-        private partService: PartService,
-        private dataService: DataService<any>,
-        private authService: AuthService) {
-        this.responseBody = {};
-        this.subCategoryId = "";
-    }
-
-    submitted: boolean = false;
-    partTypes: PartType[];
-    selectedPartTypes: PartType[] = [];
-    description: string = "";
-    responseBody: any = {};
-    partImages: File[] = [];
-    subCategoryId: any;
-    partErrorMsg: string = "";
-    @Input() part: string = 'PART 1';
-    @Output() request = new EventEmitter<null>();
-
-    ngOnInit(): void {
-        this.getPartTypes();
-    }
-
-    getPartTypes() {
-        this.partService.getPartTypes().subscribe(res => {
-            this.partTypes = res;
-            //console.log(this.partTypes)
-        }, err => {
-            console.log(err)
-        })
-    }
-
-    uploadPartImages(e) {
-        //console.log(e.files)
-        this.partImages = e.files;
-    }
-
-    sendRequest() {
-        this.request.emit();
-        this.submitted = true;
-        setTimeout(() => {
-            this.dataService.name.subscribe({
-                next: (data) => {
-                    //this.sharedJob = data;
-                    if (data && JSON.stringify(data) !== '{}') {
-                        let updatedSuppliers = [];
-                        if(data.suppliers.length > 0) {
-                            data.suppliers.forEach(element => {
-                                updatedSuppliers.push({'id': element.id})
-                            });
-                        }
-
-
-                        this.responseBody.job = data.jobId;
-                        this.responseBody.description = this.description;
-                        this.responseBody.car = { 'id': data.car.id };
-                        this.responseBody.locationName = data.location;
-                        this.responseBody.suppliers = updatedSuppliers;
-                        this.responseBody.privacy = data.privacy;
-                        this.responseBody.requestTitle = data.requestTitle;
-                        this.responseBody.user = JSON.parse(this.authService.getStoredUser()).id;
-                        this.responseBody.partTypes = this.selectedPartTypes;
-
-
-                        this.requestService.part.subscribe(part => {
-                            this.subCategoryId = "";
-
-                            if (JSON.stringify(part) !== '{}') {
-                                this.responseBody.part = {
-                                    'id': part.id,
-                                    'name': part.name,
-                                    'status': part.status
-                                };
-
-                                this.subCategoryId = part.subCategoryId;
-                            }
-                        });
-
-                        // console.log('req form is not valid')
-
-                        if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0) {
-                            //console.log('req form is valid')
-                            console.log('request body inside requets component: ', this.responseBody, this.subCategoryId);
-                            this.partErrorMsg = '';
-
-                            let stringRequestBody = JSON.stringify(this.responseBody);
-                            let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId, "partImages": this.partImages }
-
-
-                            let reqFormData = new FormData();
-                            for (var key in req) {
-                                reqFormData.append(key, req[key]);
-                            }
-
-
-                            this.requestService.add(reqFormData).subscribe(res => {
-                                console.log(res)
-                            }, err => {
-                                console.log(err)
-                            })
-                        }
-
-                        if(!this.responseBody.part) {
-                            this.partErrorMsg = 'please select or enter a part';
-                        }
-
-                    }
-                }
-            }).unsubscribe();
-        }, 1000);
-    }
+  constructor(public route: ActivatedRoute, private authService: AuthService,
+    private router: Router, private requestService: RequestService, private dataService: DataService<Request>,
+    public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
+    super(route, datePipe, breadcrumbService);
 }
 
+selectedStatus: Status;
+statuses: Status[];
+valid: boolean = false;
+
+  ngOnInit(): void {
+    super.callInsideOnInit();
+    this.getAllForUser();
+
+  }
+
+  getAllForUser() {
+    let user = this.authService.getStoredUser();
+    if(JSON.parse(user).tenant){
+      this.requestService.getForUser().subscribe({
+      next: (masters) => {
+          this.masters = masters;
+          this.loading = false;
+      },
+      error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+  });
+    }else{
+      this.requestService.getAll().subscribe({
+        next: (masters) => {
+          this.masters = masters;
+          this.loading = false;
+      },
+      error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+  });
+    }
+ }
+ 
+// We need to confirm the cancellation / deletion method
+
+confirmDelete() {
+  // this.jobService.delete(this.master.id).subscribe(res => {
+  //   if(res.messageCode == 200){
+  //     this.messageService.add({ severity: 'success', summary: 'Job cancelled successfully' });
+  //     this.deleteSingleDialog = false;
+  //     this.getAllForUser();
+  //   }
+  //   else{
+  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });     
+  //   }
+  // }, err => {
+  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
+  // })
+}
+
+getPartTypesAsString(partTypes: PartType[]) {
+    let partTypeNames: string = '';
+    partTypes.forEach(t => {
+        if(partTypeNames == '') {
+            partTypeNames = t.partType;
+        }else{
+            partTypeNames = partTypeNames + ', ' + t.partType;
+        }
+    })
+    if(partTypeNames == '')  {
+        partTypeNames = 'None';
+    }
+    return partTypeNames;
+}
+
+
+goDetails(request: Request) {
+  this.dataService.changeObject(request);
+  this.router.navigate(['request-details']);
+}
+
+}
