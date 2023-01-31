@@ -78,7 +78,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     editParentAction() {
-        this.originalMaster = { ...this.master};
+        this.originalMaster = {...this.master};
         this.selectedInsuranceType = this.master.insuranceType;
         this.masterDialog = true;
     }
@@ -92,17 +92,21 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     
 
     updateParent() {
-        this.jobService.update(this.master).subscribe(
-            {
-                next: (data) => {
-                    this.master = data;
-                    this.masters[this.findIndexById(this.master.id, this.masters)] = this.master;
-                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Job Updated', life: 3000 });
-                    this.masterDialog = false;
-                    },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
-                }
-            );
+        this.parentSubmitted = true;
+        if(this.master.jobNo && this.selectedInsuranceType) {
+            this.master.insuranceType = this.selectedInsuranceType;
+            this.jobService.update(this.master).subscribe(
+                {
+                    next: (data) => {
+                        this.master = data;
+                        this.masters[this.findIndexById(this.master.id, this.masters)] = this.master;
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Job Updated', life: 3000 });
+                        this.masterDialog = false;
+                        },
+                    error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+                    }
+                );
+        }    
     }  
 
     getPartTypesAsString(partTypes: PartType[]) {

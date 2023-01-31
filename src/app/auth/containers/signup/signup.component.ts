@@ -69,6 +69,7 @@ export class SignupComponent implements OnInit {
             this.selectedTenant.tenantType = this.tenantTypes.find(val => val.id == this.signupForm.controls.tenantType.value);
             this.selectedTenant.name = this.signupForm.controls.newTenantName.value;
             this.selectedTenant.cr = this.signupForm.controls.newCr.value;
+            this.selectedTenant.location = this.signupForm.controls.location.value;
 
             this.tenantService.add(this.selectedTenant).subscribe(
                 {
@@ -108,13 +109,14 @@ export class SignupComponent implements OnInit {
     }
 
     private createUserObjectFromSignupForm() {
+        this.selectedTenant.id = this.signupForm.controls.tenant.value;
         let user: User = {
             createdDate : new Date(),
             email : this.signupForm.get('email').value,
             firstName : this.signupForm.get('firstName').value,
             lastName : this.signupForm.get('lastName').value,
             phone : this.signupForm.get('phone').value,
-            userId : this.signupForm.get('userId').value,
+            userId : this.signupForm.get('email').value,
             password : this.signupForm.get('password').value,
             provider : 'local',
             tenant : this.selectedTenant,
@@ -127,7 +129,6 @@ export class SignupComponent implements OnInit {
             this.createUserWithNewTenant();
         }
         else if(!this.newTenantTrigger){
-
             this.createUserOnExistingTenant();
         }
         else {

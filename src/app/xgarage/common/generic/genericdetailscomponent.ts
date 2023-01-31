@@ -239,6 +239,7 @@ export class GenericDetailsComponent{
 
     resetMaster() {
         this.master = this.originalMaster;
+        this.masters[this.findIndexById(this.master.id, this.masters)] = this.master;
     }
 
     
