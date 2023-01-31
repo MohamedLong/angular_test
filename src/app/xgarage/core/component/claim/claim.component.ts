@@ -90,7 +90,7 @@ active: boolean = true;
   this.openNew();
   var currentDate = new Date();
   this.master.claimDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');
-  this.master.status = StatusConstants.OPEN_STATUS;
+  this.master.status = {id: StatusConstants.OPEN_STATUS};
   let user = this.authService.getStoredUser();
   this.selectedTenant = JSON.parse(user).tenant;
   this.active = false;
@@ -99,7 +99,8 @@ active: boolean = true;
   save() {
     this.submitted = true;
     if (this.master.claimNo && this.master.claimDate && this.selectedTenant) {
-      this.master.tenant = this.selectedTenant.id;
+        this.master.tenant = this.selectedTenant.id;
+        console.log('this.master: ', this.master);
         if (this.master.id) {
             this.claimService.update(this.master).subscribe({
                 next: (data) => {

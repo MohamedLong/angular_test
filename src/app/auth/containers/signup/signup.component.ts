@@ -92,16 +92,13 @@ export class SignupComponent implements OnInit {
         if (this.signupForm.valid) {
             let user = this.createUserObjectFromSignupForm();
             this.authService.signup(user).subscribe(res => {
-                if(res != "200") {
+                if(res.messageCode != 200) {
                     this.messageService.add({ severity: 'error', summary: 'Erorr', detail:  res.message });
                     return;
                 }
-                this.messageService.add({ severity: 'success', summary: 'Success' });
-                if (this.authService.isLoggedIn()) {
-                    this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
-                }
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
             }, err => {
-                this.messageService.add({ severity: 'error', summary: 'Erorr', detail:  err.message });
+                this.messageService.add({ severity: 'error', summary: 'Erorr', detail:  err.error.message });
             })
         } else {
             this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Please fill out all fields' })

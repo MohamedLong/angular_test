@@ -108,7 +108,7 @@
                         <label for="tenant">{{ 'claim.tableColumn.tenantName' | translate }}</label>
                         <p-dropdown [options]="tenants" [(ngModel)]="selectedTenant" [disabled]="!active"
                            optionLabel="name" [showClear]="true" [autoDisplayFirst]="false" required autofocus></p-dropdown>
-                         <small class="p-invalid" *ngIf="submitted && !master.tenant">{{ 'claim.claimDialog.tenantRequired' | translate }}</small>  
+                         <small class="p-invalid" *ngIf="submitted && !selectedTenant">{{ 'claim.claimDialog.tenantRequired' | translate }}</small>  
                     </div>
                     <div class="field col-12" >
                         <label for="claimDate">{{ 'claim.tableColumn.claimDate' | translate }}</label>

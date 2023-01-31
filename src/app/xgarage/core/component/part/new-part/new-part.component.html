@@ -30,7 +30,7 @@
             <label>{{ 'part.tableColumn.partName' | translate}}</label>
             <p-dropdown [options]="parts" [(ngModel)]="selectedPart" optionLabel="name" [disabled]="disableList"
                 placeholder="{{ 'part.partDialog.partNamePlaceHolder' | translate}}"
-                (onChange)="onSelectPart($event.value)"></p-dropdown>
+                (onChange)="onSelectPart()"></p-dropdown>
         </div>
         <div class="field col-12 flex align-items-center" *ngIf="!selectedPart">
             <p-checkbox [(ngModel)]="checked" [binary]="true" (onChange)="createNewPart()"
