@@ -1,0 +1,17 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { GenericService } from '../../common/generic/genericservice';
+import { config } from 'src/app/config';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class BidService extends GenericService<any> {
+    constructor(protected http: HttpClient) {
+        super(http, config.coreApiUrl + '/bid');
+    }
+
+    public getByRequest(requestId: number){
+        return this.http.get<any[]>(this.apiServerUrl + '/rwquest/' + requestId);
+    }
+}

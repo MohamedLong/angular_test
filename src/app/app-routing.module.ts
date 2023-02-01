@@ -52,7 +52,7 @@ const routes: Routes = [];
                     {path: 'jobs/new-job', component: NewJobComponent},
                     {path: 'requests', component: RequestComponent},
                     // {path: 'job-details', component: RequestDetailsComponent}
-                    {path: 'request/new-request', component: NewRequestComponent},
+                    {path: 'requests/new-request', component: NewRequestComponent},
                     {path: 'cars', component: CarComponent},
                     {path: 'cars/new-car', component: NewCarComponent},
                     {path: 'parts', component: PartComponent},

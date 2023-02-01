@@ -7,7 +7,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <a pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        [routerLink]="['/jobs/new-job']" [hidden]="false"></a>
+                        [routerLink]="['/requests/new-request']" [hidden]="false"></a>
                 </ng-template>
 
                 <ng-template pTemplate="right">
@@ -18,15 +18,15 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['id','requestTitle','privacy','submissionDate','carPlateNumber','jobStatus']"
+            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['id','requestTitle','privacy','submissionDate','firstName','status', 'claimNo', 'jobNo']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)"
                 [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between table-header">
-                        <h5 class="m-0">{{ 'job.title' | translate }}</h5>
+                        <h5 class="m-0">{{ 'request.title' | translate }}</h5>
                         <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
@@ -37,19 +37,31 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th pColumn="id">{{ 'common.id' | translate }}</th>
+                        <th pColumn="claimNo">{{ 'request.tableColumn.claimNo' | translate }}</th>
+                        <th pColumn="jobNo">{{ 'request.tableColumn.jobNo' | translate }}</th>
+                        <th pColumn="firstName">{{ 'request.tableColumn.createdUser' | translate }}</th>
+                        <th pColumn="submissionDate">{{ 'request.tableColumn.submissionDate' | translate }}</th>
                         <th pColumn="requestTitle">{{ 'request.tableColumn.requestTitle' | translate }}</th>
                         <th pColumn="privacy">{{ 'request.tableColumn.privacy' | translate }}</th>
-                        <th pColumn="part.name">{{ 'request.tableColumn.partName' | translate }}</th>
-                        <th pColumn="part.partTypes">{{ 'request.tableColumn.partTypes' | translate }}</th>
-                        <th pColumn="status.nameEn">{{ 'common.status' | translate }}</th>
+                        <th pColumn="submittedBids">{{ 'request.tableColumn.submittedBids' | translate }}</th>
+                        <th pColumn="status">{{ 'request.tableColumn.status' | translate }}</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-request>
                     <tr>
+                        <td><span><a (click)="goDetails(request)" [routerLink]="['/request-details']"><mark class="text-blue-400 hover:text-pink-500">Req #{{request.id}}</mark></a></span>
                         <td>
-                            {{request.id}}
+                            {{request.claimNo}}
                         </td>
-                        <td><span><a (click)="goDetails(request)" [routerLink]="['/request-details']"><mark class="text-blue-400 hover:text-pink-500">{{request.id}}</mark></a></span>
+                        <td>
+                            {{request.jobNo}}
+                        </td>
+                        <td>
+                            {{request.firstName}}
+                        </td>
+                        <td>
+                            {{request.submissionDate | date: 'dd/MM/yyyy'}}
+                        </td>
                         <td>
                             {{request.requestTitle}}
                         </td>
@@ -57,18 +69,15 @@
                             {{request.privacy}}
                         </td>
                         <td>
-                            {{request.part.name}}
+                            {{request.submittedBids}}
                         </td>
                         <td>
-                            {{getPartTypesAsString(request.partTypes)}}
-                        </td>
-                        <td>
-                            {{request.status.nameEn}}
+                            {{getStatusName(request.status)}}
                         </td>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        {{'request.table_footer' | translate: {length: masters ? masters.length : 0} }}
+                        {{'request.table_footer' | translate: {length: masterDtos ? masterDtos.length : 0} }}
                     </div>
                 </ng-template>
             </p-table>

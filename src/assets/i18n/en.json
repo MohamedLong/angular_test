@@ -528,7 +528,7 @@
         "title": "Request Information",
         "table_footer": "In total there are {{length}} Requests",
         "tableColumn": {
-            "id": "ID",
+            "id": "Request #",
             "requestTitle": "Request Title",
             "description": "Description",
             "location": "Request Location",
@@ -537,6 +537,11 @@
             "privacy": "Privacy",
             "documents": "Documents",
             "partName": "Part Name",
+            "claimNo": "Claim No",
+            "jobNo": "Job No",
+            "createdUser": "Created User",
+            "submittedBids": "No of Submitted Bids",
+            "submissionDate": "Request Date",
             "partTypes": "Part Types",
             "status": "Status"
         },

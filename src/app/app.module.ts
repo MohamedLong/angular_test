@@ -201,6 +201,8 @@ import { JobDetailsComponent } from './xgarage/core/component/job/jobdetails.com
 import { RequestService } from './xgarage/core/service/request.service';
 import { GenericService } from './xgarage/common/generic/genericservice';
 import { NewRequestComponent } from './xgarage/core/component/request/new-request/new-request.component';
+import { BidService } from './xgarage/core/service/bidservice.service';
+import { RequestDetailsComponent } from './xgarage/core/component/request/requestdetails.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -391,11 +393,12 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         PartComponent,
         NewPartComponent,
         JobDetailsComponent,
-        NewRequestComponent
+        NewRequestComponent,
+        RequestDetailsComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,
-        CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService, JobService, DataService,
+        CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService, JobService, DataService, BidService,
         PhotoService, ProductService, MenuService, AppBreadcrumbService, MetricService, StatusService, TenantService, CurrencyService, RequestService,
         DialogService, UserSubMenuService, UserMainMenuService, MainMenuService, SubMenuService, PermissionService, RoleService, RolePermissionService,
         ClaimService
