@@ -9,10 +9,11 @@ import { Status } from 'src/app/xgarage/common/model/status';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { RequestService } from '../../service/request.service';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
+import { RequestDto } from '../../dto/requestdto';
 
 
 @Component({
-  selector: 'app-job',
+  selector: 'app-request',
   templateUrl: './request.component.html',
   styleUrls: ['../../../../demo/view/tabledemo.scss'],
 
@@ -40,16 +41,18 @@ valid: boolean = false;
     let user = this.authService.getStoredUser();
     if(JSON.parse(user).tenant){
       this.requestService.getForUser().subscribe({
-      next: (masters) => {
-          this.masters = masters;
+      next: (data) => {
+          this.masterDtos = data;
+          console.log('this.masters: ', this.masterDtos);
           this.loading = false;
       },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
   });
     }else{
       this.requestService.getAll().subscribe({
-        next: (masters) => {
-          this.masters = masters;
+        next: (data) => {
+          this.masterDtos = data;
+          console.log('this.masters: ', this.masterDtos);
           this.loading = false;
       },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
@@ -74,25 +77,17 @@ confirmDelete() {
   // })
 }
 
-getPartTypesAsString(partTypes: PartType[]) {
-    let partTypeNames: string = '';
-    partTypes.forEach(t => {
-        if(partTypeNames == '') {
-            partTypeNames = t.partType;
-        }else{
-            partTypeNames = partTypeNames + ', ' + t.partType;
-        }
-    })
-    if(partTypeNames == '')  {
-        partTypeNames = 'None';
-    }
-    return partTypeNames;
-}
 
-
-goDetails(request: Request) {
-  this.dataService.changeObject(request);
-  this.router.navigate(['request-details']);
-}
+goDetails(request: RequestDto) {
+  this.requestService.getById(request.id).subscribe(
+      {
+          next: (data) => {
+              this.master = data;
+              this.dataService.changeObject(this.master);
+              this.router.navigate(['request-details']);
+          },
+          error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+  });
+  }
 
 }
