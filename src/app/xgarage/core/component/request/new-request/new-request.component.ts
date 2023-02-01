@@ -19,7 +19,7 @@ import { RequestService } from '../../../service/request.service';
     margin-bottom: 1rem;
     display: block;
   }`],
-  providers: [MessageService]
+  providers: [MessageService, DatePipe]
 })
 export class NewRequestComponent extends GenericDetailsComponent implements OnInit, OnChanges {
 
