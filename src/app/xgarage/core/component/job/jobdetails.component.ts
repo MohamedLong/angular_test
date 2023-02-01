@@ -93,10 +93,16 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     confirmCancel(id: number) {
         console.log(id);
         this.requestService.cancelRequest(id).subscribe(res => {
+            //console.log('res:', res)
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Request Canceled' });
         }, err => {
-            console.log(err.error.message);
-            this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: err.error.message });
+           // console.log(err);
+            if(err.status == 200) {
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Request Canceled' });
+            } else {
+                this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: 'faild to cancel request' });
+            }
+
         });
 
         this.deleteSingleDialog = false;

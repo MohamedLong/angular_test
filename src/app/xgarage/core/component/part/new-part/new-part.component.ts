@@ -35,24 +35,24 @@ export class NewPartComponent implements OnInit {
     @Input() partDetails: Part = {};
     @Input() errMsg: string = "";
 
-    ngOnInit(): void { 
+    ngOnInit(): void {
         this.getPartCategories();
     }
 
     getPartCategories() {
-        this.categoryService.getAll().subscribe(res => {    
+        this.categoryService.getAll().subscribe(res => {
             this.categories = res;
             if(this.partDetails) {
                 this.showPart(this.partDetails);
-            } 
+            }
         });
     }
 
     showPart(part: Part) {
-        console.log('inside showPart: ', part);
+        // console.log('inside showPart: ', part);
         this.selectedCategory = this.categories.find(c => c.id == part.categoryId);
         this.subCategoryService.getSubCategoriesByCategory(part.categoryId).subscribe(res => {
-            this.subCategories = res;      
+            this.subCategories = res;
             //this.selectedSubCategory is not showen yet, still under fixing..
 
             // this.selectedSubCategory = this.subCategories.find(c => c.id = part.subCategoryId);
@@ -60,7 +60,7 @@ export class NewPartComponent implements OnInit {
             this.selectedPart = this.parts.find(s => s.id == part.id);
             this.part = part;
             this.requestService.part.next(this.part)
-            this.disableList = true;
+            this.disableList = this.type == 'edit req'? false : true;
         });
     }
 
@@ -87,7 +87,7 @@ export class NewPartComponent implements OnInit {
         this.selectedPart = part;
         this.selectedCategory = this.categories.find(c => c.id == this.selectedPart.categoryId);
         this.subCategoryService.getSubCategoriesByCategory(this.selectedPart.categoryId).subscribe(res => {
-            this.subCategories = res;      
+            this.subCategories = res;
             this.selectedSubCategory = this.subCategories.find(c => c.id = this.selectedPart.subCategoryId);
             this.disableList = true;
             this.part = this.selectedPart;
@@ -105,7 +105,7 @@ export class NewPartComponent implements OnInit {
 
     onCategoryChange(id: number) {
         this.subCategoryService.getSubCategoriesByCategory(id).subscribe(res => {
-            this.subCategories = res;      
+            this.subCategories = res;
         })
 
     }

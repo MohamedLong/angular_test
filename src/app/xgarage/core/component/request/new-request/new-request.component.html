@@ -2,16 +2,21 @@
     <div class="field col-12">
         <app-new-part [type]="type" [errMsg]="partErrorMsg" [partDetails]="requestDetails.part"></app-new-part>
     </div>
-    <div class="field col-12">
-        <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="Upload Parts Image" [customUpload]="true"
-            [auto]="true" (uploadHandler)="uploadPartImages($event)" multiple="multiple" accept="image/*">
-        </p-fileUpload>
-    </div>
     <div class="col-12">
         <p-divider type="dashed"></p-divider>
     </div>
     <div class="grid pb-3">
+        <div class="field col-12 md:col-6 mt-4">
+            <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="{{ 'request.form.uploadImages' | translate }}" [customUpload]="true"
+                [auto]="true" (uploadHandler)="uploadPartImages($event)" multiple="multiple" accept="image/*">
+            </p-fileUpload>
+        </div>
         <div class="field col-12 md:col-6">
+            <label for="">{{ 'request.form.desc' | translate }}</label>
+            <textarea rows="5" [(ngModel)]="description" placeholder="{{ 'request.form.descPlaceholder' | translate }}"
+                class="width-100 block" type="text" pInputText required></textarea>
+        </div>
+        <div class="field col-12">
             <label class="mb-2">{{ 'request.form.prefredTypes' | translate }}</label>
             <div class="flex align-items-center">
                 <ng-container *ngFor="let type of partTypes" class="field-checkbox">
@@ -24,11 +29,7 @@
                 *ngIf="submitted && selectedPartTypes.length == 0"
                 class="p-error mt-2">{{ 'request.form.prefredTypesrequired' | translate }}</small>
         </div>
-        <div class="field col-12 md:col-6">
-            <label for="">{{ 'request.form.desc' | translate }}</label>
-            <textarea [(ngModel)]="description" placeholder="{{ 'request.form.descPlaceholder' | translate }}"
-                class="width-100 block" type="text" pInputText required></textarea>
-        </div>
+
     </div>
     <div class="col-12 text-right" *ngIf="type == 'new req'">
         <button icon="{{isSending? 'pi pi-spin pi-spinner':'pi pi-check'}}" iconPos="right" class="width-100 md:w-20rem" type="button" pButton pRipple (click)="sendRequest()"

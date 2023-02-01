@@ -545,13 +545,13 @@
             "prefredTypesrequired": "please select part type",
             "desc": "Description",
             "descPlaceholder": "Add a short description about your parts",
-            "sendReq": "{{text}}"
+            "sendReq": "{{text}}",
+            "uploadImages": "Upload Part Images"
         },
         "requestDialog": {
             "title": "Request Details"
         }
     },
-
     "car": {
         "title": "Car Information",
         "form": {

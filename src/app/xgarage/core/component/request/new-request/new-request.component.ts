@@ -1,7 +1,13 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
+import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
+import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { PartService } from '../../../service/part.service';
 import { PartTypeService } from '../../../service/parttype.service';
 import { RequestService } from '../../../service/request.service';
@@ -12,14 +18,22 @@ import { RequestService } from '../../../service/request.service';
     styles: [`:host {
     margin-bottom: 1rem;
     display: block;
-  }`]
+  }`],
+  providers: [MessageService]
 })
-export class NewRequestComponent implements OnInit, OnChanges {
+export class NewRequestComponent extends GenericDetailsComponent implements OnInit, OnChanges {
 
     constructor(
         private requestService: RequestService,
         private partTypeService: PartTypeService,
-        private dataService: DataService<any>) {
+        private dataService: DataService<any>,
+        public statusService: StatusService,
+        public breadcrumbService: AppBreadcrumbService,
+        public datePipe: DatePipe,
+        public route: ActivatedRoute,
+        public router: Router,
+        public messageService: MessageService) {
+        super(route, router, requestService, datePipe, statusService, breadcrumbService);
         this.responseBody = {};
         this.subCategoryId = "";
     }
@@ -43,7 +57,7 @@ export class NewRequestComponent implements OnInit, OnChanges {
 
     ngOnInit(): void {
         this.getPartTypes();
-        console.log(this.requestDetails)
+        // console.log(this.requestDetails)
         if (this.type == 'edit req') {
             this.setRequestInfo();
         }
@@ -93,21 +107,7 @@ export class NewRequestComponent implements OnInit, OnChanges {
                         this.responseBody.user = data.user;
                         this.responseBody.partTypes = this.selectedPartTypes;
 
-
-                        this.requestService.part.subscribe(part => {
-                            this.subCategoryId = "";
-
-                            if (JSON.stringify(part) !== '{}') {
-                                this.responseBody.part = {
-                                    'id': part.id,
-                                    'name': part.name,
-                                    'status': part.status
-                                };
-
-                                this.subCategoryId = part.subCategoryId;
-                            }
-                        });
-
+                        this.getPart();
                         // console.log('req form is not valid')
 
                         if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0) {
@@ -115,27 +115,7 @@ export class NewRequestComponent implements OnInit, OnChanges {
                             console.log('request body inside requets component: ', this.responseBody, this.subCategoryId);
                             this.partErrorMsg = '';
 
-                            let stringRequestBody = JSON.stringify(this.responseBody);
-                            let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId, "partImages": this.partImages }
-
-
-                            let reqFormData = new FormData();
-                            for (var key in req) {
-                                reqFormData.append(key, req[key]);
-                            }
-
-                            this.isSending = true;
-                            this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
-                                if (res.messageCode == 200) {
-                                    this.blocked = true;
-                                    this.isSending = false;
-                                    this.buttonTxt = 'Request Sent Successfully';
-                                }
-                            }, err => {
-                                console.log(err)
-                                this.isSending = false;
-                                this.blocked = false;
-                            });
+                            this.formatThenSaveRequest()
                         }
 
                         if (!this.responseBody.part) {
@@ -149,17 +129,85 @@ export class NewRequestComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (!changes.edit.firstChange) {
-            // this.requestDetails.description = this.description;
-            // console.log(this.requestDetails)
+        if (changes.edit && !changes.edit.firstChange) {
+            console.log('save clicked')
+            this.responseBody.id = this.requestDetails.id;
+            this.responseBody.job = this.requestDetails.job;
+            this.responseBody.description = this.description;
+            this.responseBody.car = { 'id': this.requestDetails.car.id };
+            this.responseBody.locationName = this.requestDetails.locationName;
+            this.responseBody.suppliers = this.requestDetails.suppliers;
+            this.responseBody.privacy = this.requestDetails.privacy;
+            this.responseBody.requestTitle = this.requestDetails.requestTitle;
+            this.responseBody.user = this.requestDetails.user;
+            this.responseBody.partTypes = this.selectedPartTypes;
+
+            this.getPart();
+            //console.log(this.responseBody)
+            this.formatThenSaveRequest();
         }
     }
 
     setRequestInfo() {
+        console.log('setting req info')
+        this.selectedPartTypes = this.requestDetails.partTypes; //set part types
+        this.description = this.requestDetails.description; //set description
+    }
 
-          this.selectedPartTypes = this.requestDetails.partTypes; //set part types
+    getPart() {
+        console.log('getting part')
+        this.requestService.part.subscribe(part => {
+            if (JSON.stringify(part) !== '{}') {
+                this.responseBody.part = {
+                    'id': part.id,
+                    'name': part.name,
+                    'status': part.status
+                };
 
-          this.description = this.requestDetails.description; //set description
+                this.subCategoryId = part.subCategoryId;
+            }
+        });
+    }
+
+    formatThenSaveRequest() {
+        console.log('formatting req')
+        let stringRequestBody = JSON.stringify(this.responseBody);
+        let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId, "partImages": this.partImages }
+
+        //console.log(req)
+
+        let reqFormData = new FormData();
+        for (var key in req) {
+            reqFormData.append(key, req[key]);
+        }
+        console.log(this.responseBody)
+        if (this.responseBody.hasOwnProperty('id')) {
+            console.log('editing')
+            this.requestService.update(reqFormData).subscribe((res: MessageResponse) => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+            }, err => {
+                console.log(err.error)
+                this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
+            });
+
+            this.hideDialog();
+
+        } else {
+            this.isSending = true;
+
+            this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
+                if (res.messageCode == 200) {
+                    this.blocked = true;
+                    this.isSending = false;
+                    this.buttonTxt = 'Request Sent Successfully';
+                }
+            }, err => {
+                console.log(err)
+                this.isSending = false;
+                this.blocked = false;
+            });
+        }
+
     }
 
 }
