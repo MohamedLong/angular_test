@@ -43,6 +43,10 @@ import { SupplierService } from '../../../service/supplier.service';
             cursor: not-allowed;
         }
 
+        .add-part-img {
+            cursor: pointer;
+        }
+
         .p-chips .p-chips-multiple-container .p-chips-token {
             margin-bottom: 0.25rem;
         }
