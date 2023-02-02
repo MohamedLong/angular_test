@@ -28,14 +28,11 @@ import { PartComponent } from './xgarage/core/component/part/part.component';
 import { NewPartComponent } from './xgarage/core/component/part/new-part/new-part.component';
 import { JobDetailsComponent } from './xgarage/core/component/job/jobdetails.component';
 import { NewRequestComponent } from './xgarage/core/component/request/new-request/new-request.component';
-<<<<<<< HEAD
-import { SubCategoryComponent } from './xgarage/common/component/sub-category/sub-category.component';
-import { CategoryComponent } from './xgarage/common/component/category/category.component';
-import { BrandComponent } from './xgarage/common/component/brand/brand.component';
-import { CarModelComponent } from './xgarage/common/component/car-model/car-model.component';
-=======
 import { RequestDetailsComponent } from './xgarage/core/component/request/requestdetails.component';
->>>>>>> 9e522228d491eac63bce991c346d08db515ee2ff
+import { BrandComponent } from './xgarage/common/component/brand/brand.component';
+import { CategoryComponent } from './xgarage/common/component/category/category.component';
+import { SubCategoryComponent } from './xgarage/common/component/sub-category/sub-category.component';
+import { CarModelComponent } from './xgarage/common/component/car-model/car-model.component';
 
 const routes: Routes = [];
 

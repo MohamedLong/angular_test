@@ -596,11 +596,11 @@
         "tableColumn": {
             "id": "ID",
             "name": "Category Name",
-            "nameSearch": "Search by category name",
+            "nameSearch": "Search by category name"
         },
         "categoryDialog": {
             "title": "Category Details",
-            "nameRequired": "Category name is required.",
+            "nameRequired": "Category name is required."
         }
     },
     "brand": {
@@ -608,11 +608,11 @@
         "tableColumn": {
             "id": "ID",
             "brandName": "Brand Name",
-            "nameSearch": "Search by brand name",
+            "nameSearch": "Search by brand name"
         },
         "brandDialog": {
             "title": "Brand Details",
-            "brandNameRequired": "Brand name is required.",
+            "brandNameRequired": "Brand name is required."
         }
     },
     "subcategory": {
@@ -620,11 +620,11 @@
         "tableColumn": {
             "id": "ID",
             "name": "Sub-Category Name",
-            "nameSearch": "Search by sub-category name",
+            "nameSearch": "Search by sub-category name"
         },
         "subcategoryDialog": {
             "title": "Sub-Category Details",
-            "nameRequired": "Sub-Category name is required.",
+            "nameRequired": "Sub-Category name is required."
         }
     },
     "carModel": {
@@ -632,11 +632,11 @@
         "tableColumn": {
             "id": "ID",
             "name": "Car Model Name",
-            "nameSearch": "Search by car model name",
+            "nameSearch": "Search by car model name"
         },
         "carModelDialog": {
             "title": "Car Model Details",
-            "nameRequired": "Car Model name is required.",
+            "nameRequired": "Car Model name is required."
         }
     },
     "bid": {
