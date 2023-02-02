@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { GenericService } from '../../common/generic/genericservice';
 import { config } from 'src/app/config';
 import { BehaviorSubject, throwError } from 'rxjs';
+import { MessageResponse } from '../../common/dto/messageresponse';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,7 @@ export class RequestService extends GenericService<any> {
     }
 
     cancelRequest(requestId: number) {
-        return this.http.get<any[]>(this.apiServerUrl + '/cancelRequest/' + requestId);
+        return this.http.get<MessageResponse>(this.apiServerUrl + '/cancelRequest/' + requestId);
     }
 
     part: BehaviorSubject<any> = new BehaviorSubject({});

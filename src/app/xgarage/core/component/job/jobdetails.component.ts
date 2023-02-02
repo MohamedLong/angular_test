@@ -44,6 +44,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     insuranceTypes = Object.values(InsuranceType);
     selectedInsuranceType: string;
     updateRequest: boolean = false;
+    type: string;
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe, public statusService: StatusService) {
             super(route, router, requestService, datePipe, statusService, breadcrumbService);
@@ -93,16 +94,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     confirmCancel(id: number) {
         console.log(id);
         this.requestService.cancelRequest(id).subscribe(res => {
-            //console.log('res:', res)
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Request Canceled' });
-        }, err => {
-           // console.log(err);
-            if(err.status == 200) {
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Request Canceled' });
+            if(res.messageCode == 200) {
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
             } else {
-                this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: 'faild to cancel request' });
+                this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: res.message });
             }
-
+        }, err => {
+            this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: err.error.message });
         });
 
         this.deleteSingleDialog = false;
@@ -127,6 +125,17 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         }
     }
 
+
+    openNew() {
+        this.type = 'new req';
+        super.openNew();
+    }
+
+    editAction(detail?: any) {
+        this.type = 'edit req';
+        super.editAction(detail);
+    }
+    
     getPartTypesAsString(partTypes: PartType[]) {
         let partTypeNames: string = '';
         partTypes.forEach(t => {

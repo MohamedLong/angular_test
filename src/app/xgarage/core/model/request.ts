@@ -1,4 +1,5 @@
 import { MasterEntity } from "../../common/generic/masterentity";
+import { Document } from "../../common/model/document";
 import { PartType } from "../../common/model/parttype";
 import { Privacy } from "../../common/model/privacy";
 import { Car } from "./car";

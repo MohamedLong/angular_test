@@ -12,6 +12,6 @@ export class BidService extends GenericService<any> {
     }
 
     public getByRequest(requestId: number){
-        return this.http.get<any[]>(this.apiServerUrl + '/rwquest/' + requestId);
+        return this.http.get<any[]>(this.apiServerUrl + '/request/' + requestId);
     }
 }

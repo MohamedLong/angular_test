@@ -66,9 +66,9 @@ export class NewJobComponent implements OnInit {
     supplierSelected: boolean = false;
     insuranceFrom = Object.keys(InsuranceType);
     jobForm: FormGroup = this.formBuilder.group({
-        insuranceFrom: [''],
+        insuranceFrom: ['', Validators.required],
         claim: ['', Validators.required],
-        user: [''],
+        // user: [''],
         job: [''],
         jobId: ['', Validators.required],
         location: [''],
@@ -102,9 +102,6 @@ export class NewJobComponent implements OnInit {
         private messageService: MessageService) { }
 
     ngOnInit(): void {
-        // set user id
-        let user = JSON.parse(this.authService.getStoredUser()).id;
-        this.jobForm.patchValue({ user });
         //set location
         let location = JSON.parse(this.authService.getStoredUser()).tenant.location;
         this.jobForm.patchValue({ location });
@@ -231,12 +228,16 @@ export class NewJobComponent implements OnInit {
             claim: this.claimId,
             insuranceType: this.jobForm.get('insuranceFrom').value,
             car: { 'id': this.jobForm.get('car').value.id },
+            privacy: this.jobForm.get('privacy').value,
+            suppliers: this.jobForm.get('suppliers').value,
+            jobTitle: `${this.jobForm.get('car').value.brandId.brandName} ${this.jobForm.get('car').value.carModelId.name} ${this.jobForm.get('car').value.carModelYearId.year}  ${this.jobForm.get('car').value.carModelTypeId.type}`
         }
         this.jobService.add(jobBody).subscribe(res => {
             this.jobForm.patchValue({ 'jobId': res.id });
-            if (this.jobForm.get('jobId').value !== '') {
-                this.dataService.changeObject(this.jobForm.getRawValue());
-            }
+            console.log(res)
+            // if (this.jobForm.get('jobId').value !== '') {
+            //     this.dataService.changeObject(this.jobForm.getRawValue());
+            // }
         }, err => {
             console.log('err', err)
         })

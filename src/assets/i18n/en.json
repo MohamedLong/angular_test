@@ -63,6 +63,7 @@
         "deleteConfirm": "Confirm",
         "addPayment": "Add Payment",
         "operations": "Operations",
+        "addnew": "Add New",
         "tableFilter": {
             "clear": "Clear",
             "apply": "Apply..."
@@ -329,6 +330,7 @@
         "title": "Manage Parts",
         "export": "Export",
         "dividerTitle": " Or Select Manually",
+        "addPart": "Add Part",
         "tableColumn": {
             "id": "ID",
             "partName": "Part Name",
@@ -506,16 +508,22 @@
             "enterJob": "Enter Job Card Number",
             "selectPrivateSuppliers": "Select Private Suppliers",
             "enterclaimNo": "Enter Calim Number",
-            "ot/dp": "OD/TP"
+            "ot/dp": "OD/TP",
+            "newReq": "Add New Request",
+            "selectInsurance": "Select Insurance From"
         },
 
         "tableColumn": {
             "id": "ID",
             "jobNo": "Job Number",
-            "claimNo": "Claim ID",
+            "claimNo": "Claim Number",
+            "claimId": "Claim ID",
             "insuranceType": "Insurance Type",
-            "carPlateNumber": "Plate Number",
             "carChassisNumber": "Chassis Number",
+            "carPlateNumber": "Plate Number",
+            "jobTitle": "Vechile Info",
+            "partNames": "Parts",
+            "submittedBids": "Last Update",
             "jobStatus": "Status"
 
         },
@@ -554,6 +562,7 @@
             "uploadImages": "Upload Part Images"
         },
         "requestDialog": {
+            "newRequest": "Add Request",
             "title": "Request Details"
         }
     },
@@ -628,5 +637,8 @@
             "title": "Car Model Details",
             "nameRequired": "Car Model name is required.",
         }
+    },
+    "bid": {
+        "title": "Bids"
     }
 }
