@@ -7,15 +7,15 @@
             <div class="formgrid grid">
                 <div class="field col-12 md:col-6">
                     <span class="p-buttonset">
-                        <button pButton pRipple label="{{ 'job.jobDialog.newJob' | translate }}" icon="pi pi-plus"
-                        class="p-button-success mr-2 mb-3" [routerLink]="['/jobs/new-job']" [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
+                        <button pButton pRipple label="{{ 'request.requestDialog.newRequest' | translate }}" icon="pi pi-plus"
+                        class="p-button-success mr-2 mb-3" [routerLink]="['/request/new-request']" [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
                     </span>
                 </div>
             <div class="field col-12 md:col-6">
                 <div class="flex align-items-center">
                     <p-chip label="Information" icon="pi pi-angle-double-right" styleClass="mr-2"></p-chip>
-                    <p-chip label="{{master.createdBy}}" icon="pi pi-user" tooltipPosition="top" pTooltip="{{ 'common.insertUser' | translate }}" styleClass="mr-2"></p-chip>
-                    <p-chip label="{{master.createdAt | date: 'dd/MM/yyyy'}}" icon="pi pi-history" tooltipPosition="top" pTooltip="{{ 'common.insertDate' | translate }}" styleClass="mr-2"></p-chip>
+                    <p-chip label="{{master.user}}" icon="pi pi-user" tooltipPosition="top" pTooltip="{{ 'common.insertUser' | translate }}" styleClass="mr-2"></p-chip>
+                    <p-chip label="{{master.submissionDate | date: 'dd/MM/yyyy'}}" icon="pi pi-history" tooltipPosition="top" pTooltip="{{ 'common.insertDate' | translate }}" styleClass="mr-2"></p-chip>
                     <p-chip label="{{master.status.nameEn}}" icon="pi pi-check" pTooltip="{{ 'common.status' | translate }}" tooltipPosition="top" styleClass="mr-2"></p-chip>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="flex justify-content-between">
-                                <h5>{{ 'job.jobDialog.title' | translate }} #{{master.id}}
+                                <h5>{{ 'request.requestDialog.title' | translate }} #{{master.id}}
                                 </h5>
                                 <div class="flex flex-column align-items-end">
                                     <img src="assets/layout/images/extensions/prime-logo.svg" alt="invoice-logo"/>

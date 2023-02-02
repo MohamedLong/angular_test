@@ -18,8 +18,8 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['id','jobNo','claimNo','insuranceType','carPlateNumber','jobStatus']"
+            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['id','jobNo','claimNo','partNames','jobStatus','jobTitle']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)"
@@ -36,19 +36,17 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="id">{{ 'common.id' | translate }}<p-sortIcon field="id"></p-sortIcon>
-                        </th>
                         <th pColumn="jobNo">{{ 'job.tableColumn.jobNo' | translate }}
                         </th>
+                        <th pColumn="jobTitle">{{ 'job.tableColumn.jobTitle' | translate }}
+                        </th>
+                        <th pColumn="partNames">{{ 'job.tableColumn.partNames' | translate }}
+                        </th>
+                        <th pColumn="submittedBids">{{ 'job.tableColumn.submittedBids' | translate }}
+                        </th>
+                        <th pColumn="jobStatus">{{ 'job.tableColumn.jobStatus' | translate }}
+                        </th>
                         <th pColumn="claimNo">{{ 'job.tableColumn.claimNo' | translate }}
-                        </th>
-                        <th pColumn="insuranceType">{{ 'job.tableColumn.insuranceType' | translate }}
-                        </th>
-                        <th pColumn="carChassisNumber">{{ 'job.tableColumn.carChassisNumber' | translate }}
-                        </th>
-                        <th pColumn="carPlateNumber">{{ 'job.tableColumn.carPlateNumber' | translate }}
-                        </th>
-                        <th pSortableColumn="jobStatus">{{ 'job.tableColumn.jobStatus' | translate }}<p-sortIcon field="jobStatus"></p-sortIcon>
                         </th>
                         <!-- <th pColumn="actions">{{'common.actions' | translate }}
                         </th> -->
@@ -57,24 +55,21 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-job>
                     <tr>
-                        <td>
-                            {{job.id}}
-                        </td>
                         <td><span><a (click)="goDetails(job)" style="cursor: pointer;"><mark class="text-blue-400 hover:text-pink-500">{{job.jobNo}}</mark></a></span>
                         <td>
-                            {{job.claim}}
+                            {{job.jobTitle}}
                         </td>
                         <td>
-                            {{job.insuranceType}}
+                            {{job.partNames}}
                         </td>
                         <td>
-                            {{job.car.chassisNumber}}
+                            There is {{job.submittedBids}} of Submitted Bids
                         </td>
                         <td>
-                            {{job.car.plateNumber}}
+                            {{job.jobStatus}}
                         </td>
                         <td>
-                            {{getStatusName(job.status.id)}}
+                            {{job.claimNo}}
                         </td>
 <!--
                         <td>

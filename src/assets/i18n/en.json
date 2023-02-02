@@ -512,10 +512,14 @@
         "tableColumn": {
             "id": "ID",
             "jobNo": "Job Number",
-            "claimNo": "Claim ID",
+            "claimNo": "Claim Number",
+            "claimId": "Claim ID",
             "insuranceType": "Insurance Type",
-            "carPlateNumber": "Plate Number",
             "carChassisNumber": "Chassis Number",
+            "carPlateNumber": "Plate Number",
+            "jobTitle": "Vechile Info",
+            "partNames": "Parts",
+            "submittedBids": "Last Update",
             "jobStatus": "Status"
 
         },
@@ -554,6 +558,7 @@
             "uploadImages": "Upload Part Images"
         },
         "requestDialog": {
+            "newRequest": "Add Request",
             "title": "Request Details"
         }
     },

@@ -35,9 +35,30 @@ valid: boolean = false;
 
   ngOnInit(): void {
     super.callInsideOnInit();
-    this.getAllForUser();
+    this.getAllForTenant();
 
   }
+
+  getAllForTenant() {
+    let user = this.authService.getStoredUser();
+    if(JSON.parse(user).tenant){
+      this.jobService.getForTenant().subscribe({
+      next: (data) => {
+          this.masterDtos = data;
+          this.loading = false;
+      },
+      error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+  });
+    }else{
+      this.jobService.getAll().subscribe({
+        next: (data) => {
+          this.masterDtos = data;
+          this.loading = false;
+      },
+      error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+  });
+    }
+ }
 
   getAllForUser() {
     let user = this.authService.getStoredUser();
@@ -78,9 +99,16 @@ confirmDelete() {
 }
 
 
-goDetails(job: Job) {
-  this.dataService.changeObject(job);
-  this.router.navigate(['job-details']);
+goDetails(dto: any) {
+  this.jobService.getById(dto.id).subscribe(
+    {
+        next: (data) => {
+            this.master = data;
+            this.dataService.changeObject(this.master);
+            this.router.navigate(['job-details']);
+        },
+        error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+});
 }
 
 }

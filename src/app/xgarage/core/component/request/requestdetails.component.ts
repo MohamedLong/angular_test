@@ -14,7 +14,7 @@ import { InsuranceType } from '../../model/insurancetype';
 import { BidService } from '../../service/bidservice.service';
 
 @Component({
-  selector: 'job-details',
+  selector: 'request-details',
   templateUrl: './requestdetails.component.html',
   styleUrls: ['../../../../demo/view/tabledemo.scss'],
     styles: [`
@@ -41,8 +41,6 @@ export class RequestDetailsComponent extends GenericDetailsComponent implements 
 
     ref: DynamicDialogRef;
     hasRef: boolean = false;
-    insuranceTypes = Object.values(InsuranceType);
-    selectedInsuranceType: string;
     updateRequest: boolean = false;
     constructor(public route: ActivatedRoute, private bidService: BidService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe, public statusService: StatusService) {
@@ -52,6 +50,7 @@ export class RequestDetailsComponent extends GenericDetailsComponent implements 
             next: (data) => {
                 this.master = data;
                 this.masters.push(this.master);
+                console.log('this.master: ', this.master);
                 this.getMinDate();
             },
             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
@@ -79,7 +78,6 @@ export class RequestDetailsComponent extends GenericDetailsComponent implements 
 
     editParentAction() {
         this.originalMaster = {...this.master};
-        this.selectedInsuranceType = this.master.insuranceType;
         this.masterDialog = true;
     }
 
@@ -105,8 +103,7 @@ export class RequestDetailsComponent extends GenericDetailsComponent implements 
 
     updateParent() {
         this.parentSubmitted = true;
-        if(this.master.jobNo && this.selectedInsuranceType) {
-            this.master.insuranceType = this.selectedInsuranceType;
+        if(this.master.jobNo) {
             this.requestService.update(this.master).subscribe(
                 {
                     next: (data) => {

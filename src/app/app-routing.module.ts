@@ -28,6 +28,7 @@ import { PartComponent } from './xgarage/core/component/part/part.component';
 import { NewPartComponent } from './xgarage/core/component/part/new-part/new-part.component';
 import { JobDetailsComponent } from './xgarage/core/component/job/jobdetails.component';
 import { NewRequestComponent } from './xgarage/core/component/request/new-request/new-request.component';
+import { RequestDetailsComponent } from './xgarage/core/component/request/requestdetails.component';
 
 const routes: Routes = [];
 
@@ -51,7 +52,7 @@ const routes: Routes = [];
                     {path: 'jobs', component: JobComponent},
                     {path: 'jobs/new-job', component: NewJobComponent},
                     {path: 'requests', component: RequestComponent},
-                    // {path: 'job-details', component: RequestDetailsComponent}
+                    {path: 'request-details', component: RequestDetailsComponent},
                     {path: 'requests/new-request', component: NewRequestComponent},
                     {path: 'cars', component: CarComponent},
                     {path: 'cars/new-car', component: NewCarComponent},

@@ -54,7 +54,7 @@
                         <ng-template pTemplate="header" let-columns>
                             <tr>
                                 <th pColumn="jobNo">{{ 'job.tableColumn.jobNo' | translate }}</th>
-                                <th pColumn="claim.claimNumber">{{ 'job.tableColumn.claimNo' | translate }}</th>
+                                <th pColumn="claim.claimNumber">{{ 'job.tableColumn.claimId' | translate }}</th>
                                 <th pColumn="insuranceType">{{ 'job.tableColumn.insuranceType' | translate }}</th>
                                 <th pColumn="car.chassisNumber">{{ 'job.tableColumn.carChassisNumber' | translate }}</th>
                                 <th pColumn="car.plateNumber">{{ 'job.tableColumn.carPlateNumber' | translate }}</th>
@@ -184,9 +184,8 @@
                     [modal]="true" [style]="{width:'450px'}">
                     <div class="flex align-items-center justify-content-center">
                         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                        <span *ngIf="detail">{{ 'operations.deleteMessage' | translate }} <b>{{
-                                'performaDetails.tableColumn.id' | translate }}
-                                {{detail.id}}</b>?</span>
+                        <span *ngIf="detail">{{ 'operations.cancelMessage' | translate }} <b>
+                                Req #{{detail.id}}</b>?</span>
                     </div>
                     <ng-template pTemplate="footer">
                         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
