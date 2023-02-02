@@ -524,8 +524,9 @@
             "jobTitle": "Vechile Info",
             "partNames": "Parts",
             "submittedBids": "Last Update",
-            "jobStatus": "Status"
-
+            "jobStatus": "Status",
+            "receivedBids": "Received Bids",
+            "addBids": "Add Bids"
         },
         "jobDialog": {
             "newJob": "Add Job",
