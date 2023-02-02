@@ -591,6 +591,54 @@
             "addCar": "Add Car"
         }
     },
+    "category": {
+        "title": "Manage Categories",
+        "tableColumn": {
+            "id": "ID",
+            "name": "Category Name",
+            "nameSearch": "Search by category name",
+        },
+        "categoryDialog": {
+            "title": "Category Details",
+            "nameRequired": "Category name is required.",
+        }
+    },
+    "brand": {
+        "title": "Manage Brands",
+        "tableColumn": {
+            "id": "ID",
+            "brandName": "Brand Name",
+            "nameSearch": "Search by brand name",
+        },
+        "brandDialog": {
+            "title": "Brand Details",
+            "brandNameRequired": "Brand name is required.",
+        }
+    },
+    "subcategory": {
+        "title": "Manage Sub-Categories",
+        "tableColumn": {
+            "id": "ID",
+            "name": "Sub-Category Name",
+            "nameSearch": "Search by sub-category name",
+        },
+        "subcategoryDialog": {
+            "title": "Sub-Category Details",
+            "nameRequired": "Sub-Category name is required.",
+        }
+    },
+    "carModel": {
+        "title": "Manage Car Models",
+        "tableColumn": {
+            "id": "ID",
+            "name": "Car Model Name",
+            "nameSearch": "Search by car model name",
+        },
+        "carModelDialog": {
+            "title": "Car Model Details",
+            "nameRequired": "Car Model name is required.",
+        }
+    },
     "bid": {
         "title": "Bids"
     }
