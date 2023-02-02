@@ -24,94 +24,98 @@
                     <p-toast appendTo="body"></p-toast>
                     <form [formGroup]="jobForm" (ngSubmit)="onJobFormSubmit()">
                         <div class="grid">
-                            <div class="col-12" *ngIf="jobForm.get('car').value">
-                                <p-messages class="car-info" severity="info">
-                                    <ng-template pTemplate>
-                                        <p>
-                                            {{jobForm.get('car').value.brandId.brandName}}
-                                            {{jobForm.get('car').value.carModelId.name}}
-                                            {{jobForm.get('car').value.carModelYearId.year}}
-                                            {{jobForm.get('car').value.carModelTypeId.type}},
-                                            {{ 'car.form.chassisNo' | translate }}:
-                                            {{jobForm.get('car').value.chassisNumber}},
-                                            {{ 'car.form.licencePlate' | translate }}:
-                                            {{jobForm.get('car').value.plateNumber}}
-                                        </p>
-                                    </ng-template>
-                                </p-messages>
+                            <div class="col-12" *ngIf="!isRequest">
+                                <div class="grid">
+                                    <div class="col-12" *ngIf="jobForm.get('car').value">
+                                        <p-messages class="car-info" severity="info">
+                                            <ng-template pTemplate>
+                                                <p>
+                                                    {{jobForm.get('car').value.brandId.brandName}}
+                                                    {{jobForm.get('car').value.carModelId.name}}
+                                                    {{jobForm.get('car').value.carModelYearId.year}}
+                                                    {{jobForm.get('car').value.carModelTypeId.type}},
+                                                    {{ 'car.form.chassisNo' | translate }}:
+                                                    {{jobForm.get('car').value.chassisNumber}},
+                                                    {{ 'car.form.licencePlate' | translate }}:
+                                                    {{jobForm.get('car').value.plateNumber}}
+                                                </p>
+                                            </ng-template>
+                                        </p-messages>
+                                    </div>
+                                    <div class="col-12 md:col-6">
+                                        <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
+                                        <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom"
+                                            placeholder="OD/TP"></p-dropdown>
+                                    </div>
+                                    <div class="col-12  md:col-6">
+                                        <label class="block">{{ 'job.form.claimNo' | translate }}</label>
+                                        <span class="p-input-icon-right width-100 my-2">
+                                            <i class="pi pi-spin pi-spinner" *ngIf="isTypingClaim"></i>
+                                            <!-- <i class="pi pi-check text-green-500 font-bold" *ngIf="!isTypingClaim"></i> -->
+                                            <input formControlName="claim" class="width-100" type="text" pInputText
+                                                (keyup)="onClaimNumberKeyUp()" (keydown)="onClaimNumberKeyDown()"
+                                                placeholder="{{ 'job.form.claimNo' | translate }}" required />
+                                        </span>
+                                        <small
+                                            *ngIf="submitted && !jobForm.get('claim').valid  && jobForm.get('claim').errors?.['required']"
+                                            class="p-error">{{ 'job.form.Enter Calim Number' | translate }}</small>
+                                    </div>
+                                    <div class="col-12 md:col-6">
+                                        <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
+                                        <p-dropdown class="mb-2" *ngIf="jobFound.multiple" [options]="jobs"
+                                            formControlName="jobId" optionLabel="jobNo" optionValue="id"
+                                            placeholder="select a job"></p-dropdown>
+                                        <small
+                                            *ngIf="jobFound.multiple && submitted && !jobForm.get('jobId').valid  && jobForm.get('jobId').errors?.['required']"
+                                            class="p-error">{{ 'job.form.enterJob' | translate }}</small>
+                                        <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100 mb-2"
+                                            type="text" pInputText placeholder="{{ 'job.form.enterJob' | translate }}"
+                                             />
+                                        <small
+                                            *ngIf="!jobFound.multiple && submitted && !jobForm.get('job').valid  && jobForm.get('job').errors?.['required']"
+                                            class="p-error">{{ 'job.form.enterJob' | translate }}</small>
+                                    </div>
+                                    <div class="col-12">
+                                        <p-divider align="left">
+                                            <b class="bg-bluegray-50">{{ 'job.form.addMoreDetails' | translate }}</b>
+                                        </p-divider>
+                                    </div>
+                                    <div class="col-12 md:col-6">
+                                        <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
+                                        <p-dropdown appendTo="body" formControlName="privacy" [options]="privacyList"
+                                            (onChange)="onPrivacyChange($event.value)"></p-dropdown>
+                                    </div>
+                                    <div class="col-12 md:col-6">
+                                        <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
+                                        <input formControlName="location" class="width-100" type="text" pInputText required />
+                                    </div>
+                                    <div class="col-12 md:col-6" *ngIf="privateSuppliersList.length > 0">
+                                        <ng-container *ngFor="let supplier of privateSuppliersList">
+                                            <p-chip class="mr-2" [removable]="true" (onRemove)="removePrivateSupplier(supplier)">
+                                                {{supplier.name}}
+                                            </p-chip>
+                                        </ng-container>
+                                    </div>
+                                    <p-dialog header="Private Suppliers" [modal]="true" [style]="{width: '50vw'}"
+                                        [(visible)]="displayPrivateSuppliers" (onHide)="resetPrivacy()">
+                                        <p-listbox (onChange)="selectSupplier($event.value)" [checkbox]="true"
+                                            [options]="selectedPrivateSuppliers | async" formControlName="suppliers"
+                                            [multiple]="true" optionLabel="name"></p-listbox>
+                                        <ng-template pTemplate="footer">
+                                            <p-button icon="pi pi-check" (click)="displayPrivateSuppliers=false" label="Ok"
+                                                styleClass="p-button-text" [disabled]="!supplierSelected"></p-button>
+                                        </ng-template>
+                                    </p-dialog>
+                                </div>
                             </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
-                                <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom"
-                                    placeholder="OD/TP"></p-dropdown>
-                            </div>
-                            <div class="col-12  md:col-6">
-                                <label class="block">{{ 'job.form.claimNo' | translate }}</label>
-                                <span class="p-input-icon-right width-100 my-2">
-                                    <i class="pi pi-spin pi-spinner" *ngIf="isTypingClaim"></i>
-                                    <!-- <i class="pi pi-check text-green-500 font-bold" *ngIf="!isTypingClaim"></i> -->
-                                    <input formControlName="claim" class="width-100" type="text" pInputText
-                                        (keyup)="onClaimNumberKeyUp()" (keydown)="onClaimNumberKeyDown()"
-                                        placeholder="{{ 'job.form.claimNo' | translate }}" required />
-                                </span>
-                                <small
-                                    *ngIf="submitted && !jobForm.get('claim').valid  && jobForm.get('claim').errors?.['required']"
-                                    class="p-error">{{ 'job.form.Enter Calim Number' | translate }}</small>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
-                                <p-dropdown class="mb-2" *ngIf="jobFound.multiple" [options]="jobs"
-                                    formControlName="jobId" optionLabel="jobNo" optionValue="id"
-                                    placeholder="select a job"></p-dropdown>
-                                <small
-                                    *ngIf="jobFound.multiple && submitted && !jobForm.get('jobId').valid  && jobForm.get('jobId').errors?.['required']"
-                                    class="p-error">{{ 'job.form.enterJob' | translate }}</small>
-                                <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100 mb-2"
-                                    type="text" pInputText placeholder="{{ 'job.form.enterJob' | translate }}"
-                                     />
-                                <small
-                                    *ngIf="!jobFound.multiple && submitted && !jobForm.get('job').valid  && jobForm.get('job').errors?.['required']"
-                                    class="p-error">{{ 'job.form.enterJob' | translate }}</small>
-                            </div>
-                            <div class="col-12">
-                                <p-divider align="left">
-                                    <b class="bg-bluegray-50">{{ 'job.form.addMoreDetails' | translate }}</b>
-                                </p-divider>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
-                                <p-dropdown appendTo="body" formControlName="privacy" [options]="privacyList"
-                                    (onChange)="onPrivacyChange($event.value)"></p-dropdown>
-                            </div>
-                            <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
-                                <input formControlName="location" class="width-100" type="text" pInputText required />
-                            </div>
-                            <div class="col-12 md:col-6" *ngIf="privateSuppliersList.length > 0">
-                                <ng-container *ngFor="let supplier of privateSuppliersList">
-                                    <p-chip class="mr-2" [removable]="true" (onRemove)="removePrivateSupplier(supplier)">
-                                        {{supplier.name}}
-                                    </p-chip>
-                                </ng-container>
-                            </div>
-                            <p-dialog header="Private Suppliers" [modal]="true" [style]="{width: '50vw'}"
-                                [(visible)]="displayPrivateSuppliers" (onHide)="resetPrivacy()">
-                                <p-listbox (onChange)="selectSupplier($event.value)" [checkbox]="true"
-                                    [options]="selectedPrivateSuppliers | async" formControlName="suppliers"
-                                    [multiple]="true" optionLabel="name"></p-listbox>
-                                <ng-template pTemplate="footer">
-                                    <p-button icon="pi pi-check" (click)="displayPrivateSuppliers=false" label="Ok"
-                                        styleClass="p-button-text" [disabled]="!supplierSelected"></p-button>
-                                </ng-template>
-                            </p-dialog>
                             <!-- request content -->
                             <div class="my-5 relative">
                                 <ng-container *ngFor="let _ of [].constructor(numberOfrequests); let requestNo = index">
                                     <app-new-request  [numberOfReq]="numberOfrequests" (request)="onJobFormSubmit()"
-                                        part="{{'PART ' + (requestNo + 1)}}"></app-new-request>
+                                        part="{{isRequest? 'PART DETAILS': 'PART ' + (requestNo + 1)}}"></app-new-request>
                                 </ng-container>
 
-                                <button class="absolute add-part-img" (click)="addRequest()"
+                                <button *ngIf="!isRequest" class="absolute add-part-img" (click)="addRequest()"
                                     [disabled]="!addOneMoreRequest">
                                     <img alt="Image" width="210" src="assets/layout/images/add-part.png">
                                 </button>

@@ -11,6 +11,9 @@ import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear
 import { Car } from '../../../model/car';
 import { GearType } from '../../../model/geartype';
 import { CarService } from '../../../service/car.service';
+import { ActivatedRoute } from '@angular/router';
+import { JobService } from '../../../service/job.service';
+import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 
 @Component({
     selector: 'app-new-car',
@@ -25,7 +28,9 @@ export class NewCarComponent implements OnInit {
         private carModelYearService: CarModelYearService,
         private carSpecService: CarModelTypeService,
         private carService: CarService,
-        private messageService: MessageService,) { }
+        private jobService: JobService,
+        private messageService: MessageService,
+        private route: ActivatedRoute) { }
 
     brands: Brand[];
     carModels: CarModel[];
@@ -35,9 +40,13 @@ export class NewCarComponent implements OnInit {
     gearType = Object.keys(GearType);
     submitted: boolean = false;
     isTyping: boolean = false;
+    isTypingJob: boolean = false;
     typingTimer;
+    typingjobTimer;
     found: boolean;
-
+    jobFound: boolean;
+    isRequest: boolean = false;
+    job: any = '';
     carForm: FormGroup = this.formBuilder.group({
         chassisNumber: ['', [Validators.minLength(13), Validators.required]],
         brandId: ['', Validators.required],
@@ -49,19 +58,25 @@ export class NewCarComponent implements OnInit {
     });
 
     @Input() type: string = 'new car';
-    @Output() carEvent = new EventEmitter<{ car: Car }>();
+    @Output() carEvent = new EventEmitter<any>();
 
     ngOnInit(): void {
         this.getCarBrands();
         this.getCarModelYear();
         this.getCarModelType();
+
+        this.route.queryParams
+            .subscribe(params => { this.isRequest = params.isRequest; });
     }
 
     onCarFormSubmit() {
         // console.log(this.carForm.getRawValue())
         this.submitted = true;
         if (this.carForm.valid) {
-            if (this.found && this.type == 'new job') {
+            if(this.isRequest) {
+                this.carEvent.emit('');
+            }
+            else if  (this.found && this.type == 'new job') {
                 this.carEvent.emit(this.carForm.getRawValue());
             } else {
                 //add new/update car
@@ -90,7 +105,7 @@ export class NewCarComponent implements OnInit {
 
                 this.carService.add(carFormData as Car).subscribe(res => {
                     //console.log(res)
-                    if(this.type == "new job") {
+                    if (this.type == "new job") {
                         this.setSelectedCar(res);
                         //console.log(this.carForm.getRawValue())
                         this.carEvent.emit(this.carForm.getRawValue());
@@ -201,6 +216,13 @@ export class NewCarComponent implements OnInit {
             this.carForm.patchValue({ 'gearType': carInfo.gearType });
             this.carForm.get('gearType').disable();
         }
+
+        //set car chassie number
+        if (this.isRequest && carInfo.chassisNumber) {
+            //console.log('not null')
+            this.carForm.patchValue({ 'chassisNumber': carInfo.plateNumber });
+            this.carForm.get('chassisNumber').disable();
+        }
     }
 
     setCarModel(id: number) {
@@ -246,7 +268,7 @@ export class NewCarComponent implements OnInit {
         this.carForm.removeControl('id');
 
         this.carForm.patchValue({
-            chassisNumber: this.type == 'new car'? "" : this.carForm.get('chassisNumber').value,
+            chassisNumber: this.type == 'new car' ? "" : this.carForm.get('chassisNumber').value,
             brandId: '',
             carModelId: '',
             carModelYearId: '',
@@ -262,6 +284,31 @@ export class NewCarComponent implements OnInit {
         this.carForm.get('chassisNumber').enable();
         this.carForm.get('plateNumber').enable();
         this.carForm.get('gearType').enable();
+    }
+
+    onJobKeyUp() {
+        this.isTypingJob = true;
+        clearTimeout(this.typingjobTimer);
+        this.typingTimer = setTimeout(() => {
+            if (this.isRequest && this.job) {
+                this.jobService.getJobByJobNumber(this.job).subscribe(res => {
+                   // console.log(res)
+                    this.isTypingJob = false;
+                    this.jobFound = true;
+                    this.setSelectedCar(res.car)
+                    //this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
+                }, (err) => {
+                    this.messageService.add({ severity: 'erorr', summary: err.error.messag });
+                    this.isTypingJob = false;
+                    this.jobFound = false;
+                })
+            };
+
+        }, 2000);
+    }
+
+    onJobKeyDown() {
+        clearTimeout(this.typingjobTimer);
     }
 
 }

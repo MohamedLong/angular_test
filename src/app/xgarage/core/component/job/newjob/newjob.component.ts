@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -92,16 +93,20 @@ export class NewJobComponent implements OnInit {
     addOneMoreRequest: boolean = false;
     numberOfrequests: number = 1;
     @Input() type: string = 'new job';
-
+    isRequest = false;
     constructor(private formBuilder: FormBuilder,
         private jobService: JobService,
         private authService: AuthService,
         private calimService: ClaimService,
         private supplierService: SupplierService,
         private dataService: DataService<any>,
-        private messageService: MessageService) { }
+        private messageService: MessageService,
+        private route: ActivatedRoute) { }
 
     ngOnInit(): void {
+        this.route.queryParams
+            .subscribe(params => { this.isRequest = params.isRequest; });
+
         // set user id
         let user = JSON.parse(this.authService.getStoredUser()).id;
         this.jobForm.patchValue({ user });
@@ -117,16 +122,18 @@ export class NewJobComponent implements OnInit {
 
     //car form event
     onCarFormEvent(event) {
+        if (event !== '') {
+            this.jobForm.patchValue({
+                'car': event
+            });
 
-        this.jobForm.patchValue({
-            'car': event
-        });
+            //console.log(this.jobForm.get('car').value);
+            this.jobForm.addControl('requestTitle', new FormControl);
+            this.jobForm.patchValue({
+                'requestTitle': `${event.brandId.brandName} ${event.carModelId.name} ${event.carModelYearId.year}  ${event.carModelTypeId.type}`
+            })
+        }
 
-        //console.log(this.jobForm.get('car').value);
-        this.jobForm.addControl('requestTitle', new FormControl);
-        this.jobForm.patchValue({
-            'requestTitle': `${event.brandId.brandName} ${event.carModelId.name} ${event.carModelYearId.year}  ${event.carModelTypeId.type}`
-        })
         this.clickToNavigate('request');
     }
 
@@ -146,7 +153,7 @@ export class NewJobComponent implements OnInit {
                         });
 
                         // console.log(updatedJobs)
-                        if(updatedJobs.length == 0) {
+                        if (updatedJobs.length == 0) {
                             this.jobs = [];
                             this.jobForm.patchValue({ 'job': "", 'jobId': 0 });
                             this.jobFound.multiple = false;
@@ -154,7 +161,7 @@ export class NewJobComponent implements OnInit {
 
                             console.log(this.jobs, this.jobForm.get('jobId').value)
                         }
-                        else if(updatedJobs.length == 1) {
+                        else if (updatedJobs.length == 1) {
                             this.jobForm.patchValue({ 'job': updatedJobs[0].jobNo, 'jobId': updatedJobs[0].id });
                         }
                         else if (updatedJobs.length > 1) {
@@ -208,7 +215,7 @@ export class NewJobComponent implements OnInit {
     onJobFormSubmit() {
         //console.log('emitted')
         this.submitted = true;
-        if(this.jobForm.valid) {
+        if (this.jobForm.valid) {
             if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
                 this.dataService.changeObject(this.jobForm.getRawValue());
             } else {
@@ -281,7 +288,7 @@ export class NewJobComponent implements OnInit {
     }
 
     removePrivateSupplier(value) {
-       // console.log(value)
+        // console.log(value)
         let updatedPrivateSuplliers = this.jobForm.get('suppliers').value.filter(supplier => {
             return supplier.id !== value.id;
         });
@@ -292,7 +299,7 @@ export class NewJobComponent implements OnInit {
 
         this.privateSuppliersList = updatedPrivateSuplliers
 
-        if(this.jobForm.get('suppliers').value.length == 0) {
+        if (this.jobForm.get('suppliers').value.length == 0) {
             this.jobForm.patchValue({
                 'privacy': 'Public'
             });
@@ -303,7 +310,7 @@ export class NewJobComponent implements OnInit {
 
     resetPrivacy() {
         //console.log(this.privateSuppliersList)
-        if(this.privateSuppliersList.length == 0) {
+        if (this.privateSuppliersList.length == 0) {
             this.jobForm.patchValue({
                 'suppliers': this.privateSuppliersList,
                 'privacy': 'Public'

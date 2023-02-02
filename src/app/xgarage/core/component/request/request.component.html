@@ -7,7 +7,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <a pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        [routerLink]="['/requests/new-request']" [hidden]="false"></a>
+                        [routerLink]="['/requests/new-request']" [queryParams]="{isRequest: true}" [hidden]="false"></a>
                 </ng-template>
 
                 <ng-template pTemplate="right">
