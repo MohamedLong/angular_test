@@ -44,6 +44,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     insuranceTypes = Object.values(InsuranceType);
     selectedInsuranceType: string;
     updateRequest: boolean = false;
+    type: string;
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe, public statusService: StatusService) {
             super(route, router, requestService, datePipe, statusService, breadcrumbService);
@@ -124,6 +125,17 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         }
     }
 
+
+    openNew() {
+        this.type = 'new req';
+        super.openNew();
+    }
+
+    editAction(detail?: any) {
+        this.type = 'edit req';
+        super.editAction(detail);
+    }
+    
     getPartTypesAsString(partTypes: PartType[]) {
         let partTypeNames: string = '';
         partTypes.forEach(t => {

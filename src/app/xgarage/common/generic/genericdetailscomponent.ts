@@ -50,7 +50,6 @@ export class GenericDetailsComponent{
     selectedMonth: string;
     rowsPerPageOptions = [5, 10, 20];
     loading = true;
-    type: string;
     @ViewChild('dt') table: Table;
 
     @ViewChild('filter') filter: ElementRef;
@@ -190,7 +189,6 @@ export class GenericDetailsComponent{
 
 
     openNew() {
-        this.type = 'new req';
         this.submitted = false;
         this.detailDialog = true;
         this.index = this.index - 1;
@@ -198,7 +196,6 @@ export class GenericDetailsComponent{
     }
 
     editAction(detail?: any) {
-        this.type = 'edit req';
         this.detail = { ...detail};
         this.originalDetail = { ...this.detail};
         this.detail.total = this.detail.unitPrice * this.detail.qty;
