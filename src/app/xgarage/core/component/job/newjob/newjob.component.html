@@ -6,7 +6,7 @@
                     <div class="grid col py-3">
                         <!-- (click)="clickToNavigate('car-info')" -->
                         <div class="col-6 tab flex align-items-center justify-content-center car-info-tab"
-                             [ngClass]="{'selected-tab': activeTab == 'car-info'}" (click)="clickToNavigate('car-info')">
+                            [ngClass]="{'selected-tab': activeTab == 'car-info'}" (click)="clickToNavigate('car-info')">
                             <div class="title">{{ 'car.title' | translate }}</div>
                         </div>
                         <!-- (click)="clickToNavigate('request')"  -->
@@ -41,9 +41,18 @@
                                 </p-messages>
                             </div>
                             <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
-                                <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom"
-                                    placeholder="OD/TP"></p-dropdown>
+                                <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
+                                <p-dropdown appendTo="body" formControlName="privacy" [options]="privacyList"
+                                    (onChange)="onPrivacyChange($event.value)"></p-dropdown>
+
+                                <div class="mt-3" *ngIf="privateSuppliersList.length > 0">
+                                    <ng-container *ngFor="let supplier of privateSuppliersList">
+                                        <p-chip class="mr-2" [removable]="true"
+                                            (onRemove)="removePrivateSupplier(supplier)">
+                                            {{supplier.name}}
+                                        </p-chip>
+                                    </ng-container>
+                                </div>
                             </div>
                             <div class="col-12  md:col-6">
                                 <label class="block">{{ 'job.form.claimNo' | translate }}</label>
@@ -56,7 +65,7 @@
                                 </span>
                                 <small
                                     *ngIf="submitted && !jobForm.get('claim').valid  && jobForm.get('claim').errors?.['required']"
-                                    class="p-error">{{ 'job.form.Enter Calim Number' | translate }}</small>
+                                    class="p-error">{{ 'job.form.enterclaimNo' | translate }}</small>
                             </div>
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
@@ -67,8 +76,7 @@
                                     *ngIf="jobFound.multiple && submitted && !jobForm.get('jobId').valid  && jobForm.get('jobId').errors?.['required']"
                                     class="p-error">{{ 'job.form.enterJob' | translate }}</small>
                                 <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100 mb-2"
-                                    type="text" pInputText placeholder="{{ 'job.form.enterJob' | translate }}"
-                                     />
+                                    type="text" pInputText placeholder="{{ 'job.form.enterJob' | translate }}" />
                                 <small
                                     *ngIf="!jobFound.multiple && submitted && !jobForm.get('job').valid  && jobForm.get('job').errors?.['required']"
                                     class="p-error">{{ 'job.form.enterJob' | translate }}</small>
@@ -79,20 +87,16 @@
                                 </p-divider>
                             </div>
                             <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
-                                <p-dropdown appendTo="body" formControlName="privacy" [options]="privacyList"
-                                    (onChange)="onPrivacyChange($event.value)"></p-dropdown>
+                                <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
+                                <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom"
+                                    placeholder="OD/TP"></p-dropdown>
+                                    <small
+                                    *ngIf="submitted && !jobForm.get('insuranceFrom').valid  && jobForm.get('insuranceFrom').errors?.['required']"
+                                    class="p-error">{{ 'job.form.selectInsurance' | translate }}</small>
                             </div>
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
                                 <input formControlName="location" class="width-100" type="text" pInputText required />
-                            </div>
-                            <div class="col-12 md:col-6" *ngIf="privateSuppliersList.length > 0">
-                                <ng-container *ngFor="let supplier of privateSuppliersList">
-                                    <p-chip class="mr-2" [removable]="true" (onRemove)="removePrivateSupplier(supplier)">
-                                        {{supplier.name}}
-                                    </p-chip>
-                                </ng-container>
                             </div>
                             <p-dialog header="Private Suppliers" [modal]="true" [style]="{width: '50vw'}"
                                 [(visible)]="displayPrivateSuppliers" (onHide)="resetPrivacy()">
@@ -107,7 +111,8 @@
                             <!-- request content -->
                             <div class="my-5 relative">
                                 <ng-container *ngFor="let _ of [].constructor(numberOfrequests); let requestNo = index">
-                                    <app-new-request  [numberOfReq]="numberOfrequests" (request)="onJobFormSubmit()"
+                                    <app-new-request [type]="'new job'" [numberOfReq]="numberOfrequests"
+                                        (request)="onJobFormSubmit()"
                                         part="{{'PART ' + (requestNo + 1)}}"></app-new-request>
                                 </ng-container>
 

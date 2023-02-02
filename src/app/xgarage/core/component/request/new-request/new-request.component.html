@@ -1,4 +1,5 @@
-<p-fieldset legend="{{type == 'new req'? part : requestDetails.requestTitle}}" class="relative">
+<p-fieldset legend="{{type == 'new job'? part : type == 'edit req'? requestDetails.requestTitle : 'Part Details'}}" class="relative">
+    <p-toast></p-toast>
     <div class="field col-12">
         <app-new-part [type]="type" [errMsg]="partErrorMsg" [partDetails]="requestDetails.part"></app-new-part>
     </div>
@@ -31,7 +32,7 @@
         </div>
 
     </div>
-    <div class="col-12 text-right" *ngIf="type == 'new req'">
+    <div class="col-12 text-right" *ngIf="type == 'new job'">
         <button icon="{{isSending? 'pi pi-spin pi-spinner':'pi pi-check'}}" iconPos="right" class="width-100 md:w-20rem" type="button" pButton pRipple (click)="sendRequest()"
             label="{{ 'request.form.sendReq' | translate: {'text': buttonTxt} }}" [disabled]="blocked"></button>
     </div>
