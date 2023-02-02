@@ -28,6 +28,10 @@ import { PartComponent } from './xgarage/core/component/part/part.component';
 import { NewPartComponent } from './xgarage/core/component/part/new-part/new-part.component';
 import { JobDetailsComponent } from './xgarage/core/component/job/jobdetails.component';
 import { NewRequestComponent } from './xgarage/core/component/request/new-request/new-request.component';
+import { SubCategoryComponent } from './xgarage/common/component/sub-category/sub-category.component';
+import { CategoryComponent } from './xgarage/common/component/category/category.component';
+import { BrandComponent } from './xgarage/common/component/brand/brand.component';
+import { CarModelComponent } from './xgarage/common/component/car-model/car-model.component';
 
 const routes: Routes = [];
 
@@ -48,6 +52,10 @@ const routes: Routes = [];
                     {path: 'tenanttype', component: TenantTypeComponent},
                     {path: 'tenant', component: TenantComponent},
                     {path: 'claims', component: ClaimComponent},
+                    {path: 'brands', component: BrandComponent},
+                    {path: 'category', component: CategoryComponent},
+                    {path: 'subcategory', component: SubCategoryComponent},
+                    {path: 'carmodel', component: CarModelComponent},
                     {path: 'jobs', component: JobComponent},
                     {path: 'jobs/new-job', component: NewJobComponent},
                     {path: 'requests', component: RequestComponent},

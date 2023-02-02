@@ -1,0 +1,12 @@
+export const StatusConstants = {
+    OPEN_STATUS : 1,
+    INPROGRESS_STATUS : 2,
+    ONHOLD_STATUS : 3,
+    COMPLETED_STATUS : 4,
+    REJECTED_STATUS : 5,
+    APPROVED_STATUS : 6,
+    CANCELED_STATUS : 7,
+    REVISION_STATUS : 8,
+    LOST_STATUS : 9,
+    REVISED_STATUS : 10
+}

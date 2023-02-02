@@ -203,6 +203,14 @@ import { GenericService } from './xgarage/common/generic/genericservice';
 import { NewRequestComponent } from './xgarage/core/component/request/new-request/new-request.component';
 import { BidService } from './xgarage/core/service/bidservice.service';
 import { RequestDetailsComponent } from './xgarage/core/component/request/requestdetails.component';
+import { BrandComponent } from './xgarage/common/component/brand/brand.component';
+import { CarModelComponent } from './xgarage/common/component/car-model/car-model.component';
+import { CategoryComponent } from './xgarage/common/component/category/category.component';
+import { SubCategoryComponent } from './xgarage/common/component/sub-category/sub-category.component';
+import { BrandService } from './xgarage/common/service/brand.service';
+import { CarModelService } from './xgarage/common/service/carmodel.service';
+import { CategoryService } from './xgarage/common/service/category.service';
+import { SubCategoryService } from './xgarage/common/service/subcategory.service';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -394,14 +402,18 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         NewPartComponent,
         JobDetailsComponent,
         NewRequestComponent,
-        RequestDetailsComponent
+        RequestDetailsComponent,
+        BrandComponent,
+        CarModelComponent,
+        CategoryComponent,
+        SubCategoryComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,
         CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService, JobService, DataService, BidService,
         PhotoService, ProductService, MenuService, AppBreadcrumbService, MetricService, StatusService, TenantService, CurrencyService, RequestService,
         DialogService, UserSubMenuService, UserMainMenuService, MainMenuService, SubMenuService, PermissionService, RoleService, RolePermissionService,
-        ClaimService
+        ClaimService, BrandService, CarModelService, CategoryService, SubCategoryService
     ],
     bootstrap: [AppComponent]
 })
