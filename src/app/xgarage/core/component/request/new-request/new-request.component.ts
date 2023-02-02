@@ -3,6 +3,7 @@ import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChange
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
@@ -19,7 +20,7 @@ import { RequestService } from '../../../service/request.service';
     margin-bottom: 1rem;
     display: block;
   }`],
-  providers: [MessageService, DatePipe]
+    providers: [MessageService, DatePipe]
 })
 export class NewRequestComponent extends GenericDetailsComponent implements OnInit, OnChanges {
 
@@ -32,7 +33,8 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         public datePipe: DatePipe,
         public route: ActivatedRoute,
         public router: Router,
-        public messageService: MessageService) {
+        public messageService: MessageService,
+        private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
         this.responseBody = {};
         this.subCategoryId = "";
@@ -54,11 +56,14 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     blocked: boolean = false;
     isSending: boolean = false;
     buttonTxt = 'Send Request';
-
+    user: any;
     ngOnInit(): void {
+        // set user id
+        this.user = JSON.parse(this.authService.getStoredUser()).id;
         this.getPartTypes();
-        // console.log(this.requestDetails)
+
         if (this.type == 'edit req') {
+            console.log(this.requestDetails)
             this.setRequestInfo();
         }
 
@@ -104,7 +109,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                         this.responseBody.suppliers = updatedSuppliers;
                         this.responseBody.privacy = data.privacy;
                         this.responseBody.requestTitle = data.requestTitle;
-                        this.responseBody.user = data.user;
+                        this.responseBody.user = this.user;
                         this.responseBody.partTypes = this.selectedPartTypes;
 
                         this.getPart();
@@ -130,20 +135,36 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.edit && !changes.edit.firstChange) {
-            console.log('save clicked')
-            this.responseBody.id = this.requestDetails.id;
-            this.responseBody.job = this.requestDetails.job;
-            this.responseBody.description = this.description;
-            this.responseBody.car = { 'id': this.requestDetails.car.id };
-            this.responseBody.locationName = this.requestDetails.locationName;
-            this.responseBody.suppliers = this.requestDetails.suppliers;
-            this.responseBody.privacy = this.requestDetails.privacy;
-            this.responseBody.requestTitle = this.requestDetails.requestTitle;
-            this.responseBody.user = this.requestDetails.user;
-            this.responseBody.partTypes = this.selectedPartTypes;
+            if (this.type == 'edit req') {
+                console.log('edit request')
+                this.responseBody.id = this.requestDetails.id;
+                this.responseBody.job = this.requestDetails.job;
+                this.responseBody.description = this.description;
+                this.responseBody.car = { 'id': this.requestDetails.car.id };
+                this.responseBody.locationName = this.requestDetails.locationName;
+                this.responseBody.suppliers = this.requestDetails.suppliers;
+                this.responseBody.privacy = this.requestDetails.privacy;
+                this.responseBody.requestTitle = this.requestDetails.requestTitle;
+                this.responseBody.user = this.requestDetails.user;
+                this.responseBody.partTypes = this.selectedPartTypes;
+            } else {
+                console.log('new request')
+                this.dataService.name.subscribe(res => {
+                    //console.log(res)
+                    this.responseBody.job = res.id;
+                    this.responseBody.description = this.description;
+                    this.responseBody.car = { 'id': res.car.id };
+                    this.responseBody.locationName = JSON.parse(this.authService.getStoredUser()).tenant.location;
+                    this.responseBody.suppliers = res.suppliers;
+                    this.responseBody.privacy = res.privacy;
+                    this.responseBody.requestTitle = res.jobTitle;
+                    this.responseBody.user = this.user;
+                    this.responseBody.partTypes = this.selectedPartTypes;
+                })
+            }
 
             this.getPart();
-            //console.log(this.responseBody)
+            console.log(this.responseBody)
             this.formatThenSaveRequest();
         }
     }
@@ -196,13 +217,22 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.isSending = true;
 
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
-                if (res.messageCode == 200) {
+                if (this.type == 'new req') {
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+                    this.hideDialog();
+                } else {
                     this.blocked = true;
                     this.isSending = false;
                     this.buttonTxt = 'Request Sent Successfully';
                 }
+
             }, err => {
                 console.log(err)
+                if (this.type == 'new req') {
+                    this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
+                    this.hideDialog();
+                }
+
                 this.isSending = false;
                 this.blocked = false;
             });

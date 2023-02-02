@@ -63,6 +63,7 @@
         "deleteConfirm": "Confirm",
         "addPayment": "Add Payment",
         "operations": "Operations",
+        "addnew": "Add New",
         "tableFilter": {
             "clear": "Clear",
             "apply": "Apply..."
@@ -329,6 +330,7 @@
         "title": "Manage Parts",
         "export": "Export",
         "dividerTitle": " Or Select Manually",
+        "addPart": "Add Part",
         "tableColumn": {
             "id": "ID",
             "partName": "Part Name",
@@ -506,7 +508,9 @@
             "enterJob": "Enter Job Card Number",
             "selectPrivateSuppliers": "Select Private Suppliers",
             "enterclaimNo": "Enter Calim Number",
-            "ot/dp": "OD/TP"
+            "ot/dp": "OD/TP",
+            "newReq": "Add New Request",
+            "selectInsurance": "Select Insurance From"
         },
 
         "tableColumn": {
@@ -585,5 +589,8 @@
             "uploadCarImg": "Upload Car Image",
             "addCar": "Add Car"
         }
+    },
+    "bid": {
+        "title": "Bids"
     }
 }
