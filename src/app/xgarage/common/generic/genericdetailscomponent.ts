@@ -227,9 +227,9 @@ export class GenericDetailsComponent{
     }
 
     hideDialog() {
-        this.resetDetail();
         this.detailDialog = false;
         this.submitted = false;
+        this.resetDetail();
     }
 
     resetDetail() {

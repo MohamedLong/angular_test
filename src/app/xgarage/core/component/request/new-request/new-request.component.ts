@@ -90,7 +90,6 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         setTimeout(() => {
             this.dataService.name.subscribe({
                 next: (data) => {
-                    //this.sharedJob = data;
                     if (data && JSON.stringify(data) !== '{}') {
                         console.log(data)
 
@@ -120,7 +119,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                             console.log('request body inside requets component: ', this.responseBody, this.subCategoryId);
                             this.partErrorMsg = '';
 
-                            this.formatThenSaveRequest()
+                            this.formatThenSaveRequest();
                         }
 
                         if (!this.responseBody.part) {
@@ -219,20 +218,18 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
                 if (this.type == 'new req') {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
-                    this.hideDialog();
                 } else {
                     this.blocked = true;
                     this.isSending = false;
                     this.buttonTxt = 'Request Sent Successfully';
                 }
-
+                this.detailDialog = false;
             }, err => {
                 console.log(err)
                 if (this.type == 'new req') {
                     this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
-                    this.hideDialog();
+                    this.detailDialog = false;
                 }
-
                 this.isSending = false;
                 this.blocked = false;
             });

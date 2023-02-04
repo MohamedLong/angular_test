@@ -135,7 +135,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.type = 'edit req';
         super.editAction(detail);
     }
-    
+
     getPartTypesAsString(partTypes: PartType[]) {
         let partTypeNames: string = '';
         partTypes.forEach(t => {
