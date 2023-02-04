@@ -163,10 +163,41 @@
                                 </p-table>
                             </p-tabPanel>
                             <p-tabPanel header="{{ 'job.tableColumn.receivedBids' | translate }}">
-                                Content 2
+
                             </p-tabPanel>
                             <p-tabPanel header="{{ 'job.tableColumn.addBids' | translate }}">
-                                Content 3
+                                <div class="py-3">
+                                    <div class="mb-4">
+                                        <h5 class="mb-2">BMW 7 Series 2022</h5>
+                                        <p class="mb-0 font-medium muted-text">Specification: {{master.car.carModelTypeId == 1? 'GCC' : master.car.carModelTypeId == 2 ? 'Others': 'USA'}}</p>
+                                        <p class="font-medium muted-text">Chassis No.: {{master.car.chassisNumber}}</p>
+                                    </div>
+                                    <!-- <div class="flex mb-4">
+                                        <div class="mr-8">
+                                            <h5 class="mb-0">Insurance From</h5>
+                                            <p class="font-medium muted-text mb-0">Dhofar Insurance Company</p>
+                                        </div>
+                                        <div>
+                                            <h5 class="mb-0">Bid Closing Date</h5>
+                                            <p class="font-medium muted-text text-orange-500">{{master.bidClosingDate}}</p>
+                                        </div>
+                                    </div> -->
+                                    <div class="flex mb-4">
+                                        <div class="mr-8">
+                                            <h5 class="mb-2">Claim Number</h5>
+                                            <p class="font-medium muted-text">{{master.claim}}</p>
+                                        </div>
+                                        <div class="mr-8">
+                                            <h5 class="mb-2">Job Number</h5>
+                                            <p class="font-medium muted-text">{{master.jobNo}}</p>
+                                        </div>
+                                        <!-- <div>
+                                            <h5 class="mb-0">Garage Location</h5>
+                                            <p class="font-medium muted-text">Azaiba (View in Google Map)</p>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <app-new-bid *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                             </p-tabPanel>
                         </p-tabView>
                     </div>

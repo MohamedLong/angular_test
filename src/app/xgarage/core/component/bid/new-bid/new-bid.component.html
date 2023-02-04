@@ -1,0 +1,114 @@
+<p-table [value]="requests" styleClass="p-datatable-gridlines" dataKey="id"
+    [tableStyle]="{'min-width': '50rem', 'width':'100%'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Parts Name</th>
+            <th>Qty</th>
+            <th>Preferred</th>
+            <th>Proposed</th>
+            <th>Warranty</th>
+            <th>Availability</th>
+            <th>Original Price</th>
+            <th>Discount</th>
+            <th>Price</th>
+            <th>Vat</th>
+            <th>Total Price</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-part>
+        <tr>
+            <td>{{part.requestTitle}}</td>
+            <td>1</td>
+            <td>{{part.partTypes[0]?.partType }} <br> {{part.partTypes[1]?.partType}} <br>
+                {{part.partTypes[2]?.partType}}</td>
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-dropdown [options]="statuses" appendTo="body" [(ngModel)]="part.preferred"
+                            [style]="{'width':'100%'}"></p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.preferred}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="part.warranty">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.warranty}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="part.availability">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.availability}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.originalPrice}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.discount">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.discount}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.price">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.price}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="part.vat">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.vat}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>0.0</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="field-checkbox">
+            <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"></p-checkbox>
+            <label for="binary">Add a total price Instant of adding price for each parts</label>
+        </div>
+    </ng-template>
+</p-table>
+<div class="grid mt-5">
+    <div class="col-12">
+        <label class="block mb-2">Add a Note</label>
+        <textarea class="width-100" pInputTextarea placeholder="20 November 2022"></textarea>
+    </div>
+    <div class="col-12 text-center">
+        <button class="width-100 md:w-20rem" pButton pRipple type="submit"
+            label="Submit Bid" (click)="submitBid()"></button>
+    </div>
+</div>
