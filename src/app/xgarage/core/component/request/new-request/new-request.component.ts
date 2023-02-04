@@ -218,6 +218,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
                 if (this.type == 'new req') {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+                    this.hideDialog();
                 } else {
                     this.blocked = true;
                     this.isSending = false;
@@ -228,7 +229,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 console.log(err)
                 if (this.type == 'new req') {
                     this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
-                    this.detailDialog = false;
+                    this.hideDialog();
                 }
                 this.isSending = false;
                 this.blocked = false;
