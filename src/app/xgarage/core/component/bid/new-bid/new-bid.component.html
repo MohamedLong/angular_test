@@ -1,58 +1,66 @@
+<p-toast></p-toast>
 <p-table [value]="requests" styleClass="p-datatable-gridlines" dataKey="id"
-    [tableStyle]="{'min-width': '50rem', 'width':'100%'}">
+    [tableStyle]="{'min-width': '50rem', 'width':'100%'}" editMode="row">
     <ng-template pTemplate="header">
         <tr>
             <th>Parts Name</th>
             <th>Qty</th>
             <th>Preferred</th>
             <th>Proposed</th>
-            <th>Warranty</th>
-            <th>Availability</th>
+            <th>Warranty (days)</th>
+            <th>Availability (days)</th>
             <th>Original Price</th>
             <th>Discount</th>
             <th>Price</th>
-            <th>Vat</th>
+            <th>Vat (%)</th>
             <th>Total Price</th>
+            <th>Part Images</th>
+            <th>Modify Bid</th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-part>
-        <tr>
-            <td>{{part.requestTitle}}</td>
+    <ng-template pTemplate="body"  let-part let-editing="editing" let-ri="rowIndex">
+        <p-overlayPanel #op>
+            <ng-template pTemplate>
+                {{part.images.length}}
+            </ng-template>
+        </p-overlayPanel>
+        <tr [pEditableRow]="part">
+            <td #overlay><span>{{part.part.name}}</span> <i class="pi pi-info-circle ml-3" (click)="op.toggle($event, overlay)"></i></td>
             <td>1</td>
             <td>{{part.partTypes[0]?.partType }} <br> {{part.partTypes[1]?.partType}} <br>
                 {{part.partTypes[2]?.partType}}</td>
-            <td pEditableColumn>
+            <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-dropdown [options]="statuses" appendTo="body" [(ngModel)]="part.preferred"
+                        <p-dropdown [options]="statuses" optionLabel="partType" appendTo="body" [(ngModel)]="part.preferred"
                             [style]="{'width':'100%'}"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.preferred}}
+                        {{part.preferred.partType}}
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td pEditableColumn>
+            <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="part.warranty">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.warranty">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.warranty}}
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td pEditableColumn>
+            <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="part.availability">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.availability">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.availability}}
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td pEditableColumn>
+            <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice">
@@ -62,7 +70,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td pEditableColumn>
+            <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.discount">
@@ -72,7 +80,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td pEditableColumn>
+            <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.price">
@@ -82,33 +90,43 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td pEditableColumn>
+            <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="part.vat">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.vat">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.vat}}
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>0.0</td>
+            <td>{{part.totalPrice}}</td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-fileUpload chooseIcon="{{part.images.length > 0? 'pi pi-check' : 'pi pi-plus' }}" mode="basic" auto="true" accept="image/*" multiple="multiple" (onSelect)="part.images = $event.currentFiles"></p-fileUpload>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.images.length + ' files selected'}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <div class="flex align-items-center justify-content-center gap-2">
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(part)" class="p-button-rounded p-button-text"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(part)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(part, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                </div>
+            </td>
         </tr>
     </ng-template>
     <ng-template pTemplate="summary">
-        <div class="field-checkbox">
-            <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"></p-checkbox>
-            <label for="binary">Add a total price Instant of adding price for each parts</label>
-        </div>
+        <p class="text-right">Total: {{total}}</p>
     </ng-template>
 </p-table>
-<div class="grid mt-5">
+<!-- <div class="grid mt-5">
     <div class="col-12">
         <label class="block mb-2">Add a Note</label>
-        <textarea class="width-100" pInputTextarea placeholder="20 November 2022"></textarea>
+        <textarea [(ngModel)]="note" class="width-100" pInputTextarea placeholder="20 November 2022"></textarea>
     </div>
-    <div class="col-12 text-center">
-        <button class="width-100 md:w-20rem" pButton pRipple type="submit"
-            label="Submit Bid" (click)="submitBid()"></button>
-    </div>
-</div>
+</div> -->

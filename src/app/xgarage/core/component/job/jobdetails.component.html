@@ -99,9 +99,14 @@
                     </div> -->
                     <div class="mt-5">
                         <p-tabView>
+                            <div class="pt-5 text-center" *ngIf="details.length == 0">
+                                <p-progressSpinner [style]="{width: '50px', height: '50px', textAlign: 'center'}"
+                                    styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)"
+                                    animationDuration=".5s"></p-progressSpinner>
+                            </div>
                             <p-tabPanel header="{{ 'request.title' | translate }}">
-                                <p-table dataKey="id" #dt [columns]="cols" [rows]="10" [value]="details"
-                                    styleClass="p-invoice-datatable-responsive pb-3">
+                                <p-table *ngIf="details.length  > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
+                                    [value]="details" styleClass="p-invoice-datatable-responsive pb-3">
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
                                             <th pColumn="id">{{ 'common.id' | translate }}</th>
@@ -169,7 +174,9 @@
                                 <div class="py-3">
                                     <div class="mb-4">
                                         <h5 class="mb-2">BMW 7 Series 2022</h5>
-                                        <p class="mb-0 font-medium muted-text">Specification: {{master.car.carModelTypeId == 1? 'GCC' : master.car.carModelTypeId == 2 ? 'Others': 'USA'}}</p>
+                                        <p class="mb-0 font-medium muted-text">Specification:
+                                            {{master.car.carModelTypeId == 1? 'GCC' : master.car.carModelTypeId == 2 ?
+                                            'Others': 'USA'}}</p>
                                         <p class="font-medium muted-text">Chassis No.: {{master.car.chassisNumber}}</p>
                                     </div>
                                     <!-- <div class="flex mb-4">
