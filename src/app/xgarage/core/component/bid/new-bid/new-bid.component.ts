@@ -14,7 +14,7 @@ import { RequestService } from '../../../service/request.service';
 })
 export class NewBidComponent implements OnInit {
 
-    constructor(private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
+    constructor(private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
     checked: boolean = false;
     @Input() requests: any[] = [];
     statuses: PartType[] = [{ "id": 4, "partType": "Not Interested" }, { "id": 5, "partType": "Not Available" }];
