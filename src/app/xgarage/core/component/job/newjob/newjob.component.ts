@@ -139,7 +139,7 @@ export class NewJobComponent implements OnInit {
                     this.claimId = res.claimId;
                     if (res.jobs.length > 0) {
                         let updatedJobs = res.jobs.filter(job => {
-                            return job.userId == this.jobForm.get('user').value;
+                            return job.userId == JSON.parse(this.authService.getStoredUser()).id;
                         });
 
                         // console.log(updatedJobs)

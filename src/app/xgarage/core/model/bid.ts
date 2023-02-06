@@ -23,4 +23,7 @@ export interface Bid extends MasterEntity{
     reviseComments?: string;
     actionComments?: string;
     partType?: PartType;
+    discount?: number;
+    vat?: number;
+    originalPrice?: number;
 }

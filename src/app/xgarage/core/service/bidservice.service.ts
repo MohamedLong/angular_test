@@ -19,4 +19,6 @@ export class BidService extends GenericService<any> {
     public getByJob(jobId: number){
         return this.http.get<BidDto[]>(this.apiServerUrl + '/job/' + jobId);
     }
+
+
 }
