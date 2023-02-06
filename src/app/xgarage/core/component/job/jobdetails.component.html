@@ -99,12 +99,12 @@
                     </div> -->
                     <div class="mt-5">
                         <p-tabView>
-                            <div class="pt-5 text-center" *ngIf="details.length == 0">
-                                <p-progressSpinner [style]="{width: '50px', height: '50px', textAlign: 'center'}"
-                                    styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)"
-                                    animationDuration=".5s"></p-progressSpinner>
-                            </div>
                             <p-tabPanel header="{{ 'request.title' | translate }}">
+                                <div class="pt-5 text-center" *ngIf="details.length == 0">
+                                    <p-progressSpinner [style]="{width: '50px', height: '50px', textAlign: 'center'}"
+                                        styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)"
+                                        animationDuration=".5s"></p-progressSpinner>
+                                </div>
                                 <p-table *ngIf="details.length  > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
                                     [value]="details" styleClass="p-invoice-datatable-responsive pb-3">
                                     <ng-template pTemplate="header" let-columns>
