@@ -45,14 +45,6 @@ export class SubCategoryComponent extends GenericComponent implements OnInit {
         super.callInsideOnInit();
     }
 
-    new() {
-        this.openNew();
-    }
-
-    edit(master: SubCategory) {
-        this.editMaster(master);
-    }
-
     getAll() {
         this.subCategoryService.getAll().subscribe({
             next: (masters) => {
@@ -111,18 +103,6 @@ export class SubCategoryComponent extends GenericComponent implements OnInit {
         }, err => {
             this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err, life: 3000 });
         })
-    }
-
-    changeStatus(id: number, event) {
-        if (id != null) {
-            this.subCategoryService.changeStatus(id, event.checked).subscribe(
-                {
-                    next: (data) => {
-                        this.messageService.add({ severity: 'info', summary: 'Successful', detail: 'Sub-Category Status Changed', life: 3000});
-                    }
-                }
-            )
-        }
     }
 
 }

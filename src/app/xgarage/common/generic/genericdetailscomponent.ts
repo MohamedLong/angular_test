@@ -8,6 +8,7 @@ import { Status } from '../model/status';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GenericService } from './genericservice';
 import { StatusService } from '../service/status.service';
+import { StatusConstants } from '../model/statusconstatnts';
 
 @Component({
     template: ''
@@ -347,9 +348,8 @@ export class GenericDetailsComponent{
     calculateDetailsSum(myList: any[]): number {
         let sum = 0;
         for (let detail of myList) {
-            sum = sum + detail.total;
+            sum = sum + detail.price;
         }
-
         return sum;
     }
 
@@ -410,6 +410,33 @@ export class GenericDetailsComponent{
     goMaster() {
         this.router.navigate([this.detailRouter]);
     }
+
+    getStatusName(statusId: number) {
+        switch (statusId) {
+          case StatusConstants.OPEN_STATUS:
+            return 'Open';
+          case StatusConstants.INPROGRESS_STATUS:
+            return 'In Progress';
+          case StatusConstants.ONHOLD_STATUS:
+            return 'On Hold';
+          case StatusConstants.COMPLETED_STATUS:
+            return 'Completed';
+          case StatusConstants.REJECTED_STATUS:
+            return 'Rejected';
+          case StatusConstants.APPROVED_STATUS:
+            return 'Approved';
+          case StatusConstants.CANCELED_STATUS:
+            return 'Canceled';
+          case StatusConstants.REVISION_STATUS:
+            return 'Revision';
+          case StatusConstants.LOST_STATUS:
+            return 'Lost';
+          case StatusConstants.REVISED_STATUS:
+            return 'Revised';
+          default:
+            return 'Unknown';
+        }
+      }
 
 }
 

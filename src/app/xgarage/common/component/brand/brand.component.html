@@ -7,7 +7,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        (click)="new()" [disabled]="newAuth===false"></button>
+                        (click)="openNew()" [disabled]="newAuth===false"></button>
                 </ng-template>
 
                 <ng-template pTemplate="right">
@@ -54,7 +54,7 @@
                         </td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
-                              (click)="edit(master)"></button>
+                              (click)="editMaster(master)"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
                               (click)="deleteAction(master)"></button>
                           </td>

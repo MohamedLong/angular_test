@@ -45,14 +45,6 @@ export class BrandComponent extends GenericComponent implements OnInit {
         super.callInsideOnInit();
     }
 
-    new() {
-        this.openNew();
-    }
-
-    edit(master: Brand) {
-        this.editMaster(master);
-    }
-
     getAll() {
         this.brandService.getAll().subscribe({
             next: (masters) => {

@@ -12,6 +12,10 @@ import { RequestService } from '../../service/request.service';
 import { JobService } from '../../service/job.service';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
 import { InsuranceType } from '../../model/insurancetype';
+import { BidService } from '../../service/bidservice.service';
+import { BidDto } from '../../dto/biddto';
+import { Request } from '../../model/request';
+import { Supplier } from '../../model/supplier';
 
 @Component({
   selector: 'job-details',
@@ -41,12 +45,17 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     ref: DynamicDialogRef;
     hasRef: boolean = false;
+    bidDtos: BidDto[] = [];
     insuranceTypes = Object.values(InsuranceType);
     selectedInsuranceType: string;
     updateRequest: boolean = false;
     type: string;
+    partName: string = '';
+    bidDetailsDialog: boolean = false;
+    originalBidList: BidDto[] = [];
+    supplierBids: BidDto[] = [];
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
-        public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe, public statusService: StatusService) {
+        public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService) {
             super(route, router, requestService, datePipe, statusService, breadcrumbService);
 
         this.dataService.name.subscribe({
@@ -61,22 +70,34 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     ngOnInit(): void {
         if(this.master.id) {
-            this.getAllByParent();
+            this.getRequestsByJob();
+            this.getBidsByJob();
         }
         this.callInsideOnInit();
         this.detailRouter = 'jobs';
     }
 
 
-    getAllByParent() {
+    getRequestsByJob() {
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
                 this.details = requests;
                 this.loading = false;
             },
-            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Information', detail: e.error, life: 3000 })
         });
     }
+
+    getBidsByJob() {
+        this.bidService.getByJob(this.master.id).subscribe({
+            next: (bids) => {
+                this.bidDtos = bids;
+                this.loading = false;
+            },
+            error: (e) => this.messageService.add({ severity: 'warn', summary: 'Server Information', detail: e.error, life: 3000 })
+        });
+    }
+
 
     editParentAction() {
         this.originalMaster = {...this.master};
@@ -125,7 +146,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         }
     }
 
-
     openNew() {
         this.type = 'new req';
         super.openNew();
@@ -134,6 +154,45 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     editAction(detail?: any) {
         this.type = 'edit req';
         super.editAction(detail);
+    }
+
+    viewBidsByRequest(request: Request) {
+        this.originalBidList = this.bidDtos;
+        this.partName = request.part.name;
+        this.bidDetailsDialog = true;
+        this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
+    }
+
+    viewBidsBySupplier(id: number) {
+        this.originalBidList = this.bidDtos;
+        this.bidDetailsDialog = true;
+        this.bidDtos = this.bidDtos.filter(b => b.supplierId == id);
+    }
+
+    handleChange(e) {
+        let index = e.index;
+        if(index == 1) {
+            this.switchToViewBySupplier();
+        }
+    }
+    switchToViewBySupplier() {
+        let i = 0;
+        this.supplierBids = this.bidDtos.filter((a, i) => this.bidDtos.findIndex((s) => a.supplierId === s.supplierId) === i);
+    }
+
+    cancelViewBids() {
+        this.bidDtos = this.originalBidList;
+        this.originalBidList = [];
+    }
+
+    getTotalPriceForSupplier(id: number) {
+        let bidList = this.bidDtos.filter(s => s.supplierId == id);
+        return this.calculateDetailsSum(bidList);
+    }
+
+    getTotalSubmittedBidsForSupplier(id: number) {
+        let bidList = this.bidDtos.filter(s => s.supplierId == id);
+        return bidList.length;
     }
 
     getPartTypesAsString(partTypes: PartType[]) {

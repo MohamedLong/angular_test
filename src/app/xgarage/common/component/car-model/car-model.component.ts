@@ -45,14 +45,6 @@ export class CarModelComponent extends GenericComponent implements OnInit {
         super.callInsideOnInit();
     }
 
-    new() {
-        this.openNew();
-    }
-
-    edit(master: CarModel) {
-        this.editMaster(master);
-    }
-
     getAll() {
         this.carModelService.getAll().subscribe({
             next: (masters) => {
