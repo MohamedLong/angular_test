@@ -24,7 +24,7 @@
                 {{part.images.length}}
             </ng-template>
         </p-overlayPanel>
-        <tr [pEditableRow]="part">
+        <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved}">
             <td #overlay><span>{{part.part.name}}</span> <i class="pi pi-info-circle ml-3" (click)="op.toggle($event, overlay)"></i></td>
             <td>1</td>
             <td>{{part.partTypes[0]?.partType }} <br> {{part.partTypes[1]?.partType}} <br>
@@ -32,7 +32,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-dropdown [options]="statuses" optionLabel="partType" appendTo="body" [(ngModel)]="part.preferred"
+                        <p-dropdown [options]="part.statuses" optionLabel="partType" appendTo="body" [(ngModel)]="part.preferred"
                             [style]="{'width':'100%'}"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
@@ -113,7 +113,7 @@
             </td>
             <td>
                 <div class="flex align-items-center justify-content-center gap-2">
-                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(part)" class="p-button-rounded p-button-text"></button>
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="onRowEditInit(part)" class="p-button-rounded p-button-text" [disabled]="part.saved"></button>
                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(part)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
                     <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(part, ri)" class="p-button-rounded p-button-text p-button-danger"></button>
                 </div>

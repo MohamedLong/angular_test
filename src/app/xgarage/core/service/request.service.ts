@@ -21,5 +21,9 @@ export class RequestService extends GenericService<any> {
         return this.http.get<MessageResponse>(this.apiServerUrl + '/cancelRequest/' + requestId);
     }
 
+    setSupplierNotInterested(requestId: number){
+        return this.http.get<any[]>(this.apiServerUrl + '/supplierNotInterested/' + requestId);
+    }
+
     part: BehaviorSubject<any> = new BehaviorSubject({});
 }
