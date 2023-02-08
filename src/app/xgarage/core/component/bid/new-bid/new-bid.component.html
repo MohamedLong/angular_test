@@ -63,7 +63,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice">
+                        <input min="0" pInputText type="number" (input)="onOriginalPrice(part)" [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.originalPrice}}
@@ -73,7 +73,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.discount">
+                        <input min="0" max="{{part.originalPrice}}" (input)="onDiscount(part)" pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.discount">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.discount}}
@@ -83,7 +83,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.price">
+                        <input min="0" pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.price" disabled="true">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.price}}
@@ -93,7 +93,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.vat">
+                        <input min="0" pInputText type="number" (input)="onVat(part)" [style]="{'width':'100%'}" [(ngModel)]="part.vat">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.vat}}
@@ -121,7 +121,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="summary">
-        <p class="text-right">Total: {{total}}</p>
+        <p class="text-right">Total: {{total | number}}</p>
     </ng-template>
 </p-table>
 <!-- <div class="grid mt-5">

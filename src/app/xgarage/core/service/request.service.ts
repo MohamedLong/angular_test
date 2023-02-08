@@ -22,7 +22,7 @@ export class RequestService extends GenericService<any> {
     }
 
     setSupplierNotInterested(requestId: number){
-        return this.http.get<any>(this.apiServerUrl + '/supplierNotInterested/' + requestId);
+        return this.http.post<any>(this.apiServerUrl + '/supplierNotInterested/' + requestId, '');
     }
 
     part: BehaviorSubject<any> = new BehaviorSubject({});

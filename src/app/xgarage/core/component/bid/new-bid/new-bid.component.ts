@@ -27,17 +27,10 @@ export class NewBidComponent implements OnInit {
         console.log(this.requests)
         this.requests.forEach(req => {
             req.images = [],
-                req.preferred = { "id": 4, "partType": "Not Interested" },
-                req.warranty = 0,
-                req.availability = 0,
-                req.originalPrice = 0.0,
-                req.discount = 0.0,
-                req.price = 0.0,
-                req.vat = 5.0,
-                req.totalPrice = 0.0,
-                req.statuses = this.statuses,
-                req.saved = false
+                this.resetBid(req);
         });
+
+
     }
 
     onSelect(e) {
@@ -73,7 +66,7 @@ export class NewBidComponent implements OnInit {
             cuRate: 0,
             partType: { id: part.preferred.id },
             bidDate: getYear + "-" + getMonth + "-" + getDay,
-            price: part.price,
+            price: part.totalPrice,
             request: { id: part.id },
             servicePrice: 0,
             // supplier: { id: JSON.parse(this.authService.getStoredUser()).id },
@@ -92,10 +85,8 @@ export class NewBidComponent implements OnInit {
 
 
         let vatValue = ((bidBody.originalPrice - bidBody.discount) * bidBody.vat) / 100;
-        bidBody.price = (bidBody.originalPrice - bidBody.discount) + vatValue;
-        part.totalPrice = bidBody.price;
-        this.total = this.total + bidBody.price;
-        part.price = bidBody.price;
+        part.totalPrice = (bidBody.originalPrice - bidBody.discount) + vatValue;;
+        this.total = this.total + part.totalPrice;
 
         if (part.preferred.id == 5) {
             this.messageService.add({ severity: 'warn', summary: 'Error', detail: "you can't submit a bid for unvailable part" });
@@ -112,12 +103,17 @@ export class NewBidComponent implements OnInit {
                 bidFormData.append(key, bid[key]);
             }
 
-            this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
-                //part.saved = true;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
-            }, err => {
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
-            })
+            if ((part.originalPrice >= 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice) && part.images.length > 0) {
+                this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
+                    //part.saved = true;
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
+                    this.resetBid(part);
+                }, err => {
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
+                })
+            } else {
+                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'some fileds are not valid, please try again.' });
+            }
         }
     }
 
@@ -126,4 +122,51 @@ export class NewBidComponent implements OnInit {
     }
 
 
+    onDiscount($event) {
+        if ($event.originalPrice > 0 && $event.discount > 0) {
+            $event.price = $event.originalPrice - $event.discount;
+        } else if ($event.originalPrice > 0 && ($event.discount == 0 || $event.discount == null)) {
+            $event.price = $event.originalPrice;
+        }
+
+        if ($event.discount < 0) {
+            this.messageService.add({ severity: 'error', summary: 'Discount is Not Valid', detail: 'Discount Can Not be Less Than 0' });
+            $event.discount = 0;
+        }
+
+        if ($event.discount >= $event.originalPrice) {
+            this.messageService.add({ severity: 'error', summary: 'Discount is Not Valid', detail: 'Discount Can Not be More Than Original Price' });
+            $event.discount = 0;
+        }
+    }
+
+    onOriginalPrice($event) {
+        if ($event.originalPrice == null || $event.originalPrice < 0) {
+            this.messageService.add({ severity: 'error', summary: 'Original Price is Not Valid', detail: 'Original Price Can Not be Less Than 0' });
+            $event.price = 0;
+            $event.originalPrice = 0;
+        } else {
+            $event.price = $event.originalPrice;
+        }
+    }
+
+    onVat($event) {
+        if ($event.vat == null || $event.vat < 0) {
+            this.messageService.add({ severity: 'error', summary: 'Vat is Not Valid', detail: 'Vat Can Not be Less Than 0' });
+            $event.vat = 0;
+        }
+    }
+
+    resetBid(bid) {
+        bid.preferred = { "id": 4, "partType": "Not Interested" },
+            bid.warranty = 0,
+            bid.availability = 0,
+            bid.originalPrice = 0.0,
+            bid.discount = 0.0,
+            bid.price = 0.0,
+            bid.vat = 5.0,
+            bid.totalPrice = 0.0,
+            bid.statuses = this.statuses,
+            bid.saved = false
+    }
 }
