@@ -8,7 +8,7 @@
     </div>
     <div class="grid pb-3">
         <div class="field col-12 md:col-6 mt-4">
-            <p-fileUpload [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="{{ 'request.form.uploadImages' | translate }}" [customUpload]="true"
+            <p-fileUpload maxFileSize="10000000" [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="{{ 'request.form.uploadImages' | translate }}" [customUpload]="true"
                 [auto]="true" (uploadHandler)="uploadPartImages($event)" multiple="multiple" accept="image/*">
             </p-fileUpload>
         </div>

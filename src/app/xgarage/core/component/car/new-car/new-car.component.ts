@@ -8,14 +8,16 @@ import { CarModelYear } from 'src/app/xgarage/common/model/carmodelyear';
 import { BrandService } from 'src/app/xgarage/common/service/brand.service';
 import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypes.service';
 import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
+import { DocumentService } from 'src/app/xgarage/common/service/document.service';
 import { Car } from '../../../model/car';
 import { GearType } from '../../../model/geartype';
 import { CarService } from '../../../service/car.service';
+import { config } from "src/app/config";
 
 @Component({
     selector: 'app-new-car',
     templateUrl: './new-car.component.html',
-    styles: [''],
+    styles: ['.car-image {max-width: 100%; width: 180px;filter: drop-shadow(2px 4px 6px #6c757d70);}'],
     providers: [MessageService]
 })
 export class NewCarComponent implements OnInit {
@@ -36,7 +38,8 @@ export class NewCarComponent implements OnInit {
     submitted: boolean = false;
     isTyping: boolean = false;
     typingTimer;
-    found: boolean;
+    found: boolean = false;
+    image: string = '';
 
     carForm: FormGroup = this.formBuilder.group({
         chassisNumber: ['', [Validators.minLength(13), Validators.required]],
@@ -85,7 +88,6 @@ export class NewCarComponent implements OnInit {
                 this.carService.add(carFormData).subscribe(res => {
                     if(this.type == "new job") {
                         this.setSelectedCar(res);
-
                         this.carEvent.emit(this.carForm.getRawValue());
                     }
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
@@ -103,7 +105,9 @@ export class NewCarComponent implements OnInit {
         this.typingTimer = setTimeout(() => {
             if (!this.carForm.get('chassisNumber').errors) {
                 this.carService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
-                    //console.log('res:', res)
+                    //console.log('res:', res.document.name)
+                    this.image = config.apiUrl + '/v1/document/' + res.document.name;
+
                     this.found = true;
                     this.setSelectedCar(res);
                 }, err => {
