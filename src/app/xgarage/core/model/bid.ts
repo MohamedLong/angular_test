@@ -14,7 +14,7 @@ export interface Bid extends MasterEntity{
     cu?: Currency;
     cuRate?: number;
     request?: Request;
-    supplier?: Supplier;
+    supplier?: number;
     deliverDays: number;
     warranty?: number;
     comments?: string;

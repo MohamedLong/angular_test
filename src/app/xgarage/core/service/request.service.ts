@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GenericService } from '../../common/generic/genericservice';
 import { config } from 'src/app/config';
-import { BehaviorSubject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { MessageResponse } from '../../common/dto/messageresponse';
 
 @Injectable({
@@ -22,8 +22,9 @@ export class RequestService extends GenericService<any> {
     }
 
     setSupplierNotInterested(requestId: number){
-        return this.http.get<any>(this.apiServerUrl + '/supplierNotInterested/' + requestId);
+        return this.http.post<MessageResponse>(this.apiServerUrl + '/supplierNotInterested/' + requestId, null);
     }
+
 
     part: BehaviorSubject<any> = new BehaviorSubject({});
 }

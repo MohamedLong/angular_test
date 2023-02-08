@@ -78,21 +78,14 @@ export class NewCarComponent implements OnInit {
                 let stringCarBody = JSON.stringify(carBody);
                 let carFormData = new FormData();
 
-                let updatedCarBody = { 'carBody': stringCarBody };
+                carFormData.append('carBody', stringCarBody);
+                carFormData.append('carDocument', this.carFile ? this.carFile : null);
 
-                if (this.carFile) {
-                    updatedCarBody['carDocument'] = this.carFile;
-                }
-
-                for (let key in updatedCarBody) {
-                    carFormData.append(key, updatedCarBody[key]);
-                }
-
-                this.carService.add(carFormData as Car).subscribe(res => {
-                    //console.log(res)
+                console.log('carDocument: ', carFormData.get('carDocument'));
+                this.carService.add(carFormData).subscribe(res => {
                     if(this.type == "new job") {
                         this.setSelectedCar(res);
-                        //console.log(this.carForm.getRawValue())
+
                         this.carEvent.emit(this.carForm.getRawValue());
                     }
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
@@ -129,7 +122,7 @@ export class NewCarComponent implements OnInit {
     }
 
     onCarImageUpload(e) {
-        this.carFile = e.files;
+        this.carFile = e.files[0];
     }
 
     getBrandCarModels(brand: Brand) {

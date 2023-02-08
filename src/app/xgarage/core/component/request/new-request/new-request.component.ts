@@ -100,7 +100,6 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                             });
                         }
 
-
                         this.responseBody.job = data.jobId;
                         this.responseBody.description = this.description;
                         this.responseBody.car = { 'id': data.car.id };
@@ -112,11 +111,8 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                         this.responseBody.partTypes = this.selectedPartTypes;
 
                         this.getPart();
-                        // console.log('req form is not valid')
 
                         if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0) {
-                            //console.log('req form is valid')
-                            console.log('request body inside requets component: ', this.responseBody, this.subCategoryId);
                             this.partErrorMsg = '';
 
                             this.formatThenSaveRequest();
@@ -190,19 +186,16 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     }
 
     formatThenSaveRequest() {
-        console.log('formatting req')
         let stringRequestBody = JSON.stringify(this.responseBody);
-        let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId, "partImages": this.partImages }
-
-        //console.log(req)
-
+        let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId}
         let reqFormData = new FormData();
         for (var key in req) {
             reqFormData.append(key, req[key]);
         }
-        console.log(this.responseBody)
+        for(let i = 0;i < this.partImages.length; i++) {
+            reqFormData.append('partImages', this.partImages[i]);
+        }
         if (this.responseBody.hasOwnProperty('id')) {
-            console.log('editing')
             this.requestService.update(reqFormData).subscribe((res: MessageResponse) => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
             }, err => {
@@ -214,7 +207,6 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
 
         } else {
             this.isSending = true;
-
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
                 if (this.type == 'new req') {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });

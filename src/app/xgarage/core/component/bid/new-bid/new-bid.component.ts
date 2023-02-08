@@ -14,7 +14,7 @@ import { RequestService } from '../../../service/request.service';
 })
 export class NewBidComponent implements OnInit {
 
-    constructor(private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
+    constructor(private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
     checked: boolean = false;
     @Input() requests: any[] = [];
     statuses: PartType[] = [{ "id": 4, "partType": "Not Interested" }, { "id": 5, "partType": "Not Available" }];
@@ -22,7 +22,9 @@ export class NewBidComponent implements OnInit {
     bids: any[] = [];
     total: number = 0.0;
     note: string = '';
+    
     images: Document[] = [];
+
     ngOnInit(): void {
         console.log(this.requests)
         this.requests.forEach(req => {
@@ -76,8 +78,7 @@ export class NewBidComponent implements OnInit {
             price: part.price,
             request: { id: part.id },
             servicePrice: 0,
-            // supplier: { id: JSON.parse(this.authService.getStoredUser()).id },
-            supplier: { id: 37 },
+            supplier: JSON.parse(this.authService.getStoredUser()).id,
             comments: this.note,
             deliverDays: part.availability,
             warranty: part.warranty,
@@ -89,7 +90,6 @@ export class NewBidComponent implements OnInit {
             reviseComments: "",
             actionComments: "",
         }
-
 
         let vatValue = ((bidBody.originalPrice - bidBody.discount) * bidBody.vat) / 100;
         bidBody.price = (bidBody.originalPrice - bidBody.discount) + vatValue;
@@ -106,12 +106,15 @@ export class NewBidComponent implements OnInit {
             }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message }))
 
         } else {
-            let bid = { bidBody: JSON.stringify(bidBody), bidImages: part.images, voiceNote: '' }
+            console.log('part.images: ', part.images);
+            let bid = { bidBody: JSON.stringify(bidBody), voiceNote: '' }
             let bidFormData = new FormData();
             for (var key in bid) {
                 bidFormData.append(key, bid[key]);
             }
-
+            for(let i = 0;i < part.images.length; i++) {
+                bidFormData.append('bidImages', part.images[i]);
+            }
             this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
                 //part.saved = true;
                 this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
