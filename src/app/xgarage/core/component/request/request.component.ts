@@ -8,7 +8,6 @@ import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponen
 import { Status } from 'src/app/xgarage/common/model/status';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { RequestService } from '../../service/request.service';
-import { PartType } from 'src/app/xgarage/common/model/parttype';
 import { RequestDto } from '../../dto/requestdto';
 
 

@@ -122,7 +122,7 @@ export class NewCarComponent implements OnInit {
     }
 
     onCarImageUpload(e) {
-        this.carFile = e.files[0];
+        this.carFile = e.files ? e.files[0] : null;
     }
 
     getBrandCarModels(brand: Brand) {
