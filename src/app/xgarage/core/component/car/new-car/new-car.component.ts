@@ -40,6 +40,7 @@ export class NewCarComponent implements OnInit {
     typingTimer;
     found: boolean = false;
     image: string = '';
+    saving: boolean = false;
 
     carForm: FormGroup = this.formBuilder.group({
         chassisNumber: ['', [Validators.minLength(13), Validators.required]],
@@ -68,6 +69,7 @@ export class NewCarComponent implements OnInit {
                 this.carEvent.emit(this.carForm.getRawValue());
             } else {
                 //add new/update car
+                this.saving = true;
                 let carBody = {
                     "brandId": this.carForm.value.brandId.id,
                     "carModelId": this.carForm.value.carModelId.id,
@@ -84,7 +86,7 @@ export class NewCarComponent implements OnInit {
                 carFormData.append('carBody', stringCarBody);
                 carFormData.append('carDocument', this.carFile ? this.carFile : null);
 
-                console.log('carDocument: ', carFormData.get('carDocument'));
+                //console.log('carDocument: ', carFormData.get('carDocument'));
                 this.carService.add(carFormData).subscribe(res => {
                     if(this.type == "new job") {
                         this.setSelectedCar(res);
@@ -92,6 +94,7 @@ export class NewCarComponent implements OnInit {
                     }
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
                     this.resetCarForm();
+                    this.saving = false;
                 }, err => {
                     this.messageService.add({ severity: 'erorr', summary: 'Error', detail: 'Erorr Saving Car' });
                 })
@@ -146,7 +149,7 @@ export class NewCarComponent implements OnInit {
             this.setCarModelYear(carModelYearId);
         } else {
             this.carModelYearService.getAll().subscribe(res => {
-                this.carModelYears = res;
+                this.carModelYears = res.reverse();
             }, err => console.log(err));
         }
 

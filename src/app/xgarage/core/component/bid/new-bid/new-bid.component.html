@@ -1,47 +1,46 @@
 <p-toast></p-toast>
 <p-table [value]="requests" styleClass="p-datatable-gridlines" dataKey="id"
-    [tableStyle]="{'min-width': '50rem', 'width':'100%'}" editMode="row">
+    [tableStyle]="{'min-width': '50rem', 'width':'100%'}" editMode="row" #partTable>
     <ng-template pTemplate="header">
         <tr>
-            <th>Parts Name</th>
-            <th>Qty</th>
-            <th>Preferred</th>
-            <th>Proposed</th>
-            <th>Warranty (days)</th>
-            <th>Availability (days)</th>
-            <th>Original Price</th>
-            <th>Discount</th>
-            <th>Price</th>
-            <th>Vat (%)</th>
-            <th>Total Price</th>
-            <th>Part Images</th>
-            <th>Modify Bid</th>
+            <th>{{'bid.bidDetails.partName' | translate}}</th>
+            <th>{{'bid.bidDetails.qty' | translate}}</th>
+            <th>{{'bid.bidDetails.Preferred' | translate}}</th>
+            <th>{{'bid.bidDetails.Proposed' | translate}}</th>
+            <th>{{'bid.bidDetails.warranty' | translate}} {{'bid.bidDetails.days' | translate}}</th>
+            <th>{{'bid.bidDetails.deliverDays' | translate}} {{'bid.bidDetails.days' | translate}}</th>
+            <th>{{'bid.bidDetails.originalPrice' | translate}}</th>
+            <th>{{'bid.bidDetails.discount' | translate}}</th>
+            <th>{{'bid.bidDetails.price' | translate}}</th>
+            <th>{{'bid.bidDetails.vat' | translate}}</th>
+            <th>{{'bid.bidDetails.totalPrice' | translate}}</th>
+            <th>{{'bid.bidDetails.partImgs' | translate}}</th>
+            <th>{{'bid.bidDetails.modifyBid' | translate}}</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-part let-editing="editing" let-ri="rowIndex">
-        <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}" appendTo="body">
+        <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}" appendTo="partTable">
             <ng-template pTemplate>
-                <div class="align-items-start flex justify-content-between" *ngIf="part.documents.length > 0; else noimages">
+                <div class="align-items-start flex justify-content-between mb-3" *ngIf="part.documents.length > 0; else noimages">
                     <ng-container *ngFor="let doc of part.documents">
                         <img class="car-image rounded-large  shadow-3" src="{{'http://letsgo-oman.com:6060/api/v1/document/' + doc.name}}"
                             alt="">
                     </ng-container>
                 </div>
                 <ng-template #noimages>
-                    <p>this part has no images</p>
+                    <p>{{'bid.bidDetails.noImgs' | translate}}</p>
                 </ng-template>
                 <div *ngIf="part.description">
                     <h5 class="mb-2">{{part.part.name}}</h5>
                     <p class="muted-text text-lg">
-                        <span class="font-medium">Comment from client:</span> {{part.description}}
+                        <span class="font-medium">{{'bid.bidDetails.comment' | translate}}:</span> {{part.description}}
                     </p>
                 </div>
             </ng-template>
         </p-overlayPanel>
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved}">
-            <td #overlay><span>{{part.part.name}}</span> <i
-                    class="pi pi-info-circle fs-large m-2 ml-3 pi pi-info-circle text-blue-500"
-                    (click)="op.toggle($event, overlay)"></i></td>
+            <td (mouseenter)="op.show($event, overlay)" style="cursor: pointer;" #overlay><span>{{part.part.name}}</span>
+                <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i></td>
             <td>1</td>
             <td>{{part.partTypes[0]?.partType }} <br> {{part.partTypes[1]?.partType}} <br>
                 {{part.partTypes[2]?.partType}}</td>
@@ -149,7 +148,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="summary">
-        <p class="text-right">Total: {{total | number}}</p>
+        <p class="text-right">{{'bid.bidDetails.total' | translate}}: {{total | number}}</p>
     </ng-template>
 </p-table>
 <!-- <div class="grid mt-5">
