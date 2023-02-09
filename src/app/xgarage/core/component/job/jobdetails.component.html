@@ -2,11 +2,12 @@
     <p-toast></p-toast>
     <p-confirmDialog key="cfmdialog" [style]="{width: '50vw'}" [baseZIndex]="10000"
         rejectButtonStyleClass="p-button-text"></p-confirmDialog>
-    <p-toolbar styleClass="mb-4 align-items-start"[hidden]="master.refernceMode===true">
+    <p-toolbar styleClass="mb-4 align-items-start" [hidden]="master.refernceMode===true">
         <ng-template pTemplate="left" *ngIf="master">
             <div class="flex py-4">
-                <div class="mr-4">
-                    <img class="rounded-large shadow-3" width="200"
+                <div class="mr-4 relative">
+                    <p-skeleton class="absolute top-0 left-0 z-1" size="200px" *ngIf="!imageLoaded"></p-skeleton>
+                    <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="200"
                         src="{{'http://letsgo-oman.com:6060/api/v1/document/' + master.car.document.name}}" alt="">
                 </div>
                 <div class="py-3">
@@ -15,7 +16,8 @@
                         <p class="mb-0 font-medium muted-text text-xl">{{'car.form.spec' | translate}}:
                             {{master.car.carModelTypeId == 1? 'GCC' : master.car.carModelTypeId == 2 ?
                             'Others': 'USA'}}</p>
-                        <p class="font-medium muted-text text-xl">{{'job.tableColumn.carChassisNumber' | translate}}: {{master.car.chassisNumber}}</p>
+                        <p class="font-medium muted-text text-xl">{{'job.tableColumn.carChassisNumber' | translate}}:
+                            {{master.car.chassisNumber}}</p>
                     </div>
                     <!-- <div class="flex mb-4">
                             <div class="mr-8">
@@ -37,9 +39,9 @@
                             <p class="font-medium muted-text text-xl">{{master.jobNo}}</p>
                         </div>
                         <div>
-                                <h5 class="mb-2">{{'job.form.garageLocation' | translate}}</h5>
-                                <p class="font-medium muted-text text-xl text-blue-500">{{details[0].locationName}}</p>
-                            </div>
+                            <h5 class="mb-2">{{'job.form.garageLocation' | translate}}</h5>
+                            <p class="font-medium muted-text text-xl text-blue-500">{{details[0].locationName}}</p>
+                        </div>
                     </div>
                 </div>
             </div>

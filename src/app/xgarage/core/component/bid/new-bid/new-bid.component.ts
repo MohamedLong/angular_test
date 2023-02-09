@@ -22,7 +22,7 @@ export class NewBidComponent implements OnInit {
     bids: any[] = [];
     total: number = 0.0;
     note: string = '';
-
+    imagesLoaded: boolean = false;
     images: Document[] = [];
 
     ngOnInit(): void {

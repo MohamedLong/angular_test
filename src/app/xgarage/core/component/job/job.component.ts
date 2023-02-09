@@ -32,12 +32,13 @@ export class JobComponent extends GenericComponent implements OnInit {
 selectedStatus: Status;
 statuses: Status[];
 valid: boolean = false;
-
+imageLoaded: boolean = false;
   ngOnInit(): void {
     super.callInsideOnInit();
     this.getAllForTenant();
 
   }
+
 
   getAllForTenant() {
     let user = this.authService.getStoredUser();
@@ -80,7 +81,7 @@ valid: boolean = false;
   });
     }
  }
- 
+
 // We need to confirm the cancellation / deletion method
 
 confirmDelete() {
@@ -91,7 +92,7 @@ confirmDelete() {
   //     this.getAllForUser();
   //   }
   //   else{
-  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });     
+  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });
   //   }
   // }, err => {
   //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
