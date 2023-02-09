@@ -74,7 +74,7 @@
                     (uploadHandler)="onCarImageUpload($event)" *ngIf="!found"></p-fileUpload>
 
                     <ng-container *ngIf="found && image !== ''">
-                            <img src="{{image}}" class="car-image rounded-large" alt="">
+                            <img src="{{image}}" class="car-image rounded-large  shadow-3" alt="">
                     </ng-container>
 
             </div>

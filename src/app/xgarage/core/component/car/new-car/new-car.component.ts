@@ -17,7 +17,7 @@ import { config } from "src/app/config";
 @Component({
     selector: 'app-new-car',
     templateUrl: './new-car.component.html',
-    styles: ['.car-image {max-width: 100%; width: 180px;filter: drop-shadow(2px 4px 6px #6c757d70);}'],
+    styles: [''],
     providers: [MessageService]
 })
 export class NewCarComponent implements OnInit {

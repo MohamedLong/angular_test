@@ -35,6 +35,46 @@
                     <h5>{{ 'job.jobDialog.title' | translate }} #{{master.id}}
                     </h5>
                 </div>
+                <div class="flex py-4">
+                    <div class="mr-4">
+                        <img class="rounded-large shadow-3" width="200"
+                            src="{{'http://letsgo-oman.com:6060/api/v1/document/' + master.car.document.name}}"
+                            alt="">
+                    </div>
+                    <div class="py-3">
+                        <div class="mb-4">
+                            <h5 class="mb-2">BMW 7 Series 2022</h5>
+                            <p class="mb-0 font-medium muted-text">Specification:
+                                {{master.car.carModelTypeId == 1? 'GCC' : master.car.carModelTypeId == 2 ?
+                                'Others': 'USA'}}</p>
+                            <p class="font-medium muted-text">Chassis No.: {{master.car.chassisNumber}}</p>
+                        </div>
+                        <!-- <div class="flex mb-4">
+                                <div class="mr-8">
+                                    <h5 class="mb-0">Insurance From</h5>
+                                    <p class="font-medium muted-text mb-0">Dhofar Insurance Company</p>
+                                </div>
+                                <div>
+                                    <h5 class="mb-0">Bid Closing Date</h5>
+                                    <p class="font-medium muted-text text-orange-500">{{master.bidClosingDate}}</p>
+                                </div>
+                            </div> -->
+                        <div class="flex mb-4">
+                            <div class="mr-8">
+                                <h5 class="mb-2">Claim Number</h5>
+                                <p class="font-medium muted-text">{{master.claim}}</p>
+                            </div>
+                            <div class="mr-8">
+                                <h5 class="mb-2">Job Number</h5>
+                                <p class="font-medium muted-text">{{master.jobNo}}</p>
+                            </div>
+                            <!-- <div>
+                                    <h5 class="mb-0">Garage Location</h5>
+                                    <p class="font-medium muted-text">Azaiba (View in Google Map)</p>
+                                </div> -->
+                        </div>
+                    </div>
+                </div>
                 <!-- <div class="p-3">
                     <p-table [columns]="cols" [rows]="1" [value]="masters"
                     styleClass="p-invoice-datatable-responsive pb-3">
@@ -77,277 +117,246 @@
                 </p-table>
                 </div> -->
 
-                    <div class="mt-5">
-                        <p-tabView (onChange)="handleChange($event)">
-                            <p-tabPanel header="{{ 'request.title' | translate }}">
-                                <div class="pt-5 text-center" *ngIf="details.length == 0">
-                                    <p-progressSpinner [style]="{width: '50px', height: '50px', textAlign: 'center'}"
-                                        styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)"
-                                        animationDuration=".5s"></p-progressSpinner>
-                                </div>
-                                <p-table *ngIf="details.length  > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
-                                    [value]="details" styleClass="p-invoice-datatable-responsive pb-3">
-                                    <ng-template pTemplate="header" let-columns>
-                                        <tr>
-                                            <th pColumn="id">{{ 'common.id' | translate }}</th>
-                                            <th pColumn="requestTitle">{{ 'request.tableColumn.requestTitle' | translate}}</th>
-                                            <th pColumn="privacy">{{ 'request.tableColumn.privacy' | translate }}</th>
-                                            <th pColumn="part.name">{{ 'request.tableColumn.partName' | translate }}</th>
-                                            <th pColumn="part.partTypes">{{ 'request.tableColumn.partTypes' | translate}}</th>
-                                            <th pColumn="status.nameEn">{{ 'common.status' | translate }}</th>
-                                            <th [hidden]="(printingMode)" style="text-align:center">{{'operations.operations' | translate }}</th>
-                                            <th style="text-align:center">{{ 'bid.title' | translate }}</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-request>
-                                        <tr>
-                                            <td>
-                                                {{request.id}}
+                <div class="mt-5">
+                    <p-tabView (onChange)="handleChange($event)">
+                        <p-tabPanel header="{{ 'request.title' | translate }}">
+                            <div class="pt-5 text-center" *ngIf="details.length == 0">
+                                <p-progressSpinner [style]="{width: '50px', height: '50px', textAlign: 'center'}"
+                                    styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)"
+                                    animationDuration=".5s"></p-progressSpinner>
+                            </div>
+                            <p-table *ngIf="details.length  > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
+                                [value]="details" styleClass="p-invoice-datatable-responsive pb-3">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th pColumn="id">{{ 'common.id' | translate }}</th>
+                                        <th pColumn="requestTitle">{{ 'request.tableColumn.requestTitle' | translate}}
+                                        </th>
+                                        <th pColumn="privacy">{{ 'request.tableColumn.privacy' | translate }}</th>
+                                        <th pColumn="part.name">{{ 'request.tableColumn.partName' | translate }}</th>
+                                        <th pColumn="part.partTypes">{{ 'request.tableColumn.partTypes' | translate}}
+                                        </th>
+                                        <th pColumn="status.nameEn">{{ 'common.status' | translate }}</th>
+                                        <th [hidden]="(printingMode)" style="text-align:center">
+                                            {{'operations.operations' | translate }}</th>
+                                        <th style="text-align:center">{{ 'bid.title' | translate }}</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-request>
+                                    <tr>
+                                        <td>
+                                            {{request.id}}
+                                        </td>
+                                        <td>
+                                            {{request.requestTitle}}
+                                        </td>
+                                        <td>
+                                            {{request.privacy}}
+                                        </td>
+                                        <td>
+                                            {{request.part.name}}
+                                        </td>
+                                        <td>
+                                            {{getPartTypesAsString(request.partTypes)}}
+                                        </td>
+                                        <td>
+                                            {{request.status.nameEn}}
+                                        </td>
+                                        <ng-container>
+                                            <td [hidden]="(printingMode)" style="text-align:center">
+                                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                                    (click)="editAction(request)"
+                                                    [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                                    class="p-button-rounded p-button-text hidden-print"></button>
+                                                <button pButton pRipple type="button" icon="pi pi-times"
+                                                    (click)="deleteAction(request)"
+                                                    [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                                    class="p-button-rounded p-button-text hidden-print"></button>
                                             </td>
-                                            <td>
-                                                {{request.requestTitle}}
-                                            </td>
-                                            <td>
-                                                {{request.privacy}}
-                                            </td>
-                                            <td>
-                                                {{request.part.name}}
-                                            </td>
-                                            <td>
-                                                {{getPartTypesAsString(request.partTypes)}}
-                                            </td>
-                                            <td>
-                                                {{request.status.nameEn}}
-                                            </td>
-                                            <ng-container>
-                                                <td [hidden]="(printingMode)" style="text-align:center">
-                                                    <button pButton pRipple type="button" icon="pi pi-pencil"
-                                                        (click)="editAction(request)"
-                                                        [disabled]="!(master.status.id == 1 && editAuth===true)"
-                                                        class="p-button-rounded p-button-text hidden-print"></button>
-                                                    <button pButton pRipple type="button" icon="pi pi-times"
-                                                        (click)="deleteAction(request)"
-                                                        [disabled]="!(master.status.id == 1 && editAuth===true)"
-                                                        class="p-button-rounded p-button-text hidden-print"></button>
-                                                </td>
-                                            </ng-container>
-                                            <td [hidden]="printingMode===true || master.refernceMode===true">
-                                                <button pButton pRipple icon="pi pi-eye"
+                                        </ng-container>
+                                        <td [hidden]="printingMode===true || master.refernceMode===true">
+                                            <button pButton pRipple icon="pi pi-eye"
                                                 class="p-button-rounded p-button-success mr-2"
-                                                    (click)="viewBidsByRequest(request)"></button>
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </p-tabPanel>
+                                                (click)="viewBidsByRequest(request)"></button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-tabPanel>
 
-                            <p-tabPanel header="{{ 'job.tableColumn.receivedBids' | translate }}">
+                        <p-tabPanel header="{{ 'job.tableColumn.receivedBids' | translate }}">
 
-                                <p-table [columns]="cols" [rows]="10" [value]="supplierBids"
+                            <p-table [columns]="cols" [rows]="10" [value]="supplierBids"
                                 styleClass="p-invoice-datatable-responsive pb-3">
                                 <ng-template pTemplate="header" let-columns>
-                                <tr>
-                                    <th pColumn="supplierName">{{ 'bid.tableColumn.supplierName' | translate }}</th>
-                                    <th pColumn="status">{{ 'bid.tableColumn.status' | translate }}</th>
-                                    <th pColumn="bidDate">{{ 'bid.tableColumn.bidDate' | translate }}</th>
-                                    <th pColumn="bidValue">{{ 'bid.tableColumn.bidValue' | translate }}</th>
-                                    <th pColumn="submittedBids">{{ 'bid.tableColumn.submittedBids' | translate }}</th>
-                                    <th [hidden]="printingMode===true || master.refernceMode===true">{{
-                                        'operations.operations' | translate }}</th>
-                                </tr>
+                                    <tr>
+                                        <th pColumn="supplierName">{{ 'bid.tableColumn.supplierName' | translate }}</th>
+                                        <th pColumn="status">{{ 'bid.tableColumn.status' | translate }}</th>
+                                        <th pColumn="bidDate">{{ 'bid.tableColumn.bidDate' | translate }}</th>
+                                        <th pColumn="bidValue">{{ 'bid.tableColumn.bidValue' | translate }}</th>
+                                        <th pColumn="submittedBids">{{ 'bid.tableColumn.submittedBids' | translate }}
+                                        </th>
+                                        <th [hidden]="printingMode===true || master.refernceMode===true">{{
+                                            'operations.operations' | translate }}</th>
+                                    </tr>
                                 </ng-template>
-                    <ng-template pTemplate="body" let-bid>
-                        <tr>
-                            <td>
-                                {{bid.supplierName}}
-                            </td>
-                            <td>
-                                {{getStatusName(bid.statusId)}}
-                            </td>
-                            <td>
-                                {{bid.bidDate | date: 'dd/MM/yyyy hh:mm'}}
-                            </td>
-                            <td>
-                                {{getTotalPriceForSupplier(bid.supplierId)}}
-                            </td>
-                            <td>
-                                {{getTotalSubmittedBidsForSupplier(bid.supplierId)}}
-                            </td>
-                            <td [hidden]="printingMode===true || master.refernceMode===true">
-                                <button pButton pRipple icon="pi pi-pencil"
-                                    class="p-button-rounded p-button-success mr-2"
-                                    (click)="viewBidsBySupplier(bid.supplierId)"></button>
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-                    </p-tabPanel>
-                            <p-tabPanel header="{{ 'job.tableColumn.addBids' | translate }}">
-                                <div class="py-3">
-                                    <div class="mb-4">
-                                        <h5 class="mb-2">BMW 7 Series 2022</h5>
-                                        <p class="mb-0 font-medium muted-text">Specification:
-                                            {{master.car.carModelTypeId == 1? 'GCC' : master.car.carModelTypeId == 2 ?
-                                            'Others': 'USA'}}</p>
-                                        <p class="font-medium muted-text">Chassis No.: {{master.car.chassisNumber}}</p>
-                                    </div>
-                                    <!-- <div class="flex mb-4">
-                                        <div class="mr-8">
-                                            <h5 class="mb-0">Insurance From</h5>
-                                            <p class="font-medium muted-text mb-0">Dhofar Insurance Company</p>
-                                        </div>
-                                        <div>
-                                            <h5 class="mb-0">Bid Closing Date</h5>
-                                            <p class="font-medium muted-text text-orange-500">{{master.bidClosingDate}}</p>
-                                        </div>
-                                    </div> -->
-                                    <div class="flex mb-4">
-                                        <div class="mr-8">
-                                            <h5 class="mb-2">Claim Number</h5>
-                                            <p class="font-medium muted-text">{{master.claim}}</p>
-                                        </div>
-                                        <div class="mr-8">
-                                            <h5 class="mb-2">Job Number</h5>
-                                            <p class="font-medium muted-text">{{master.jobNo}}</p>
-                                        </div>
-                                        <!-- <div>
-                                            <h5 class="mb-0">Garage Location</h5>
-                                            <p class="font-medium muted-text">Azaiba (View in Google Map)</p>
-                                        </div> -->
-                                    </div>
-                                </div>
-                                <app-new-bid *ngIf="details.length > 0" [requests]="details"></app-new-bid>
-                            </p-tabPanel>
+                                <ng-template pTemplate="body" let-bid>
+                                    <tr>
+                                        <td>
+                                            {{bid.supplierName}}
+                                        </td>
+                                        <td>
+                                            {{getStatusName(bid.statusId)}}
+                                        </td>
+                                        <td>
+                                            {{bid.bidDate | date: 'dd/MM/yyyy hh:mm'}}
+                                        </td>
+                                        <td>
+                                            {{getTotalPriceForSupplier(bid.supplierId)}}
+                                        </td>
+                                        <td>
+                                            {{getTotalSubmittedBidsForSupplier(bid.supplierId)}}
+                                        </td>
+                                        <td [hidden]="printingMode===true || master.refernceMode===true">
+                                            <button pButton pRipple icon="pi pi-pencil"
+                                                class="p-button-rounded p-button-success mr-2"
+                                                (click)="viewBidsBySupplier(bid.supplierId)"></button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-tabPanel>
+                        <p-tabPanel header="{{ 'job.tableColumn.addBids' | translate }}">
+                            <app-new-bid *ngIf="details.length > 0" [requests]="details"></app-new-bid>
+                        </p-tabPanel>
                     </p-tabView>
-                    </div>
-
                 </div>
-        <p-dialog [(visible)]="bidDetailsDialog" [style]="{width: '1200px'}"
+
+            </div>
+            <p-dialog [(visible)]="bidDetailsDialog" [style]="{width: '1200px'}"
                 header="{{ 'bid.bidDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
-            <ng-template pTemplate="content">
+                <ng-template pTemplate="content">
 
-            <p-table #dt [value]="bidDtos" [columns]="cols" [rows]="10" [paginator]="true">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th pColumn="partName">{{ 'bid.bidDetails.partName' | translate }}
-                        </th>
-                        <th pColumn="partType">{{ 'bid.bidDetails.partType' | translate }}
-                        </th>
-                        <th pColumn="warranty">{{ 'bid.bidDetails.warranty' | translate }}
-                        </th>
-                        <th pColumn="deliverDays">{{ 'bid.bidDetails.deliverDays' | translate }}
-                        </th>
-                        <th pColumn="qty">{{ 'bid.bidDetails.qty' | translate }}
-                        </th>
-                        <th pColumn="originalPrice">{{ 'bid.bidDetails.originalPrice' | translate }}
-                        </th>
-                        <th pColumn="discount">{{ 'bid.bidDetails.discount' | translate }}
-                        </th>
-                        <th pColumn="vat">{{ 'bid.bidDetails.vat' | translate }}
-                        </th>
-                        <th pColumn="totalPrice">{{ 'bid.bidDetails.totalPrice' | translate }}
-                        </th>
-                        <th pColumn="actions">{{'common.actions' | translate }}
-                        </th>
+                    <p-table #dt [value]="bidDtos" [columns]="cols" [rows]="10" [paginator]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pColumn="partName">{{ 'bid.bidDetails.partName' | translate }}
+                                </th>
+                                <th pColumn="partType">{{ 'bid.bidDetails.partType' | translate }}
+                                </th>
+                                <th pColumn="warranty">{{ 'bid.bidDetails.warranty' | translate }}
+                                </th>
+                                <th pColumn="deliverDays">{{ 'bid.bidDetails.deliverDays' | translate }}
+                                </th>
+                                <th pColumn="qty">{{ 'bid.bidDetails.qty' | translate }}
+                                </th>
+                                <th pColumn="originalPrice">{{ 'bid.bidDetails.originalPrice' | translate }}
+                                </th>
+                                <th pColumn="discount">{{ 'bid.bidDetails.discount' | translate }}
+                                </th>
+                                <th pColumn="vat">{{ 'bid.bidDetails.vat' | translate }}
+                                </th>
+                                <th pColumn="totalPrice">{{ 'bid.bidDetails.totalPrice' | translate }}
+                                </th>
+                                <th pColumn="actions">{{'common.actions' | translate }}
+                                </th>
 
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-bid>
-                    <tr>
-                        <td>
-                            {{bid.partName}}
-                        </td>
-                        <td>
-                            {{bid.partType}}
-                        </td>
-                        <td>
-                            {{bid.Warranty ? 0 : bid.warranty}} Days
-                        </td>
-                        <td>
-                            {{bid.deliverDays ? 0 : bid.deliverDays}} Days
-                        </td>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            {{bid.originalPrice ? 0 : bid.originalPrice}}
-                        </td>
-                        <td>
-                            {{bid.dicount ? 0 : bid.discount}}
-                        </td>
-                        <td>
-                            {{bid.vat ? 0 : bid.vat}}
-                        </td>
-                        <td>
-                            {{bid.price ? 0 : bid.price}}
-                        </td>
-                        <ng-container>
-                            <td [hidden]="(printingMode)" style="text-align:center">
-                                <button pButton pRipple type="button" icon="pi pi-pencil"
-                                    (click)="editAction(request)"
-                                    [disabled]="!(master.status.id == 1 && editAuth===true)"
-                                    class="p-button-rounded p-button-text hidden-print"></button>
-                                <button pButton pRipple type="button" icon="pi pi-times"
-                                    (click)="deleteAction(request)"
-                                    [disabled]="!(master.status.id == 1 && editAuth===true)"
-                                    class="p-button-rounded p-button-text hidden-print"></button>
-                            </td>
-                        </ng-container>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="summary">
-                    <div class="flex align-items-center justify-content-between">
-                        {{'bid.table_footer' | translate: {length: bidDtos ? bidDtos.length : 0} }}
-                    </div>
-                </ng-template>
-            </p-table>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-bid>
+                            <tr>
+                                <td>
+                                    {{bid.partName}}
+                                </td>
+                                <td>
+                                    {{bid.partType}}
+                                </td>
+                                <td>
+                                    {{bid.Warranty ? 0 : bid.warranty}} Days
+                                </td>
+                                <td>
+                                    {{bid.deliverDays ? 0 : bid.deliverDays}} Days
+                                </td>
+                                <td>
+                                    1
+                                </td>
+                                <td>
+                                    {{bid.originalPrice ? 0 : bid.originalPrice}}
+                                </td>
+                                <td>
+                                    {{bid.dicount ? 0 : bid.discount}}
+                                </td>
+                                <td>
+                                    {{bid.vat ? 0 : bid.vat}}
+                                </td>
+                                <td>
+                                    {{bid.price ? 0 : bid.price}}
+                                </td>
+                                <ng-container>
+                                    <td [hidden]="(printingMode)" style="text-align:center">
+                                        <button pButton pRipple type="button" icon="pi pi-pencil"
+                                            (click)="editAction(request)"
+                                            [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                            class="p-button-rounded p-button-text hidden-print"></button>
+                                        <button pButton pRipple type="button" icon="pi pi-times"
+                                            (click)="deleteAction(request)"
+                                            [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                            class="p-button-rounded p-button-text hidden-print"></button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary">
+                            <div class="flex align-items-center justify-content-between">
+                                {{'bid.table_footer' | translate: {length: bidDtos ? bidDtos.length : 0} }}
+                            </div>
+                        </ng-template>
+                    </p-table>
 
-            </ng-template>
+                </ng-template>
             </p-dialog>
 
-                <p-dialog [(visible)]="masterDialog" [style]="{width: '300px'}"
-                    header="{{ 'job.jobDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
-                    <ng-template pTemplate="content">
-                        <div class="formgrid grid">
-                            <div class="field col-12">
-                                <label>{{ 'job.tableColumn.insuranceType' | translate }}</label>
-                                <p-dropdown [options]="insuranceTypes" [(ngModel)]="selectedInsuranceType" required
-                                    autofocus></p-dropdown>
-                            </div>
-                            <div class="field col-12">
-                                <label for="jobNo">{{ 'job.tableColumn.jobNo' | translate }}</label>
-                                <input type="text" pInputText id="jobNo" [(ngModel)]="master.jobNo" required
-                                    autofocus />
-                                <small class="p-error" *ngIf="parentSubmitted && !master.jobNo">{{
-                                    'job.form.jobNoRequired' | translate }}</small>
-                            </div>
+            <p-dialog [(visible)]="masterDialog" [style]="{width: '300px'}"
+                header="{{ 'job.jobDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
+                <ng-template pTemplate="content">
+                    <div class="formgrid grid">
+                        <div class="field col-12">
+                            <label>{{ 'job.tableColumn.insuranceType' | translate }}</label>
+                            <p-dropdown [options]="insuranceTypes" [(ngModel)]="selectedInsuranceType" required
+                                autofocus></p-dropdown>
                         </div>
-                    </ng-template>
-                    <ng-template pTemplate="footer">
-                        <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
-                            class="p-button-text" (click)="hideParentDialog()"></button>
-                        <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
-                            class="p-button-text" (click)="updateParent()"
-                            [disabled]="!(selectedInsuranceType && master.status.id == 1 && editAuth===true)"></button>
-                    </ng-template>
-                </p-dialog>
+                        <div class="field col-12">
+                            <label for="jobNo">{{ 'job.tableColumn.jobNo' | translate }}</label>
+                            <input type="text" pInputText id="jobNo" [(ngModel)]="master.jobNo" required autofocus />
+                            <small class="p-error" *ngIf="parentSubmitted && !master.jobNo">{{
+                                'job.form.jobNoRequired' | translate }}</small>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
+                        class="p-button-text" (click)="hideParentDialog()"></button>
+                    <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
+                        class="p-button-text" (click)="updateParent()"
+                        [disabled]="!(selectedInsuranceType && master.status.id == 1 && editAuth===true)"></button>
+                </ng-template>
+            </p-dialog>
 
-                <p-dialog [(visible)]="detailDialog" [style]="{width: '600px'}"
-                    header="{{ 'request.requestDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
-                    <ng-template pTemplate="content">
-                        <app-new-request [type]="type" [requestDetails]="detail"
-                            [edit]="updateRequest"></app-new-request>
-                    </ng-template>
-                    <ng-template pTemplate="footer">
-                        <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
-                            class="p-button-text" (click)="hideDialog()"></button>
-                        <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
-                            class="p-button-text" (click)="updateRequest = !updateRequest"></button>
-                        {{updateRequest}}
-                    </ng-template>
-                </p-dialog>
+            <p-dialog [(visible)]="detailDialog" [style]="{width: '600px'}"
+                header="{{ 'request.requestDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
+                <ng-template pTemplate="content">
+                    <app-new-request [type]="type" [requestDetails]="detail" [edit]="updateRequest"></app-new-request>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
+                        class="p-button-text" (click)="hideDialog()"></button>
+                    <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
+                        class="p-button-text" (click)="updateRequest = !updateRequest"></button>
+                    {{updateRequest}}
+                </ng-template>
+            </p-dialog>
 
-                <!-- <p-dialog [(visible)]="newDialog" [style]="{width: '600px'}"
+            <!-- <p-dialog [(visible)]="newDialog" [style]="{width: '600px'}"
                     header="{{ 'request.requestDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
                     <ng-template pTemplate="content">
                         <app-new-request></app-new-request>
@@ -361,34 +370,34 @@
                 </p-dialog> -->
 
 
-                <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}"
-                    [modal]="true" [style]="{width:'450px'}">
-                    <div class="flex align-items-center justify-content-center">
-                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                        <span *ngIf="detail">{{ 'operations.cancelMessage' | translate }} <b>
-                                Req #{{detail.id}}</b>?</span>
-                    </div>
-                    <ng-template pTemplate="footer">
-                        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-                            (click)="deleteSingleDialog = false"></button>
-                        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
-                            (click)="confirmCancel(detail.id)"></button>
-                    </ng-template>
-                </p-dialog>
+            <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}"
+                [modal]="true" [style]="{width:'450px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span *ngIf="detail">{{ 'operations.cancelMessage' | translate }} <b>
+                            Req #{{detail.id}}</b>?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                        (click)="deleteSingleDialog = false"></button>
+                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                        (click)="confirmCancel(detail.id)"></button>
+                </ng-template>
+            </p-dialog>
 
-                <p-dialog [(visible)]="confirmActionDialog" header="{{ 'operations.confirmAction' | translate}}"
-                    [modal]="true" [style]="{width:'450px'}">
-                    <div class="flex align-items-center justify-content-center">
-                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                        <span><b>{{ 'operations.confirmActionMessage' | translate }}</b></span>
-                    </div>
-                    <ng-template pTemplate="footer">
-                        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-                            (click)="confirmActionDialog = false"></button>
-                        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
-                            (click)="confirm()"></button>
-                    </ng-template>
-                </p-dialog>
-            </div>
+            <p-dialog [(visible)]="confirmActionDialog" header="{{ 'operations.confirmAction' | translate}}"
+                [modal]="true" [style]="{width:'450px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span><b>{{ 'operations.confirmActionMessage' | translate }}</b></span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                        (click)="confirmActionDialog = false"></button>
+                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                        (click)="confirm()"></button>
+                </ng-template>
+            </p-dialog>
         </div>
+    </div>
 </div>

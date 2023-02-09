@@ -10,12 +10,18 @@
 .p-dropdown {
     text-align: start;
 }
+
 // .p-fileupload-choose,
-.p-dropdown,  .p-cascadeselect, .p-calendar, .p-multiselect, .p-autocomplete, .p-autocomplete > input {
+.p-dropdown,
+.p-cascadeselect,
+.p-calendar,
+.p-multiselect,
+.p-autocomplete,
+.p-autocomplete>input {
     width: 100%;
 }
 
-.car-info > .p-message.p-message-info {
+.car-info>.p-message.p-message-info {
     border: none;
 }
 
@@ -30,11 +36,16 @@
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.car-image {
+    max-width: 100%;
+    width: 180px;
 }
