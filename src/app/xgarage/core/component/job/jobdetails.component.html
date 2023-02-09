@@ -347,20 +347,6 @@
                     </ng-template>
                 </p-dialog>
 
-                <!-- <p-dialog [(visible)]="newDialog" [style]="{width: '600px'}"
-                    header="{{ 'request.requestDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
-                    <ng-template pTemplate="content">
-                        <app-new-request></app-new-request>
-                    </ng-template>
-                    <ng-template pTemplate="footer">
-                        <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
-                            class="p-button-text" (click)="hideDialog()"></button>
-                        <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
-                            class="p-button-text" (click)="updateRequest = !updateRequest"></button>
-                    </ng-template>
-                </p-dialog> -->
-
-
                 <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}"
                     [modal]="true" [style]="{width:'450px'}">
                     <div class="flex align-items-center justify-content-center">
