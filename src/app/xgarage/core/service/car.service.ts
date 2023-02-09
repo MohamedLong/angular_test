@@ -4,6 +4,7 @@ import { throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { config } from 'src/app/config';
 import { GenericService } from '../../common/generic/genericservice';
+import { Car } from '../model/car';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +16,7 @@ export class CarService extends GenericService<any> {
     }
 
     getCarByChn(chn: string) {
-        return this.http.get<{ brandId: number }>(this.apiServerUrl + '/chassisNumber/' + chn).pipe(
+        return this.http.get<Car>(this.apiServerUrl + '/chassisNumber/' + chn).pipe(
             tap(res => {
                 return res
             }), catchError(err => {

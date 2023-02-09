@@ -9,7 +9,7 @@ import { RequestService } from '../../../service/request.service';
 @Component({
     selector: 'app-new-bid',
     templateUrl: './new-bid.component.html',
-    styles: [':host ::ng-deep .row-disabled {background-color: rgba(0,0,0,.15) !important;}'],
+    styles: [':host ::ng-deep .row-disabled {background-color: rgba(0,0,0,.15) !important;} .car-image:not(:last-of-type) {margin-right: .5rem}'],
     providers: [MessageService]
 })
 export class NewBidComponent implements OnInit {
@@ -22,7 +22,7 @@ export class NewBidComponent implements OnInit {
     bids: any[] = [];
     total: number = 0.0;
     note: string = '';
-    
+
     images: Document[] = [];
 
     ngOnInit(): void {

@@ -103,9 +103,9 @@ export class NewJobComponent implements OnInit {
 
     ngOnInit(): void {
         //set location
-        let location = JSON.parse(this.authService.getStoredUser()).tenant.location;
+        let location = JSON.parse(this.authService.getStoredUser()).tenant?.location? JSON.parse(this.authService.getStoredUser()).tenant.location : '';
         this.jobForm.patchValue({ location });
-        this.jobForm.get('location').disable();
+        //this.jobForm.get('location').disable();
     }
 
     clickToNavigate(step: string) {

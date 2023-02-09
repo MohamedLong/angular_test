@@ -13,5 +13,5 @@ export interface Car extends GenericEntity{
     chassisNumber?: string;
     plateNumber?: string;
     gearType?: GearType;
-    document?: Document;
+    document?: {extension: string, id: number, name:string};
 }
