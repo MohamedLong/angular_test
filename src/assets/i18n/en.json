@@ -676,13 +676,22 @@
             "qty": "Qty",
             "originalPrice": "Original Price",
             "discount": "Discount",
-            "vat": "Vat",
-            "totalPrice": "Total Price"
+            "vat": "Vat (%)",
+            "totalPrice": "Total Price",
+            "days": "(days)",
+            "total": "Total",
+            "Preferred": "Preferred",
+            "Proposed": "Proposed",
+            "price": "Price",
+            "partImgs": "Part Images",
+            "modifyBid": "Modify Bid",
+            "noImgs": "this part has no images",
+            "comment": "Comment from client"
         },
         "bidDialog": {
             "newBid": "Add Bid",
             "title": "Bids for Part: "
         }
     }
-    
+
 }
