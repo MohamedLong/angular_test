@@ -132,7 +132,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.parentSubmitted = true;
         if(this.master.jobNo && this.selectedInsuranceType) {
             this.master.insuranceType = this.selectedInsuranceType;
-            this.jobService.update(this.master).subscribe(
+            this.jobService.partialUpdate(this.master).subscribe(
                 {
                     next: (data) => {
                         this.master = data;
@@ -176,7 +176,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         }
     }
     switchToViewBySupplier() {
-        let i = 0;
         this.supplierBids = this.bidDtos.filter((a, i) => this.bidDtos.findIndex((s) => a.supplierId === s.supplierId) === i);
     }
 

@@ -12,6 +12,8 @@ import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { JobService } from '../../service/job.service';
 import { Job } from '../../model/job';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
+import { InsuranceType } from '../../model/insurancetype';
+import { UpdateJobDto } from '../../dto/updatedjobdto';
 
 
 @Component({
@@ -32,6 +34,9 @@ export class JobComponent extends GenericComponent implements OnInit {
 selectedStatus: Status;
 statuses: Status[];
 valid: boolean = false;
+insuranceTypes = Object.values(InsuranceType);
+selectedInsuranceType: string;
+jobDto: UpdateJobDto = {};
 
   ngOnInit(): void {
     super.callInsideOnInit();
@@ -84,18 +89,56 @@ valid: boolean = false;
 // We need to confirm the cancellation / deletion method
 
 confirmDelete() {
-  // this.jobService.delete(this.master.id).subscribe(res => {
-  //   if(res.messageCode == 200){
-  //     this.messageService.add({ severity: 'success', summary: 'Job cancelled successfully' });
-  //     this.deleteSingleDialog = false;
-  //     this.getAllForUser();
-  //   }
-  //   else{
-  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });     
-  //   }
-  // }, err => {
-  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
-  // })
+  this.jobService.delete(this.masterDto.id).subscribe(res => {
+    if(res.messageCode == 200){
+      this.masterDtos = this.masterDtos.filter(val => val.id != this.masterDto.id);
+      this.messageService.add({ severity: 'success', summary: 'Job Deleted successfully' });
+      this.deleteSingleDialog = false;
+    }
+    else{
+      this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Delete Job', life: 3000 });     
+    }
+  }, err => {
+      this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
+  })
+}
+
+editParentAction(dto: any) {
+  this.jobDto.id = dto.id;
+  this.jobDto.jobNumber = dto.jobNo;
+  this.jobDto.status = dto.status;
+  this.masterDialog = true;
+}
+
+updateParent() {
+  this.submitted = true;
+  if(this.jobDto.jobNumber) {
+      this.jobService.partialUpdate(this.jobDto).subscribe(
+          {
+              next: (data) => {
+                  if(data.messageCode == 200) {
+                    this.masterDtos.find(job => job.id == this.jobDto.id).jobNo = this.jobDto.jobNumber;
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Job Updated', life: 3000 });
+                    this.masterDialog = false;
+                  }else{
+                    this.messageService.add({ severity: 'error', summary: 'Server Error', detail: data.message, life: 3000 })
+                  }
+                  },
+              error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+              }
+          );
+  }
+}
+
+hideParentDialog() {
+  this.masterDialog = false;
+  this.submitted = false;
+  this.editable = false;
+}
+
+deleteJob(dto: any) {
+  this.deleteSingleDialog = true;
+  this.masterDto = { ...dto };
 }
 
 
@@ -104,6 +147,7 @@ goDetails(dto: any) {
     {
         next: (data) => {
             this.master = data;
+            this.master.claimNo = dto.claimNo;
             this.dataService.changeObject(this.master);
             this.router.navigate(['job-details']);
         },
