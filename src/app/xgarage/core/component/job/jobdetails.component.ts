@@ -15,7 +15,6 @@ import { InsuranceType } from '../../model/insurancetype';
 import { BidService } from '../../service/bidservice.service';
 import { BidDto } from '../../dto/biddto';
 import { Request } from '../../model/request';
-import { Supplier } from '../../model/supplier';
 import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
@@ -51,7 +50,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     selectedInsuranceType: string;
     updateRequest: boolean = false;
     type: string;
-    partName: string = '';
+    partName: string = null;
+    supplierName: string = null;
     bidDetailsDialog: boolean = false;
     originalBidList: BidDto[] = [];
     supplierBids: BidDto[] = [];
@@ -88,7 +88,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             next: (requests) => {
                 this.details = requests;
                 this.loading = false;
-                //console.log(this.details)
                 this.isFetching = false;
             },
             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Information', detail: e.error, life: 3000 })
@@ -104,7 +103,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             error: (e) => this.messageService.add({ severity: 'warn', summary: 'Server Information', detail: e.error, life: 3000 })
         });
     }
-
 
     editParentAction() {
         this.originalMaster = {...this.master};
@@ -170,10 +168,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
     }
 
-    viewBidsBySupplier(id: number) {
+    viewBidsBySupplier(bid: any) {
         this.originalBidList = this.bidDtos;
         this.bidDetailsDialog = true;
-        this.bidDtos = this.bidDtos.filter(b => b.supplierId == id);
+        this.bidDtos = this.bidDtos.filter(b => b.supplierId == bid.supplierId);
+        this.supplierName = bid.supplierName;
     }
 
     handleChange(e) {
@@ -199,6 +198,12 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     getTotalSubmittedBidsForSupplier(id: number) {
         let bidList = this.bidDtos.filter(s => s.supplierId == id);
         return bidList.length;
+    }
+
+    closeBidDialog() {
+        this.partName = null;
+        this.supplierName = null;
+        this.bidDtos = this.originalBidList;
     }
 
     getPartTypesAsString(partTypes: PartType[]) {

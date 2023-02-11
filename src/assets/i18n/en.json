@@ -492,8 +492,8 @@
         }
     },
     "job": {
-        "title": "Jobs",
-        "table_footer": "In total there are {{length}} Jobs",
+        "title": "Requests",
+        "table_footer": "In total there are {{length}} Requests",
         "form": {
             "insuranceFrom": "Insurance From",
             "claimNo": "Claim Number",
@@ -670,6 +670,7 @@
         },
         "bidDetails": {
             "partName": "Part Name",
+            "supplierName": "Supplier Name",
             "partType": "Part Type",
             "warranty": "Warranty",
             "deliverDays": "Availability",
@@ -690,7 +691,8 @@
         },
         "bidDialog": {
             "newBid": "Add Bid",
-            "title": "Bids for Part: "
+            "titleByPart": "Bids for Part: ",
+            "titleBySupplier": "Bids for Supplier: "
         }
     }
 
