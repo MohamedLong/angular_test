@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 <p-table [value]="requests" styleClass="p-datatable-gridlines" dataKey="id"
-    [tableStyle]="{'min-width': '50rem', 'width':'100%'}" editMode="row" #partTable>
+    [tableStyle]="{'min-width': '50rem', 'width':'100%'}" editMode="row" #partTable *ngIf="requests.length > 0">
     <ng-template pTemplate="header">
         <tr>
             <th>{{'bid.bidDetails.partName' | translate}}</th>
@@ -151,9 +151,6 @@
         <p class="text-right">{{'bid.bidDetails.total' | translate}}: {{total | number}}</p>
     </ng-template>
 </p-table>
-<!-- <div class="grid mt-5">
-    <div class="col-12">
-        <label class="block mb-2">Add a Note</label>
-        <textarea [(ngModel)]="note" class="width-100" pInputTextarea placeholder="20 November 2022"></textarea>
-    </div>
-</div> -->
+<div *ngIf="requests.length <= 0">
+    <p>this request has no parts for bid</p>
+</div>

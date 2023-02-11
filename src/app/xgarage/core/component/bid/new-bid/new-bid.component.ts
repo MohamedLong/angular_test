@@ -26,13 +26,17 @@ export class NewBidComponent implements OnInit {
     images: Document[] = [];
 
     ngOnInit(): void {
-        console.log(this.requests)
-        this.requests.forEach(req => {
+        this.requests.forEach((req, index) => {
             req.images = [],
                 this.resetBid(req);
+            let notInterestedSupplier = req.notInterestedSuppliers.filter(supplier => {
+                return supplier.user = JSON.parse(this.authService.getStoredUser()).id;
+            });
+
+            if(notInterestedSupplier.length > 0) {
+                this.requests[index].saved = true
+            }
         });
-
-
     }
 
     onSelect(e) {
@@ -97,20 +101,20 @@ export class NewBidComponent implements OnInit {
             }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message }))
 
         } else {
-            console.log('part.images: ', part.images);
+            //console.log('part.images: ', part.images);
             let bid = { bidBody: JSON.stringify(bidBody), voiceNote: '' }
             let bidFormData = new FormData();
             for (var key in bid) {
                 bidFormData.append(key, bid[key]);
             }
-            for(let i = 0;i < part.images.length; i++) {
+            for (let i = 0; i < part.images.length; i++) {
                 bidFormData.append('bidImages', part.images[i]);
             }
             if ((part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice) && part.images.length > 0) {
                 this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
-                    //part.saved = true;
+                    part.saved = true;
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
-                    this.resetBid(part);
+                    //this.resetBid(part);
                 }, err => {
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
                 })
