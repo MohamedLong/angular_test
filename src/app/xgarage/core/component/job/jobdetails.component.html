@@ -359,34 +359,20 @@
                 </ng-template>
             </p-dialog>
 
-            <!-- <p-dialog [(visible)]="newDialog" [style]="{width: '600px'}"
-                    header="{{ 'request.requestDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
-                    <ng-template pTemplate="content">
-                        <app-new-request></app-new-request>
-                    </ng-template>
+                <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}"
+                    [modal]="true" [style]="{width:'450px'}">
+                    <div class="flex align-items-center justify-content-center">
+                        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                        <span *ngIf="detail">{{ 'operations.cancelMessage' | translate }} <b>
+                                Req #{{detail.id}}</b>?</span>
+                    </div>
                     <ng-template pTemplate="footer">
-                        <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
-                            class="p-button-text" (click)="hideDialog()"></button>
-                        <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
-                            class="p-button-text" (click)="updateRequest = !updateRequest"></button>
+                        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                            (click)="deleteSingleDialog = false"></button>
+                        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                            (click)="confirmCancel(detail.id)"></button>
                     </ng-template>
-                </p-dialog> -->
-
-
-            <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}"
-                [modal]="true" [style]="{width:'450px'}">
-                <div class="flex align-items-center justify-content-center">
-                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                    <span *ngIf="detail">{{ 'operations.cancelMessage' | translate }} <b>
-                            Req #{{detail.id}}</b>?</span>
-                </div>
-                <ng-template pTemplate="footer">
-                    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
-                        (click)="deleteSingleDialog = false"></button>
-                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
-                        (click)="confirmCancel(detail.id)"></button>
-                </ng-template>
-            </p-dialog>
+                </p-dialog>
 
             <p-dialog [(visible)]="confirmActionDialog" header="{{ 'operations.confirmAction' | translate}}"
                 [modal]="true" [style]="{width:'450px'}">

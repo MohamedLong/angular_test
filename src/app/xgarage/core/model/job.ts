@@ -7,6 +7,7 @@ import { Supplier } from "./supplier";
 export interface Job extends MasterEntity{
     jobNO?: string;
     claim?: number;
+    claimNo?: string;
     insuranceType: InsuranceType;
     car?: Car;
     privacy?: Privacy;

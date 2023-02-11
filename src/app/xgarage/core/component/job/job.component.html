@@ -48,8 +48,8 @@
                         </th>
                         <th pColumn="claimNo">{{ 'job.tableColumn.claimNo' | translate }}
                         </th>
-                        <!-- <th pColumn="actions">{{'common.actions' | translate }}
-                        </th> -->
+                        <th pColumn="actions">{{'common.actions' | translate }}
+                        </th>
 
                     </tr>
                 </ng-template>
@@ -63,7 +63,7 @@
                             {{job.partNames}}
                         </td>
                         <td>
-                            There is {{job.submittedBids}} of Submitted Bids
+                            There is {{job.submittedBids? job.submittedBids : 0}} of Submitted Bids
                         </td>
                         <td>
                             {{job.jobStatus}}
@@ -71,27 +71,49 @@
                         <td>
                             {{job.claimNo}}
                         </td>
-<!--
+
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
-                              (click)="edit(job)"></button>
+                              (click)="editParentAction(job)"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
-                              (click)="deleteAction(job)"></button>
-                          </td> -->
+                              (click)="deleteJob(job)"></button>
+                          </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        {{'job.table_footer' | translate: {length: masters ? masters.length : 0} }}
+                        {{'job.table_footer' | translate: {length: masterDtos ? masterDtos.length : 0} }}
                     </div>
                 </ng-template>
             </p-table>
         </div>
 
+        <p-dialog [(visible)]="masterDialog" [style]="{width: '300px'}"
+                header="{{ 'job.jobDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
+                <ng-template pTemplate="content">
+                    <div class="formgrid grid">
+                        <div class="field col-12">
+                            <label for="jobNo">{{ 'job.tableColumn.jobNo' | translate }}</label>
+                            <input type="text" pInputText id="jobNo" [(ngModel)]="jobDto.jobNumber" required autofocus />
+                            <small class="p-error" *ngIf="submitted && !jobDto.jobNumber">{{
+                                'job.form.jobNoRequired' | translate }}</small>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
+                        class="p-button-text" (click)="hideParentDialog()"></button>
+                    <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
+                        class="p-button-text" (click)="updateParent()"
+                        [disabled]="!(jobDto.status == 1 && editAuth===true)"></button>
+                </ng-template>
+            </p-dialog>
+
+
         <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="master">{{ 'operations.cancelMessage' | translate }} <b>{{master.name}}</b>?</span>
+                <span *ngIf="masterDto">{{ 'operations.deleteMessage' | translate }} <b>{{masterDto.jobNo}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"

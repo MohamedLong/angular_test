@@ -5,6 +5,7 @@ import { throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GenericService } from '../../common/generic/genericservice';
 import { Job } from '../model/job';
+import { MessageResponse } from '../../common/dto/messageresponse';
 
 @Injectable({
     providedIn: 'root'
@@ -33,5 +34,9 @@ export class JobService extends GenericService<Job> {
                 return throwError(err)
             })
         )
+    }
+
+    partialUpdate(dto: any) {
+        return this.http.patch<MessageResponse>(config.coreApiUrl + '/job/updateJob', dto);
     }
 }

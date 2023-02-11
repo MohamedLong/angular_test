@@ -12,6 +12,8 @@ import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { JobService } from '../../service/job.service';
 import { Job } from '../../model/job';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
+import { InsuranceType } from '../../model/insurancetype';
+import { UpdateJobDto } from '../../dto/updatedjobdto';
 
 
 @Component({
@@ -32,7 +34,7 @@ export class JobComponent extends GenericComponent implements OnInit {
 selectedStatus: Status;
 statuses: Status[];
 valid: boolean = false;
-imageLoaded: boolean = false;
+
   ngOnInit(): void {
     super.callInsideOnInit();
     this.getAllForTenant();
@@ -92,7 +94,7 @@ confirmDelete() {
   //     this.getAllForUser();
   //   }
   //   else{
-  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });
+  //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });     
   //   }
   // }, err => {
   //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
@@ -105,6 +107,7 @@ goDetails(dto: any) {
     {
         next: (data) => {
             this.master = data;
+            this.master.claimNo = dto.claimNo;
             this.dataService.changeObject(this.master);
             this.router.navigate(['job-details']);
         },
