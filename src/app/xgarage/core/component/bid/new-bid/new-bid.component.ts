@@ -106,7 +106,7 @@ export class NewBidComponent implements OnInit {
             for(let i = 0;i < part.images.length; i++) {
                 bidFormData.append('bidImages', part.images[i]);
             }
-            if ((part.originalPrice >= 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice) && part.images.length > 0) {
+            if ((part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice) && part.images.length > 0) {
                 this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
                     //part.saved = true;
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
@@ -123,7 +123,6 @@ export class NewBidComponent implements OnInit {
     onRowEditCancel(data) {
         console.log('cancel')
     }
-
 
     onDiscount($event) {
         if ($event.originalPrice > 0 && $event.discount > 0) {
@@ -144,10 +143,10 @@ export class NewBidComponent implements OnInit {
     }
 
     onOriginalPrice($event) {
-        if ($event.originalPrice == null || $event.originalPrice < 0) {
-            this.messageService.add({ severity: 'error', summary: 'Original Price is Not Valid', detail: 'Original Price Can Not be Less Than 0' });
+        if ($event.originalPrice == null || $event.originalPrice <= 0) {
+            this.messageService.add({ severity: 'error', summary: 'Original Price is Not Valid', detail: 'Original Price Can Not be Less Than 1' });
             $event.price = 0;
-            $event.originalPrice = 0;
+            $event.originalPrice = 1;
         } else {
             $event.price = $event.originalPrice;
         }
@@ -164,7 +163,7 @@ export class NewBidComponent implements OnInit {
         bid.preferred = { "id": 4, "partType": "Not Interested" },
             bid.warranty = 0,
             bid.availability = 0,
-            bid.originalPrice = 0.0,
+            bid.originalPrice = 1,
             bid.discount = 0.0,
             bid.price = 0.0,
             bid.vat = 5.0,

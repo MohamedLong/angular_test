@@ -68,7 +68,6 @@ export class NewJobComponent implements OnInit {
     jobForm: FormGroup = this.formBuilder.group({
         insuranceFrom: ['', Validators.required],
         claim: ['', Validators.required],
-        // user: [''],
         job: [''],
         jobId: ['', Validators.required],
         location: [''],
@@ -91,6 +90,7 @@ export class NewJobComponent implements OnInit {
     displayPrivateSuppliers: boolean = false;
     addOneMoreRequest: boolean = false;
     numberOfrequests: number = 1;
+    newJob: boolean = false;
     @Input() type: string = 'new job';
 
     constructor(private formBuilder: FormBuilder,
@@ -103,7 +103,7 @@ export class NewJobComponent implements OnInit {
 
     ngOnInit(): void {
         //set location
-        let location = JSON.parse(this.authService.getStoredUser()).tenant?.location? JSON.parse(this.authService.getStoredUser()).tenant.location : '';
+        let location = JSON.parse(this.authService.getStoredUser()).tenant?.location ? JSON.parse(this.authService.getStoredUser()).tenant.location : '';
         this.jobForm.patchValue({ location });
         //this.jobForm.get('location').disable();
     }
@@ -143,7 +143,7 @@ export class NewJobComponent implements OnInit {
                         });
 
                         // console.log(updatedJobs)
-                        if(updatedJobs.length == 0) {
+                        if (updatedJobs.length == 0) {
                             this.jobs = [];
                             this.jobForm.patchValue({ 'job': "", 'jobId': 0 });
                             this.jobFound.multiple = false;
@@ -151,8 +151,10 @@ export class NewJobComponent implements OnInit {
 
                             console.log(this.jobs, this.jobForm.get('jobId').value)
                         }
-                        else if(updatedJobs.length == 1) {
+                        else if (updatedJobs.length == 1) {
+                            this.jobFound.found = true;
                             this.jobForm.patchValue({ 'job': updatedJobs[0].jobNo, 'jobId': updatedJobs[0].id });
+                            this.jobForm.get('job').disable();
                         }
                         else if (updatedJobs.length > 1) {
                             this.jobFound.multiple = true;
@@ -203,22 +205,22 @@ export class NewJobComponent implements OnInit {
     }
 
     onJobFormSubmit() {
-        //console.log('emitted')
+        console.log(this.jobForm.value)
         this.submitted = true;
-        if(this.jobForm.valid) {
-            if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
-                this.dataService.changeObject(this.jobForm.getRawValue());
-            } else {
-                this.addNewJob();
-            }
-
-            this.addOneMoreRequest = true;
-            this.submitted = false;
+        if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
+            this.sendRequest();
         } else {
-            console.log('form is not valid');
-            console.log(this.jobForm.errors);
+            this.addNewJob();
         }
+    }
 
+    onNewJob() {
+        this.jobFound.multiple = false;
+        this.jobForm.get('job').enable();
+        this.jobForm.patchValue({
+            job: "",
+            jobId: ""
+        });
     }
 
     addNewJob() {
@@ -235,12 +237,24 @@ export class NewJobComponent implements OnInit {
         this.jobService.add(jobBody).subscribe(res => {
             this.jobForm.patchValue({ 'jobId': res.id });
             console.log(res)
-            // if (this.jobForm.get('jobId').value !== '') {
-            //     this.dataService.changeObject(this.jobForm.getRawValue());
-            // }
+            if (this.jobForm.get('jobId').value !== '') {
+                this.sendRequest();
+            }
         }, err => {
             console.log('err', err)
         })
+    }
+
+    sendRequest() {
+        if (this.jobForm.valid) {
+            this.dataService.changeObject(this.jobForm.getRawValue());
+            this.addOneMoreRequest = true;
+            this.submitted = false;
+        } else {
+            console.log('form is not valid');
+            console.log(this.jobForm.errors);
+            console.log(this.jobForm.value);
+        }
     }
 
     onPrivacyChange(value) {
@@ -282,7 +296,7 @@ export class NewJobComponent implements OnInit {
     }
 
     removePrivateSupplier(value) {
-       // console.log(value)
+        // console.log(value)
         let updatedPrivateSuplliers = this.jobForm.get('suppliers').value.filter(supplier => {
             return supplier.id !== value.id;
         });
@@ -293,7 +307,7 @@ export class NewJobComponent implements OnInit {
 
         this.privateSuppliersList = updatedPrivateSuplliers
 
-        if(this.jobForm.get('suppliers').value.length == 0) {
+        if (this.jobForm.get('suppliers').value.length == 0) {
             this.jobForm.patchValue({
                 'privacy': 'Public'
             });
@@ -304,7 +318,7 @@ export class NewJobComponent implements OnInit {
 
     resetPrivacy() {
         //console.log(this.privateSuppliersList)
-        if(this.privateSuppliersList.length == 0) {
+        if (this.privateSuppliersList.length == 0) {
             this.jobForm.patchValue({
                 'suppliers': this.privateSuppliersList,
                 'privacy': 'Public'

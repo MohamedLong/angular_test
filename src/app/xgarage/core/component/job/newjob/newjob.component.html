@@ -77,6 +77,7 @@
                                     class="p-error">{{ 'job.form.enterJob' | translate }}</small>
                                 <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100 mb-2"
                                     type="text" pInputText placeholder="{{ 'job.form.enterJob' | translate }}" />
+                                <p style="cursor: pointer;" *ngIf="jobFound.found" class="text-green-500 text-right" (click)="onNewJob()"><i class="pi pi-plus"></i> or add a new job number</p>
                                 <small
                                     *ngIf="!jobFound.multiple && submitted && !jobForm.get('job').valid  && jobForm.get('job').errors?.['required']"
                                     class="p-error">{{ 'job.form.enterJob' | translate }}</small>
@@ -90,7 +91,7 @@
                                 <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
                                 <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom"
                                     placeholder="OD/TP"></p-dropdown>
-                                    <small
+                                <small
                                     *ngIf="submitted && !jobForm.get('insuranceFrom').valid  && jobForm.get('insuranceFrom').errors?.['required']"
                                     class="p-error">{{ 'job.form.selectInsurance' | translate }}</small>
                             </div>

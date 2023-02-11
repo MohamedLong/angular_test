@@ -39,17 +39,18 @@ export class NewCarComponent implements OnInit {
     isTyping: boolean = false;
     typingTimer;
     found: boolean = false;
+    notFound: boolean = false;
     image: string = '';
     saving: boolean = false;
 
     carForm: FormGroup = this.formBuilder.group({
-        chassisNumber: ['', [Validators.minLength(13), Validators.required]],
+        chassisNumber: ['', [Validators.minLength(13), Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
         brandId: ['', Validators.required],
         carModelId: ['', Validators.required],
         carModelYearId: ['', Validators.required],
         carModelTypeId: ['', Validators.required],
-        plateNumber: ['', Validators.required],
-        gearType: ['Automatic'],
+        plateNumber: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
+        gearType: ['Automatic', Validators.required],
     });
 
     @Input() type: string = 'new car';
@@ -110,11 +111,12 @@ export class NewCarComponent implements OnInit {
                 this.carService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
                     //console.log('res:', res.document.name)
                     this.image = config.apiUrl + '/v1/document/' + res.document.name;
-
                     this.found = true;
+                    this.notFound = !this.found;
                     this.setSelectedCar(res);
                 }, err => {
                     this.found = false;
+                    this.notFound = !this.found;
                     this.resetCarForm();
                     //console.log('err:', err.error)
                 })

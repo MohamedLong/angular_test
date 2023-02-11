@@ -86,7 +86,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     sendRequest() {
         this.request.emit();
         this.submitted = true;
-
+        this.isSending = true;
         setTimeout(() => {
             this.dataService.name.subscribe({
                 next: (data) => {
@@ -114,12 +114,12 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
 
                         if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0) {
                             this.partErrorMsg = '';
-
                             this.formatThenSaveRequest();
                         }
 
                         if (!this.responseBody.part) {
                             this.partErrorMsg = 'please select or enter a part';
+                            this.isSending = false;
                         }
 
                     }
@@ -206,17 +206,17 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.hideDialog();
 
         } else {
-            this.isSending = true;
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
                 if (this.type == 'new req') {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
                     this.hideDialog();
                 } else {
                     this.blocked = true;
-                    this.isSending = false;
                     this.buttonTxt = 'Request Sent Successfully';
                 }
+
                 this.detailDialog = false;
+                this.isSending = false;
             }, err => {
                 console.log(err)
                 if (this.type == 'new req') {

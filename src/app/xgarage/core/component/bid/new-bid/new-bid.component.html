@@ -19,7 +19,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-part let-editing="editing" let-ri="rowIndex">
-        <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}" appendTo="partTable">
+        <p-overlayPanel #op [showCloseIcon]="true"  appendTo="partTable" class="z-2">
             <ng-template pTemplate>
                 <div class="align-items-start flex justify-content-between mb-3" *ngIf="part.documents.length > 0; else noimages">
                     <ng-container *ngFor="let doc of part.documents">
@@ -39,7 +39,7 @@
             </ng-template>
         </p-overlayPanel>
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved}">
-            <td (mouseenter)="op.show($event, overlay)" style="cursor: pointer;" #overlay><span>{{part.part.name}}</span>
+            <td (mouseenter)="op.show($event, overlay)" style="cursor: pointer;"><span>{{part.part.name}}</span>
                 <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i></td>
             <td>1</td>
             <td>{{part.partTypes[0]?.partType }} <br> {{part.partTypes[1]?.partType}} <br>
@@ -78,7 +78,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input min="0" pInputText type="number" (input)="onOriginalPrice(part)"
+                        <input min="1" pInputText type="number" (input)="onOriginalPrice(part)"
                             [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice">
                     </ng-template>
                     <ng-template pTemplate="output">

@@ -40,7 +40,7 @@
                         </div>
                         <div>
                             <h5 class="mb-2">{{'job.form.garageLocation' | translate}}</h5>
-                            <p class="font-medium muted-text text-xl text-blue-500">{{details[0].locationName}}</p>
+                            <p class="font-medium muted-text text-xl text-blue-500">{{details[0]?details[0].locationName : '-'}}</p>
                         </div>
                     </div>
                 </div>
@@ -117,12 +117,16 @@
                 </div> -->
 
                 <div class="mt-5">
+
                     <p-tabView (onChange)="handleChange($event)">
                         <p-tabPanel header="{{ 'request.title' | translate }}">
-                            <div class="pt-5 text-center" *ngIf="details.length == 0">
+                            <div class="pt-5 text-center" *ngIf="isFetching">
                                 <p-progressSpinner [style]="{width: '50px', height: '50px', textAlign: 'center'}"
                                     styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)"
                                     animationDuration=".5s"></p-progressSpinner>
+                            </div>
+                            <div class="pt-5 text-center" *ngIf="!isFetching && details.length  == 0">
+                               this job has no requests
                             </div>
                             <p-table *ngIf="details.length  > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
                                 [value]="details" styleClass="p-invoice-datatable-responsive pb-3">
@@ -183,7 +187,7 @@
                             </p-table>
                         </p-tabPanel>
 
-                        <p-tabPanel header="{{ 'job.tableColumn.receivedBids' | translate }}">
+                        <p-tabPanel *ngIf="role == 1" header="{{ 'job.tableColumn.receivedBids' | translate }}">
 
                             <p-table [columns]="cols" [rows]="10" [value]="supplierBids"
                                 styleClass="p-invoice-datatable-responsive pb-3">
@@ -225,7 +229,7 @@
                                 </ng-template>
                             </p-table>
                         </p-tabPanel>
-                        <p-tabPanel header="{{ 'job.tableColumn.addBids' | translate }}">
+                        <p-tabPanel  *ngIf="role == 2" header="{{ 'job.tableColumn.addBids' | translate }}">
                             <app-new-bid *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                         </p-tabPanel>
                     </p-tabView>

@@ -16,6 +16,7 @@ import { BidService } from '../../service/bidservice.service';
 import { BidDto } from '../../dto/biddto';
 import { Request } from '../../model/request';
 import { Supplier } from '../../model/supplier';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'job-details',
@@ -54,8 +55,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     bidDetailsDialog: boolean = false;
     originalBidList: BidDto[] = [];
     supplierBids: BidDto[] = [];
+    isFetching:  boolean = false;
+    role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
+
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
-        public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService) {
+        public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
             super(route, router, requestService, datePipe, statusService, breadcrumbService);
 
         this.dataService.name.subscribe({
@@ -79,10 +83,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
 
     getRequestsByJob() {
+        this.isFetching = true;
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
                 this.details = requests;
                 this.loading = false;
+                //console.log(this.details)
+                this.isFetching = false;
             },
             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Information', detail: e.error, life: 3000 })
         });
