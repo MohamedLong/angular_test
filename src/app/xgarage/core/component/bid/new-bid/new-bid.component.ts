@@ -17,6 +17,7 @@ export class NewBidComponent implements OnInit {
     constructor(private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
     checked: boolean = false;
     @Input() requests: any[] = [];
+    @Input() type: string = 'new bid';
     statuses: PartType[] = [{ "id": 4, "partType": "Not Interested" }, { "id": 5, "partType": "Not Available" }];
     preferredTypes: string = '';
     bids: any[] = [];
@@ -26,18 +27,26 @@ export class NewBidComponent implements OnInit {
     images: Document[] = [];
 
     ngOnInit(): void {
-        console.log(this.requests)
-        this.requests.forEach((req, index) => {
-            req.images = [],
-                this.resetBid(req);
-            let notInterestedSupplier = req.notInterestedSuppliers.filter(supplier => {
-                return supplier.user = JSON.parse(this.authService.getStoredUser()).id;
-            });
 
-            if (notInterestedSupplier.length > 0) {
-                this.requests[index].saved = true
-            }
-        });
+        if (this.type == 'new bid') {
+            this.requests.forEach((req, index) => {
+                req.images = [],
+                    this.resetBid(req);
+                let notInterestedSupplier = req.notInterestedSuppliers.filter(supplier => {
+                    return supplier.user = JSON.parse(this.authService.getStoredUser()).id;
+                });
+
+                if (notInterestedSupplier.length > 0) {
+                    this.requests[index].saved = true
+                }
+            });
+        } else {
+            console.log(this.requests)
+            this.requests.forEach(req => {
+                req.qty2 = req.qty
+            })
+        }
+
     }
 
     onSelect(e) {
@@ -167,10 +176,10 @@ export class NewBidComponent implements OnInit {
     }
 
     onQty(part) {
-        if(part.qty2  <= 0) {
+        if (part.qty2 <= 0) {
             this.messageService.add({ severity: 'error', summary: 'Quantity is Not Valid', detail: 'Quantity Can Not be Less Than 0' });
             part.qty2 = part.qty;
-        } else if( part.qty2 > part.qty) {
+        } else if (part.qty2 > part.qty) {
             this.messageService.add({ severity: 'error', summary: 'Quantity is Not Valid', detail: `Quantity Can Not be More Than ${part.qty}` });
             part.qty2 = part.qty;
         } else {
@@ -180,7 +189,7 @@ export class NewBidComponent implements OnInit {
     }
 
     resetBid(bid) {
-            bid.preferred = { "id": 4, "partType": "Not Interested" },
+        bid.preferred = { "id": 4, "partType": "Not Interested" },
             bid.warranty = 0,
             bid.availability = 0,
             bid.originalPrice = 1,

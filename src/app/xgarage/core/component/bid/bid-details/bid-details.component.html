@@ -1,5 +1,5 @@
 <div class="card">
-    <p-table [columns]="cols" [value]="bids" [tableStyle]="{'min-width': '50rem'}">
+    <p-table (onRowSelect)="onBidSelect($event)" selectionMode="single" [columns]="cols" [value]="bids">
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns">
@@ -7,13 +7,16 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr>
-                <td *ngFor="let col of columns">
-                    {{rowData[col.field]}}
+        <ng-template pTemplate="body" let-bid let-columns="columns">
+            <tr  [pSelectableRow]="bid">
+                <td *ngFor="let col of columns" [ngClass]="{'font-bold': col.field == 'jobTitle'}">
+                    {{bid[col.field]}}
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
-
+<p-dialog [header]="jobBids[0]?.requestTitle" [(visible)]="displayModal" [modal]="true" [style]="{width: '90vw'}"
+    [draggable]="false" [resizable]="false">
+    <app-new-bid *ngIf="jobBids.length > 0" [requests]="jobBids" type="'edit bid'"></app-new-bid>
+</p-dialog>
