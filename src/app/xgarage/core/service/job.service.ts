@@ -25,7 +25,7 @@ export class JobService extends GenericService<Job> {
             })
         )
     }
-    
+
     saveJob(body: any) {
         return this.http.post<any>(config.coreApiUrl + '/job/saveJob?jobBody=' + body, '').pipe(
             tap(res => {
@@ -38,5 +38,9 @@ export class JobService extends GenericService<Job> {
 
     partialUpdate(dto: any) {
         return this.http.patch<MessageResponse>(config.coreApiUrl + '/job/updateJob', dto);
+    }
+
+    getBidsByJob() {
+        return this.http.get<any>(config.coreApiUrl + '/job/tenantSupplier');
     }
 }

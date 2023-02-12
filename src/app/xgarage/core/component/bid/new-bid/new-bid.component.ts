@@ -26,6 +26,7 @@ export class NewBidComponent implements OnInit {
     images: Document[] = [];
 
     ngOnInit(): void {
+        console.log(this.requests)
         this.requests.forEach((req, index) => {
             req.images = [],
                 this.resetBid(req);
@@ -33,7 +34,7 @@ export class NewBidComponent implements OnInit {
                 return supplier.user = JSON.parse(this.authService.getStoredUser()).id;
             });
 
-            if(notInterestedSupplier.length > 0) {
+            if (notInterestedSupplier.length > 0) {
                 this.requests[index].saved = true
             }
         });
@@ -44,10 +45,11 @@ export class NewBidComponent implements OnInit {
     }
 
     onRowEditInit(part) {
-        console.log('edit')
+        // console.log('edit')
         part.partTypes.forEach(type => {
             if (!part.statuses.includes(type)) {
-                part.statuses.push(type);
+                part.statuses.unshift(type);
+                part.preferred = type;
             }
 
         });
@@ -62,6 +64,7 @@ export class NewBidComponent implements OnInit {
         let getYear = date.toLocaleString("default", { year: "numeric" });
         let getMonth = date.toLocaleString("default", { month: "2-digit" });
         let getDay = date.toLocaleString("default", { day: "2-digit" });
+        this.updatePrice(part);
 
         let bidBody = {
             partName: part.part.name,
@@ -86,13 +89,11 @@ export class NewBidComponent implements OnInit {
             reviseVoiceNote: null,
             reviseComments: "",
             actionComments: "",
+            qty: part.qty2
         }
 
-        let vatValue = ((bidBody.originalPrice - bidBody.discount) * bidBody.vat) / 100;
-        part.totalPrice = (bidBody.originalPrice - bidBody.discount) + vatValue;
-        part.price = part.totalPrice;
-        this.total = this.total + part.totalPrice;
 
+        console.log(bidBody)
         if (part.preferred.id == 5) {
             this.messageService.add({ severity: 'warn', summary: 'Error', detail: "you can't submit a bid for unvailable part" });
         } else if (part.preferred.id == 4) {
@@ -102,7 +103,6 @@ export class NewBidComponent implements OnInit {
             }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message }))
 
         } else {
-            //console.log('part.images: ', part.images);
             let bid = { bidBody: JSON.stringify(bidBody), voiceNote: '' }
             let bidFormData = new FormData();
             for (var key in bid) {
@@ -111,11 +111,13 @@ export class NewBidComponent implements OnInit {
             for (let i = 0; i < part.images.length; i++) {
                 bidFormData.append('bidImages', part.images[i]);
             }
-            if ((part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice) && part.images.length > 0) {
+
+            this.total = this.total + part.totalPrice;
+
+            if ((part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
                 this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
                     part.saved = true;
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
-                    //this.resetBid(part);
                 }, err => {
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
                 })
@@ -130,13 +132,11 @@ export class NewBidComponent implements OnInit {
     }
 
     onDiscount($event) {
-        if ($event.originalPrice > 0 && $event.discount > 0) {
-            $event.price = $event.originalPrice - $event.discount;
-        } else if ($event.originalPrice > 0 && ($event.discount == 0 || $event.discount == null)) {
-            $event.price = $event.originalPrice;
+        if ($event.originalPrice > 0 && $event.discount >= 0) {
+            this.updatePrice($event);
         }
 
-        if ($event.discount < 0) {
+        if ($event.discount < 0 || $event.discount == null) {
             this.messageService.add({ severity: 'error', summary: 'Discount is Not Valid', detail: 'Discount Can Not be Less Than 0' });
             $event.discount = 0;
         }
@@ -150,10 +150,10 @@ export class NewBidComponent implements OnInit {
     onOriginalPrice($event) {
         if ($event.originalPrice == null || $event.originalPrice <= 0) {
             this.messageService.add({ severity: 'error', summary: 'Original Price is Not Valid', detail: 'Original Price Can Not be Less Than 1' });
-            $event.price = 0;
+            $event.price = 1;
             $event.originalPrice = 1;
         } else {
-            $event.price = $event.originalPrice;
+            this.updatePrice($event);
         }
     }
 
@@ -161,11 +161,26 @@ export class NewBidComponent implements OnInit {
         if ($event.vat == null || $event.vat < 0) {
             this.messageService.add({ severity: 'error', summary: 'Vat is Not Valid', detail: 'Vat Can Not be Less Than 0' });
             $event.vat = 0;
+        } else {
+            this.updatePrice($event);
         }
     }
 
+    onQty(part) {
+        if(part.qty2  <= 0) {
+            this.messageService.add({ severity: 'error', summary: 'Quantity is Not Valid', detail: 'Quantity Can Not be Less Than 0' });
+            part.qty2 = part.qty;
+        } else if( part.qty2 > part.qty) {
+            this.messageService.add({ severity: 'error', summary: 'Quantity is Not Valid', detail: `Quantity Can Not be More Than ${part.qty}` });
+            part.qty2 = part.qty;
+        } else {
+            this.updatePrice(part)
+        }
+        console.log(part.qty2, part.qty)
+    }
+
     resetBid(bid) {
-        bid.preferred = { "id": 4, "partType": "Not Interested" },
+            bid.preferred = { "id": 4, "partType": "Not Interested" },
             bid.warranty = 0,
             bid.availability = 0,
             bid.originalPrice = 1,
@@ -174,6 +189,17 @@ export class NewBidComponent implements OnInit {
             bid.vat = 5.0,
             bid.totalPrice = 0.0,
             bid.statuses = this.statuses,
-            bid.saved = false
+            bid.saved = false,
+            bid.qty2 = bid.qty
+    }
+
+    updatePrice(part) {
+        let price = part.originalPrice * part.qty2;
+        let priceAfterDiscount = price - part.discount;
+        let vat = (priceAfterDiscount * part.vat) / 100;
+        let totalPrice = priceAfterDiscount + vat;
+
+        part.price = price;
+        part.totalPrice = totalPrice;
     }
 }

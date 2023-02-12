@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { BidDto } from '../../../dto/biddto';
 import { BidService } from '../../../service/bidservice.service';
+import { JobService } from '../../../service/job.service';
 
 @Component({
   selector: 'app-bid-details',
@@ -11,15 +12,15 @@ import { BidService } from '../../../service/bidservice.service';
 export class BidDetailsComponent implements OnInit {
     bids: BidDto[] = [];
     cols: any[];
-  constructor(private bidService: BidService) { }
+  constructor(private bidService: BidService, private jobService: JobService) { }
 
   ngOnInit(): void {
     this.getBids()
   }
 
   getBids() {
-    this.bidService.getBySupplier().subscribe((res: MessageResponse)=> {
-        console.log(res.message)
+    this.jobService.getBidsByJob().subscribe((res: MessageResponse)=> {
+        console.log(res)
     });
 
     this.cols = [

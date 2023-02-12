@@ -39,6 +39,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         this.responseBody = {};
         this.subCategoryId = "";
     }
+    qty: number = 1;
     checked: boolean = true;
     submitted: boolean = false;
     partTypes: PartType[];
@@ -109,11 +110,13 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                         this.responseBody.requestTitle = data.requestTitle;
                         this.responseBody.user = this.user;
                         this.responseBody.partTypes = this.selectedPartTypes;
+                        this.responseBody.qty = this.qty;
 
                         this.getPart();
 
-                        if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0) {
+                        if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0 && this.responseBody.qty >= 1) {
                             this.partErrorMsg = '';
+                            //console.log(this.responseBody)
                             this.formatThenSaveRequest();
                         }
 

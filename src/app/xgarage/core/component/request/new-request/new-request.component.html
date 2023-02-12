@@ -7,15 +7,22 @@
         <p-divider type="dashed"></p-divider>
     </div>
     <div class="grid pb-3">
-        <div class="field col-12 md:col-6 mt-4">
-            <p-fileUpload maxFileSize="10000000" [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="{{ 'request.form.uploadImages' | translate }}" [customUpload]="true"
-                [auto]="true" (uploadHandler)="uploadPartImages($event)" multiple="multiple" accept="image/*">
-            </p-fileUpload>
+        <div class="field col-12 md:col-6">
+            <label>Quantity</label>
+            <input min="1" [(ngModel)]="qty" class="width-100" type="number" pInputText placeholder="" />
+            <small
+                *ngIf="qty < 1"
+                class="p-error mt-2">Quantity can't be less than 1</small>
         </div>
         <div class="field col-12 md:col-6">
             <label for="">{{ 'request.form.desc' | translate }}</label>
-            <textarea rows="5" [(ngModel)]="description" placeholder="{{ 'request.form.descPlaceholder' | translate }}"
+            <textarea [(ngModel)]="description" placeholder="{{ 'request.form.descPlaceholder' | translate }}"
                 class="width-100 block" type="text" pInputText required></textarea>
+        </div>
+        <div class="field col-12">
+            <p-fileUpload maxFileSize="10000000" [chooseIcon]="'pi pi-cloud-upload'" chooseLabel="{{ 'request.form.uploadImages' | translate }}" [customUpload]="true"
+                [auto]="true" (uploadHandler)="uploadPartImages($event)" multiple="multiple" accept="image/*">
+            </p-fileUpload>
         </div>
         <div class="field col-12">
             <label class="mb-2">{{ 'request.form.prefredTypes' | translate }}</label>
