@@ -12,13 +12,16 @@ export class BidService extends GenericService<any> {
         super(http, config.coreApiUrl + '/bid');
     }
 
-    public getByRequest(requestId: number){
+    getByRequest(requestId: number){
         return this.http.get<BidDto[]>(this.apiServerUrl + '/request/' + requestId);
     }
 
-    public getByJob(jobId: number){
+    getByJob(jobId: number){
         return this.http.get<BidDto[]>(this.apiServerUrl + '/job/' + jobId);
     }
 
+    getBySupplier(){
+        return this.http.get<any>(config.coreApiUrl + '/job/supplier');
+    }
 
 }
