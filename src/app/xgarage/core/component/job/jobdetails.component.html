@@ -188,8 +188,8 @@
             </div>
             <p-dialog [(visible)]="bidDetailsDialog" [style]="{width: '1200px'}" [modal]="true" styleClass="p-fluid" (onHide)="closeBidDialog()">
                 <ng-template pTemplate="header">
-                    <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' | translate }} {{partName}}</p>      
-                    <p *ngIf="partName==null" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleBySupplier' | translate }} {{supplierName}}</p>    
+                    <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' | translate }} {{partName}}</p>
+                    <p *ngIf="partName==null" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleBySupplier' | translate }} {{supplierName}}</p>
                 </ng-template>
                 <ng-template pTemplate="content">
 

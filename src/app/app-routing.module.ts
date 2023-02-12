@@ -33,6 +33,7 @@ import { BrandComponent } from './xgarage/common/component/brand/brand.component
 import { CategoryComponent } from './xgarage/common/component/category/category.component';
 import { SubCategoryComponent } from './xgarage/common/component/sub-category/sub-category.component';
 import { CarModelComponent } from './xgarage/common/component/car-model/car-model.component';
+import { BidDetailsComponent } from './xgarage/core/component/bid/bid-details/bid-details.component';
 
 const routes: Routes = [];
 
@@ -66,7 +67,8 @@ const routes: Routes = [];
                     {path: 'cars/new-car', component: NewCarComponent},
                     {path: 'parts', component: PartComponent},
                     {path: 'parts/new-part', component: NewPartComponent},
-                    {path: 'job-details', component: JobDetailsComponent}
+                    {path: 'job-details', component: JobDetailsComponent},
+                    {path: 'bids', component: BidDetailsComponent}
                     // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
                     // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},

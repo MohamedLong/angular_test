@@ -212,6 +212,7 @@ import { CarModelService } from './xgarage/common/service/carmodel.service';
 import { CategoryService } from './xgarage/common/service/category.service';
 import { SubCategoryService } from './xgarage/common/service/subcategory.service';
 import { NewBidComponent } from './xgarage/core/component/bid/new-bid/new-bid.component';
+import { BidDetailsComponent } from './xgarage/core/component/bid/bid-details/bid-details.component';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -409,7 +410,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         CarModelComponent,
         CategoryComponent,
         SubCategoryComponent,
-        NewBidComponent
+        NewBidComponent,
+        BidDetailsComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,

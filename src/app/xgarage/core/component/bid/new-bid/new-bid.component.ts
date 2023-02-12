@@ -89,7 +89,8 @@ export class NewBidComponent implements OnInit {
         }
 
         let vatValue = ((bidBody.originalPrice - bidBody.discount) * bidBody.vat) / 100;
-        part.totalPrice = (bidBody.originalPrice - bidBody.discount) + vatValue;;
+        part.totalPrice = (bidBody.originalPrice - bidBody.discount) + vatValue;
+        part.price = part.totalPrice;
         this.total = this.total + part.totalPrice;
 
         if (part.preferred.id == 5) {
