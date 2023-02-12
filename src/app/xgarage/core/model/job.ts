@@ -13,4 +13,5 @@ export interface Job extends MasterEntity{
     privacy?: Privacy;
     jobTitle?: string;
     suppliers?: Supplier[];
+    tenant?: number;
 }

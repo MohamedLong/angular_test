@@ -2,7 +2,6 @@ import { MasterEntity } from "../../common/generic/masterentity";
 import { Currency } from "../../common/model/currency";
 import { Document } from "../../common/model/document";
 import { PartType } from "../../common/model/parttype";
-import { Supplier } from "./supplier";
 
 export interface Bid extends MasterEntity{
     partName?: string;
@@ -15,6 +14,7 @@ export interface Bid extends MasterEntity{
     cuRate?: number;
     request?: Request;
     supplier?: number;
+    createUser?: number;
     deliverDays: number;
     warranty?: number;
     comments?: string;

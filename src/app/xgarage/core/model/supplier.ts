@@ -10,5 +10,6 @@ export interface Supplier extends MasterEntity{
     partTypes?: PartType[];
     serviceTypes?:  ServiceType[];
     brand?: Brand[];
-    user?: number
+    user?: number;
+    tenant?: number;
 }
