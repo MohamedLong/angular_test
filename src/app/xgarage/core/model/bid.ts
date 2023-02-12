@@ -26,4 +26,5 @@ export interface Bid extends MasterEntity{
     discount?: number;
     vat?: number;
     originalPrice?: number;
+    qty?: number;
 }

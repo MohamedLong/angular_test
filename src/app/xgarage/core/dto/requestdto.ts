@@ -12,4 +12,5 @@ export interface RequestDto{
     claimId?: number;
     jobNo?: string;
     claimNo?: string;
+    qtty?: number;
 }

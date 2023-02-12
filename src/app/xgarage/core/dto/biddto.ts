@@ -1,5 +1,5 @@
 export interface BidDto{
-    id?: number;
+    bidId?: number;
     partName?: string;
     partType?: string;
     requestId?: number;
@@ -11,6 +11,7 @@ export interface BidDto{
     price?: number;
     originalPrice?: number;
     vat?: number;
+    qty?: number;
     discount?: number;
     servicePrice?: number;
     cuId?: number;
