@@ -24,4 +24,5 @@ export interface Request extends MasterEntity{
     locationName?: string;
     voiceNote?: Document;
     tenant?: number;
+    qty?: number;
 }
