@@ -19,12 +19,13 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-part let-editing="editing" let-ri="rowIndex">
-        <p-overlayPanel #op [showCloseIcon]="true"  appendTo="partTable" class="z-2">
+        <p-overlayPanel #op [showCloseIcon]="true" appendTo="partTable" class="z-2">
             <ng-template pTemplate>
-                <div class="align-items-start flex justify-content-between mb-3" *ngIf="part.documents.length > 0; else noimages">
+                <div class="align-items-start flex justify-content-between mb-3"
+                    *ngIf="part.documents?.length > 0; else noimages">
                     <ng-container *ngFor="let doc of part.documents">
-                        <img class="car-image rounded-large  shadow-3" src="{{'http://letsgo-oman.com:6060/api/v1/document/' + doc.name}}"
-                            alt="">
+                        <img class="car-image rounded-large  shadow-3"
+                            src="{{'http://letsgo-oman.com:6060/api/v1/document/' + doc.name}}" alt="">
                     </ng-container>
                 </div>
                 <ng-template #noimages>
@@ -39,20 +40,22 @@
             </ng-template>
         </p-overlayPanel>
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved}">
-            <td (mouseenter)="op.show($event, overlay)" style="cursor: pointer;"><span>{{type == 'new bid'? part.part.name : partName}}</span>
-                <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i></td>
+            <td (mouseenter)="op.show($event, overlay)" style="cursor: pointer;"><span>{{type == 'new bid'?
+                    part.part.name : partName}}</span>
+                <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
+            </td>
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input min="1" max="{{part.qty}}" (input)="onQty(part)" pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.qty2">
+                        <input min="1" max="{{part.qty}}" (input)="onQty(part)" pInputText type="number"
+                            [style]="{'width':'100%'}" [(ngModel)]="part.qty2">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.qty2}}
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>{{type == 'new bid'? part.partTypes[0]?.partType : part.partType}} <br> {{type == 'new bid'?  part.partTypes[1]?.partType  : part.partType}} <br>
-                {{type == 'new bid'?  part.partTypes[2]?.partType  : part.partType}}</td>
+            <td>{{type == 'new bid'? part.partTypes[0]?.partType + ', ' + part.partTypes[1]?.partType + ', ' + part.partTypes[2]?.partType : part.partType}}</td>
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -60,7 +63,7 @@
                             [(ngModel)]="part.preferred" [style]="{'width':'100%'}"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{type == 'new bid'?  part.preferred.partType : part.partType}}
+                        {{type == 'new bid'? part.preferred.partType : part.partType}}
                     </ng-template>
                 </p-cellEditor>
             </td>
