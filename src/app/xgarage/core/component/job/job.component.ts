@@ -18,7 +18,7 @@ import { UpdateJobDto } from '../../dto/updatedjobdto';
     selector: 'app-job',
     templateUrl: './job.component.html',
     styleUrls: ['../../../../demo/view/tabledemo.scss'],
-
+    styles: ['.active {border-bottom: 2px solid #6366F1 !important;border-radius: 0;}'],
     providers: [MessageService, ConfirmationService, DatePipe]
 })
 export class JobComponent extends GenericComponent implements OnInit {

@@ -19,28 +19,8 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-part let-editing="editing" let-ri="rowIndex">
-        <p-overlayPanel #op [showCloseIcon]="true" appendTo="partTable" class="z-2">
-            <ng-template pTemplate>
-                <div class="align-items-start flex justify-content-between mb-3"
-                    *ngIf="part.documents?.length > 0; else noimages">
-                    <ng-container *ngFor="let doc of part.documents">
-                        <img class="car-image rounded-large  shadow-3"
-                            src="{{'http://letsgo-oman.com:6060/api/v1/document/' + doc.name}}" alt="">
-                    </ng-container>
-                </div>
-                <ng-template #noimages>
-                    <p>{{'bid.bidDetails.noImgs' | translate}}</p>
-                </ng-template>
-                <div *ngIf="part.description">
-                    <h5 class="mb-2">{{part.part.name}}</h5>
-                    <p class="muted-text text-lg">
-                        <span class="font-medium">{{'bid.bidDetails.comment' | translate}}:</span> {{part.description}}
-                    </p>
-                </div>
-            </ng-template>
-        </p-overlayPanel>
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved}">
-            <td (mouseenter)="op.show($event, overlay)" style="cursor: pointer;"><span>{{type == 'new bid'?
+            <td (mouseenter)="showModal(part)" style="cursor: pointer;"><span>{{type == 'new bid'?
                     part.part.name : part.partName}}</span>
                 <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
             </td>
@@ -55,7 +35,8 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>{{type == 'new bid'? part.partTypes[0]?.partType + ', ' + part.partTypes[1]?.partType + ', ' + part.partTypes[2]?.partType : part.partType}}</td>
+            <td>{{type == 'new bid'? part.partTypes[0]?.partType + ', ' + part.partTypes[1]?.partType + ', ' +
+                part.partTypes[2]?.partType : part.partType}}</td>
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -158,7 +139,8 @@
                 </div>
             </td>
             <td *ngIf="type == 'edit bid'">
-                <button (click)="onCancelBid(part.bidId)" pButton pRipple type="button" styleClass="width-100 p-button-sm text-sm" label="Cancel"></button>
+                <button (click)="confirmCancel(part.bidId)" pButton pRipple type="button"
+                    styleClass="width-100 p-button-sm text-sm" label="Cancel"></button>
             </td>
         </tr>
     </ng-template>
@@ -169,3 +151,23 @@
 <div *ngIf="requests.length <= 0">
     <p>this request has no parts for bid</p>
 </div>
+
+<p-dialog header="{{type == 'new bid'? 'Part Images': modalPart.partName}}" [(visible)]="displayModal" [modal]="true" [style]="{'max-width': '50vw'}" [draggable]="true"
+    [resizable]="true">
+    <div class="align-items-start flex justify-content-between mb-3" *ngIf="modalPart.documents?.length > 0; else noimages">
+        <ng-container *ngFor="let doc of modalPart.documents">
+            <img class="car-image rounded-large  shadow-3"
+                src="{{'http://letsgo-oman.com:6060/api/v1/document/' + doc.name}}" alt="">
+        </ng-container>
+    </div>
+    <ng-template #noimages>
+        <p>{{'bid.bidDetails.noImgs' | translate}}</p>
+    </ng-template>
+    <div *ngIf="modalPart.description">
+        <h5 class="mb-2">{{modalPart.part.name}}</h5>
+        <p class="muted-text text-lg">
+            <span class="font-medium">{{'bid.bidDetails.comment' | translate}}:</span> {{modalPart.description}}
+        </p>
+    </div>
+</p-dialog>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

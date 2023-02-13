@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
@@ -10,11 +10,11 @@ import { RequestService } from '../../../service/request.service';
     selector: 'app-new-bid',
     templateUrl: './new-bid.component.html',
     styles: [':host ::ng-deep .row-disabled {background-color: rgba(0,0,0,.15) !important;} .car-image:not(:last-of-type) {margin-right: .5rem}'],
-    providers: [MessageService]
+    providers: [MessageService, ConfirmationService]
 })
 export class NewBidComponent implements OnInit {
 
-    constructor(private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
+    constructor(private confirmationService: ConfirmationService, private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
     checked: boolean = false;
     @Input() requests: any[] = [];
     @Input() type: string = 'new bid';
@@ -25,7 +25,8 @@ export class NewBidComponent implements OnInit {
     note: string = '';
     imagesLoaded: boolean = false;
     images: Document[] = [];
-
+    modalPart: any = [];
+    displayModal: boolean = false;
     ngOnInit(): void {
 
         if (this.type == 'new bid') {
@@ -216,5 +217,20 @@ export class NewBidComponent implements OnInit {
         this.bidService.cancelBid(id).subscribe(res => {
             console.log(res)
         })
+    }
+
+    confirmCancel(id: number) {
+        this.confirmationService.confirm({
+            message: 'Are you sure that you want to cancel this bid?',
+            accept: () => {
+                this.onCancelBid(id);
+            }
+        });
+    }
+
+    showModal(part) {
+        console.log(part)
+        this.modalPart = part;
+        this.displayModal = true;
     }
 }

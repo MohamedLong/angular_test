@@ -28,6 +28,8 @@ import { AuthService } from 'src/app/auth/services/auth.service';
             display: block;
         }
 
+        .active {border-bottom: 2px solid #6366F1 !important;border-radius: 0;}
+
         @media screen and (max-width: 960px) {
             :host ::ng-deep .p-datatable.p-datatable-customers .p-datatable-tbody > tr > td:last-child {
                 text-align: center;
