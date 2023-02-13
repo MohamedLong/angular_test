@@ -67,7 +67,6 @@
                 </div>
 
                 <div class="mt-5">
-
                     <p-tabView (onChange)="handleChange($event)">
                         <p-tabPanel header="{{ 'request.title' | translate }}">
                             <div class="pt-5 text-center" *ngIf="isFetching">
@@ -75,11 +74,18 @@
                                     styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)"
                                     animationDuration=".5s"></p-progressSpinner>
                             </div>
-                            <div class="pt-5 text-center" *ngIf="!isFetching && details.length  == 0">
+                            <div class="pt-5 text-center" *ngIf="!isFetching && fillteredDetails.length  == 0">
                                this job has no requests
                             </div>
-                            <p-table *ngIf="details.length  > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
-                                [value]="details" styleClass="p-invoice-datatable-responsive pb-3">
+                            <p-table *ngIf="fillteredDetails.length  > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
+                                [value]="fillteredDetails" styleClass="p-invoice-datatable-responsive pb-3">
+                                <ng-template pTemplate="caption" class="pb-0">
+                                    <div class="border-300 border-bottom-1">
+                                        <ng-container *ngFor="let state of status">
+                                            <button (click)="filterByStatus(state)" pButton pRipple type="button" label="{{state}}" [ngClass]="{'active': selectedState == state, 'text-black-alpha-40': selectedState !== state}" class="mr-3 p-button-text"></button>
+                                        </ng-container>
+                                    </div>
+                                </ng-template>
                                 <ng-template pTemplate="header" let-columns>
                                     <tr>
                                         <th pColumn="id">{{ 'common.id' | translate }}</th>

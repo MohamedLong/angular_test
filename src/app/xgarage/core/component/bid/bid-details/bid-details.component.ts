@@ -28,6 +28,7 @@ export class BidDetailsComponent implements OnInit {
     getBids() {
         this.loading = true;
         this.jobService.getBidsByJob().subscribe(res => {
+            console.log(res)
             this.bids = res;
             this.fillteredBids = res;
             this.loading = false;

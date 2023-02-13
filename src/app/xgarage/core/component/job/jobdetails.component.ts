@@ -42,7 +42,9 @@ import { AuthService } from 'src/app/auth/services/auth.service';
     providers: [MessageService, ConfirmationService, DialogService, DatePipe]
 })
 export class JobDetailsComponent extends GenericDetailsComponent implements OnInit {
-
+    status: any[] = ["All"];
+    selectedState = 'All';
+    fillteredDetails: any[] = [];
     ref: DynamicDialogRef;
     hasRef: boolean = false;
     bidDtos: BidDto[] = [];
@@ -87,6 +89,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
                 this.details = requests;
+                this.fillteredDetails = requests;
+                this.setStatusNames(this.details)
                 this.loading = false;
                 this.isFetching = false;
             },
@@ -219,6 +223,61 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             partTypeNames = 'None';
         }
         return partTypeNames;
+    }
+
+    setStatusNames(arr) {
+        //console.log(arr)
+        let names = [];
+        arr.forEach(element => {
+            names.push(element.status.nameEn);
+        });
+
+        if (names.length > 0) {
+            names.forEach((name, index) => {
+                if (!this.status.includes(name)) {
+                    this.status.push(name);
+                }
+            });
+        }
+
+        //console.log(names)
+
+        // names.forEach(name => {
+        //     console.log(name, this.status.includes(name))
+        //     if(this.status.includes(name)) {
+
+        //     } else {
+        //         this.status.push(name)
+        //     }
+        // })
+
+        // console.log(this.status)
+
+        // if (names.length > 0) {
+        //     names.forEach((name, index) => {
+        //         //console.log(this.status.includes(name, 0), name.state)
+        //         if (this.status.includes(name)) {
+        //             console.log('includes')
+        //             this.status[index].count = this.status[index].count + 1;
+        //         } else {
+        //             console.log('not includes')
+        //             console.log(name)
+        //             this.status.push(name);
+        //             console.log(this.status)
+        //         }
+        //     });
+        // }
+    }
+
+    filterByStatus(state: any) {
+        this.selectedState = state;
+        if (state == 'All') {
+            this.fillteredDetails = this.details;
+        } else {
+            this.fillteredDetails = this.details.filter(detail => {
+                return detail.status.nameEn == state;
+            });
+        }
     }
 
 }
