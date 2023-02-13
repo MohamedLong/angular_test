@@ -17,7 +17,7 @@ export class BidDetailsComponent implements OnInit {
     displayModal: boolean = false;
     jobBids: BidDto[] = [];
     loading: boolean = false;
-    status: any[] = [{state: "All", count: 0}];
+    status: any[] = ["All"];
     selectedState = 'All';
     constructor(private bidService: BidService, private jobService: JobService, private msgService: MessageService) { }
 
@@ -32,7 +32,7 @@ export class BidDetailsComponent implements OnInit {
             this.bids = res;
             this.fillteredBids = res;
             this.loading = false;
-            this.status[0].count = this.bids.length;
+            // this.status[0].count = this.bids.length;
             this.setStatusNames(this.bids)
         });
     }
@@ -55,27 +55,25 @@ export class BidDetailsComponent implements OnInit {
     setStatusNames(arr) {
         let names = [];
         arr.forEach(element => {
-            names.push({state: element.jobStatus, count: 1});
+            names.push(element.jobStatus);
         });
 
         if (names.length > 0) {
-            names.forEach((name, index) => {
-                if (this.status[index].state !== name.state) {
+            names.forEach(name => {
+                if (!this.status.includes(name)) {
                     this.status.push(name);
-                } else {
-                    this.status[index].count = this.status[index].count + 1;
                 }
             });
         }
     }
 
     filterByStatus(state: any) {
-        this.selectedState = state.state;
-        if (state.state == 'All') {
+        this.selectedState = state;
+        if (state == 'All') {
             this.fillteredBids = this.bids;
         } else {
             this.fillteredBids = this.bids.filter(bid => {
-                return bid.jobStatus == state.state;
+                return bid.jobStatus == state;
             });
         }
     }

@@ -13,7 +13,7 @@
             </div>
             <div class="mt-3 border-300 border-bottom-1">
                 <ng-container *ngFor="let state of status">
-                    <button (click)="filterByStatus(state)" pButton pRipple type="button" label="{{state.state + ' ' + '(' + state.count + ')'}}" [ngClass]="{'active': selectedState == state.state, 'text-black-alpha-40': selectedState !== state.state}" class="mr-3 p-button-text"></button>
+                    <button (click)="filterByStatus(state)" pButton pRipple type="button" label="{{state}}" [ngClass]="{'active': selectedState == state, 'text-black-alpha-40': selectedState !== state}" class="mr-3 p-button-text"></button>
                 </ng-container>
             </div>
         </ng-template>
