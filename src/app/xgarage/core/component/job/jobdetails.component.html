@@ -281,7 +281,7 @@
                 </ng-template>
             </p-dialog>
 
-            <p-dialog [(visible)]="detailDialog" [style]="{width: '600px'}"
+            <p-dialog [(visible)]="detailDialog" [style]="{width: '800px'}"
                 header="{{ 'request.requestDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
                 <ng-template pTemplate="content">
                     <app-new-request [type]="type" [requestDetails]="detail" [edit]="updateRequest"></app-new-request>
