@@ -44,7 +44,6 @@ export class JobComponent extends GenericComponent implements OnInit {
 
     }
 
-
     getAllForTenant() {
         let user = this.authService.getStoredUser();
         if (JSON.parse(user).tenant) {
