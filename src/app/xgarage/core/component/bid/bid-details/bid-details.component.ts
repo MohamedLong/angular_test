@@ -2,35 +2,45 @@ import { Component, OnInit } from '@angular/core';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { BidDto } from '../../../dto/biddto';
 import { BidService } from '../../../service/bidservice.service';
+import { JobService } from '../../../service/job.service';
 
 @Component({
-  selector: 'app-bid-details',
-  templateUrl: './bid-details.component.html',
-  styles: ['']
+    selector: 'app-bid-details',
+    templateUrl: './bid-details.component.html',
+    styles: ['']
 })
 export class BidDetailsComponent implements OnInit {
-    bids: BidDto[] = [];
+    bids: any[] = [];
     cols: any[];
-  constructor(private bidService: BidService) { }
+    displayModal: boolean = false;
+    jobBids: BidDto[] = [];
+    constructor(private bidService: BidService, private jobService: JobService) { }
 
-  ngOnInit(): void {
-    this.getBids()
-  }
+    ngOnInit(): void {
+        this.getBids()
+    }
 
-  getBids() {
-    this.bidService.getBySupplier().subscribe((res: MessageResponse)=> {
-        console.log(res.message)
-    });
+    getBids() {
+        this.jobService.getBidsByJob().subscribe(res => {
+            this.bids = res;
+            this.cols = [
+                { field: 'jobTitle', header: 'Vehicle Info' },
+                { field: 'client', header: 'Client' },
+                { field: 'partNames', header: 'Parts' },
+                { field: 'status', header: 'Status' },
+                { field: 'totalPrice', header: 'Total Price' }
+            ];
+        });
+    }
 
-    this.cols = [
-        { field: 'code', header: 'Vehicle Info' },
-        { field: 'name', header: 'Client' },
-        { field: 'category', header: 'Parts' },
-        { field: 'quantity', header: 'Bid Closing Date' },
-        { field: 'quantity', header: 'Status' },
-        { field: 'quantity', header: 'Total Price' },
-        { field: 'quantity', header: 'Action' }
-    ];
-  }
+    onBidSelect(event) {
+        this.bidService.getByJob(event.data.id).subscribe(res => {
+            // console.log(res)
+            this.jobBids = res;
+            this.displayModal = true;
+        }, err => {
+            console.log(err)
+        })
+    }
 
 }

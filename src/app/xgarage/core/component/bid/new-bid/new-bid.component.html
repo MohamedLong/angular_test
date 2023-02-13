@@ -10,11 +10,11 @@
             <th>{{'bid.bidDetails.warranty' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.deliverDays' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.originalPrice' | translate}}</th>
-            <th>{{'bid.bidDetails.discount' | translate}}</th>
             <th>{{'bid.bidDetails.price' | translate}}</th>
+            <th>{{'bid.bidDetails.discount' | translate}}</th>
             <th>{{'bid.bidDetails.vat' | translate}}</th>
             <th>{{'bid.bidDetails.totalPrice' | translate}}</th>
-            <th>{{'bid.bidDetails.partImgs' | translate}}</th>
+            <th *ngIf="type == 'new bid'">{{'bid.bidDetails.partImgs' | translate}}</th>
             <th>{{'bid.bidDetails.modifyBid' | translate}}</th>
         </tr>
     </ng-template>
@@ -39,11 +39,20 @@
             </ng-template>
         </p-overlayPanel>
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved}">
-            <td (mouseenter)="op.show($event, overlay)" style="cursor: pointer;"><span>{{part.part.name}}</span>
+            <td (mouseenter)="op.show($event, overlay)" style="cursor: pointer;"><span>{{type == 'new bid'? part.part.name : partName}}</span>
                 <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i></td>
-            <td>1</td>
-            <td>{{part.partTypes[0]?.partType }} <br> {{part.partTypes[1]?.partType}} <br>
-                {{part.partTypes[2]?.partType}}</td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input min="1" max="{{part.qty}}" (input)="onQty(part)" pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.qty2">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.qty2}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>{{type == 'new bid'? part.partTypes[0]?.partType : part.partType}} <br> {{type == 'new bid'?  part.partTypes[1]?.partType  : part.partType}} <br>
+                {{type == 'new bid'?  part.partTypes[2]?.partType  : part.partType}}</td>
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -51,7 +60,7 @@
                             [(ngModel)]="part.preferred" [style]="{'width':'100%'}"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.preferred.partType}}
+                        {{type == 'new bid'?  part.preferred.partType : part.partType}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -71,7 +80,7 @@
                         <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.availability">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.availability}}
+                        {{type == 'new bid'? part.availability : part.deliverDays}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -89,22 +98,22 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input min="0" max="{{part.originalPrice}}" (input)="onDiscount(part)" pInputText type="number"
-                            [style]="{'width':'100%'}" [(ngModel)]="part.discount">
+                        <input min="0" pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.price"
+                            disabled="true">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.discount}}
+                        {{part.price}}
                     </ng-template>
                 </p-cellEditor>
             </td>
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input min="0" pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.price"
-                            disabled="true">
+                        <input min="0" max="{{part.originalPrice}}" (input)="onDiscount(part)" pInputText type="number"
+                            [style]="{'width':'100%'}" [(ngModel)]="part.discount">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.price}}
+                        {{part.discount}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -119,8 +128,8 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>{{part.totalPrice}}</td>
-            <td>
+            <td>{{type == 'new bid'? part.totalPrice : part.price}}</td>
+            <td *ngIf="type == 'new bid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <p-fileUpload chooseIcon="{{part.images.length > 0? 'pi pi-check' : 'pi pi-plus' }}"
