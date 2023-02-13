@@ -87,6 +87,7 @@
                                         </th>
                                         <th pColumn="privacy">{{ 'request.tableColumn.privacy' | translate }}</th>
                                         <th pColumn="part.name">{{ 'request.tableColumn.partName' | translate }}</th>
+                                        <th pColumn="part.qty">{{ 'common.qty' | translate }}</th>
                                         <th pColumn="part.partTypes">{{ 'request.tableColumn.partTypes' | translate}}
                                         </th>
                                         <th pColumn="status.nameEn">{{ 'common.status' | translate }}</th>
@@ -108,6 +109,9 @@
                                         </td>
                                         <td>
                                             {{request.part.name}}
+                                        </td>
+                                        <td>
+                                            {{request.qty ? request.qty : 1}}
                                         </td>
                                         <td>
                                             {{getPartTypesAsString(request.partTypes)}}

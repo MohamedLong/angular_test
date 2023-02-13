@@ -94,7 +94,7 @@
         "vatDialog": " VAT Details",
         "amountSeacrh": "Search by amount",
         "amountRequired": "Amount is required.",
-        "qty": "Quantity",
+        "qty": "Qty",
         "qtyRequired": "Quantity is required.",
         "qtyPositiveConstraint": "Quantity should be >= 0.",
         "qtySearch": "Search by Quantity",

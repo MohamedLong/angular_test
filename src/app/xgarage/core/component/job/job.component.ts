@@ -1,4 +1,3 @@
-import { StatusConstants } from '../../model/statusconstatnts';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -8,7 +7,6 @@ import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
 import { ClaimService } from '../../service/claimservice';
 import { Status } from 'src/app/xgarage/common/model/status';
-import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { JobService } from '../../service/job.service';
 import { Job } from '../../model/job';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
@@ -51,6 +49,7 @@ jobDto: UpdateJobDto = {};
       this.jobService.getForTenant().subscribe({
       next: (data) => {
           this.masterDtos = data;
+          this.masterDtos = this.masterDtos.filter(job => job.id != null);
           this.loading = false;
       },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
@@ -59,6 +58,7 @@ jobDto: UpdateJobDto = {};
       this.jobService.getAll().subscribe({
         next: (data) => {
           this.masterDtos = data;
+          this.masterDtos = this.masterDtos.filter(job => job.id != null);
           this.loading = false;
       },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
