@@ -19,4 +19,8 @@ export class BidService extends GenericService<any> {
     getByJob(jobId: number){
         return this.http.get<BidDto[]>(this.apiServerUrl + '/job/' + jobId);
     }
+
+    cancelBid(bidId: number){
+        return this.http.post(this.apiServerUrl + '/cancelBid/' + bidId, {"comments": ""});
+    }
 }

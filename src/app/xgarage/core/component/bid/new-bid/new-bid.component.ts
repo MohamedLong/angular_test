@@ -211,4 +211,10 @@ export class NewBidComponent implements OnInit {
         part.price = price;
         part.totalPrice = totalPrice;
     }
+
+    onCancelBid(id: number) {
+        this.bidService.cancelBid(id).subscribe(res => {
+            console.log(res)
+        })
+    }
 }

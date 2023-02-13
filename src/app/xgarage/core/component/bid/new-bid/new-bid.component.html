@@ -41,7 +41,7 @@
         </p-overlayPanel>
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved}">
             <td (mouseenter)="op.show($event, overlay)" style="cursor: pointer;"><span>{{type == 'new bid'?
-                    part.part.name : partName}}</span>
+                    part.part.name : part.partName}}</span>
                 <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
             </td>
             <td>
@@ -144,7 +144,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>
+            <td *ngIf="type == 'new bid'">
                 <div class="flex align-items-center justify-content-center gap-2">
                     <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                         (click)="onRowEditInit(part)" class="p-button-rounded p-button-text"
@@ -156,6 +156,9 @@
                         (click)="onRowEditCancel(part, ri)"
                         class="p-button-rounded p-button-text p-button-danger"></button>
                 </div>
+            </td>
+            <td *ngIf="type == 'edit bid'">
+                <button (click)="onCancelBid(part.bidId)" pButton pRipple type="button" styleClass="width-100 p-button-sm text-sm" label="Cancel"></button>
             </td>
         </tr>
     </ng-template>
