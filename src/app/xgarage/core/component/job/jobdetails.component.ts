@@ -61,31 +61,50 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     supplierBids: BidDto[] = [];
     isFetching: boolean = false;
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
+    activeTab: number = 0;
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
 
-        this.dataService.name.subscribe({
-            next: (data) => {
-                this.master = data;
-                this.masters.push(this.master);
-                this.getMinDate();
-            },
-            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
-        }).unsubscribe();
+        if (this.route.snapshot.queryParams['jobId']) {
+            this.route.queryParamMap.subscribe((params) => {
+                let jobId = JSON.parse(params.get('jobId'));
+
+                this.jobService.getById(jobId).subscribe(
+                    {
+                        next: (data) => {
+                            this.master = data;
+                            this.masters.push(this.master);
+                            // console.log(this.master)
+                            this.getRequestsByJob();
+                            this.getBidsByJob();
+                        },
+                        error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+                    });
+
+                    this.activeTab = 2;
+                // console.log('this job id:', jobId)
+            });
+        } else {
+            this.dataService.name.subscribe({
+                next: (data) => {
+                    this.master = data;
+                    this.masters.push(this.master);
+                    this.getMinDate();
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+            }).unsubscribe();
+        }
+
     }
 
     ngOnInit(): void {
-        this.route.queryParamMap.subscribe((params) => {
-            let jobId = params.get('jobId');
-            console.log('this job id is:', jobId)
-        });
-
-        if (this.master.id) {
+        if (!this.route.snapshot.queryParams['jobId'] && this.master.id) {
             this.getRequestsByJob();
             this.getBidsByJob();
         }
+
         this.callInsideOnInit();
         this.detailRouter = 'jobs';
     }

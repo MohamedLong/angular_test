@@ -122,7 +122,7 @@ export class NewJobComponent implements OnInit {
         //console.log(this.jobForm.get('car').value);
         this.jobForm.addControl('requestTitle', new FormControl);
         this.jobForm.patchValue({
-            'requestTitle': `${event.brandId.brandName} ${event.carModelId.name} ${event.carModelYearId.year}  ${event.carModelTypeId.type}`
+            'requestTitle': `${event.brandId.brandName} ${event.carModelId.name} ${event.carModelYearId.year},  ${event.carModelTypeId.type}`
         })
         this.clickToNavigate('request');
     }
@@ -232,7 +232,7 @@ export class NewJobComponent implements OnInit {
             car: { 'id': this.jobForm.get('car').value.id },
             privacy: this.jobForm.get('privacy').value,
             suppliers: this.jobForm.get('suppliers').value,
-            jobTitle: `${this.jobForm.get('car').value.brandId.brandName} ${this.jobForm.get('car').value.carModelId.name} ${this.jobForm.get('car').value.carModelYearId.year}  ${this.jobForm.get('car').value.carModelTypeId.type}`
+            jobTitle: `${this.jobForm.get('car').value.brandId.brandName} ${this.jobForm.get('car').value.carModelId.name} ${this.jobForm.get('car').value.carModelYearId.year},  ${this.jobForm.get('car').value.carModelTypeId.type}`
         }
         this.jobService.add(jobBody).subscribe(res => {
             this.jobForm.patchValue({ 'jobId': res.id });

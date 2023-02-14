@@ -1,18 +1,18 @@
 <div class="relative">
-    <div class="field col-6 text-center mx-auto absolute">
+    <div class="field col-12 md:col-6 text-center mx-auto absolute">
         <h1 class="text-white">Bid on a request</h1>
         <span class="p-input-icon-right block">
             <i class="pi pi-search z-1"></i>
             <p-autoComplete class="width-100" placeholder="Search request with brand name or parts name"></p-autoComplete>
         </span>
     </div>
-    <img class="img-fluid" src="assets/layout/images/supplier-header-bg.png" alt="">
+    <img class="img-fluid width-100" src="assets/layout/images/supplier-header-bg.png" alt="">
 </div>
-<div class="grid justify-content-center mx-auto p-5 mb-5">
+<div class="grid justify-content-center mx-auto p-3 md:p-5  mb-5">
     <div class="col-12">
         <h4>Latest Request</h4>
     </div>
-    <div class="col-4" *ngFor="let req of latestRequest">
+    <div class="col-12 md:col-4" *ngFor="let req of latestRequest">
         <p-card header="{{req.jobTitle}}" subheader="Chassis No.: Ex: 291919AD1914" styleClass="p-card-shadow height-100">
             <ng-template pTemplate="header">
                 <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png">
