@@ -11,6 +11,9 @@ import { RequestService } from '../../../service/request.service';
     templateUrl: './new-bid.component.html',
     styles: [`:host ::ng-deep .row-disabled {background-color: rgba(0,0,0,.15) !important;}
     .car-image:not(:last-of-type) {margin-right: .5rem}
+    .prices:not(:last-of-type) {
+        display: none;
+    }
     `],
     providers: [MessageService, ConfirmationService]
 })
@@ -37,7 +40,7 @@ export class NewBidComponent implements OnInit {
         if (this.type == 'new bid') {
             this.requests.forEach((req, index) => {
                 req.images = [],
-                this.resetBid(req);
+                    this.resetBid(req);
                 let notInterestedSupplier = req.notInterestedSuppliers.filter(supplier => {
                     return supplier.user = JSON.parse(this.authService.getStoredUser()).id;
                 });
