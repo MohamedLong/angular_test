@@ -34,11 +34,10 @@ export class NewBidComponent implements OnInit {
     bidTotalDiscount: number = 0;
 
     ngOnInit(): void {
-
         if (this.type == 'new bid') {
             this.requests.forEach((req, index) => {
                 req.images = [],
-                    this.resetBid(req);
+                this.resetBid(req);
                 let notInterestedSupplier = req.notInterestedSuppliers.filter(supplier => {
                     return supplier.user = JSON.parse(this.authService.getStoredUser()).id;
                 });
@@ -48,7 +47,6 @@ export class NewBidComponent implements OnInit {
                 }
             });
         } else {
-            console.log(this.requests)
             this.requests.forEach(req => {
                 req.qty2 = req.qty
                 this.bidTotalPrice = this.bidTotalPrice + req.price;

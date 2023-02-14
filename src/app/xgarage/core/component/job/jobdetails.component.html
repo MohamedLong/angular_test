@@ -196,7 +196,7 @@
                 </div>
 
             </div>
-            <p-dialog [(visible)]="bidDetailsDialog" [style]="{width: '1200px'}" [modal]="true" styleClass="p-fluid" (onHide)="closeBidDialog()">
+            <p-dialog [(visible)]="bidDetailsDialog" [style]="{width: '1300px'}" [modal]="true" styleClass="p-fluid" (onHide)="closeBidDialog()">
                 <ng-template pTemplate="header">
                     <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' | translate }} {{partName}}</p>
                     <p *ngIf="partName==null" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleBySupplier' | translate }} {{supplierName}}</p>
@@ -234,6 +234,8 @@
                                 </th>
                                 <th pColumn="totalPrice">{{ 'bid.bidDetails.totalPrice' | translate }}
                                 </th>
+                                <th pColumn="status">{{ 'common.status' | translate }}
+                                </th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-bid>
@@ -270,6 +272,9 @@
                                 </td>
                                 <td>
                                     {{bid.price ? 0 : bid.price}}
+                                </td>
+                                <td>
+                                    {{getStatusName(bid.statusId)}}
                                 </td>
                             </tr>
                         </ng-template>
