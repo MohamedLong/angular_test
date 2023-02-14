@@ -9,7 +9,9 @@ import { RequestService } from '../../../service/request.service';
 @Component({
     selector: 'app-new-bid',
     templateUrl: './new-bid.component.html',
-    styles: [':host ::ng-deep .row-disabled {background-color: rgba(0,0,0,.15) !important;} .car-image:not(:last-of-type) {margin-right: .5rem}'],
+    styles: [`:host ::ng-deep .row-disabled {background-color: rgba(0,0,0,.15) !important;}
+    .car-image:not(:last-of-type) {margin-right: .5rem}
+    `],
     providers: [MessageService, ConfirmationService]
 })
 export class NewBidComponent implements OnInit {
@@ -27,6 +29,10 @@ export class NewBidComponent implements OnInit {
     images: Document[] = [];
     modalPart: any = [];
     displayModal: boolean = false;
+    bidTotalOriginalPrice: number = 0;
+    bidTotalPrice: number = 0;
+    bidTotalDiscount: number = 0;
+
     ngOnInit(): void {
 
         if (this.type == 'new bid') {
@@ -45,6 +51,9 @@ export class NewBidComponent implements OnInit {
             console.log(this.requests)
             this.requests.forEach(req => {
                 req.qty2 = req.qty
+                this.bidTotalPrice = this.bidTotalPrice + req.price;
+                this.bidTotalOriginalPrice = this.bidTotalOriginalPrice + req.originalPrice;
+                this.bidTotalDiscount = this.bidTotalDiscount + req.discount;
             })
         }
 

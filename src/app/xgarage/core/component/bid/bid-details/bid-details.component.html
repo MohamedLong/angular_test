@@ -57,7 +57,7 @@
     </p-table>
 </div>
 
-<p-dialog [header]="jobBids[0]?.requestTitle" [(visible)]="displayModal" [modal]="true" [style]="{width: '90vw'}"
+<p-dialog contentStyleClass="editbidDialoagContentt" styleClass="editbidDialoag" [header]="jobBids[0]?.requestTitle" [(visible)]="displayModal" [modal]="true" [style]="{width: '90vw'}"
     [draggable]="false" [resizable]="false">
     <app-new-bid *ngIf="jobBids.length > 0" [requests]="jobBids" type="edit bid"></app-new-bid>
 </p-dialog>

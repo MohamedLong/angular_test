@@ -9,7 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AppComponent implements OnInit{
 
-    topbarTheme = 'blue';
+    topbarTheme = 'white';
 
     menuTheme = 'light';
 
@@ -29,7 +29,7 @@ export class AppComponent implements OnInit{
     constructor(public translate: TranslateService, private primengConfig: PrimeNGConfig) {
         translate.addLangs(['en', 'ar']);
         translate.setDefaultLang('en');
-    
+
         const browserLang = translate.getBrowserLang();
         if(localStorage.getItem('lang')){
             translate.use(localStorage.getItem('lang'));

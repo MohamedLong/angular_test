@@ -6,9 +6,9 @@
         <ng-template pTemplate="left" *ngIf="master">
             <div class="flex py-4">
                 <div class="mr-4 relative">
-                    <p-skeleton class="absolute top-0 left-0 z-1" size="200px" *ngIf="!imageLoaded"></p-skeleton>
+                    <p-skeleton class="absolute top-0 left-0 z-1" size="200px" *ngIf="!imageLoaded && master.car?.document !== null"></p-skeleton>
                     <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="200"
-                        src="{{'http://letsgo-oman.com:6060/api/v1/document/' + master.car?.document?.name}}" alt="">
+                        src="{{master.car?.document? 'http://letsgo-oman.com:6060/api/v1/document/' + master.car?.document?.name : ''}}" alt="">
                 </div>
                 <div class="py-3">
                     <div class="mb-4">
@@ -297,7 +297,6 @@
                         class="p-button-text" (click)="hideDialog()"></button>
                     <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
                         class="p-button-text" (click)="updateRequest = !updateRequest"></button>
-                    {{updateRequest}}
                 </ng-template>
             </p-dialog>
 

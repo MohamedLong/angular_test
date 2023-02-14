@@ -37,7 +37,6 @@
                 *ngIf="submitted && selectedPartTypes.length == 0"
                 class="p-error mt-2">{{ 'request.form.prefredTypesrequired' | translate }}</small>
         </div>
-
     </div>
     <div class="col-12 text-right" *ngIf="type == 'new job'">
         <button icon="{{isSending? 'pi pi-spin pi-spinner':'pi pi-check'}}" iconPos="right" class="width-100 md:w-20rem" type="button" pButton pRipple (click)="sendRequest()"

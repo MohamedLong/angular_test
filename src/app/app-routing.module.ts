@@ -34,6 +34,7 @@ import { CategoryComponent } from './xgarage/common/component/category/category.
 import { SubCategoryComponent } from './xgarage/common/component/sub-category/sub-category.component';
 import { CarModelComponent } from './xgarage/common/component/car-model/car-model.component';
 import { BidDetailsComponent } from './xgarage/core/component/bid/bid-details/bid-details.component';
+import { SupplierDashbaordComponent } from './xgarage/dashboard/component/supplier-dashbaord/supplier-dashbaord.component';
 
 const routes: Routes = [];
 
@@ -43,7 +44,7 @@ const routes: Routes = [];
             {
                 path: '', component: AppMainComponent,
                 children: [
-                    {path: '', component: DashboardComponent, canActivate: [RandomGuard]},
+                    {path: '', component: SupplierDashbaordComponent, canActivate: [RandomGuard]},
                     {path: 'mainmenu', component: UserMainMenuComponent},
                     {path: 'submenu', component: UserSubMenuComponent},
                     {path: 'change-password', component: ResetPasswordComponent},

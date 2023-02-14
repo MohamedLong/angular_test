@@ -70,6 +70,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             next: (data) => {
                 this.master = data;
                 this.masters.push(this.master);
+                console.log(this.master)
                 this.getMinDate();
             },
             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
