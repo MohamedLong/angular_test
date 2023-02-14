@@ -152,7 +152,7 @@
                     class="width-100 p-button-sm text-sm p-button-warning" styleClass="" label="Cancel"></button>
             </td>
         </tr>
-        <!-- <tr  class="font-bold" *ngIf="type == 'edit bid'">
+        <tr  class="font-bold prices" *ngIf="type == 'edit bid'">
             <td colspan="5"></td>
             <td>Total</td>
             <td>{{bidTotalOriginalPrice}}</td>
@@ -160,8 +160,7 @@
             <td>{{bidTotalDiscount}}</td>
             <td></td>
             <td>{{bidTotalPrice}}</td>
-            <td>{{bidTotalPrice}}</td>
-        </tr> -->
+        </tr>
     </ng-template>
 
     <ng-template pTemplate="summary" *ngIf="type == 'new bid'">
