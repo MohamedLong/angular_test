@@ -65,29 +65,28 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
-
-        this.dataService.name.subscribe({
-            next: (data) => {
-                this.master = data;
-                this.masters.push(this.master);
-                this.getMinDate();
-            },
-            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
-        }).unsubscribe();
     }
 
     ngOnInit(): void {
         this.route.queryParamMap.subscribe((params) => {
-            let jobId = params.get('jobId');
-            console.log('this job id is:', jobId)
+            let jobId = Number(params.get('jobId'));
+            console.log('this job id is:', jobId);
+            this.jobService.getById(jobId).subscribe(
+            {
+                next: (data) => {
+                    this.master = data;
+                    this.masters.push(this.master);
+                    this.getMinDate();            
+                    if (this.master.id) {
+                        this.getRequestsByJob();
+                        this.getBidsByJob();
+                    }
+                    this.callInsideOnInit();
+                    this.detailRouter = 'jobs';
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            });
         });
-
-        if (this.master.id) {
-            this.getRequestsByJob();
-            this.getBidsByJob();
-        }
-        this.callInsideOnInit();
-        this.detailRouter = 'jobs';
     }
 
 

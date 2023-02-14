@@ -2,7 +2,7 @@
     <p-toast></p-toast>
     <p-confirmDialog key="cfmdialog" [style]="{width: '50vw'}" [baseZIndex]="10000"
         rejectButtonStyleClass="p-button-text"></p-confirmDialog>
-    <p-toolbar styleClass="mb-4 align-items-start" [hidden]="master.refernceMode===true">
+    <p-toolbar styleClass="mb-4 align-items-start">
         <ng-template pTemplate="left" *ngIf="master">
             <div class="flex py-4">
                 <div class="mr-4 relative">
@@ -137,7 +137,7 @@
                                                     class="p-button-rounded p-button-text hidden-print"></button>
                                             </td>
                                         </ng-container>
-                                        <td [hidden]="printingMode===true || master.refernceMode===true">
+                                        <td [hidden]="printingMode===true">
                                             <button pButton pRipple icon="pi pi-eye"
                                                 class="p-button-rounded p-button-success mr-2"
                                                 (click)="viewBidsByRequest(request)"></button>
@@ -159,7 +159,7 @@
                                         <th pColumn="bidValue">{{ 'bid.tableColumn.bidValue' | translate }}</th>
                                         <th pColumn="submittedBids">{{ 'bid.tableColumn.submittedBids' | translate }}
                                         </th>
-                                        <th [hidden]="printingMode===true || master.refernceMode===true">{{
+                                        <th [hidden]="printingMode===true">{{
                                             'operations.operations' | translate }}</th>
                                     </tr>
                                 </ng-template>
@@ -180,7 +180,7 @@
                                         <td>
                                             {{getTotalSubmittedBidsForSupplier(bid.supplierId)}}
                                         </td>
-                                        <td [hidden]="printingMode===true || master.refernceMode===true">
+                                        <td [hidden]="printingMode===true">
                                             <button pButton pRipple icon="pi pi-eye"
                                                 class="p-button-rounded p-button-success mr-2"
                                                 (click)="viewBidsBySupplier(bid)"></button>
