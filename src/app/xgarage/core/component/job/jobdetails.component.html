@@ -77,7 +77,7 @@
                             <div class="pt-5 text-center" *ngIf="!isFetching && fillteredDetails.length  == 0">
                                this job has no requests
                             </div>
-                            <p-table *ngIf="fillteredDetails.length  > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
+                            <p-table *ngIf="fillteredDetails.length > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
                                 [value]="fillteredDetails" styleClass="p-invoice-datatable-responsive pb-3">
                                 <ng-template pTemplate="caption" class="pb-0">
                                     <div class="border-300 border-bottom-1">
@@ -200,12 +200,20 @@
                 <ng-template pTemplate="header">
                     <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' | translate }} {{partName}}</p>
                     <p *ngIf="partName==null" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleBySupplier' | translate }} {{supplierName}}</p>
+                        <div class="field col">
+                            <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
+                                (click)="print()" class="mb-3"></button>
+                            <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
+                                (click)="print()" class="mb-3"></button>
+                        </div>
                 </ng-template>
                 <ng-template pTemplate="content">
 
                     <p-table #dt [value]="bidDtos" [columns]="cols" [rows]="10" [paginator]="true">
                         <ng-template pTemplate="header">
                             <tr>
+                                <th pColumn="id">{{ 'common.select' | translate }}
+                                </th>
                                 <th *ngIf="partName==null" pColumn="partName">{{ 'bid.bidDetails.partName' | translate }}
                                 </th>
                                 <th *ngIf="partName" pColumn="supplierName">{{ 'bid.bidDetails.supplierName' | translate }}
@@ -226,13 +234,13 @@
                                 </th>
                                 <th pColumn="totalPrice">{{ 'bid.bidDetails.totalPrice' | translate }}
                                 </th>
-                                <th pColumn="actions">{{'common.actions' | translate }}
-                                </th>
-
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-bid>
                             <tr>
+                                <td>
+                                    <p-tableCheckbox [value]="bid"></p-tableCheckbox>
+                                </td>
                                 <td *ngIf="partName==null">
                                     {{bid.partName}}
                                 </td>
@@ -249,7 +257,7 @@
                                     {{bid.deliverDays ? 0 : bid.deliverDays}} Days
                                 </td>
                                 <td>
-                                    1
+                                    {{bid.qty ? bid.qty : 1}}
                                 </td>
                                 <td>
                                     {{bid.originalPrice ? 0 : bid.originalPrice}}
@@ -263,18 +271,6 @@
                                 <td>
                                     {{bid.price ? 0 : bid.price}}
                                 </td>
-                                <ng-container>
-                                    <td [hidden]="(printingMode)" style="text-align:center">
-                                        <button pButton pRipple type="button" icon="pi pi-pencil"
-                                            (click)="editAction(request)"
-                                            [disabled]="!(master.status.id == 1 && editAuth===true)"
-                                            class="p-button-rounded p-button-text hidden-print"></button>
-                                        <button pButton pRipple type="button" icon="pi pi-times"
-                                            (click)="deleteAction(request)"
-                                            [disabled]="!(master.status.id == 1 && editAuth===true)"
-                                            class="p-button-rounded p-button-text hidden-print"></button>
-                                    </td>
-                                </ng-container>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="summary">
