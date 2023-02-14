@@ -24,7 +24,7 @@
     <div class="layout-main">
         <app-breadcrumb></app-breadcrumb>
 
-        <div class="layout-content">
+        <div [ngClass]="{'layout-content': !isDashboard}">
             <router-outlet></router-outlet>
         </div>
 
