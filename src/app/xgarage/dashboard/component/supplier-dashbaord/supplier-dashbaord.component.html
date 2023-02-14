@@ -8,4 +8,25 @@
     </div>
     <img class="img-fluid" src="assets/layout/images/supplier-header-bg.png" alt="">
 </div>
+<div class="grid justify-content-center mx-auto p-5 mb-5">
+    <div class="col-12">
+        <h4>Latest Request</h4>
+    </div>
+    <div class="col-4" *ngFor="let req of latestRequest">
+        <p-card header="{{req.jobTitle}}" subheader="Chassis No.: Ex: 291919AD1914" styleClass="p-card-shadow height-100">
+            <ng-template pTemplate="header">
+                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png">
+            </ng-template>
+            <div>
+                <h6 class="font-bold mb-2">Parts Requirments</h6>
+                <p *ngFor="let part of req.parts" class="mb-0">
+                  {{part}}
+                </p>
+            </div>
+            <ng-template pTemplate="footer">
+                <p-button styleClass="width-100" label="Bid Now" (click)="onBid(req.id)"></p-button>
+            </ng-template>
+        </p-card>
+    </div>
+</div>
 

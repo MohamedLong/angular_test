@@ -1,6 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
-import { ConfirmationService} from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
@@ -18,9 +18,9 @@ import { Request } from '../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
-  selector: 'job-details',
-  templateUrl: './jobdetails.component.html',
-  styleUrls: ['../../../../demo/view/tabledemo.scss'],
+    selector: 'job-details',
+    templateUrl: './jobdetails.component.html',
+    styleUrls: ['../../../../demo/view/tabledemo.scss'],
     styles: [`
         :host ::ng-deep .p-dialog .product-image {
             width: 150px;
@@ -59,18 +59,17 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     bidDetailsDialog: boolean = false;
     originalBidList: BidDto[] = [];
     supplierBids: BidDto[] = [];
-    isFetching:  boolean = false;
+    isFetching: boolean = false;
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
-            super(route, router, requestService, datePipe, statusService, breadcrumbService);
+        super(route, router, requestService, datePipe, statusService, breadcrumbService);
 
         this.dataService.name.subscribe({
             next: (data) => {
                 this.master = data;
                 this.masters.push(this.master);
-                console.log(this.master)
                 this.getMinDate();
             },
             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
@@ -78,7 +77,12 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     ngOnInit(): void {
-        if(this.master.id) {
+        this.route.queryParamMap.subscribe((params) => {
+            let jobId = params.get('jobId');
+            console.log('this job id is:', jobId)
+        });
+
+        if (this.master.id) {
             this.getRequestsByJob();
             this.getBidsByJob();
         }
@@ -112,7 +116,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     editParentAction() {
-        this.originalMaster = {...this.master};
+        this.originalMaster = { ...this.master };
         this.selectedInsuranceType = this.master.insuranceType;
         this.masterDialog = true;
     }
@@ -127,7 +131,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     confirmCancel(id: number) {
         console.log(id);
         this.requestService.cancelRequest(id).subscribe(res => {
-            if(res.messageCode == 200) {
+            if (res.messageCode == 200) {
                 this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
             } else {
                 this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: res.message });
@@ -142,7 +146,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     updateParent() {
         this.parentSubmitted = true;
-        if(this.master.jobNo && this.selectedInsuranceType) {
+        if (this.master.jobNo && this.selectedInsuranceType) {
             this.master.insuranceType = this.selectedInsuranceType;
             this.jobService.partialUpdate(this.master).subscribe(
                 {
@@ -151,10 +155,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                         this.masters[this.findIndexById(this.master.id, this.masters)] = this.master;
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Job Updated', life: 3000 });
                         this.masterDialog = false;
-                        },
+                    },
                     error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
-                    }
-                );
+                }
+            );
         }
     }
 
@@ -184,7 +188,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     handleChange(e) {
         let index = e.index;
-        if(index == 1) {
+        if (index == 1) {
             this.switchToViewBySupplier();
         }
     }
@@ -216,13 +220,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     getPartTypesAsString(partTypes: PartType[]) {
         let partTypeNames: string = '';
         partTypes.forEach(t => {
-            if(partTypeNames == '') {
+            if (partTypeNames == '') {
                 partTypeNames = t.partType;
-            }else{
+            } else {
                 partTypeNames = partTypeNames + ', ' + t.partType;
             }
         })
-        if(partTypeNames == '')  {
+        if (partTypeNames == '') {
             partTypeNames = 'None';
         }
         return partTypeNames;

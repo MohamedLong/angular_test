@@ -2,6 +2,7 @@ import {Component, AfterViewInit, Renderer2, OnInit, OnDestroy} from '@angular/c
 import { MenuService } from './app.menu.service';
 import { PrimeNGConfig } from 'primeng/api';
 import { AppComponent } from './app.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-main',
@@ -50,12 +51,15 @@ export class AppMainComponent implements AfterViewInit, OnInit, OnDestroy {
     inlineMenuClick: boolean;
     menuActiveMobile: boolean;
     menuInactiveDesktop: boolean;
-
+    isDashboard: boolean = false;
     constructor(public renderer: Renderer2, private menuService: MenuService, private primengConfig: PrimeNGConfig,
-                public app: AppComponent) { }
+                public app: AppComponent, private router: Router) { }
 
     ngOnInit() {
         this.menuActive = this.isStatic() && !this.isMobile();
+        if(this.router.url == '/') {
+            this.isDashboard = true;
+        }
     }
 
     ngAfterViewInit() {
