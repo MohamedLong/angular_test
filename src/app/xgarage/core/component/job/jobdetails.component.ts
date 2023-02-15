@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
@@ -16,6 +16,8 @@ import { BidService } from '../../service/bidservice.service';
 import { BidDto } from '../../dto/biddto';
 import { Request } from '../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'job-details',
@@ -63,79 +65,53 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
     activeTab: number = 0;
     queryRead = false;
-    jobId: number;
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
-    }
-
-    ngOnInit(): void {
-        this.setQueryParams();
-        // if(this.route.snapshot.queryParamMap.get('jobId')) {
-        //     let jobId = Number(this.route.snapshot.queryParamMap.get('jobId'));
-        //     console.log('this job id is:', jobId);
-        //     this.jobService.getById(jobId).subscribe(
-        //     {
-        //         next: (data) => {
-        //             this.master = data;
-        //             this.masters.push(this.master);
-        //             this.getMinDate();            
-        //             if (this.master.id) {
-        //                 this.getRequestsByJob();
-        //                 this.getBidsByJob();
-        //             }
-        //             this.callInsideOnInit();
-        //             this.detailRouter = 'jobs';
-        //         },
-        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-        //     });
-        // }
-    }
-
-    setQueryParams(){
-        if(this.route.snapshot.queryParamMap.get('jobId')) {
-            if (!this.queryRead) {
-                this.jobId = Number(this.route.snapshot.queryParamMap.get('jobId'));
-                this.queryRead = true;
-            }
-                 // Remove query parameters
-            this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: null,
-                    queryParamsHandling: 'merge'
-                  });
-                  // Add query parameters
-                  this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: {jobId: this.jobId},
-                    queryParamsHandling: 'merge'
-                  });
         }
-        this.callFromRouterHistory(this.jobId);
-      }
 
-    callFromRouterHistory(jobId: number) {
-        this.jobService.getById(jobId).subscribe(
-            {
-                next: (data) => {
-                    this.master = data;
-                    this.masters.push(this.master);
-                    this.getMinDate();            
-                    if (this.master.id) {
-                        this.getRequestsByJob();
-                        this.getBidsByJob();
-                    }
-                    this.callInsideOnInit();
-                    this.detailRouter = 'jobs';
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-            });
+    ngOnInit() {
+        this.dataService.name.subscribe({
+            next: (data) => {
+                this.master = data;
+                this.masters.push(this.master);
+                this.activeTab = 2;
+                this.getRequestsByJob();
+                this.getBidsByJob();
+                this.callInsideOnInit();
+                this.detailRouter = 'jobs';
+                this.master.claimNo = data.claimNo;
+
+            //     if (typeof data == 'number') {
+            //         this.jobService.getById(data).subscribe(
+            //             {
+            //                 next: (data) => {
+            //                     this.master = data;
+            //                     this.masters.push(this.master);
+            //                     this.activeTab = 2;
+            //                     this.getRequestsByJob();
+            //                     this.getBidsByJob();
+            //                     this.callInsideOnInit();
+            //                     this.detailRouter = 'jobs';
+            //                     this.master.claimNo = dto.claimNo;
+            //                 },
+            //                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            //             });
+            //     } else  {
+            //         this.master = data;
+            //         this.masters.push(this.master);
+            //         this.getMinDate();
+            //     }
+            },
+            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+        }).unsubscribe();
+
     }
-
 
     getRequestsByJob() {
         this.isFetching = true;
+        console.log(this.master.id)
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
                 this.details = requests;
