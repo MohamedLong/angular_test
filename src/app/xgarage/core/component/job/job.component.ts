@@ -5,11 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
-import { ClaimService } from '../../service/claimservice';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { JobService } from '../../service/job.service';
-import { Job } from '../../model/job';
-import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { InsuranceType } from '../../model/insurancetype';
 import { UpdateJobDto } from '../../dto/updatedjobdto';
 
@@ -23,8 +20,8 @@ import { UpdateJobDto } from '../../dto/updatedjobdto';
 })
 export class JobComponent extends GenericComponent implements OnInit {
 
-    constructor(public route: ActivatedRoute, private authService: AuthService, private claimService: ClaimService,
-        private router: Router, private jobService: JobService, private dataService: DataService<Job>,
+    constructor(public route: ActivatedRoute, private authService: AuthService,
+        private router: Router, private jobService: JobService,
         public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
         super(route, datePipe, breadcrumbService);
     }
@@ -146,16 +143,17 @@ export class JobComponent extends GenericComponent implements OnInit {
 
 
     goDetails(dto: any) {
-        this.jobService.getById(dto.id).subscribe(
-            {
-                next: (data) => {
-                    this.master = data;
-                    this.master.claimNo = dto.claimNo;
-                    this.dataService.changeObject(this.master);
-                    this.router.navigate(['job-details']);
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-            });
+        this.router.navigate(['job-details'], { queryParams: { jobId: dto.id } });
+        // this.jobService.getById(dto.id).subscribe(
+        //     {
+        //         next: (data) => {
+        //             this.master = data;
+        //             this.master.claimNo = dto.claimNo;
+        //             this.dataService.changeObject(this.master);
+        //             this.router.navigate(['job-details']);
+        //         },
+        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+        //     });
     }
 
     setStatusNames(arr) {
