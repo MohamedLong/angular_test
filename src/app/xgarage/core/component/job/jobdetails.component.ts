@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
@@ -16,6 +16,8 @@ import { BidService } from '../../service/bidservice.service';
 import { BidDto } from '../../dto/biddto';
 import { Request } from '../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'job-details',
@@ -67,47 +69,39 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
 
-        if (this.route.snapshot.queryParams['jobId']) {
-            this.route.queryParamMap.subscribe((params) => {
-                let jobId = JSON.parse(params.get('jobId'));
-
-                this.jobService.getById(jobId).subscribe(
-                    {
-                        next: (data) => {
-                            this.master = data;
-                            this.masters.push(this.master);
-                            // console.log(this.master)
-                            this.getRequestsByJob();
-                            this.getBidsByJob();
-                        },
-                        error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-                    });
-
-                    this.activeTab = 2;
-                // console.log('this job id:', jobId)
-            });
-        } else {
-            this.dataService.name.subscribe({
-                next: (data) => {
+        this.dataService.name.subscribe({
+            next: (data) => {
+                if (typeof data == 'number') {
+                    console.log(typeof data)
+                    this.jobService.getById(data).subscribe(
+                        {
+                            next: (data) => {
+                                this.master = data;
+                                this.masters.push(this.master);
+                                this.activeTab = 2;
+                                // this.master.claimNo = dto.claimNo;
+                            },
+                            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+                        });
+                } else {
                     this.master = data;
                     this.masters.push(this.master);
                     this.getMinDate();
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
-            }).unsubscribe();
-        }
+                }
+
+                this.getRequestsByJob();
+                this.getBidsByJob();
+
+                this.callInsideOnInit();
+                this.detailRouter = 'jobs';
+
+            },
+            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+        }).unsubscribe();
 
     }
 
-    ngOnInit(): void {
-        if (!this.route.snapshot.queryParams['jobId'] && this.master.id) {
-            this.getRequestsByJob();
-            this.getBidsByJob();
-        }
-
-        this.callInsideOnInit();
-        this.detailRouter = 'jobs';
-    }
+    ngOnInit(): void {}
 
 
     getRequestsByJob() {
