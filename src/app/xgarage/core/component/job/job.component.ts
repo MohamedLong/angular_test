@@ -144,16 +144,6 @@ export class JobComponent extends GenericComponent implements OnInit {
 
     goDetails(dto: any) {
         this.router.navigate(['job-details'], { queryParams: { jobId: dto.id } });
-        // this.jobService.getById(dto.id).subscribe(
-        //     {
-        //         next: (data) => {
-        //             this.master = data;
-        //             this.master.claimNo = dto.claimNo;
-        //             this.dataService.changeObject(this.master);
-        //             this.router.navigate(['job-details']);
-        //         },
-        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-        //     });
     }
 
     setStatusNames(arr) {

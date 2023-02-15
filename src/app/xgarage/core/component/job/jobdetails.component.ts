@@ -62,6 +62,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     isFetching: boolean = false;
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
     activeTab: number = 0;
+    queryRead = false;
+    jobId: number;
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
@@ -69,10 +71,52 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     ngOnInit(): void {
-        this.route.queryParamMap.subscribe((params) => {
-            let jobId = Number(params.get('jobId'));
-            console.log('this job id is:', jobId);
-            this.jobService.getById(jobId).subscribe(
+        this.setQueryParams();
+        // if(this.route.snapshot.queryParamMap.get('jobId')) {
+        //     let jobId = Number(this.route.snapshot.queryParamMap.get('jobId'));
+        //     console.log('this job id is:', jobId);
+        //     this.jobService.getById(jobId).subscribe(
+        //     {
+        //         next: (data) => {
+        //             this.master = data;
+        //             this.masters.push(this.master);
+        //             this.getMinDate();            
+        //             if (this.master.id) {
+        //                 this.getRequestsByJob();
+        //                 this.getBidsByJob();
+        //             }
+        //             this.callInsideOnInit();
+        //             this.detailRouter = 'jobs';
+        //         },
+        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+        //     });
+        // }
+    }
+
+    setQueryParams(){
+        if(this.route.snapshot.queryParamMap.get('jobId')) {
+            if (!this.queryRead) {
+                this.jobId = Number(this.route.snapshot.queryParamMap.get('jobId'));
+                this.queryRead = true;
+            }
+                 // Remove query parameters
+            this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: null,
+                    queryParamsHandling: 'merge'
+                  });
+                  // Add query parameters
+                  this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: {jobId: this.jobId},
+                    queryParamsHandling: 'merge'
+                  });
+        }
+        this.callFromRouterHistory(this.jobId);
+      }
+
+    callFromRouterHistory(jobId: number) {
+        this.jobService.getById(jobId).subscribe(
             {
                 next: (data) => {
                     this.master = data;
@@ -87,8 +131,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });
-        });
-
     }
 
 
