@@ -79,6 +79,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                                 this.masters.push(this.master);
                                 this.activeTab = 2;
                                 // this.master.claimNo = dto.claimNo;
+
+                                this.getRequestsByJob();
+                                this.getBidsByJob();
+
+                                this.callInsideOnInit();
                             },
                             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
                         });
@@ -86,12 +91,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                     this.master = data;
                     this.masters.push(this.master);
                     this.getMinDate();
+
+                    this.getRequestsByJob();
+                    this.getBidsByJob();
+
+                    this.callInsideOnInit();
                 }
 
-                this.getRequestsByJob();
-                this.getBidsByJob();
-
-                this.callInsideOnInit();
                 this.detailRouter = 'jobs';
 
             },
