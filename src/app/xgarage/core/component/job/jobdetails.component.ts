@@ -72,7 +72,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.dataService.name.subscribe({
             next: (data) => {
                 if (typeof data == 'number') {
-                    console.log(typeof data)
                     this.jobService.getById(data).subscribe(
                         {
                             next: (data) => {
@@ -83,7 +82,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                             },
                             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
                         });
-                } else {
+                } else  {
                     this.master = data;
                     this.masters.push(this.master);
                     this.getMinDate();
@@ -106,6 +105,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     getRequestsByJob() {
         this.isFetching = true;
+        console.log(this.master.id)
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
                 this.details = requests;
