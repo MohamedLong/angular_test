@@ -27,16 +27,24 @@ export class SupplierDashbaordComponent implements OnInit {
         if (JSON.parse(user).tenant) {
             this.jobService.getForTenant().subscribe({
                 next: (data) => {
-                    this.requests = data;
-                    this.requests = this.requests.filter(job => job.id != null);
+                    if (data.length > 0) {
+                        this.requests = data;
+                        this.requests = this.requests.filter(job => job.id != null);
 
-                    this.requests.forEach((req, i) => {
-                        if(i <= 2) {
-                            let parts = req.partNames.split(',')
-                            req.parts = parts;
-                            this.latestRequest.push(req)
-                        }
-                    })
+                        console.log(this.requests)
+                        this.requests.forEach((req, i) => {
+                            if (i <= 2) {
+                                if (req.partNames) {
+                                    let parts = req.partNames.split(',');
+                                    req.parts = parts;
+                                    this.latestRequest.push(req)
+                                }
+                            }
+                        })
+                    }
+
+                    //console.log(this.requests)
+                    //console.log(this.latestRequest)
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
             });

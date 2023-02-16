@@ -42,7 +42,7 @@
                     {{job.jobStatus}}
                 </td>
                 <td>
-                    {{job.totalPrice}}
+                    {{job.totalPrice | number}}
                 </td>
                 <td>
                     <button (click)="onBidView(job)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
