@@ -14,7 +14,7 @@ import { JobService } from 'src/app/xgarage/core/service/job.service';
 export class SupplierDashbaordComponent implements OnInit {
     constructor(private dataService: DataService<number>, private router: Router, private authService: AuthService, private jobService: JobService, private messageService: MessageService) { }
     requests = [];
-    latestRequest= [];
+    latestRequest = [];
     ngOnInit(): void {
         this.getAllForTenant();
     }
@@ -24,16 +24,22 @@ export class SupplierDashbaordComponent implements OnInit {
         if (JSON.parse(user).tenant) {
             this.jobService.getForTenant().subscribe({
                 next: (data) => {
-                    this.requests = data;
-                    this.requests = this.requests.filter(job => job.id != null);
+                    if (data.length > 0) {
+                        this.requests = data;
+                        this.requests = this.requests.filter(job => job.id != null);
 
-                    this.requests.forEach((req, i) => {
-                        if(i <= 2) {
-                            let parts = req.partNames.split(',')
-                            req.parts = parts;
-                            this.latestRequest.push(req)
-                        }
-                    })
+                        console.log(this.requests)
+                        this.requests.forEach((req, i) => {
+                            if (i <= 2) {
+                                if (req.partNames) {
+                                    let parts = req.partNames.split(',');
+                                    req.parts = parts;
+                                    this.latestRequest.push(req)
+                                }
+                            }
+                        })
+                    }
+
                     //console.log(this.requests)
                     //console.log(this.latestRequest)
                 },

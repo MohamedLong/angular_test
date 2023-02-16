@@ -64,6 +64,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     isFetching: boolean = false;
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
     activeTab: number = 0;
+    suppliersBidToCompare = [];
+    isSupplierChecked: boolean = false;
+    displayCompareBids: boolean = false;
+    groupedBypart: any[] = [];
+    supplierNames: any[]  = [];
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
@@ -87,7 +92,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                             },
                             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
                         });
-                } else  {
+                } else {
                     this.master = data;
                     this.masters.push(this.master);
                     this.getMinDate();
@@ -106,7 +111,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     }
 
-    ngOnInit(): void {}
+    ngOnInit(): void { }
 
 
     getRequestsByJob() {
@@ -196,6 +201,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.partName = request.part.name;
         this.bidDetailsDialog = true;
         this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
+
     }
 
     viewBidsBySupplier(bid: any) {
@@ -303,6 +309,99 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.fillteredDetails = this.details.filter(detail => {
                 return detail.status.nameEn == state;
             });
+        }
+    }
+
+    onToggleBid(supplierBid) {
+        if(supplierBid.add) {
+            if(supplierBid.add == true) {
+                supplierBid.add = false;
+                this.suppliersBidToCompare = this.suppliersBidToCompare.filter(bid => {
+                    return bid.bidId !== supplierBid.bidId
+                });
+            } else {
+                this.suppliersBidToCompare.push(supplierBid);
+            }
+        } else {
+            supplierBid.add = true;
+            this.suppliersBidToCompare.push(supplierBid);
+
+        }
+        //console.log(this.suppliersBidToCompare);
+    }
+
+    onCompareBids() {
+        //console.log(this.bidDtos)
+        let bids = this.bidDtos;
+        let bidsToCompare = [];
+        let partNames = [];
+
+
+        //compare selected suppliers with all suppliers
+        if(this.suppliersBidToCompare.length >= 2) {
+            this.suppliersBidToCompare.forEach(supp => {
+                bids.forEach(bid => {
+                     //5 //4 //5 //6
+                    if(bid.supplierId == supp.supplierId) {
+                        bidsToCompare.push(bid)
+                    }
+                })
+            });
+            //console.log(bidsToCompare)
+
+            //get part names
+            bidsToCompare.forEach(bid => {
+                if(partNames.length > 0) {
+                    let name = partNames.find(part => part == bid.partName);
+                    if(name) {
+                        console.log(name)
+                    } else {
+                        console.log(name +" not found")
+                        partNames.push(bid.partName)
+                    }
+                } else {
+                    partNames.push(bid.partName)
+                }
+            })
+
+            bidsToCompare.forEach(bid => {
+                if(this.supplierNames.length > 0) {
+                    let name = this.supplierNames.find(supp => supp == bid.supplierName);
+                    if(name) {
+                        console.log(name)
+                    } else {
+                        console.log(name +" not found")
+                        this.supplierNames.push(bid.supplierName)
+                    }
+                } else {
+                    this.supplierNames.push(bid.supplierName)
+                }
+            })
+
+            console.log(this.supplierNames)
+            //group bids by part name
+            partNames.forEach(name => {
+                bidsToCompare.forEach(bid => {
+                    if(bid.partName == name) {
+                        if(this.groupedBypart.length > 0) {
+                            let existingPart = this.groupedBypart.find(part => part.partName == bid.partName);
+                            if(existingPart) {
+                                existingPart.bids.push(bid)
+                            } else {
+                                this.groupedBypart.push({partName: name, bids: [bid]})
+                            }
+                        } else {
+                            this.groupedBypart.push({partName: name, bids: [bid]})
+                        }
+                    }
+                })
+            });
+
+            console.log(this.groupedBypart)
+            this.displayCompareBids = true
+
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'please select 2 or more bids to comapre' })
         }
     }
 
