@@ -23,7 +23,7 @@ export class JobComponent extends GenericComponent implements OnInit {
 
     constructor(public route: ActivatedRoute, private authService: AuthService,
         private router: Router, private jobService: JobService,
-        public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService, private dataService: DataService<any>) {
+        public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
         super(route, datePipe, breadcrumbService);
     }
 
@@ -144,21 +144,16 @@ export class JobComponent extends GenericComponent implements OnInit {
 
 
     goDetails(dto: any) {
-<<<<<<< HEAD
-        this.router.navigate(['job-details'], { queryParams: { jobId: dto.id } });
-=======
-        //this.router.navigate(['job-details'], { queryParams: { jobId: dto.id } });
         this.jobService.getById(dto.id).subscribe(
             {
                 next: (data) => {
                     this.master = data;
                     this.master.claimNo = dto.claimNo;
-                    this.dataService.changeObject(this.master);
+                    localStorage.setItem('job', JSON.stringify(this.master));
                     this.router.navigate(['job-details']);
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });
->>>>>>> 4359e9a750d447e5ffc172918e53479feb3ab099
     }
 
     setStatusNames(arr) {

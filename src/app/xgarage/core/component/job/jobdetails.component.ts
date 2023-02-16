@@ -16,8 +16,6 @@ import { BidService } from '../../service/bidservice.service';
 import { BidDto } from '../../dto/biddto';
 import { Request } from '../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { map } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'job-details',
@@ -66,52 +64,26 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     activeTab: number = 0;
     queryRead = false;
 
-    constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, private dataService: DataService<any>, private dialogService: DialogService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
+    constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
         }
 
     ngOnInit() {
-        this.dataService.name.subscribe({
-            next: (data) => {
-                this.master = data;
-                this.masters.push(this.master);
-                this.activeTab = 2;
-                this.getRequestsByJob();
-                this.getBidsByJob();
-                this.callInsideOnInit();
-                this.detailRouter = 'jobs';
-                this.master.claimNo = data.claimNo;
-
-            //     if (typeof data == 'number') {
-            //         this.jobService.getById(data).subscribe(
-            //             {
-            //                 next: (data) => {
-            //                     this.master = data;
-            //                     this.masters.push(this.master);
-            //                     this.activeTab = 2;
-            //                     this.getRequestsByJob();
-            //                     this.getBidsByJob();
-            //                     this.callInsideOnInit();
-            //                     this.detailRouter = 'jobs';
-            //                     this.master.claimNo = dto.claimNo;
-            //                 },
-            //                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-            //             });
-            //     } else  {
-            //         this.master = data;
-            //         this.masters.push(this.master);
-            //         this.getMinDate();
-            //     }
-            },
-            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
-        }).unsubscribe();
+        if(localStorage.getItem('job')) {
+            let data = JSON.parse(localStorage.getItem('job'));
+            this.master = data;
+            this.master.claimNo = data.claimNo;
+            this.masters.push(this.master);
+            this.getRequestsByJob();
+            this.getBidsByJob();
+            this.detailRouter = 'jobs';
+        }
 
     }
 
     getRequestsByJob() {
         this.isFetching = true;
-        console.log(this.master.id)
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
                 this.details = requests;
@@ -132,6 +104,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             },
             error: (e) => this.messageService.add({ severity: 'warn', summary: 'Server Information', detail: e.error, life: 3000 })
         });
+    }
+
+    designCompareBids(bids: any[]){
+
     }
 
     editParentAction() {
@@ -234,6 +210,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.partName = null;
         this.supplierName = null;
         this.bidDtos = this.originalBidList;
+        this.bidDetailsDialog = false;
     }
 
     getPartTypesAsString(partTypes: PartType[]) {

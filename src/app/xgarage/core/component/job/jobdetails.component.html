@@ -14,7 +14,7 @@
                     <div class="mb-4">
                         <h6 class="mb-2">{{master.jobTitle}}</h6>
                         <p class="mb-0 font-medium muted-text">{{'car.form.spec' | translate}}:
-                            {{master.car.carModelTypeId == 1? 'GCC' : master.car.carModelTypeId == 2 ?
+                            {{master.car.carModelTypeId == 1 ? 'GCC' : master.car.carModelTypeId == 2 ?
                             'Others': 'USA'}}</p>
                         <p class="font-medium muted-text">{{'job.tableColumn.carChassisNumber' | translate}}:
                             {{master.car.chassisNumber}}</p>
@@ -198,14 +198,35 @@
             </div>
             <p-dialog [(visible)]="bidDetailsDialog" [style]="{width: '1300px'}" [modal]="true" styleClass="p-fluid" (onHide)="closeBidDialog()">
                 <ng-template pTemplate="header">
-                    <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' | translate }} {{partName}}</p>
-                    <p *ngIf="partName==null" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleBySupplier' | translate }} {{supplierName}}</p>
-                        <div class="field col">
-                            <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
-                                (click)="print()" class="mb-3"></button>
-                            <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
-                                (click)="print()" class="mb-3"></button>
-                        </div>
+
+                    <p-toolbar styleClass="mb-2" [style]="{width: '1270px'}">
+
+                        <ng-template pTemplate="left">
+                            <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' | translate }} {{partName}}</p>
+                            <p *ngIf="partName==null" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleBySupplier' | translate }} {{supplierName}}</p>
+                        </ng-template>
+        
+                        <ng-template pTemplate="right">
+
+                            <div class="grid p-fluid">
+                                <div class="col-12 md:col-5">
+                                    <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}" icon="pi pi-check"
+                                    (click)="print()" class="p-button-success mr-2 mb-3"></button>
+                                </div>
+                                
+                                <div class="col-12 md:col-5">
+                                    <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}" icon="pi pi-danger"
+                                    (click)="print()" class="p-button-success mr-2 mb-3"></button>
+                                </div>
+
+                                <div class="col-12 md:col-2">
+                                    <button pButton pRipple type="button" icon="pi pi-times"
+                                    (click)="closeBidDialog()" class="mb-3"></button>
+                                </div>
+                            </div>
+
+                        </ng-template>
+                    </p-toolbar>
                 </ng-template>
                 <ng-template pTemplate="content">
 

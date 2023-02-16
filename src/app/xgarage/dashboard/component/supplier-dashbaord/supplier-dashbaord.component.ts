@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
+import { JobDto } from 'src/app/xgarage/core/dto/jobdto';
+import { Job } from 'src/app/xgarage/core/model/job';
 import { JobService } from 'src/app/xgarage/core/service/job.service';
 
 @Component({
@@ -12,9 +14,10 @@ import { JobService } from 'src/app/xgarage/core/service/job.service';
     providers: [MessageService]
 })
 export class SupplierDashbaordComponent implements OnInit {
-    constructor(private dataService: DataService<number>, private router: Router, private authService: AuthService, private jobService: JobService, private messageService: MessageService) { }
+    constructor(private dataService: DataService<any>, private router: Router, private authService: AuthService, private jobService: JobService, private messageService: MessageService) { }
     requests = [];
     latestRequest= [];
+    master: Job;
     ngOnInit(): void {
         this.getAllForTenant();
     }
@@ -34,8 +37,6 @@ export class SupplierDashbaordComponent implements OnInit {
                             this.latestRequest.push(req)
                         }
                     })
-                    //console.log(this.requests)
-                    //console.log(this.latestRequest)
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
             });
@@ -50,12 +51,17 @@ export class SupplierDashbaordComponent implements OnInit {
         }
     }
 
-    onBid(id: number) {
-        // let jobid  = encodeURIComponent(JSON.stringify({ jobId: id }));
-        // this.router.navigate(['job-details'], { queryParams: { key: jobid } });
-        // this.router.navigate(['job-details'], {state: {data: { key: id } }});
-        this.dataService.changeObject(id);
-        this.router.navigate(['job-details']);
+    onBid(dto: any) {
+        this.jobService.getById(dto.id).subscribe(
+            {
+                next: (data) => {
+                    this.master = data;
+                    this.master.claimNo = dto.claimNo;
+                    localStorage.setItem('job', JSON.stringify(this.master));
+                    this.router.navigate(['job-details']);
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            });
     }
 
 }

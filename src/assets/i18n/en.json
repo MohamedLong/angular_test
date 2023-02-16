@@ -42,6 +42,9 @@
     "operations": {
         "title": "Operations",
         "new": "New",
+        "close": "Close",
+        "reject": "Reject",
+        "approve": "Approve",
         "run": "Run",
         "confirmAction": "Confirm Action",
         "confirmCloneAction": "Confirm Clone Action",
