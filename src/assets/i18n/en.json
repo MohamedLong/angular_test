@@ -569,14 +569,11 @@
     },
     "car": {
         "title": "Car Information",
+        "table_footer": "In total there are {{length}} Cars",
         "form": {
             "minChassieErorr": "Min Chassis Number is 13.",
+            "title": "Car Details",
             "chassisNo": "Chassis Number",
-            "chassisNoRequired": "Chassis Number is Required.",
-            "brandRequired": "Brand is Required.",
-            "modelRequired": "Brand Model is Required.",
-            "yearRequired": "Car Year is Required.",
-            "specRequired": "Car Specification is Required.",
             "licencePlate": "Licence Plate",
             "emptybrand": "Please Enter Chassis Number First",
             "model": "Model",
@@ -588,7 +585,19 @@
             "gearbox": "Gear Box",
             "plateRequired": "Plate Number is Required.",
             "uploadCarImg": "Upload Car Image",
-            "addCar": "Add Car"
+            "addCar": "Add Car",
+            "brand": "Brand",
+            "type": "Type",
+            "gear": "Gear",
+            "brandRequired": "Brand is required.",
+            "chassisNoRequired": "Chassis Number is Required.",
+            "modelRequired": "Model is required.",
+            "yearRequired": "Year is required.",
+            "typeRequired": "Type is required.",
+            "gearRequired": "Gear Type is required.",
+            "gearTypeRequired": "Gear Type is required.",
+            "chassisRequired": "Chassis Number is required.",
+            "specRequired": "Car Specification is Required."
         }
     },
     "category": {

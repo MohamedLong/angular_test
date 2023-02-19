@@ -55,6 +55,8 @@ export class NewCarComponent implements OnInit {
 
     @Input() type: string = 'new car';
     @Output() carEvent = new EventEmitter<{ car: Car }>();
+    @Output() close = new EventEmitter<void>();
+
 
     ngOnInit(): void {
         this.getCarBrands();
@@ -96,6 +98,7 @@ export class NewCarComponent implements OnInit {
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
                     this.resetCarForm();
                     this.saving = false;
+                    this.close.emit();
                 }, err => {
                     this.messageService.add({ severity: 'erorr', summary: 'Error', detail: 'Erorr Saving Car' });
                 })
@@ -117,7 +120,7 @@ export class NewCarComponent implements OnInit {
                 }, err => {
                     this.found = false;
                     this.notFound = !this.found;
-                    this.resetCarForm();
+                    // this.resetCarForm();
                     //console.log('err:', err.error)
                 })
             };
