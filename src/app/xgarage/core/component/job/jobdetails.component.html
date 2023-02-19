@@ -2,18 +2,18 @@
     <p-toast></p-toast>
     <p-confirmDialog key="cfmdialog" [style]="{width: '50vw'}" [baseZIndex]="10000"
         rejectButtonStyleClass="p-button-text"></p-confirmDialog>
-    <p-toolbar styleClass="mb-4 align-items-start">
+    <p-toolbar styleClass="mb-3 align-items-start">
         <ng-template pTemplate="left" *ngIf="master">
-            <div class="flex py-4">
-                <div class="mr-4 relative">
+            <div class="flex py-2">
+                <div class="mr-3 relative">
                     <p-skeleton class="absolute top-0 left-0 z-1" size="150px"
                         *ngIf="!imageLoaded && master.car?.document !== null"></p-skeleton>
                     <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="150"
-                        src="{{master.car?.document? 'http://letsgo-oman.com:6060/api/v1/document/' + master.car?.document?.name : ''}}"
+                        src="{{master.car?.document? 'http://localhost:6060/api/v1/document/' + master.car?.document?.name : ''}}"
                         alt="">
                 </div>
-                <div class="py-3">
-                    <div class="mb-4">
+                <div class="py-2">
+                    <div class="mb-3">
                         <h6 class="mb-2">{{master.jobTitle}}</h6>
                         <p class="mb-0 font-medium muted-text">{{'car.form.spec' | translate}}:
                             {{master.car.carModelTypeId == 1 ? 'GCC' : master.car.carModelTypeId == 2 ?
@@ -22,7 +22,7 @@
                             {{master.car.chassisNumber}}</p>
                     </div>
 
-                    <div class="flex mb-4">
+                    <div class="flex mb-3">
                         <div class="mr-8">
                             <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
                             <p class="font-medium muted-text">{{master.claimNo}}</p>
@@ -49,25 +49,18 @@
                     icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
                     (click)="menu.toggle($event)"></button>
             </div>
-            <div class="field col">
-                <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
-                    (click)="print()" [disabled]="(editable || master.status.id != 2)" class="mb-3"></button>
+            <div class="field">
+                <button pButton pRipple label="{{ 'part.addPart' | translate }}" icon="pi pi-plus"
+                    (click)="openNew()" class="p-button-success mr-2 mb-3"
+                    [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
             </div>
         </ng-template>
-
     </p-toolbar>
+
     <div class="grid layout-invoice-content">
+
         <div class="col-12">
-            <div class="card">
-                <div class="flex justify-content-between align-items-center">
-                    <h5>{{ 'job.jobDialog.title' | translate }} #{{master.id}}
-                    </h5>
-                    <div class="field">
-                        <button pButton pRipple label="{{ 'part.addPart' | translate }}" icon="pi pi-plus"
-                            (click)="openNew()" class="p-button-success mr-2 mb-3"
-                            [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
-                    </div>
-                </div>
+            <!-- <div class="card"> -->
 
                 <div class="mt-5">
                     <p-tabView (onChange)="handleChange($event)" [(activeIndex)]="activeTab">
@@ -226,12 +219,12 @@
                             <div class="grid p-fluid">
                                 <div class="col-12 md:col-5">
                                     <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}" icon="pi pi-check"
-                                    (click)="print()" class="p-button-success mr-2 mb-3"></button>
+                                    (click)="print()" [disabled]="selectedEntries.length == 0" class="p-button-success mr-2 mb-3"></button>
                                 </div>
                                 
                                 <div class="col-12 md:col-5">
                                     <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}" icon="pi pi-danger"
-                                    (click)="print()" class="p-button-success mr-2 mb-3"></button>
+                                    (click)="print()" [disabled]="selectedEntries.length == 0" class="p-button-success mr-2 mb-3"></button>
                                 </div>
 
                                 <div class="col-12 md:col-2">
@@ -245,7 +238,7 @@
                 </ng-template>
                 <ng-template pTemplate="content">
 
-                    <p-table #dt [value]="bidDtos" [columns]="cols" [rows]="10" [paginator]="true">
+                    <p-table #dt [value]="bidDtos" [columns]="cols" [rows]="10" [paginator]="true" [(selection)]="selectedEntries">
                         <ng-template pTemplate="header">
                             <tr>
                                 <th pColumn="id">{{ 'common.select' | translate }}
@@ -279,7 +272,7 @@
                         <ng-template pTemplate="body" let-bid>
                             <tr>
                                 <td>
-                                    <p-tableCheckbox [value]="bid"></p-tableCheckbox>
+                                    <p-tableCheckbox [value]="bid" [disabled]="bid.statusId != 1"></p-tableCheckbox>
                                 </td>
                                 <td *ngIf="partName==null">
                                     {{bid.partName}}
@@ -417,5 +410,5 @@
                 </ng-template>
             </p-dialog>
         </div>
-    </div>
+    <!-- </div> -->
 </div>

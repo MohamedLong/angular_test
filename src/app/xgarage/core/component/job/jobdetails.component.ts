@@ -83,6 +83,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.getRequestsByJob();
             this.getBidsByJob();
             this.detailRouter = 'jobs';
+            this.selectedEntries = [];
         }
 
     }
@@ -217,6 +218,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.supplierName = null;
         this.bidDtos = this.originalBidList;
         this.bidDetailsDialog = false;
+        this.selectedEntries = [];
     }
 
     getPartTypesAsString(partTypes: PartType[]) {

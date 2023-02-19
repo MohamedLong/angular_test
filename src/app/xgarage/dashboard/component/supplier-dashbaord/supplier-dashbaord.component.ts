@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { DataService } from 'src/app/xgarage/common/generic/dataservice';
-import { JobDto } from 'src/app/xgarage/core/dto/jobdto';
 import { Job } from 'src/app/xgarage/core/model/job';
 import { JobService } from 'src/app/xgarage/core/service/job.service';
 
@@ -14,7 +12,7 @@ import { JobService } from 'src/app/xgarage/core/service/job.service';
     providers: [MessageService]
 })
 export class SupplierDashbaordComponent implements OnInit {
-    constructor(private dataService: DataService<any>, private router: Router, private authService: AuthService, private jobService: JobService, private messageService: MessageService) { }
+    constructor(private router: Router, private authService: AuthService, private jobService: JobService, private messageService: MessageService) { }
     requests = [];
     latestRequest= [];
     master: Job;
