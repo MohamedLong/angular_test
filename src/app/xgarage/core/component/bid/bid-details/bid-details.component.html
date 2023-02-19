@@ -27,25 +27,25 @@
                 <th>Action</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-bid>
+        <ng-template pTemplate="body" let-job>
             <tr>
                 <td class="font-bold">
-                    {{bid.jobTitle}}
+                    {{job.jobTitle}}
                 </td>
                 <td>
-                    {{bid.client}}
+                    {{job.client}}
                 </td>
                 <td>
-                    {{bid.partNames}}
+                    {{job.partNames}}
                 </td>
                 <td>
-                    {{bid.jobStatus}}
+                    {{job.jobStatus}}
                 </td>
                 <td>
-                    {{bid.totalPrice}}
+                    {{job.totalPrice | number}}
                 </td>
                 <td>
-                    <button (click)="onBidView(bid)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
+                    <button (click)="onBidView(job)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
                 </td>
             </tr>
         </ng-template>
@@ -57,7 +57,7 @@
     </p-table>
 </div>
 
-<p-dialog [header]="jobBids[0]?.requestTitle" [(visible)]="displayModal" [modal]="true" [style]="{width: '90vw'}"
+<p-dialog contentStyleClass="editbidDialoagContentt" styleClass="editbidDialoag" [header]="jobBids[0]?.requestTitle" [(visible)]="displayModal" [modal]="true" [style]="{width: '90vw'}"
     [draggable]="false" [resizable]="false">
     <app-new-bid *ngIf="jobBids.length > 0" [requests]="jobBids" type="edit bid"></app-new-bid>
 </p-dialog>

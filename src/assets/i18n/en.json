@@ -42,6 +42,9 @@
     "operations": {
         "title": "Operations",
         "new": "New",
+        "close": "Close",
+        "reject": "Reject",
+        "approve": "Approve",
         "run": "Run",
         "confirmAction": "Confirm Action",
         "confirmCloneAction": "Confirm Clone Action",
@@ -78,7 +81,7 @@
         "supplier": "Supplier Name",
         "supplierRequired": "Supplier name is required",
         "supplierSearch": "Search by supplier name",
-        "select": "Select a ",
+        "select": "Select",
         "fixed": "Fixed",
         "vatValue": " VAT Value",
         "notes": "Notes",

@@ -5,26 +5,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
-import { ClaimService } from '../../service/claimservice';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { JobService } from '../../service/job.service';
-import { Job } from '../../model/job';
-import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { InsuranceType } from '../../model/insurancetype';
 import { UpdateJobDto } from '../../dto/updatedjobdto';
+import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 
 
 @Component({
     selector: 'app-job',
     templateUrl: './job.component.html',
     styleUrls: ['../../../../demo/view/tabledemo.scss'],
-
+    styles: ['.active {border-bottom: 2px solid #6366F1 !important;border-radius: 0;}'],
     providers: [MessageService, ConfirmationService, DatePipe]
 })
 export class JobComponent extends GenericComponent implements OnInit {
 
-    constructor(public route: ActivatedRoute, private authService: AuthService, private claimService: ClaimService,
-        private router: Router, private jobService: JobService, private dataService: DataService<Job>,
+    constructor(public route: ActivatedRoute, private authService: AuthService,
+        private router: Router, private jobService: JobService,
         public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
         super(route, datePipe, breadcrumbService);
     }
@@ -43,7 +41,6 @@ export class JobComponent extends GenericComponent implements OnInit {
         this.getAllForTenant();
 
     }
-
 
     getAllForTenant() {
         let user = this.authService.getStoredUser();
@@ -152,7 +149,7 @@ export class JobComponent extends GenericComponent implements OnInit {
                 next: (data) => {
                     this.master = data;
                     this.master.claimNo = dto.claimNo;
-                    this.dataService.changeObject(this.master);
+                    localStorage.setItem('job', JSON.stringify(this.master));
                     this.router.navigate(['job-details']);
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })

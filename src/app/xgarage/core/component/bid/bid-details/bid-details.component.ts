@@ -27,19 +27,23 @@ export class BidDetailsComponent implements OnInit {
 
     getBids() {
         this.loading = true;
-        this.jobService.getBidsByJob().subscribe(res => {
-            console.log(res)
-            this.bids = res;
-            this.fillteredBids = res;
-            this.loading = false;
-            // this.status[0].count = this.bids.length;
-            this.setStatusNames(this.bids)
+        this.jobService.getBidsByJob().subscribe({
+            next: (res) => {
+                this.bids = res;
+                this.fillteredBids = res;
+                this.loading = false;
+                this.setStatusNames(this.bids);
+            },
+            error: (e) => {
+                this.msgService.add({ severity: 'error', summary: 'Server Information', detail: e.error.message, life: 3000 });
+                this.loading = false;
+            }
         });
     }
 
-    onBidView(event) {
+    onBidView(job: any) {
         // console.log(event)
-        this.bidService.getByJob(event.id).subscribe(res => {
+        this.bidService.getByJob(job.id).subscribe(res => {
             if(res.length > 0) {
                 this.jobBids = res;
                 this.displayModal = true;
