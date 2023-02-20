@@ -438,8 +438,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         console.log('hide')
         this.groupedBypart = [];
         this.suppliersBidToCompare = [];
-
-        // console.log(this.input)
     }
 
     downloadPdf() {

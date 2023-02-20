@@ -97,8 +97,8 @@
                                     <th pColumn="part.partTypes">{{ 'request.tableColumn.partTypes' | translate}}
                                     </th>
                                     <th pColumn="status.nameEn">{{ 'common.status' | translate }}</th>
-                                    <th [hidden]="(printingMode)" style="text-align:center">
-                                        {{'operations.operations' | translate }}</th>
+                                    <th [hidden]="role == 2" style="text-align:center">
+                                        {{'operations.actions' | translate }}</th>
                                     <th style="text-align:center">{{ 'bid.title' | translate }}</th>
                                 </tr>
                             </ng-template>
@@ -137,7 +137,7 @@
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                         </td>
                                     </ng-container>
-                                    <td [hidden]="printingMode===true">
+                                    <td [hidden]="role == 2">
                                         <button pButton pRipple icon="pi pi-eye"
                                             class="p-button-rounded p-button-success mr-2"
                                             (click)="viewBidsByRequest(request)"></button>
@@ -165,7 +165,7 @@
                                     <th pColumn="submittedBids">{{ 'bid.tableColumn.submittedBids' | translate }}
                                     </th>
                                     <th [hidden]="printingMode===true">{{
-                                        'operations.operations' | translate }}</th>
+                                        'bid.title' | translate }}</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-bid>
@@ -357,8 +357,8 @@
         <p-dialog [(visible)]="approveMultipleBidDialog" header="{{ 'job.operations.approveBid' | translate }}"
             [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>{{ 'job.operations.approveMultipleBids' | translate }}</span>
+                <i class="pi pi-check-circle mr-3" style="font-size: 2rem"></i>
+                <span [ngStyle]="{color:'var(--green-700)'}"><h6>{{ 'job.operations.approveMultipleBids' | translate }}</h6></span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
@@ -371,8 +371,8 @@
         <p-dialog [(visible)]="rejectMultipleBidDialog" header="{{ 'job.operations.rejectBid' | translate }}"
             [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>{{ 'job.operations.rejectMultipleBids' | translate }}</span>
+                <i class="pi pi-times-circle mr-3" style="font-size: 2rem"></i>
+                <span [ngStyle]="{color:'var(--orange-700)'}"><h6>{{ 'job.operations.rejectMultipleBids' | translate }}</h6></span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
