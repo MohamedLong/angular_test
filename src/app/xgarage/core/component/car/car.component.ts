@@ -132,13 +132,13 @@ export class CarComponent extends GenericComponent implements OnInit {
 
    save() {
     this.submitted = true;
-    this.master.brandId = this.selectedBrand.id;
-    this.master.carModelId = this.selectedModel.id;
-    this.master.carModelTypeId = this.selectedType.id;
-    this.master.carModelYearId = this.selectedYear.id;
-    this.master.gearType = this.selectedGear;
     if (this.master.chassisNumber && this.master.plateNumber) {
-        if (this.master.id) {
+      this.master.brandId = this.selectedBrand.id;
+      this.master.carModelId = this.selectedModel.id;
+      this.master.carModelTypeId = this.selectedType.id;
+      this.master.carModelYearId = this.selectedYear.id;
+      this.master.gearType = this.selectedGear;
+      if (this.master.id) {
             this.carService.update(this.master).subscribe({
                 next: (data) => {
                         this.master = data;
@@ -151,7 +151,7 @@ export class CarComponent extends GenericComponent implements OnInit {
                   detail: e.error.message })
                 }
             });
-        } 
+      } 
       this.masterDialog = false;
       this.master = {};
     }

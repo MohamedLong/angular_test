@@ -1,13 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
-import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { RequestService } from '../../service/request.service';
 import { JobService } from '../../service/job.service';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
@@ -68,6 +67,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     displayCompareBids: boolean = false;
     groupedBypart: any[] = [];
     supplierNames: any[]  = [];
+    approveMultipleBidDialog: boolean = false;
+    rejectMultipleBidDialog: boolean = false;
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
@@ -84,6 +85,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.getBidsByJob();
             this.detailRouter = 'jobs';
             this.selectedEntries = [];
+            this.callInsideOnInit();
         }
 
     }
@@ -383,6 +385,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.messageService.add({ severity: 'error', summary: 'please select 2 or more bids to comapre' })
         }
     }
+
 
 }
 

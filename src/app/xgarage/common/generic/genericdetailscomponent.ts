@@ -110,7 +110,7 @@ export class GenericDetailsComponent{
 
                     const confirmStatus: Status = {
                         id: 2,
-                        nameEn: 'Confirmed',
+                        nameEn: 'Confirm',
                         nameAr: 'مؤكد'
                     }
                     this.confirmStatus = confirmStatus;
@@ -129,20 +129,10 @@ export class GenericDetailsComponent{
                 }
             },
             {
-                label: 'Cancel Confirm', icon: 'pi pi-times-circle', visible: (this.master.status.id!=2), command: (event: any) => {
-                    const cancelConfirmStatus: Status = {
-                        id: 4,
-                        nameEn: 'Cancel Confirmed',
-                        nameAr: 'ملغي مؤكد'
-                    }
-                    this.confirmStatus = cancelConfirmStatus;
-                    this.confirmActionDialog = true;
-                }
-            },
-            {
-                label: 'Print', icon: 'pi pi-print', visible: (this.master.status.id==2), command: (event: any) => {
+                label: 'Print', icon: 'pi pi-print', command: (event: any) => {
                     // this.confirmType = 'cloneConfirm';
                     // this.confirmActionDialog = true;
+                    // visible: (this.master.status.id==2)
                     this.print();
                 }
             },

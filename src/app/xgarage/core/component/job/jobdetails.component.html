@@ -1,7 +1,8 @@
 <div class="layout-invoice-page">
     <p-toast></p-toast>
-    <p-confirmDialog key="cfmdialog" [style]="{width: '50vw'}" [baseZIndex]="10000"
-        rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+    <!-- <p-confirmDialog key="cfmdialog" [style]="{width: '50vw'}" [baseZIndex]="10000"
+        rejectButtonStyleClass="p-button-text"></p-confirmDialog> -->
+
     <p-toolbar styleClass="mb-3 align-items-start">
         <ng-template pTemplate="left" *ngIf="master">
             <div class="flex py-2">
@@ -219,12 +220,12 @@
                             <div class="grid p-fluid">
                                 <div class="col-12 md:col-5">
                                     <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}" icon="pi pi-check"
-                                    (click)="print()" [disabled]="selectedEntries.length == 0" class="p-button-success mr-2 mb-3"></button>
+                                    (click)="approveMultipleBidDialog = true" [disabled]="selectedEntries.length == 0" class="p-button-success mr-2 mb-3"></button>
                                 </div>
                                 
                                 <div class="col-12 md:col-5">
-                                    <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}" icon="pi pi-danger"
-                                    (click)="print()" [disabled]="selectedEntries.length == 0" class="p-button-success mr-2 mb-3"></button>
+                                    <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}" icon="pi pi-times"
+                                    (click)="rejectMultipleBidDialog = true" [disabled]="selectedEntries.length == 0" class="p-button-danger mr-2 mb-3"></button>
                                 </div>
 
                                 <div class="col-12 md:col-2">
@@ -344,6 +345,28 @@
                         (click)="deleteSingleDialog = false"></button>
                     <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
                         (click)="confirmCancel(detail.id)"></button>
+                </ng-template>
+            </p-dialog>
+
+            <p-dialog [(visible)]="approveMultipleBidDialog" header="{{ 'job.operations.approveBid' | translate }}" [modal]="true" [style]="{width:'450px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span>{{ 'job.operations.approveMultipleBids' | translate }}</span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel" (click)="approveMultipleBidDialog = false"></button>
+                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Confirm" (click)="approveMultipleBid()"></button>
+                </ng-template>
+            </p-dialog>
+
+            <p-dialog [(visible)]="rejectMultipleBidDialog" header="{{ 'job.operations.rejectBid' | translate }}" [modal]="true" [style]="{width:'450px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span>{{ 'job.operations.rejectMultipleBids' | translate }}</span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel" (click)="rejectMultipleBidDialog = false"></button>
+                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Confirm" (click)="rejectMultipleBid()"></button>
                 </ng-template>
             </p-dialog>
 
