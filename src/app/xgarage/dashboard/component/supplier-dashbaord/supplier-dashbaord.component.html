@@ -29,7 +29,7 @@
                 <a *ngIf="req.parts.length > 2">...see all</a>
             </div>
             <ng-template pTemplate="footer">
-                <p-button styleClass="width-100" label="Bid Now" (click)="onBid(req)"></p-button>
+                <p-button styleClass="width-100" label="{{role == 1? 'View Bid': 'Bid Now'}}" (click)="onBid(req)"></p-button>
             </ng-template>
         </p-card>
     </div>

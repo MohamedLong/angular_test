@@ -16,6 +16,8 @@ export class SupplierDashbaordComponent implements OnInit {
     requests = [];
     latestRequest= [];
     master: Job;
+    role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
+
     ngOnInit(): void {
         this.getAllForTenant();
     }
