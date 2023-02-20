@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
@@ -15,7 +15,8 @@ import { BidService } from '../../service/bidservice.service';
 import { BidDto } from '../../dto/biddto';
 import { Request } from '../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
-
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 @Component({
     selector: 'job-details',
     templateUrl: './jobdetails.component.html',
@@ -42,7 +43,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
     `],
     providers: [MessageService, ConfirmationService, DialogService, DatePipe]
 })
-export class JobDetailsComponent extends GenericDetailsComponent implements OnInit {
+export class JobDetailsComponent extends GenericDetailsComponent implements OnInit, AfterViewInit {
     status: any[] = ["All"];
     selectedState = 'All';
     fillteredDetails: any[] = [];
@@ -66,19 +67,21 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     isSupplierChecked: boolean = false;
     displayCompareBids: boolean = false;
     groupedBypart: any[] = [];
-    supplierNames: any[]  = [];
+    supplierNames: any[] = [];
     approveMultipleBidDialog: boolean = false;
     rejectMultipleBidDialog: boolean = false;
+    @ViewChild('toggleBid', { static: true }) input: ElementRef;
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
-        }
+    }
 
     ngOnInit() {
-        if(localStorage.getItem('job')) {
+        if (localStorage.getItem('job')) {
             let data = JSON.parse(localStorage.getItem('job'));
             this.master = data;
+            //console.log(this.master)
             this.master.claimNo = data.claimNo;
             this.masters.push(this.master);
             this.getRequestsByJob();
@@ -86,6 +89,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.detailRouter = 'jobs';
             this.selectedEntries = [];
             this.callInsideOnInit();
+
+            // this.activeTab = 1;
         }
 
     }
@@ -114,7 +119,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         });
     }
 
-    designCompareBids(bids: any[]){
+    designCompareBids(bids: any[]) {
 
     }
 
@@ -252,34 +257,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 }
             });
         }
-
-        //console.log(names)
-
-        // names.forEach(name => {
-        //     console.log(name, this.status.includes(name))
-        //     if(this.status.includes(name)) {
-
-        //     } else {
-        //         this.status.push(name)
-        //     }
-        // })
-
-        // console.log(this.status)
-
-        // if (names.length > 0) {
-        //     names.forEach((name, index) => {
-        //         //console.log(this.status.includes(name, 0), name.state)
-        //         if (this.status.includes(name)) {
-        //             console.log('includes')
-        //             this.status[index].count = this.status[index].count + 1;
-        //         } else {
-        //             console.log('not includes')
-        //             console.log(name)
-        //             this.status.push(name);
-        //             console.log(this.status)
-        //         }
-        //     });
-        // }
     }
 
     filterByStatus(state: any) {
@@ -294,8 +271,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     onToggleBid(supplierBid) {
-        if(supplierBid.add) {
-            if(supplierBid.add == true) {
+        if (supplierBid.add) {
+            if (supplierBid.add == true) {
                 supplierBid.add = false;
                 this.suppliersBidToCompare = this.suppliersBidToCompare.filter(bid => {
                     return bid.bidId !== supplierBid.bidId
@@ -319,11 +296,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
 
         //compare selected suppliers with all suppliers
-        if(this.suppliersBidToCompare.length >= 2) {
+        if (this.suppliersBidToCompare.length >= 2) {
             this.suppliersBidToCompare.forEach(supp => {
                 bids.forEach(bid => {
-                     //5 //4 //5 //6
-                    if(bid.supplierId == supp.supplierId) {
+                    //5 //4 //5 //6
+                    if (bid.supplierId == supp.supplierId) {
                         bidsToCompare.push(bid)
                     }
                 })
@@ -332,12 +309,12 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
             //get part names
             bidsToCompare.forEach(bid => {
-                if(partNames.length > 0) {
+                if (partNames.length > 0) {
                     let name = partNames.find(part => part == bid.partName);
-                    if(name) {
+                    if (name) {
                         console.log(name)
                     } else {
-                        console.log(name +" not found")
+                        console.log(name + " not found")
                         partNames.push(bid.partName)
                     }
                 } else {
@@ -346,12 +323,12 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             })
 
             bidsToCompare.forEach(bid => {
-                if(this.supplierNames.length > 0) {
+                if (this.supplierNames.length > 0) {
                     let name = this.supplierNames.find(supp => supp == bid.supplierName);
-                    if(name) {
+                    if (name) {
                         console.log(name)
                     } else {
-                        console.log(name +" not found")
+                        console.log(name + " not found")
                         this.supplierNames.push(bid.supplierName)
                     }
                 } else {
@@ -359,31 +336,49 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 }
             })
 
-            console.log(this.supplierNames)
+            //console.log(this.supplierNames)
             //group bids by part name
             partNames.forEach(name => {
                 bidsToCompare.forEach(bid => {
-                    if(bid.partName == name) {
-                        if(this.groupedBypart.length > 0) {
+                    if (bid.partName == name) {
+                        if (this.groupedBypart.length > 0) {
                             let existingPart = this.groupedBypart.find(part => part.partName == bid.partName);
-                            if(existingPart) {
+                            if (existingPart) {
                                 existingPart.bids.push(bid)
                             } else {
-                                this.groupedBypart.push({partName: name, bids: [bid]})
+                                this.groupedBypart.push({ partName: name, bids: [bid] })
                             }
                         } else {
-                            this.groupedBypart.push({partName: name, bids: [bid]})
+                            this.groupedBypart.push({ partName: name, bids: [bid] })
                         }
                     }
                 })
             });
 
-            console.log(this.groupedBypart)
+            //console.log(this.groupedBypart)
             this.displayCompareBids = true
 
         } else {
             this.messageService.add({ severity: 'error', summary: 'please select 2 or more bids to comapre' })
         }
+    }
+
+    ngAfterViewInit() {
+        // console.log(this.input)
+      }
+
+    onHideCompareBids() {
+        console.log('hide')
+        this.groupedBypart = [];
+        this.suppliersBidToCompare = [];
+
+        // console.log(this.input)
+    }
+
+    downloadPdf() {
+        const doc = new jsPDF();
+        autoTable(doc, { html: '#bids-table' });
+        doc.save('bids.pdf')
     }
 
 

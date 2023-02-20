@@ -84,7 +84,7 @@
                             [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.originalPrice}}
+                        {{part.originalPrice | number}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -95,7 +95,7 @@
                             disabled="true">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.price}}
+                        {{part.price | number}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -155,11 +155,11 @@
         <tr  class="font-bold prices" *ngIf="type == 'edit bid'">
             <td colspan="5"></td>
             <td>Total</td>
-            <td>{{bidTotalOriginalPrice}}</td>
-            <td>{{bidTotalPrice}}</td>
+            <td>{{bidTotalOriginalPrice | number}}</td>
+            <td>{{bidTotalPrice | number}}</td>
             <td>{{bidTotalDiscount}}</td>
             <td></td>
-            <td>{{bidTotalPrice}}</td>
+            <td>{{bidTotalPrice | number}}</td>
         </tr>
     </ng-template>
 
