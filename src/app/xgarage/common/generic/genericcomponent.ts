@@ -67,7 +67,7 @@ export class GenericComponent{
 
     printAuth: boolean;
 
-    constructor(public route: ActivatedRoute, public datePipe: DatePipe, private breadcrumbService: AppBreadcrumbService) {
+    constructor(public route: ActivatedRoute, public datePipe: DatePipe, public breadcrumbService: AppBreadcrumbService) {
                     this.extractPermissions();
     }
 

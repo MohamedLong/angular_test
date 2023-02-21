@@ -13,14 +13,14 @@ import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 
 @Component({
   selector: 'app-claim',
-  templateUrl: './claim.component.html', 
+  templateUrl: './claim.component.html',
   styleUrls: ['../../../../demo/view/tabledemo.scss'],
 
   providers: [MessageService, ConfirmationService, DatePipe]
 })
 export class ClaimComponent extends GenericComponent implements OnInit {
 
-  constructor(public route: ActivatedRoute, private authService: AuthService, private tenantService: TenantService, 
+  constructor(public route: ActivatedRoute, private authService: AuthService, private tenantService: TenantService,
     private claimService: ClaimService,
     public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
     super(route, datePipe, breadcrumbService);
@@ -36,6 +36,8 @@ active: boolean = true;
     this.getAll();
     this.getAllTenants();
     super.callInsideOnInit();
+
+    this.breadcrumbService.setItems([{'label': 'Claims', routerLink: ['claims']}]);
   }
 
   getAllTenants() {
@@ -57,17 +59,17 @@ active: boolean = true;
           this.loading = false;
         },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Error', detail: e.error.message, life: 3000 })
-      }); 
+      });
     }
     else{
       this.claimService.getAll().subscribe({
         next: (masters) => {
           this.masterDtos = masters;
           this.loading = false;
-          this.masterDtos.forEach(val => val.cancellable = (val.status != null && val.status == StatusConstants.OPEN_STATUS)); 
+          this.masterDtos.forEach(val => val.cancellable = (val.status != null && val.status == StatusConstants.OPEN_STATUS));
         },
         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
-      }); 
+      });
     }
  }
 
@@ -105,11 +107,11 @@ active: boolean = true;
                 next: (data) => {
                         this.master = data;
                         this.getAll();
-                        this.messageService.add({ severity: 'success', summary: 'Successful', 
+                        this.messageService.add({ severity: 'success', summary: 'Successful',
                         detail: 'Claim Updated'});
                 },
                 error: (e) => {
-                  this.messageService.add({ severity: 'error', summary: 'Error', 
+                  this.messageService.add({ severity: 'error', summary: 'Error',
                   detail: e.error.message })
                 }
             });
@@ -118,11 +120,11 @@ active: boolean = true;
               next: (data) => {
                 this.master = data;
                 this.getAll();
-                this.messageService.add({ severity: 'success', summary: 'Successful', 
+                this.messageService.add({ severity: 'success', summary: 'Successful',
                 detail: 'Claim created successfully' });
               },
               error: (e) => {
-                this.messageService.add({ severity: 'error', summary: 'Error', 
+                this.messageService.add({ severity: 'error', summary: 'Error',
                 detail: e.error.message })
               }
             });
@@ -133,7 +135,7 @@ active: boolean = true;
 }
 
 confirmDelete() {
-    let cancelStatus: Status = { 
+    let cancelStatus: Status = {
       id: StatusConstants.CANCELED_STATUS
     }
     this.claimService.changeStatus(this.master.id, cancelStatus).subscribe(res => {
@@ -143,7 +145,7 @@ confirmDelete() {
         this.getAll();
       }
       else{
-        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Claim', life: 3000 });     
+        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Claim', life: 3000 });
       }
     }, err => {
         this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.error.message, life: 3000 });

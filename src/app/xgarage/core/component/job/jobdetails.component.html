@@ -154,7 +154,7 @@
                         </div>
 
                         <p-table [columns]="cols" [rows]="10" [value]="supplierBids"
-                            styleClass="p-invoice-datatable-responsive pb-3">
+                            styleClass="p-invoice-datatable-responsive pb-3" *ngIf="visible">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th>Select</th>

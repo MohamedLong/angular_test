@@ -11,6 +11,7 @@ import { Tenant } from 'src/app/xgarage/common/model/tenant';
 import { UserDto } from 'src/app/xgarage/common/dto/userdto';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ThrowStmt } from '@angular/compiler';
+import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 
 @Component({
     selector: 'app-users',
@@ -83,7 +84,7 @@ export class UsersComponent implements OnInit {
 
     selectedTenant: Tenant;
 
-    constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private messageService: MessageService, private roleService: RoleService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef, private tenantService: TenantService) {
+    constructor(private route: ActivatedRoute, private breadcrumbService: AppBreadcrumbService, private userService: UserService, private messageService: MessageService, private roleService: RoleService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef, private tenantService: TenantService) {
         this.extractPermissions();
      }
 
@@ -100,6 +101,8 @@ export class UsersComponent implements OnInit {
         this.getUsers();
         this.getTenants();
         this.getRoles();
+
+        this.breadcrumbService.setItems([{'label': 'Users', 'routerLink': ['users']}]);
     }
 
     getTenants() {
@@ -135,7 +138,7 @@ export class UsersComponent implements OnInit {
             ];
         });
     }
-    
+
     openNew() {
         this.user = {};
         this.userDto = {};

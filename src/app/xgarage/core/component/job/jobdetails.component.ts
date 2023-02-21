@@ -45,7 +45,7 @@ import autoTable from 'jspdf-autotable';
     `],
     providers: [MessageService, ConfirmationService, DialogService, DatePipe]
 })
-export class JobDetailsComponent extends GenericDetailsComponent implements OnInit, AfterViewInit {
+export class JobDetailsComponent extends GenericDetailsComponent implements OnInit {
     status: any[] = ["All"];
     selectedState = 'All';
     fillteredDetails: any[] = [];
@@ -73,7 +73,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     approveMultipleBidDialog: boolean = false;
     rejectMultipleBidDialog: boolean = false;
     @ViewChild('toggleBid', { read: ElementRef }) input: ElementRef;
-
+    visible: boolean = true;
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
@@ -94,6 +94,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.initActionMenu();
             // this.activeTab = 1;
         }
+
+        this.breadcrumbService.setItems([{'label': 'Requests', routerLink: ['jobs']}, {'label': 'Request Details', routerLink: ['job-details']}]);
 
     }
 
@@ -338,19 +340,24 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     onToggleBid(supplierBid) {
+        console.log(supplierBid)
+        console.log(this.suppliersBidToCompare)
         if (supplierBid.add) {
+            console.log('supplier has add:', supplierBid.add)
             if (supplierBid.add == true) {
+                console.log("supplier has add and it's true:", supplierBid.add)
                 supplierBid.add = false;
                 this.suppliersBidToCompare = this.suppliersBidToCompare.filter(bid => {
                     return bid.bidId !== supplierBid.bidId
                 });
             } else {
+                console.log("supplier has add and it's false:", supplierBid.add)
                 this.suppliersBidToCompare.push(supplierBid);
             }
         } else {
+            console.log("supplier doesn't have add:", supplierBid)
             supplierBid.add = true;
             this.suppliersBidToCompare.push(supplierBid);
-
         }
         //console.log(this.suppliersBidToCompare);
     }
@@ -430,16 +437,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         }
     }
 
-    ngAfterViewInit() {
-        // console.log(this.input)
-      }
-
     onHideCompareBids() {
         console.log('hide')
-        this.groupedBypart = [];
         this.suppliersBidToCompare = [];
-        this.input.nativeElement.attributes[1].specified = false
-        console.log(this.input.nativeElement.attributes)
+        this.visible = false;
+        setTimeout(() => this.visible = true, 0);
+        // this.input.nativeElement.attributes[1].specified = false
+        // console.log(this.input.nativeElement.attributes)
     }
 
     downloadPdf() {

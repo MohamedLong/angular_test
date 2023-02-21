@@ -43,6 +43,8 @@ export class SubCategoryComponent extends GenericComponent implements OnInit {
     ngOnInit(): void {
         this.getAll();
         super.callInsideOnInit();
+
+        this.breadcrumbService.setItems([{'label': 'SubCatogries', 'routerLink': ['subcategory']}]);
     }
 
     getAll() {
@@ -77,7 +79,7 @@ export class SubCategoryComponent extends GenericComponent implements OnInit {
                         error: (e) => alert(e)
                     }
                 );
-            } else {       
+            } else {
                 this.subCategoryService.add(this.master).subscribe(
                     {
                         next: (data) => {

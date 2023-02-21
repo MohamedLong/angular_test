@@ -3,6 +3,7 @@ import { PermissionService } from '../../service/permission.service';
 import { Table, TableModule } from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { Permission } from 'src/app/xgarage/common/model/permission';
+import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 
 @Component({
   selector: 'app-persmissions',
@@ -49,7 +50,7 @@ export class PermissionsComponent implements OnInit {
 
   @ViewChild('filter') filter: ElementRef;
 
-  constructor(private permissionService: PermissionService, private messageService: MessageService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef) { }
+  constructor(private breadcrumbService: AppBreadcrumbService, private permissionService: PermissionService, private messageService: MessageService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef) { }
 
 
   ngOnInit() {
@@ -64,6 +65,8 @@ export class PermissionsComponent implements OnInit {
         { field: 'permissionUrl', header: 'Permission Url' },
       ];
     });
+
+    this.breadcrumbService.setItems([{'label': 'Permissions', 'routerLink': ['permission']}]);
   }
 
   openNew() {

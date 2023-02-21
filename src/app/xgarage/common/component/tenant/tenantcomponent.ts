@@ -49,6 +49,8 @@ export class TenantComponent extends GenericComponent implements OnInit {
         this.getAll();
         this.getTenantTypes();
         super.callInsideOnInit();
+
+        this.breadcrumbService.setItems([{'label': 'Tenants', 'routerLink': ['tenant']}]);
     }
 
     new() {
@@ -106,7 +108,7 @@ export class TenantComponent extends GenericComponent implements OnInit {
                         error: (e) => alert(e)
                     }
                 );
-            } else {       
+            } else {
                 this.tenantService.add(this.master).subscribe(
                     {
                         next: (data) => {

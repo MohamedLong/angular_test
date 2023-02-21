@@ -69,7 +69,7 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit() {
     this.getAll();
-
+    this.breadcrumbService.setItems([{'label': 'Catogries', 'routerLink': ['category']}]);
   }
 
 getAll() {

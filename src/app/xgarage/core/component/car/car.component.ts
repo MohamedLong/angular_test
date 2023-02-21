@@ -34,7 +34,7 @@ export class CarComponent extends GenericComponent implements OnInit {
       private carModelYearService: CarModelYearService,  private carModelTypeService: CarModelTypeService) {
       super(route, datePipe, breadcrumbService);
   }
-  
+
   selectedModel: CarModel;
   carModels: CarModel[];
   selectedBrand: Brand;
@@ -58,6 +58,8 @@ export class CarComponent extends GenericComponent implements OnInit {
       this.getAllModels();
       this.getAllYears();
       this.getAllModelTypes();
+
+      this.breadcrumbService.setItems([{'label': 'Cars', routerLink: ['cars']}]);
     }
 
    getAll() {
@@ -67,7 +69,7 @@ export class CarComponent extends GenericComponent implements OnInit {
         this.loading = false;
       },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
-    }); 
+    });
   }
 
   getAllBrands() {
@@ -85,7 +87,7 @@ export class CarComponent extends GenericComponent implements OnInit {
       },
       error: (e) => alert(e)
     })
-  }  
+  }
   getAllYears() {
     this.carModelYearService.getAll().subscribe({
       next: (data) => {
@@ -120,7 +122,7 @@ export class CarComponent extends GenericComponent implements OnInit {
       }
     )
    }
-   
+
    onBrandChange() {
     if (this.selectedBrand && this.selectedBrand.carModels) {
       this.carModels = this.selectedBrand.carModels;
@@ -143,15 +145,15 @@ export class CarComponent extends GenericComponent implements OnInit {
                 next: (data) => {
                         this.master = data;
                         this.getAll();
-                        this.messageService.add({ severity: 'success', summary: 'Successful', 
+                        this.messageService.add({ severity: 'success', summary: 'Successful',
                         detail: 'Car Updated'});
                 },
                 error: (e) => {
-                  this.messageService.add({ severity: 'error', summary: 'Error', 
+                  this.messageService.add({ severity: 'error', summary: 'Error',
                   detail: e.error.message })
                 }
             });
-      } 
+      }
       this.masterDialog = false;
       this.master = {};
     }
@@ -165,7 +167,7 @@ closeCarDialog() {
   this.displayNewCarDialog = false;
   this.getAll();
 }
-  
+
 }
 
 

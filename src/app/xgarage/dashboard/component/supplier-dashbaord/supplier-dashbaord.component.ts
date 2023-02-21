@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Job } from 'src/app/xgarage/core/model/job';
 import { JobService } from 'src/app/xgarage/core/service/job.service';
@@ -12,7 +13,7 @@ import { JobService } from 'src/app/xgarage/core/service/job.service';
     providers: [MessageService]
 })
 export class SupplierDashbaordComponent implements OnInit {
-    constructor(private router: Router, private authService: AuthService, private jobService: JobService, private messageService: MessageService) { }
+    constructor(private router: Router, private authService: AuthService, private jobService: JobService, private messageService: MessageService, private breadcrumbService: AppBreadcrumbService) { }
     requests = [];
     latestRequest= [];
     master: Job;
@@ -20,6 +21,8 @@ export class SupplierDashbaordComponent implements OnInit {
 
     ngOnInit(): void {
         this.getAllForTenant();
+
+        this.breadcrumbService.setItems([]);
     }
 
     getAllForTenant() {
