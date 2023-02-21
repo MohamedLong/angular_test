@@ -1,6 +1,6 @@
 <p-toast></p-toast>
-<p-table [value]="requests" dataKey="id"
-    [tableStyle]="{'min-width': '50rem', 'width':'100%'}" editMode="row" #partTable *ngIf="requests.length > 0">
+<p-table [value]="requests" dataKey="id" [tableStyle]="{'min-width': '50rem', 'width':'100%'}" editMode="row" #partTable
+    *ngIf="requests.length > 0">
 
     <ng-template pTemplate="header">
         <tr>
@@ -16,6 +16,7 @@
             <th>{{'bid.bidDetails.vat' | translate}}</th>
             <th>{{'bid.bidDetails.totalPrice' | translate}}</th>
             <th *ngIf="type == 'new bid'">{{'bid.bidDetails.partImgs' | translate}}</th>
+            <th *ngIf="type == 'edit bid'">{{'common.status' | translate}}</th>
             <th>{{'bid.bidDetails.modifyBid' | translate}}</th>
         </tr>
     </ng-template>
@@ -148,11 +149,16 @@
                 </div>
             </td>
             <td *ngIf="type == 'edit bid'">
-                <button (click)="confirmCancel(part.bidId)" pButton pRipple type="button"
-                    class="width-100 p-button-sm text-sm p-button-warning" styleClass="" label="Cancel"></button>
+                {{part.statusId == 1? 'Open' : part.statusId == 2? 'In Progress' : part.statusId == 3? 'OnHold' :
+                part.statusId == 4? 'Completed' : 'Rejected'}}
+            </td>
+            <td *ngIf="type == 'edit bid'">
+                <button (click)="confirmCancel(part.bidId)" pButton pRipple type="button" [disabled]="part.statusId !== 1"
+                    class="width-100 p-button-sm text-sm p-button-warning" styleClass=""
+                    label="{{'USERSUBMENU.DIALOG.CANCEL' | translate}}"></button>
             </td>
         </tr>
-        <tr  class="font-bold prices" *ngIf="type == 'edit bid'">
+        <tr class="font-bold prices" *ngIf="type == 'edit bid'">
             <td colspan="5"></td>
             <td>Total</td>
             <td>{{bidTotalOriginalPrice | number}}</td>

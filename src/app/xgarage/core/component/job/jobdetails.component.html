@@ -397,23 +397,23 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag" header="Compare Bids" [(visible)]="displayCompareBids" [modal]="true" [style]="{width: '90vw'}"
+        <p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag" header="{{ 'bid.compareBids' | translate }}" [(visible)]="displayCompareBids" [modal]="true" [style]="{width: '90vw'}"
             [draggable]="false" [resizable]="false" (onHide)="onHideCompareBids()">
             <div class="p-datatable p-datatable-gridlines">
                 <table class="p-datatable-table" id="bids-table">
                     <thead class="p-datatable-thead">
                         <tr>
-                            <th>Part Name</th>
-                            <th>Supplier Name</th>
-                            <th>Part Type</th>
-                            <th>Warranty</th>
-                            <th>Avalibality</th>
-                            <th>Qty</th>
-                            <th>Orginal Price</th>
-                            <th>Discount</th>
-                            <th>Price</th>
-                            <th>Vat</th>
-                            <th>Total Price</th>
+                            <th>{{ 'request.tableColumn.partName' | translate }}</th>
+                            <th>{{ 'common.supplier' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.partType' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.warranty' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.deliverDays' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.qty' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.originalPrice' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.discount' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.price' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.vat' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.totalPrice' | translate }}</th>
                         </tr>
                     </thead>
                     <tbody class="p-element p-datatable-tbody">
@@ -503,13 +503,12 @@
             </div>
             <ng-template pTemplate="footer">
                 <div class="text-center pt-3">
-                    <p-button (click)="downloadPdf()" label="Download"
+                    <p-button (click)="downloadPdf()" label="{{ 'bid.bidDialog.download' | translate }}"
                         styleClass="p-button bg-indigo-100 text-indigo-600 border-0 font-light px-5"></p-button>
-                    <p-button (click)="displayCompareBids=false" label="Change Supplier"
+                    <p-button (click)="displayCompareBids=false" label="{{ 'bid.bidDialog.changeSupp' | translate }}"
                         styleClass="p-button"></p-button>
                 </div>
             </ng-template>
         </p-dialog>
     </div>
-    <!-- </div> -->
 </div>

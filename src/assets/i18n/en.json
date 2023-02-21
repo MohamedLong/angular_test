@@ -660,6 +660,7 @@
 
     "bid": {
         "title": "Bids",
+        "compareBids": "Compare Bids",
         "table_footer": "In total there are {{length}} Bids",
         "form": {
             "insuranceFrom": "Insurance From",
@@ -705,12 +706,18 @@
             "partImgs": "Part Images",
             "modifyBid": "Modify Bid",
             "noImgs": "this part has no images",
-            "comment": "Comment from client"
+            "comment": "Comment from client",
+            "bidOnReq": "Bid on a request",
+            "Reqlatest": "Latest Request",
+            "partsRequirments": "Parts Requirments",
+            "seeAll": "see all"
         },
         "bidDialog": {
             "newBid": "Add Bid",
             "titleByPart": "Bids for Part: ",
-            "titleBySupplier": "Bids for Supplier: "
+            "titleBySupplier": "Bids for Supplier: ",
+            "changeSupp": "Change Supplier",
+            "download": "Download"
         }
     }
 
