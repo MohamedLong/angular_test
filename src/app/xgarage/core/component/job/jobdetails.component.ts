@@ -15,8 +15,10 @@ import { BidService } from '../../service/bidservice.service';
 import { BidDto } from '../../dto/biddto';
 import { Request } from '../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import { Status } from 'src/app/xgarage/common/model/status';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 @Component({
     selector: 'job-details',
     templateUrl: './jobdetails.component.html',
@@ -89,10 +91,75 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.detailRouter = 'jobs';
             this.selectedEntries = [];
             this.callInsideOnInit();
-
+            this.initActionMenu();
             // this.activeTab = 1;
         }
 
+    }
+
+    initActionMenu() {
+        this.menuItems = [
+            {
+                label: 'Draft', icon: 'pi pi-pencil', visible: (this.master.status.id!=1), command: (event: any) => {
+                    const newStatus: Status = {
+                        id: 1,
+                        nameEn: 'Draft',
+                        nameAr: 'مقتوح'
+                    }
+                    this.confirmStatus = newStatus;
+                    this.confirmActionDialog = true;
+                }
+            },
+            {
+                label: 'Confirm', icon: 'pi pi-check', visible: (this.master.status.id!=2), command: (event: any) => {
+
+                    const confirmStatus: Status = {
+                        id: 2,
+                        nameEn: 'Confirm',
+                        nameAr: 'مؤكد'
+                    }
+                    this.confirmStatus = confirmStatus;
+                    this.confirmActionDialog = true;
+                }
+            },
+            {
+                label: 'Cancel', icon: 'pi pi-times', visible: (this.master.status.id!=2), command: (event: any) => {
+                    const cancelStatus: Status = {
+                        id: 3,
+                        nameEn: 'Canceled',
+                        nameAr: 'ملغي'
+                    }
+                    this.confirmStatus = cancelStatus;
+                    this.confirmActionDialog = true;
+                }
+            },
+            {
+                label: 'Print', icon: 'pi pi-print', command: (event: any) => {
+                    // this.confirmType = 'cloneConfirm';
+                    // this.confirmActionDialog = true;
+                    // visible: (this.master.status.id==2)
+                    this.print();
+                }
+            },
+            {
+                label: 'Clone', icon: 'pi pi-clone', command: (event: any) => {
+                    this.confirmType = 'cloneConfirm';
+                    this.confirmActionDialog = true;
+                }
+            },
+            {
+                label: 'Delete', icon: 'pi pi-trash', visible: (this.master.status.id!=2), command: (event: any) => {
+                    const deleteStatus: Status = {
+                        id: 6,
+                        nameEn: 'Deleted',
+                        nameAr: 'محذوف'
+                    }
+                    this.confirmStatus = deleteStatus;
+                    this.confirmActionDialog = true;
+                }
+            }
+
+        ];
     }
 
     getRequestsByJob() {
@@ -381,6 +448,24 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         doc.save('bids.pdf')
     }
 
+
+    confirm(event) {
+        if(this.confirmType === 'confirm'){
+            let statusCode = this.confirmStatus.id;
+            this.changeStatusService.changeStatus(this.master.id, this.confirmStatus).subscribe({
+                next: (data) => {
+                    this.updateCurrentObject(data);
+                    if(statusCode == 6) {
+                        setTimeout(() => {this.goMaster();}, 1500);
+                    }
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            });
+            this.confirmActionDialog = false;
+        }else if(this.confirmType === 'cloneConfirm'){
+            this.cloneObject();
+        }
+    }
 
 }
 
