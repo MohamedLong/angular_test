@@ -70,7 +70,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     supplierNames: any[] = [];
     approveMultipleBidDialog: boolean = false;
     rejectMultipleBidDialog: boolean = false;
-    @ViewChild('toggleBid', { static: true }) input: ElementRef;
+    @ViewChild('toggleBid', { read: ElementRef }) input: ElementRef;
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
@@ -312,9 +312,9 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 if (partNames.length > 0) {
                     let name = partNames.find(part => part == bid.partName);
                     if (name) {
-                        console.log(name)
+                        //console.log(name)
                     } else {
-                        console.log(name + " not found")
+                        //console.log(name + " not found")
                         partNames.push(bid.partName)
                     }
                 } else {
@@ -326,9 +326,9 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 if (this.supplierNames.length > 0) {
                     let name = this.supplierNames.find(supp => supp == bid.supplierName);
                     if (name) {
-                        console.log(name)
+                        //console.log(name)
                     } else {
-                        console.log(name + " not found")
+                        //console.log(name + " not found")
                         this.supplierNames.push(bid.supplierName)
                     }
                 } else {
@@ -371,8 +371,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         console.log('hide')
         this.groupedBypart = [];
         this.suppliersBidToCompare = [];
-
-        // console.log(this.input)
+        this.input.nativeElement.attributes[1].specified = false
+        console.log(this.input.nativeElement.attributes)
     }
 
     downloadPdf() {
