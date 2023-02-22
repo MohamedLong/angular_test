@@ -95,14 +95,14 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             // this.activeTab = 1;
         }
 
-        this.breadcrumbService.setItems([{'label': 'Requests', routerLink: ['jobs']}, {'label': 'Request Details', routerLink: ['job-details']}]);
+        this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
 
     }
 
     initActionMenu() {
         this.menuItems = [
             {
-                label: 'Draft', icon: 'pi pi-pencil', visible: (this.master.status.id!=1), command: (event: any) => {
+                label: 'Draft', icon: 'pi pi-pencil', visible: (this.master.status.id != 1), command: (event: any) => {
                     const newStatus: Status = {
                         id: 1,
                         nameEn: 'Draft',
@@ -113,7 +113,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 }
             },
             {
-                label: 'Confirm', icon: 'pi pi-check', visible: (this.master.status.id!=2), command: (event: any) => {
+                label: 'Confirm', icon: 'pi pi-check', visible: (this.master.status.id != 2), command: (event: any) => {
 
                     const confirmStatus: Status = {
                         id: 2,
@@ -125,7 +125,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 }
             },
             {
-                label: 'Cancel', icon: 'pi pi-times', visible: (this.master.status.id!=2), command: (event: any) => {
+                label: 'Cancel', icon: 'pi pi-times', visible: (this.master.status.id != 2), command: (event: any) => {
                     const cancelStatus: Status = {
                         id: 3,
                         nameEn: 'Canceled',
@@ -150,7 +150,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 }
             },
             {
-                label: 'Delete', icon: 'pi pi-trash', visible: (this.master.status.id!=2), command: (event: any) => {
+                label: 'Delete', icon: 'pi pi-trash', visible: (this.master.status.id != 2), command: (event: any) => {
                     const deleteStatus: Status = {
                         id: 6,
                         nameEn: 'Deleted',
@@ -340,26 +340,20 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     onToggleBid(supplierBid) {
-        console.log(supplierBid)
-        console.log(this.suppliersBidToCompare)
-        if (supplierBid.add) {
-            console.log('supplier has add:', supplierBid.add)
-            if (supplierBid.add == true) {
-                console.log("supplier has add and it's true:", supplierBid.add)
-                supplierBid.add = false;
+        //console.log(supplierBid)
+        if (supplierBid.added) {
+            if (supplierBid.added == true) {
+                supplierBid.added = false;
                 this.suppliersBidToCompare = this.suppliersBidToCompare.filter(bid => {
                     return bid.bidId !== supplierBid.bidId
                 });
             } else {
-                console.log("supplier has add and it's false:", supplierBid.add)
                 this.suppliersBidToCompare.push(supplierBid);
             }
         } else {
-            console.log("supplier doesn't have add:", supplierBid)
-            supplierBid.add = true;
+            supplierBid.added = true;
             this.suppliersBidToCompare.push(supplierBid);
         }
-        //console.log(this.suppliersBidToCompare);
     }
 
     onCompareBids() {
@@ -438,12 +432,15 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     onHideCompareBids() {
-        console.log('hide')
+        //console.log('hide')
+        this.suppliersBidToCompare.forEach(bid => {
+            delete bid.added;
+        });
+
         this.suppliersBidToCompare = [];
+        this.groupedBypart = [];
         this.visible = false;
         setTimeout(() => this.visible = true, 0);
-        // this.input.nativeElement.attributes[1].specified = false
-        // console.log(this.input.nativeElement.attributes)
     }
 
     downloadPdf() {
@@ -452,21 +449,20 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         doc.save('bids.pdf')
     }
 
-
     confirm(event) {
-        if(this.confirmType === 'confirm'){
+        if (this.confirmType === 'confirm') {
             let statusCode = this.confirmStatus.id;
             this.changeStatusService.changeStatus(this.master.id, this.confirmStatus).subscribe({
                 next: (data) => {
                     this.updateCurrentObject(data);
-                    if(statusCode == 6) {
-                        setTimeout(() => {this.goMaster();}, 1500);
+                    if (statusCode == 6) {
+                        setTimeout(() => { this.goMaster(); }, 1500);
                     }
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });
             this.confirmActionDialog = false;
-        }else if(this.confirmType === 'cloneConfirm'){
+        } else if (this.confirmType === 'cloneConfirm') {
             this.cloneObject();
         }
     }
