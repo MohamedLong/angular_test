@@ -86,86 +86,12 @@ export class GenericDetailsComponent{
 
     callInsideOnInit(): void {
         this.getAllStatus();
-        this.initActionMenu();
         this.editable = false;
         this.index = -1;
         this.printingMode = false;
     }
 
-    initActionMenu() {
-        this.menuItems = [
-            {
-                label: 'Draft', icon: 'pi pi-pencil', visible: (this.master.status.id!=1), command: (event: any) => {
-                    const newStatus: Status = {
-                        id: 1,
-                        nameEn: 'Draft',
-                        nameAr: 'مقتوح'
-                    }
-                    this.confirmStatus = newStatus;
-                    this.confirmActionDialog = true;
-                }
-            },
-            {
-                label: 'Confirm', icon: 'pi pi-check', visible: (this.master.status.id!=2), command: (event: any) => {
-
-                    const confirmStatus: Status = {
-                        id: 2,
-                        nameEn: 'Confirmed',
-                        nameAr: 'مؤكد'
-                    }
-                    this.confirmStatus = confirmStatus;
-                    this.confirmActionDialog = true;
-                }
-            },
-            {
-                label: 'Cancel', icon: 'pi pi-times', visible: (this.master.status.id!=2), command: (event: any) => {
-                    const cancelStatus: Status = {
-                        id: 3,
-                        nameEn: 'Canceled',
-                        nameAr: 'ملغي'
-                    }
-                    this.confirmStatus = cancelStatus;
-                    this.confirmActionDialog = true;
-                }
-            },
-            {
-                label: 'Cancel Confirm', icon: 'pi pi-times-circle', visible: (this.master.status.id!=2), command: (event: any) => {
-                    const cancelConfirmStatus: Status = {
-                        id: 4,
-                        nameEn: 'Cancel Confirmed',
-                        nameAr: 'ملغي مؤكد'
-                    }
-                    this.confirmStatus = cancelConfirmStatus;
-                    this.confirmActionDialog = true;
-                }
-            },
-            {
-                label: 'Print', icon: 'pi pi-print', visible: (this.master.status.id==2), command: (event: any) => {
-                    // this.confirmType = 'cloneConfirm';
-                    // this.confirmActionDialog = true;
-                    this.print();
-                }
-            },
-            {
-                label: 'Clone', icon: 'pi pi-clone', command: (event: any) => {
-                    this.confirmType = 'cloneConfirm';
-                    this.confirmActionDialog = true;
-                }
-            },
-            {
-                label: 'Delete', icon: 'pi pi-trash', visible: (this.master.status.id!=2), command: (event: any) => {
-                    const deleteStatus: Status = {
-                        id: 6,
-                        nameEn: 'Deleted',
-                        nameAr: 'محذوف'
-                    }
-                    this.confirmStatus = deleteStatus;
-                    this.confirmActionDialog = true;
-                }
-            }
-
-        ];
-    }
+   
 
 
     getMinDate(){
@@ -363,24 +289,6 @@ export class GenericDetailsComponent{
         this.printingMode = false;
     }
 
-
-    confirm(event) {
-        if(this.confirmType === 'confirm'){
-            let statusCode = this.confirmStatus.id;
-            this.changeStatusService.changeStatus(this.master.id, this.confirmStatus).subscribe({
-                next: (data) => {
-                    this.updateCurrentObject(data);
-                    if(statusCode == 6) {
-                        setTimeout(() => {this.goMaster();}, 1500);
-                    }
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-            });
-            this.confirmActionDialog = false;
-        }else if(this.confirmType === 'cloneConfirm'){
-            this.cloneObject();
-        }
-    }
 
     cloneObject() {
         var newMaster = this.master;

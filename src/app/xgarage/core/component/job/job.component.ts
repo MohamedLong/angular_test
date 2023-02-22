@@ -40,6 +40,7 @@ export class JobComponent extends GenericComponent implements OnInit {
         super.callInsideOnInit();
         this.getAllForTenant();
 
+        this.breadcrumbService.setItems([{'label': 'Requests', routerLink: ['jobs']}]);
     }
 
     getAllForTenant() {

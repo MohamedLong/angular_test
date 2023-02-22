@@ -41,6 +41,8 @@ export class TenantTypeComponent extends GenericComponent implements OnInit {
     ngOnInit(): void {
         this.getAll();
         super.callInsideOnInit();
+
+        this.breadcrumbService.setItems([{'label': 'Tenant Types', 'routerLink': ['tenanttype']}]);
     }
 
     getAll() {

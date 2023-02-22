@@ -50,17 +50,52 @@ input[type=number] {
     width: 180px;
 }
 
-.editbidDialoagContentt {
+.customeDialoagContentt {
     padding-left: 0px !important;
     padding-right: 0px !important;
     padding-bottom: 0px !important;
 }
 
-.editbidDialoag > .p-dialog-header {
+.customeDialoag > .p-dialog-header {
     background-color: #4D4DE7 !important;
     color: #fff !important;
 }
 
 .cell {
     background-color: #f8f9fa;
+}
+
+.p-datatable table {
+    border-collapse: collapse;
+    min-width: 100%;
+    table-layout: fixed;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    text-align: left;
+    padding: 1rem 1rem;
+    border: 1px solid #dee2e6;
+    border-width: 0 0 1px 0;
+    font-weight: 700;
+    color: #343a40;
+    background: #f8f9fa;
+    transition: box-shadow 0.2s;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+    background: #ffffff;
+    color: #495057;
+    transition: box-shadow 0.2s;
+    outline-color: #C7D2FE;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    text-align: left;
+    border: 1px solid #dee2e6;
+    border-width: 0 0 1px 0;
+    padding: 1rem 1rem;
+}
+
+.p-datatable.p-datatable-gridlines .p-datatable-thead > tr > th {
+    border-width: 1px 1px 1px 1px;
 }

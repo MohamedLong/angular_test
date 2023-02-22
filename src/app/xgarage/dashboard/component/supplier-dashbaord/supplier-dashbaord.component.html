@@ -1,6 +1,6 @@
 <div class="relative">
     <div class="field col-12 md:col-6 text-center mx-auto absolute">
-        <h1 class="text-white">Bid on a request</h1>
+        <h1 class="text-white">{{ 'bid.bidDetails.bidOnReq' | translate }}</h1>
         <span class="p-input-icon-right block">
             <i class="pi pi-search z-1"></i>
             <p-autoComplete class="width-100"
@@ -11,7 +11,7 @@
 </div>
 <div class="grid justify-content-center mx-auto p-3 md:p-5  mb-5">
     <div class="col-12">
-        <h4>Latest Request</h4>
+        <h4>{{ 'bid.bidDetails.Reqlatest' | translate }}</h4>
     </div>
     <div class="col-12 md:col-4" *ngFor="let req of latestRequest">
         <p-card header="{{req.jobTitle}}" subheader="Chassis No.: Ex: 291919AD1914"
@@ -20,16 +20,16 @@
                 <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png">
             </ng-template>
             <div>
-                <h6 class="font-bold mb-2">Parts Requirments</h6>
+                <h6 class="font-bold mb-2">{{ 'bid.bidDetails.partsRequirments' | translate }}</h6>
                 <ng-container *ngFor="let part of req.parts; let i = index;">
                     <p *ngIf="i <= 2" class="mb-0">
                         {{part}}
                     </p>
                 </ng-container>
-                <a *ngIf="req.parts.length > 2">...see all</a>
+                <a *ngIf="req.parts.length > 2">...{{ 'bid.bidDetails.seeAll' | translate }}</a>
             </div>
             <ng-template pTemplate="footer">
-                <p-button styleClass="width-100" label="Bid Now" (click)="onBid(req)"></p-button>
+                <p-button styleClass="width-100" label="{{role == 1? 'View Bid': 'Bid Now'}}" (click)="onBid(req)"></p-button>
             </ng-template>
         </p-card>
     </div>

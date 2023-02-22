@@ -7,6 +7,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { Permission } from 'src/app/xgarage/common/model/permission';
 import { PermissionService } from '../../service/permission.service';
 import { Role } from 'src/app/xgarage/common/model/role';
+import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 
 @Component({
   selector: 'app-roles',
@@ -67,7 +68,7 @@ export class RolesComponent implements OnInit {
 
   printAuth: boolean;
 
-  constructor(private route: ActivatedRoute, private roleService: RoleService, private messageService: MessageService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef, private dialogService: DialogService) {
+  constructor(private route: ActivatedRoute, private roleService: RoleService, private messageService: MessageService, private breadcrumbService: AppBreadcrumbService, private cd: ChangeDetectorRef, private dialogService: DialogService) {
     this.extractPermissions();
    }
 
@@ -91,6 +92,8 @@ export class RolesComponent implements OnInit {
       ];
 
     });
+
+    this.breadcrumbService.setItems([{'label': 'Roles', 'routerLink': ['roles']}]);
   }
 
   openNew() {

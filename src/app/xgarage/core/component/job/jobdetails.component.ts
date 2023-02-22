@@ -1,13 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
-import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { RequestService } from '../../service/request.service';
 import { JobService } from '../../service/job.service';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
@@ -16,6 +15,9 @@ import { BidService } from '../../service/bidservice.service';
 import { BidDto } from '../../dto/biddto';
 import { Request } from '../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { Status } from 'src/app/xgarage/common/model/status';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
     selector: 'job-details',
@@ -67,24 +69,99 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     isSupplierChecked: boolean = false;
     displayCompareBids: boolean = false;
     groupedBypart: any[] = [];
-    supplierNames: any[]  = [];
-
+    supplierNames: any[] = [];
+    approveMultipleBidDialog: boolean = false;
+    rejectMultipleBidDialog: boolean = false;
+    @ViewChild('toggleBid', { read: ElementRef }) input: ElementRef;
+    visible: boolean = true;
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
-        }
+    }
 
     ngOnInit() {
-        if(localStorage.getItem('job')) {
+        if (localStorage.getItem('job')) {
             let data = JSON.parse(localStorage.getItem('job'));
             this.master = data;
+            //console.log(this.master)
             this.master.claimNo = data.claimNo;
             this.masters.push(this.master);
             this.getRequestsByJob();
             this.getBidsByJob();
             this.detailRouter = 'jobs';
+            this.selectedEntries = [];
+            this.callInsideOnInit();
+            this.initActionMenu();
+            // this.activeTab = 1;
         }
 
+        this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
+
+    }
+
+    initActionMenu() {
+        this.menuItems = [
+            {
+                label: 'Draft', icon: 'pi pi-pencil', visible: (this.master.status.id != 1), command: (event: any) => {
+                    const newStatus: Status = {
+                        id: 1,
+                        nameEn: 'Draft',
+                        nameAr: 'مقتوح'
+                    }
+                    this.confirmStatus = newStatus;
+                    this.confirmActionDialog = true;
+                }
+            },
+            {
+                label: 'Confirm', icon: 'pi pi-check', visible: (this.master.status.id != 2), command: (event: any) => {
+
+                    const confirmStatus: Status = {
+                        id: 2,
+                        nameEn: 'Confirm',
+                        nameAr: 'مؤكد'
+                    }
+                    this.confirmStatus = confirmStatus;
+                    this.confirmActionDialog = true;
+                }
+            },
+            {
+                label: 'Cancel', icon: 'pi pi-times', visible: (this.master.status.id != 2), command: (event: any) => {
+                    const cancelStatus: Status = {
+                        id: 3,
+                        nameEn: 'Canceled',
+                        nameAr: 'ملغي'
+                    }
+                    this.confirmStatus = cancelStatus;
+                    this.confirmActionDialog = true;
+                }
+            },
+            {
+                label: 'Print', icon: 'pi pi-print', command: (event: any) => {
+                    // this.confirmType = 'cloneConfirm';
+                    // this.confirmActionDialog = true;
+                    // visible: (this.master.status.id==2)
+                    this.print();
+                }
+            },
+            {
+                label: 'Clone', icon: 'pi pi-clone', command: (event: any) => {
+                    this.confirmType = 'cloneConfirm';
+                    this.confirmActionDialog = true;
+                }
+            },
+            {
+                label: 'Delete', icon: 'pi pi-trash', visible: (this.master.status.id != 2), command: (event: any) => {
+                    const deleteStatus: Status = {
+                        id: 6,
+                        nameEn: 'Deleted',
+                        nameAr: 'محذوف'
+                    }
+                    this.confirmStatus = deleteStatus;
+                    this.confirmActionDialog = true;
+                }
+            }
+
+        ];
     }
 
     getRequestsByJob() {
@@ -111,7 +188,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         });
     }
 
-    designCompareBids(bids: any[]){
+    designCompareBids(bids: any[]) {
 
     }
 
@@ -217,6 +294,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.supplierName = null;
         this.bidDtos = this.originalBidList;
         this.bidDetailsDialog = false;
+        this.selectedEntries = [];
     }
 
     getPartTypesAsString(partTypes: PartType[]) {
@@ -248,34 +326,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 }
             });
         }
-
-        //console.log(names)
-
-        // names.forEach(name => {
-        //     console.log(name, this.status.includes(name))
-        //     if(this.status.includes(name)) {
-
-        //     } else {
-        //         this.status.push(name)
-        //     }
-        // })
-
-        // console.log(this.status)
-
-        // if (names.length > 0) {
-        //     names.forEach((name, index) => {
-        //         //console.log(this.status.includes(name, 0), name.state)
-        //         if (this.status.includes(name)) {
-        //             console.log('includes')
-        //             this.status[index].count = this.status[index].count + 1;
-        //         } else {
-        //             console.log('not includes')
-        //             console.log(name)
-        //             this.status.push(name);
-        //             console.log(this.status)
-        //         }
-        //     });
-        // }
     }
 
     filterByStatus(state: any) {
@@ -290,9 +340,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     onToggleBid(supplierBid) {
-        if(supplierBid.add) {
-            if(supplierBid.add == true) {
-                supplierBid.add = false;
+        //console.log(supplierBid)
+        if (supplierBid.added) {
+            if (supplierBid.added == true) {
+                supplierBid.added = false;
                 this.suppliersBidToCompare = this.suppliersBidToCompare.filter(bid => {
                     return bid.bidId !== supplierBid.bidId
                 });
@@ -300,11 +351,9 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 this.suppliersBidToCompare.push(supplierBid);
             }
         } else {
-            supplierBid.add = true;
+            supplierBid.added = true;
             this.suppliersBidToCompare.push(supplierBid);
-
         }
-        //console.log(this.suppliersBidToCompare);
     }
 
     onCompareBids() {
@@ -315,11 +364,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
 
         //compare selected suppliers with all suppliers
-        if(this.suppliersBidToCompare.length >= 2) {
+        if (this.suppliersBidToCompare.length >= 2) {
             this.suppliersBidToCompare.forEach(supp => {
                 bids.forEach(bid => {
-                     //5 //4 //5 //6
-                    if(bid.supplierId == supp.supplierId) {
+                    //5 //4 //5 //6
+                    if (bid.supplierId == supp.supplierId) {
                         bidsToCompare.push(bid)
                     }
                 })
@@ -328,12 +377,12 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
             //get part names
             bidsToCompare.forEach(bid => {
-                if(partNames.length > 0) {
+                if (partNames.length > 0) {
                     let name = partNames.find(part => part == bid.partName);
-                    if(name) {
-                        console.log(name)
+                    if (name) {
+                        //console.log(name)
                     } else {
-                        console.log(name +" not found")
+                        //console.log(name + " not found")
                         partNames.push(bid.partName)
                     }
                 } else {
@@ -342,12 +391,12 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             })
 
             bidsToCompare.forEach(bid => {
-                if(this.supplierNames.length > 0) {
+                if (this.supplierNames.length > 0) {
                     let name = this.supplierNames.find(supp => supp == bid.supplierName);
-                    if(name) {
-                        console.log(name)
+                    if (name) {
+                        //console.log(name)
                     } else {
-                        console.log(name +" not found")
+                        //console.log(name + " not found")
                         this.supplierNames.push(bid.supplierName)
                     }
                 } else {
@@ -355,30 +404,66 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 }
             })
 
-            console.log(this.supplierNames)
+            //console.log(this.supplierNames)
             //group bids by part name
             partNames.forEach(name => {
                 bidsToCompare.forEach(bid => {
-                    if(bid.partName == name) {
-                        if(this.groupedBypart.length > 0) {
+                    if (bid.partName == name) {
+                        if (this.groupedBypart.length > 0) {
                             let existingPart = this.groupedBypart.find(part => part.partName == bid.partName);
-                            if(existingPart) {
+                            if (existingPart) {
                                 existingPart.bids.push(bid)
                             } else {
-                                this.groupedBypart.push({partName: name, bids: [bid]})
+                                this.groupedBypart.push({ partName: name, bids: [bid] })
                             }
                         } else {
-                            this.groupedBypart.push({partName: name, bids: [bid]})
+                            this.groupedBypart.push({ partName: name, bids: [bid] })
                         }
                     }
                 })
             });
 
-            console.log(this.groupedBypart)
+            //console.log(this.groupedBypart)
             this.displayCompareBids = true
 
         } else {
             this.messageService.add({ severity: 'error', summary: 'please select 2 or more bids to comapre' })
+        }
+    }
+
+    onHideCompareBids() {
+        //console.log('hide')
+        this.suppliersBidToCompare.forEach(bid => {
+            delete bid.added;
+        });
+
+        this.suppliersBidToCompare = [];
+        this.groupedBypart = [];
+        this.visible = false;
+        setTimeout(() => this.visible = true, 0);
+    }
+
+    downloadPdf() {
+        const doc = new jsPDF();
+        autoTable(doc, { html: '#bids-table' });
+        doc.save('bids.pdf')
+    }
+
+    confirm(event) {
+        if (this.confirmType === 'confirm') {
+            let statusCode = this.confirmStatus.id;
+            this.changeStatusService.changeStatus(this.master.id, this.confirmStatus).subscribe({
+                next: (data) => {
+                    this.updateCurrentObject(data);
+                    if (statusCode == 6) {
+                        setTimeout(() => { this.goMaster(); }, 1500);
+                    }
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            });
+            this.confirmActionDialog = false;
+        } else if (this.confirmType === 'cloneConfirm') {
+            this.cloneObject();
         }
     }
 

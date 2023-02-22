@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
@@ -17,7 +17,7 @@ import { RequestService } from '../../../service/request.service';
     `],
     providers: [MessageService, ConfirmationService]
 })
-export class NewBidComponent implements OnInit {
+export class NewBidComponent implements OnInit, OnChanges {
 
     constructor(private confirmationService: ConfirmationService, private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
     checked: boolean = false;
@@ -37,6 +37,7 @@ export class NewBidComponent implements OnInit {
     bidTotalDiscount: number = 0;
 
     ngOnInit(): void {
+        console.log('init')
         if (this.type == 'new bid') {
             this.requests.forEach((req, index) => {
                 req.images = [],
@@ -49,7 +50,17 @@ export class NewBidComponent implements OnInit {
                     this.requests[index].saved = true
                 }
             });
-        } else {
+        }
+
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        // changes.prop contains the old and the new value...
+        this.bidTotalPrice = 0;
+        this.bidTotalOriginalPrice = 0;
+        this.bidTotalDiscount = 0;
+        console.log(changes)
+        if (this.type == 'edit bid') {
             this.requests.forEach(req => {
                 req.qty2 = req.qty
                 this.bidTotalPrice = this.bidTotalPrice + req.price;
@@ -57,7 +68,6 @@ export class NewBidComponent implements OnInit {
                 this.bidTotalDiscount = this.bidTotalDiscount + req.discount;
             })
         }
-
     }
 
     onSelect(e) {

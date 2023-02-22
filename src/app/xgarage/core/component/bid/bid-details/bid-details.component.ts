@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { BidDto } from '../../../dto/biddto';
 import { BidService } from '../../../service/bidservice.service';
@@ -19,10 +20,12 @@ export class BidDetailsComponent implements OnInit {
     loading: boolean = false;
     status: any[] = ["All"];
     selectedState = 'All';
-    constructor(private bidService: BidService, private jobService: JobService, private msgService: MessageService) { }
+    constructor(private breadcrumbService: AppBreadcrumbService, private bidService: BidService, private jobService: JobService, private msgService: MessageService) { }
 
     ngOnInit(): void {
-        this.getBids()
+        this.getBids();
+
+        this.breadcrumbService.setItems([{'label': 'My Bids', 'routerLink': ['bids']}]);
     }
 
     getBids() {

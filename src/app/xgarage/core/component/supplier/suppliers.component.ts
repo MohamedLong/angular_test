@@ -43,6 +43,8 @@ export class SuppliersComponent extends GenericComponent implements OnInit {
         this.getPartTypes();
         this.getServiceTypes();
         this.getBrands();
+
+        this.breadcrumbService.setItems([{'label': 'Suppliers', 'routerLink': ['suppliers']}]);
     }
 
     getSuppliers() {

@@ -43,6 +43,8 @@ export class BrandComponent extends GenericComponent implements OnInit {
     ngOnInit(): void {
         this.getAll();
         super.callInsideOnInit();
+
+        this.breadcrumbService.setItems([{'label': 'Brands', 'routerLink': ['brands']}]);
     }
 
     getAll() {
@@ -77,7 +79,7 @@ export class BrandComponent extends GenericComponent implements OnInit {
                         error: (e) => alert(e)
                     }
                 );
-            } else {       
+            } else {
                 this.brandService.add(this.master).subscribe(
                     {
                         next: (data) => {
