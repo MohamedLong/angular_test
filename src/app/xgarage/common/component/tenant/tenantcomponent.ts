@@ -51,6 +51,12 @@ export class TenantComponent extends GenericComponent implements OnInit {
         super.callInsideOnInit();
     }
 
+    viewProfile(id: number){
+        localStorage.removeItem('supplierId');
+        this.tenantService.selectedTenantId = id;
+        this.router.navigate(['/supplier-profile']);
+    }
+
     new() {
         this.selectedTenantType = {};
         this.openNew();

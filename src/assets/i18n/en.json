@@ -66,6 +66,8 @@
         "deleteConfirm": "Confirm",
         "addPayment": "Add Payment",
         "operations": "Operations",
+        "update": "Update",
+        "view": "View",
         "addnew": "Add New",
         "tableFilter": {
             "clear": "Clear",
@@ -74,6 +76,8 @@
     },
     "common": {
         "id": "ID",
+        "profile": "Profile",
+        "x": "X-Garage",
         "description": "Description",
         "customer": "Customer Name",
         "customerRequired": "Customer name is required.",
@@ -249,6 +253,7 @@
             "crSearch": "Search by tenant cr",
             "location": "Location",
             "tenantType": "Tenant Type",
+            "profile": "Profile",
             "enabled": "Enabled"
         },
         "tenantDialog": {
@@ -314,6 +319,26 @@
             "service": "Service types",
             "brand": "Brand"
         }
+    },
+    "supplierProfile": {
+        "title": "Supplier Profile",
+        "information": "Profile Information",
+        "nameRequired": "Supplier name is required.",
+        "phoneRequired": "Supplier phone is required.",
+        "crRequired": "Supplier CR is required.",
+        "locationRequired": "Location is required.",
+        "partRequired": "Please select at least one part type",
+        "serviceRequired": "Please select at least one service type",
+        "brandRequired": "Please select at least one car brand",
+        "specialityRequired": "Please select at least one car brand",
+        "name": "Supplier name",
+        "bids": "Number Of Bids",
+        "cr": "Cr number",
+        "phone": "Phone number",
+        "parts": "Part types",
+        "services": "Service types",
+        "brands": "Brands",
+        "speciality": "About Your Speciality"
     },
     "itemType": {
         "title": "Manage Item Types",

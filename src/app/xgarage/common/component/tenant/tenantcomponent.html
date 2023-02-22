@@ -46,6 +46,8 @@
                         </th>
                         <th pColumn="tenantType">{{ 'tenant.tableColumn.tenantType' | translate }}
                         </th>
+                        <th pColumn="profile">{{ 'tenant.tableColumn.profile' | translate }}
+                        </th>
                         <th pColumn="enabled">{{'tenant.tableColumn.enabled' | translate}}
                         </th>
                         <th pColumn="actions">{{'operations.title' | translate}}
@@ -68,6 +70,11 @@
                         </td>
                         <td>
                             {{master.tenantType.name}}
+                        </td>
+                        <td>
+                            <button *ngIf="master.tenantType.id == 3" pButton pRipple label="{{ 'operations.view' | translate }}"  
+                            class="p-button-success mr-2 mb-2" (click)="viewProfile(master.id)">
+                        </button>
                         </td>
                         <td style="min-width: 12rem;">
                             <p-inputSwitch type="button" [(ngModel)]="master.enabled" (onChange)="changeStatus(master.id, $event)">

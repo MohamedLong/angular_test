@@ -9,13 +9,13 @@ import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponen
 import { Car } from '../../model/car';
 import { CarService } from '../../service/car.service';
 import { CarModelYear } from 'src/app/xgarage/common/model/carmodelyear';
-import { Brand } from '../../model/brand';
 import { CarModelType } from 'src/app/xgarage/common/model/carmodeltype';
 import { GearType } from '../../model/geartype';
 import { CarModelService } from 'src/app/xgarage/common/service/carmodel.service';
 import { BrandService } from '../../service/brandservice';
 import { CarModelYearService } from 'src/app/xgarage/common/service/carmodelyear.service';
 import { CarModelTypeService } from 'src/app/xgarage/common/service/carmodeltypes.service';
+import { Brand } from 'src/app/xgarage/common/model/brand';
 
 @Component({
     selector: 'app-car',

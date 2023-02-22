@@ -9,6 +9,9 @@ import { Tenant } from "../model/tenant";
     providedIn: 'root'
 })
 export class TenantService extends GenericService<Tenant>{
+
+    selectedTenantId: number;
+
     constructor(http: HttpClient) {
         super(http, config.apiUrl + '/v1/tenant');
     }

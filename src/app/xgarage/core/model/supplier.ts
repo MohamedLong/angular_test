@@ -12,4 +12,9 @@ export interface Supplier extends MasterEntity{
     brand?: Brand[];
     user?: number;
     tenant?: number;
+
+    registratedDate?: Date;
+    submittedBids?: number;
+    speciality?: string;
+    enabled?: boolean;
 }

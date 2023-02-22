@@ -1,0 +1,43 @@
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -1rem;
+  }
+  
+  .grid > * {
+    margin: 1rem;
+  }
+  
+  .field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+  
+  label {
+    margin-bottom: 0.5rem;
+  }
+  
+  input[type="text"],
+  textarea {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+  }
+  
+  p-multiSelect,
+  p-radioButton {
+    width: 100%;
+  }
+  
+  button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+  }
+  
+  button:hover {
+    background-color: #0069d9
+  }  

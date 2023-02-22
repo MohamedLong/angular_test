@@ -1,10 +1,12 @@
 import { MessageResponse } from '../../common/dto/messageresponse';
-import { Brand } from '../model/brand';
+// import { Brand } from '../model/brand';
+
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { config } from "src/app/config";
 import { GenericService } from '../../common/generic/genericservice';
 import { BrandDto } from '../dto/branddto';
+import { Brand } from '../../common/model/brand';
 
 
 @Injectable({

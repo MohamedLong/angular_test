@@ -159,9 +159,9 @@
                             </a>
                         </li>
                         <li class="layout-topbar-action-item">
-                            <a class="flex flex-row align-items-center" pRipple>
+                            <a class="flex flex-row align-items-center" pRipple (click)="viewProfile(54)">
                                 <i class="pi pi-file-o" [ngClass]="{'mr-2': !app.isRTL, 'ml-2': app.isRTL}"></i>
-                                <span>Terms of Usage</span>
+                                <span>{{ 'common.profile' | translate }}</span>
                             </a>
                         </li>
                         <li class="layout-topbar-action-item">

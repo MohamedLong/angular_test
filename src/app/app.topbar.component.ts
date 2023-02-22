@@ -1,3 +1,4 @@
+import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { trigger, style, transition, animate, AnimationEvent } from '@angular/animations';
 import { MegaMenuItem } from 'primeng/api';
@@ -22,10 +23,12 @@ import { Router } from '@angular/router';
 })
 export class AppTopBarComponent {
 
-    constructor(public appMain: AppMainComponent, public app: AppComponent, private authService: AuthService, private router: Router) {
+    constructor(public appMain: AppMainComponent, public app: AppComponent, 
+        private authService: AuthService, private router: Router, private tenantService: TenantService) {
     }
 
     activeItem: number;
+    userId: number;
 
     model: MegaMenuItem[] = [
         {
@@ -124,6 +127,15 @@ export class AppTopBarComponent {
                 this.searchInputViewChild.nativeElement.focus();
             break;
         }
+    }
+
+    viewProfile(id: number){
+        localStorage.removeItem('supplierId');
+        this.userId = JSON.parse(this.authService.getStoredUser()).id;
+        console.log(this.userId);
+        this.tenantService.selectedTenantId = this.userId;
+        console.log(this.tenantService.selectedTenantId);
+        this.router.navigate(['/supplier-profile']);
     }
 
     doLogout(){

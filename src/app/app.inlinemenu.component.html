@@ -16,10 +16,10 @@
                 <span>Settings</span>
             </a>
         </li>
-        <li class="layout-inline-menu-action-item" pTooltip="Terms of Usage" [tooltipDisabled]="isTooltipDisabled">
+        <li class="layout-inline-menu-action-item" pTooltip="Terms of Usage" [tooltipDisabled]="isTooltipDisabled" (click)="viewProfile()">
             <a class="flex flex-row align-items-center" [attr.tabindex]="tabIndex">
                 <i class="pi pi-file-o pi-fw"></i>
-                <span>Terms of Usage</span>
+                <span>{{ 'common.profile' | translate }}</span>
             </a>
         </li>
         <li class="layout-inline-menu-action-item" pTooltip="Support" [tooltipDisabled]="isTooltipDisabled">

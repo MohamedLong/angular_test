@@ -1,0 +1,83 @@
+<div class="grid">
+	<div class="col-12 md:col-6">
+        <p-toast></p-toast>
+		<div class="card">
+            <div class="d-flex flex-column align-items-center text-center">
+                <h5>{{ 'supplierProfile.title' | translate }}</h5>
+                <img class="rounded-circle" width="100px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+            </div>
+            <form [formGroup]="supplierForm">
+                <div class="field">
+                    <label for="name">{{ 'supplierProfile.name' | translate }}</label>
+                    <input pInputText type="text" formControlName="name" />
+                    <div *ngIf="supplierForm.controls['name'].invalid && supplierForm.controls['name'].touched"
+                        class="p-error"> {{ 'supplierProfile.nameRequired' | translate }}
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="phoneNumber">{{ 'supplierProfile.phone' | translate }}</label>
+                    <input pInputText type="text" formControlName="phoneNumber" />
+                    <div *ngIf="supplierForm.controls['phoneNumber'].invalid && supplierForm.controls['phoneNumber'].touched"
+                    class="p-error"> {{ 'supplierProfile.phoneRequired' | translate }}
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="cr">{{ 'supplierProfile.cr' | translate }}</label>
+                    <input pInputText type="text" formControlName="cr" />
+                    <div *ngIf="supplierForm.controls['cr'].invalid && supplierForm.controls['cr'].touched"
+                    class="p-error"> {{ 'supplierProfile.crRequired' | translate }}
+                    </div>
+                </div>
+                <div class="field"> 
+                    <label for="submittedBids">{{ 'supplierProfile.bids' | translate }}</label>
+                    <input pInputText type="text" formControlName="submittedBids"/>
+                </div>
+                <div class="field">
+                <label for="brand">{{ 'supplierProfile.brands' | translate }}</label>
+                <p-multiSelect [options]="brands" [(ngModel)]="selectedBrands" optionLabel="brandName"
+                    formControlName="brand"></p-multiSelect>
+                    <ng-container *ngIf="supplierForm.get('brand').invalid && (supplierForm.get('brand').dirty || supplierForm.get('brand').touched)">
+                        <div class="error-message">
+                          <div *ngIf="supplierForm.get('brand').hasError('required')">{{ 'supplierProfile.brandRequired' | translate }}</div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="field">
+                <label for="serviceTypes">{{ 'supplierProfile.services' | translate }}</label>
+                <p-multiSelect [options]="serviceTypes" [(ngModel)]="selectedServiceTypes" optionLabel="name"
+                    formControlName="serviceTypes" display="chip"></p-multiSelect>
+                    <ng-container *ngIf="supplierForm.get('serviceTypes').invalid && (supplierForm.get('serviceTypes').dirty || supplierForm.get('serviceTypes').touched)">
+                        <div class="error-message">
+                          <div *ngIf="supplierForm.get('serviceTypes').hasError('required')">{{ 'supplierProfile.serviceRequired' | translate }}</div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="field">
+                <label for="partType">{{ 'supplierProfile.parts' | translate }}</label>
+                <p-multiSelect [options]="partTypes" [(ngModel)]="selectedPartTypes" optionLabel="partType"
+                    formControlName="partTypes" display="chip"></p-multiSelect>
+                    <ng-container *ngIf="supplierForm.get('partTypes').invalid && (supplierForm.get('partTypes').dirty || supplierForm.get('partTypes').touched)">
+                        <div class="error-message">
+                          <div *ngIf="supplierForm.get('partTypes').hasError('required')">{{ 'supplierProfile.partRequired' | translate }}</div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="field">
+                    <label for="speciality">{{ 'supplierProfile.speciality' | translate }}</label>
+                    <textarea rows="5" cols="30" class="w-full" pInputTextarea 
+                    formControlName="speciality" ></textarea>
+                    <ng-container *ngIf="supplierForm.get('speciality').invalid && (supplierForm.get('speciality').dirty || supplierForm.get('speciality').touched)">
+                        <div class="error-message">
+                          <div *ngIf="supplierForm.get('speciality').hasError('required')">{{ 'supplierProfile.specialityRequired' | translate }}</div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="d-flex flex-column align-items-center text-center mt-5"  >
+                    <button pButton pRipple label="{{ 'operations.update' | translate }}"  
+                     class="p-button-success mr-2 mb-2"(click)="submitForm()">
+                    </button>
+                </div> 
+            </form>
+		</div>
+	</div>
+</div>

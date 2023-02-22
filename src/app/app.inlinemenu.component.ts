@@ -4,6 +4,7 @@ import { AppMainComponent } from './app.main.component';
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/services/auth.service';
 import { Router } from '@angular/router';
+import { TenantService } from './xgarage/common/service/tenant.service';
 
 @Component({
     selector: 'app-inline-menu',
@@ -43,8 +44,10 @@ export class AppInlineMenuComponent {
     @Input() styleClass: string;
 
     active: boolean;
+    userId: number;
 
-    constructor(public appMain: AppMainComponent, public app: AppComponent, private authService: AuthService, private router: Router) { }
+    constructor(public appMain: AppMainComponent, public app: AppComponent, 
+        private authService: AuthService, private router: Router, private tenantService: TenantService) { }
 
     onClick(event) {
         this.appMain.onInlineMenuClick(event, this.key);
@@ -61,6 +64,15 @@ export class AppInlineMenuComponent {
 
     isHorizontalActive() {
        return this.appMain.isHorizontal() && !this.appMain.isMobile();
+    }
+
+    viewProfile(){
+        localStorage.removeItem('supplierId');
+        this.userId = JSON.parse(this.authService.getStoredUser()).id;
+        console.log(this.userId);
+        this.tenantService.selectedTenantId = this.userId;
+        console.log(this.tenantService.selectedTenantId);
+        this.router.navigate(['/supplier-profile']);
     }
 
     doLogout(){

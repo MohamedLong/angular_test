@@ -215,6 +215,7 @@ import { NewBidComponent } from './xgarage/core/component/bid/new-bid/new-bid.co
 import { BidDetailsComponent } from './xgarage/core/component/bid/bid-details/bid-details.component';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { SupplierDashbaordComponent } from './xgarage/dashboard/component/supplier-dashbaord/supplier-dashbaord.component';
+import { SupplierprofileComponent } from './xgarage/common/component/supplierprofile/supplierprofile.component';
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
 }
@@ -413,7 +414,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         SubCategoryComponent,
         NewBidComponent,
         BidDetailsComponent,
-        SupplierDashbaordComponent
+        SupplierDashbaordComponent,
+        SupplierprofileComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,
