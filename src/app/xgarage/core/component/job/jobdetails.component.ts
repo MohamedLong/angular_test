@@ -445,7 +445,12 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     downloadPdf() {
         const doc = new jsPDF();
-        autoTable(doc, { html: '#bids-table' });
+        autoTable(doc, { html: '#bids-table',
+        // didParseCell: function (data) {
+        //     var rows = data.table.body;
+        //     data.row. = 'flex';
+        // }
+     });
         doc.save('bids.pdf')
     }
 
