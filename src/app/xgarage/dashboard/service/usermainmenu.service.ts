@@ -23,7 +23,7 @@ export class UserMainMenuService {
             .then(data => data);
     }
 
-    saveUserMainMenu(usermainmenu: UserMainMenu) {
+    saveUserMainMenu(usermainmenu: any) {
         return this.http.post<UserMainMenu>(`${config.dashboardUrl}/userMainMenu/save`,usermainmenu)
     }
 
