@@ -116,7 +116,6 @@ export class UserMainMenuComponent implements OnInit {
   }
 
   editUserMainMenu(usermainmenu: UserMainMenu) {
-    console.log(usermainmenu.role.roleName+" "+usermainmenu.mainMenu.pageName);
     this.usermainmenu = { ...usermainmenu };
     this.selectedRole = usermainmenu.role;
     this.selectedModule = usermainmenu.mainMenu;

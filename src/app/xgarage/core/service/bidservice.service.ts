@@ -20,6 +20,10 @@ export class BidService extends GenericService<any> {
         return this.http.get<BidDto[]>(this.apiServerUrl + '/job/' + jobId);
     }
 
+    getByOrder(orderId: number){
+        return this.http.get<BidDto[]>(this.apiServerUrl + '/order/' + orderId);
+    }
+
     cancelBid(bidId: number){
         return this.http.post(this.apiServerUrl + '/cancelBid/' + bidId, {"comments": ""});
     }
