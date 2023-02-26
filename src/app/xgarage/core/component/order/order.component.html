@@ -4,7 +4,7 @@
 
        <!-- //Sale invoice Components  -->
         <div class="card">
-            <p-toolbar styleClass="mb-4">
+            <!-- <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
                         (click)="openNew()" [disabled]="newAuth===false"></button>
@@ -16,7 +16,7 @@
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help mb-2"
                         (click)="dt.exportCSV()"></button>
                 </ng-template>
-            </p-toolbar>
+            </p-toolbar> -->
 
             <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true" (onFilter)="onFilter($event, dt)"
                 [globalFilterFields]="['id','orderId','orderDate','insertDate', 'payedStatus', 'deliveryStatus', 'customerPartyName', 'statusNameEn', 'cuCurrencyCode']"
@@ -25,15 +25,8 @@
                 [showCurrentPageReport]="true">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between table-header">
-                        <h5 class="m-0">{{ 'invoice.title' | translate }}</h5>
-                        <span class="p-float-label">
-                            <p-calendar [showIcon]="true" view="month" [(ngModel)]="selectedMonth" dateFormat="mm/yy" [yearNavigator]="true"
-                                yearRange="2000:2030"
-                                [readonlyInput]="true"
-                                inputId="monthpicker" styleClass="w-full"  (ngModelChange)="filterByMonth($event, dt)">
-                            </p-calendar>
-                            <label>Choose a month</label>
-                        </span>
+                        <h5 class="m-0">{{ 'orders.table.tableTitle' | translate }}</h5>
+
                         <span class="p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
@@ -43,23 +36,16 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pColumn="id">{{ 'common.id' | translate }}
-                        </th>
-                        <th pSortableColumn="orderId">{{ 'invoice.tableColumn.orderId' | translate }}<p-sortIcon field="orderId"></p-sortIcon>
-                        </th>
-                        <th pColumn="insertDate">{{ 'common.insertDate' | translate }}
-                        </th>
-                        <th pSortableColumn="orderDate">{{ 'invoice.tableColumn.orderDate' | translate }}<p-sortIcon field="orderDate"></p-sortIcon>
-                        </th>
-                        <th pColumn="customerName">{{ 'common.customer' | translate }}
-                        </th>
-                        <th pColumn="amount">{{ 'common.grandTotal' | translate }}</th>
-                        <th pSortableColumn="paymentStatus">{{ 'common.payedStatus' | translate }}<p-sortIcon field="payedStatus"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="deliveryStatus">{{ 'common.deliveryStatus' | translate }}<p-sortIcon field="deliveryStatus"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="status">{{ 'common.status' | translate }}<p-sortIcon field="status"></p-sortIcon>
-                        </th>
+                        <th>ID</th>
+                        <th>{{'orders.table.date' | translate}}</th>
+                        <th *ngIf="role == 2">{{'orders.table.customerName' | translate}}</th>
+                        <th *ngIf="role == 1">{{'orders.table.supplierName' | translate}}</th>
+                        <th>{{'orders.table.number' | translate}}</th>
+                        <th>{{'orders.table.amount' | translate}}</th>
+                        <th>{{'orders.table.total' | translate}}</th>
+                        <th>{{'orders.table.sttaus' | translate}}</th>
+                        <th>{{'orders.table.delivery' | translate}}</th>
+                        <th>{{'orders.table.payment' | translate}}</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-invoice>
@@ -102,7 +88,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        In total there are {{masterDtos ? masterDtos.length : 0 }} invoices.
+                        In total there are {{masterDtos ? masterDtos.length : 0 }} orders.
                     </div>
                 </ng-template>
             </p-table>
@@ -183,4 +169,4 @@
             </ng-template>
         </p-dialog>
     </div>
-    
+

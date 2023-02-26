@@ -36,6 +36,8 @@ import { CarModelComponent } from './xgarage/common/component/car-model/car-mode
 import { BidDetailsComponent } from './xgarage/core/component/bid/bid-details/bid-details.component';
 import { SupplierDashbaordComponent } from './xgarage/dashboard/component/supplier-dashbaord/supplier-dashbaord.component';
 import { SupplierprofileComponent } from './xgarage/common/component/supplierprofile/supplierprofile.component';
+import { OrderComponent } from './xgarage/core/component/order/order.component';
+import { OrderDetailsComponent } from './xgarage/core/component/order/orderdetails.component';
 
 const routes: Routes = [];
 
@@ -75,6 +77,7 @@ const routes: Routes = [];
                     {path: 'permission', component: PermissionsComponent},
                     {path: 'user-main-menu', component: UserMainMenuComponent},
                     {path: 'user-sub-menu', component: UserSubMenuComponent},
+                    {path: 'orders', component: OrderDetailsComponent},
                     // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
                     // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
                     // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
