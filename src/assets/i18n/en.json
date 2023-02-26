@@ -745,7 +745,6 @@
         }
     },
     "orders": {
-
         "table": {
             "tableTitle": "Orders",
             "date": "Date",
@@ -755,7 +754,7 @@
             "amount": "Order Amount",
             "total": "Total Amount",
             "sttaus": "Order Status",
-            "delivery": "Delivery Status",
+            "delivery": "Delivery Fees",
             "payment": "Payment Status"
         }
     }

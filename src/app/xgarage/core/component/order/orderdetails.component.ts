@@ -38,57 +38,34 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
         public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe) {
         super(route, router, null, datePipe, null, breadcrumbService);
     }
-
-    billData: any[];
-
-    billCols: any[];
-
-    productData: any[];
-
-    productCols: any[];
+    dataCols: any[];
     pdfName: string = 'invoice';
     src: string = '';
+    order: any = '';
+    totalVat: number = 0;
     @ViewChild('invoice') invoice!: ElementRef;
 
     ngOnInit() {
-        this.billData = [
-            {
-                slno: 1,
-                productName: 'rear door rh assy',
-                qty: 1,
-                unit: 'no3',
-                rate: '304.000',
-                value: '304.000',
-                disc: '5',
-                tax: '15.200',
-                amount: '319.200',
-                lineVal: '319.23',
-            },
-            {
-                slno: 2,
-                productName: 'rh foot step assy',
-                qty: 5,
-                unit: 'no3',
-                rate: '304.000',
-                value: '304.000',
-                disc: '5',
-                tax: '3.610',
-                amount: '90.2',
-                lineVal: '75.610',
-            }
-        ];
+        this.master = JSON.parse(localStorage.getItem('orderData'));
+        this.order = JSON.parse(localStorage.getItem('order'));
 
-        this.billCols = [
-            { field: 'slno', header: 'SL.NO' },
-            { field: 'productName', header: 'PRODUCT NAME' },
+        console.log(this.master, this.order)
+
+        this.master.forEach(element => {
+            this.totalVat = this.totalVat + element.vat;
+        });
+
+        this.dataCols = [
+            { field: 'bidId', header: 'SL.NO' },
+            { field: 'partName', header: 'PRODUCT NAME' },
             { field: 'unit', header: 'PRODUCT UNIT' },
             { field: 'qty', header: 'PROD QTY' },
-            { field: 'rate', header: 'UNIT RATE' },
-            { field: 'value', header: 'UNIT VALUE' },
-            { field: 'disc', header: 'DISC' },
-            { field: 'tax', header: 'TAX' },
-            { field: 'amount', header: 'TAX AMT' },
-            { field: 'lineVal', header: 'LINE VALUE' }
+            { field: 'price', header: 'UNIT RATE' },
+            { field: 'price', header: 'UNIT VALUE' },
+            { field: 'discount', header: 'DISC' },
+            // { field: 'vat', header: 'TAX' },
+            { field: 'vat', header: 'TAX AMT' },
+            { field: 'price', header: 'LINE VALUE' }
         ];
 
     }

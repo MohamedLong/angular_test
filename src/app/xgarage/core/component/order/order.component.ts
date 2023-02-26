@@ -6,6 +6,7 @@ import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
+import { BidService } from '../../service/bidservice.service';
 import { OrderService } from '../../service/order.service';
 
 @Component({
@@ -34,7 +35,7 @@ import { OrderService } from '../../service/order.service';
 })
 export class OrderComponent extends GenericComponent implements OnInit {
 
-    constructor(private authService: AuthService, private orderService: OrderService, public route: ActivatedRoute, private router: Router, private dataService: DataService<any>, public confirmationService: ConfirmationService,
+    constructor(private bidService: BidService, private authService: AuthService, private orderService: OrderService, public route: ActivatedRoute, private router: Router, private dataService: DataService<any>, public confirmationService: ConfirmationService,
         public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
             super(route, datePipe, breadcrumbService);
     }
@@ -46,38 +47,12 @@ export class OrderComponent extends GenericComponent implements OnInit {
     }
 
     getAll() {
-        this.orderService.getForUser().subscribe(res => {
-            console.log(res)
+        this.orderService.getForTenant().subscribe(res => {
+            //console.log(res)
             this.masterDtos = res;
         }, err => {
             this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.error.statusMsg, life: 3000 })
         })
-        // this.invoiceService.getAllSaleInvoices().subscribe({
-        //     next: (invoices) => {
-        //         // currencies.forEach(currency => this.currencyService.savecurrency(currency).subscribe());
-        //         this.masterDtos = invoices;
-        //         this.loading = false;
-        //         this.masterDtos = this.updateCalculatedAmounts(this.masterDtos);
-        //         this.cols = [
-        //             { field: 'id', header: 'ID' },
-        //             { field: 'orderId', header: 'performa No' },
-        //             { field: 'orderDate', header: 'performa Date' },
-        //             { field: 'insertDate', header: 'Insert Date' },
-        //             { field: 'customerPartyName', header: 'Customer Name' },
-        //             { field: 'netamount', header: 'Total' },
-        //             { field: 'statusNameEn', header: 'Status' },
-        //             { field: 'statusNameAr', header: 'Status' },
-        //             { field: 'paymentStatus', header: 'Payment Status' },
-        //             { field: 'deliveryStatus', header: 'Delivery Status' },
-        //             { field: 'cuCurrencyCode', header: 'Cu' },
-        //             { field: 'processId', header: 'Process Id' }
-
-        //         ];
-        //     },
-        //     error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-        //     // @ts-ignore
-        //     // this.accents.forEach(accent => accent.date = new Date(customer.date));
-        // });
     }
 
 
@@ -92,20 +67,20 @@ export class OrderComponent extends GenericComponent implements OnInit {
     }
 
 
-    goDetails(invoice: any) {
-        // this.invoiceService.getById(invoice.id).subscribe(
-        //     {
-        //         next: (data) => {
-        //             this.master = data;
-        //             this.master.customerName = invoice.customerPartyName;
-        //             this.master.cuCode = invoice.cuCurrencyCode;
-        //             this.master.saleCostName = invoice.saleCostName;
-        //             this.calculateNetAmount();
-        //             this.dataService.changeObject(this.master);
-        //             this.router.navigate(['pages/invoiceDetails']);
-        //         },
-        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-        // });
+    goOrderDetails(order: any) {
+        this.bidService.getByOrder(order.id).subscribe(
+            {
+                next: (data) => {
+                    this.master = data;
+                    localStorage.removeItem('orderData');
+                    localStorage.removeItem('order');
+
+                    localStorage.setItem('orderData', JSON.stringify(this.master));
+                    localStorage.setItem('order', JSON.stringify(order));
+                    this.router.navigate(['order-details']);
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            });
     }
 
 }

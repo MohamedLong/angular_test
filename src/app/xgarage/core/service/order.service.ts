@@ -9,6 +9,6 @@ import { config } from 'src/app/config';
 export class OrderService extends GenericService<any> {
 
     constructor(protected http: HttpClient) {
-        super(http, config.shopApiUrl + '/orders');
+        super(http, config.storeApiUrl + '/orders');
     }
 }
