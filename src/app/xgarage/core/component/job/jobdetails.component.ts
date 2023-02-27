@@ -18,6 +18,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { Status } from 'src/app/xgarage/common/model/status';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { RejectMultipleBids } from '../../dto/rejectmultiplebids';
 
 @Component({
     selector: 'job-details',
@@ -471,6 +472,44 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.confirmActionDialog = false;
         } else if (this.confirmType === 'cloneConfirm') {
             this.cloneObject();
+        }
+    }
+
+    approveMultipleBids() {
+        // if(this.selectedEntries.length > 0) {
+        //     this.bidService.approveMultipleBids(this.master.id, this.confirmStatus).subscribe({
+        //         next: (data) => {
+        //             this.updateCurrentObject(data);
+        //             if (statusCode == 6) {
+        //                 setTimeout(() => { this.goMaster(); }, 1500);
+        //             }
+        //         },
+        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+        //     });
+        // }
+
+    }
+
+    rejectMultipleBids() {
+        if(this.selectedEntries.length > 0) {
+            let rejectMultipleBids: RejectMultipleBids = {}
+            let rejectedBids: number[] = [];
+            for (let i = 0; i < this.selectedEntries.length; i++) {
+                rejectedBids[i] = this.selectedEntries[i].bidId;
+            }
+            rejectMultipleBids.bids = rejectedBids;
+            this.bidService.rejectMutltipleBids(rejectMultipleBids).subscribe({
+                next: (data) => {
+                    if (data = true) {
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });                   
+                     }else{
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Rejection Failed', life: 3000 });
+                    }
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.error, life: 3000 })
+            });
+            this.rejectMultipleBidDialog = false;
+
         }
     }
 
