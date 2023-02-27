@@ -685,7 +685,6 @@
             "nameRequired": "Car Model name is required."
         }
     },
-
     "bid": {
         "title": "Bids",
         "compareBids": "Compare Bids",
@@ -746,6 +745,20 @@
             "titleBySupplier": "Bids for Supplier: ",
             "changeSupp": "Change Supplier",
             "download": "Download"
+        }
+    },
+    "orders": {
+        "table": {
+            "tableTitle": "Orders",
+            "date": "Date",
+            "customerName": "Customer Name",
+            "supplierName": "Supplier Name",
+            "number": "Phone Number",
+            "amount": "Order Amount",
+            "total": "Total Amount",
+            "sttaus": "Order Status",
+            "delivery": "Delivery Fees",
+            "payment": "Payment Status"
         }
     }
 

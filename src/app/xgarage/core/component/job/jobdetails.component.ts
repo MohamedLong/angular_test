@@ -18,6 +18,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { Status } from 'src/app/xgarage/common/model/status';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { RejectMultipleBids } from '../../dto/rejectmultiplebids';
 
 @Component({
     selector: 'job-details',
@@ -74,6 +75,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     rejectMultipleBidDialog: boolean = false;
     @ViewChild('toggleBid', { read: ElementRef }) input: ElementRef;
     visible: boolean = true;
+    selection: string = 'single';
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
@@ -252,13 +254,14 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     viewBidsByRequest(request: Request) {
         this.originalBidList = this.bidDtos;
         this.partName = request.part.name;
+        this.selection = 'single';
         this.bidDetailsDialog = true;
         this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
-
     }
 
     viewBidsBySupplier(bid: any) {
         this.originalBidList = this.bidDtos;
+        this.selection = 'multiple';
         this.bidDetailsDialog = true;
         this.bidDtos = this.bidDtos.filter(b => b.supplierId == bid.supplierId);
         this.supplierName = bid.supplierName;
@@ -445,7 +448,12 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     downloadPdf() {
         const doc = new jsPDF();
-        autoTable(doc, { html: '#bids-table' });
+        autoTable(doc, { html: '#bids-table',
+        // didParseCell: function (data) {
+        //     var rows = data.table.body;
+        //     data.row. = 'flex';
+        // }
+     });
         doc.save('bids.pdf')
     }
 
@@ -464,6 +472,44 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.confirmActionDialog = false;
         } else if (this.confirmType === 'cloneConfirm') {
             this.cloneObject();
+        }
+    }
+
+    approveMultipleBids() {
+        // if(this.selectedEntries.length > 0) {
+        //     this.bidService.approveMultipleBids(this.master.id, this.confirmStatus).subscribe({
+        //         next: (data) => {
+        //             this.updateCurrentObject(data);
+        //             if (statusCode == 6) {
+        //                 setTimeout(() => { this.goMaster(); }, 1500);
+        //             }
+        //         },
+        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+        //     });
+        // }
+
+    }
+
+    rejectMultipleBids() {
+        if(this.selectedEntries.length > 0) {
+            let rejectMultipleBids: RejectMultipleBids = {}
+            let rejectedBids: number[] = [];
+            for (let i = 0; i < this.selectedEntries.length; i++) {
+                rejectedBids[i] = this.selectedEntries[i].bidId;
+            }
+            rejectMultipleBids.bids = rejectedBids;
+            this.bidService.rejectMutltipleBids(rejectMultipleBids).subscribe({
+                next: (data) => {
+                    if (data = true) {
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });                   
+                     }else{
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Rejection Failed', life: 3000 });
+                    }
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.error, life: 3000 })
+            });
+            this.rejectMultipleBidDialog = false;
+
         }
     }
 

@@ -6,4 +6,6 @@ export interface MainMenu{
     routerLink: string;
     icon: string;
     subMenus: Array<SubMenu>;
+    mainMenu: any;
+    rootMenu: {id: number, icon: string, moduleName: string, pageOrder: number}
 }

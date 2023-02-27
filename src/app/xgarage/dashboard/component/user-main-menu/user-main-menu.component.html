@@ -57,10 +57,10 @@
               {{usermainmenu.id}}
             </td>
             <td style="min-width: 12rem;">
-              {{usermainmenu.role.roleName}}
+              {{usermainmenu.role == 1? 'ROLE_USER' : 'ROLE_SUPPLIER'}}
             </td>
             <td style="min-width: 12rem;">
-              {{usermainmenu.mainMenu.pageName}}
+              {{usermainmenu.mainMenu? usermainmenu.mainMenu.pageName : '-'}}
             </td>
             <td>
               <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
@@ -91,14 +91,14 @@
           </p-dropdown>
 
           <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !usermainmenu.role">Role is required.</small>
+          <small class="p-error block" *ngIf="submitted && !selectedRole">Role is required.</small>
         </div>
         <div class="field">
           <label for="roleId">Module</label>
-          <p-dropdown [options]="modules" [(ngModel)]="selectedModule" placeholder="Select a Module" optionLabel="mainMenu.pageName" [showClear]="true"></p-dropdown>
+          <p-dropdown appendTo="body" [options]="modules" [(ngModel)]="selectedModule" placeholder="Select a Module" optionLabel="mainMenu.pageName" [showClear]="true"></p-dropdown>
 
           <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !usermainmenu.mainMenu.pageName">Module is
+          <small class="p-error block" *ngIf="submitted && !selectedModule">Module is
             required.</small>
         </div>
       </ng-template>

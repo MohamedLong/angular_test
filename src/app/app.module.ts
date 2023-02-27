@@ -216,6 +216,8 @@ import { BidDetailsComponent } from './xgarage/core/component/bid/bid-details/bi
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { SupplierDashbaordComponent } from './xgarage/dashboard/component/supplier-dashbaord/supplier-dashbaord.component';
 import { SupplierprofileComponent } from './xgarage/common/component/supplierprofile/supplierprofile.component';
+import { OrderComponent } from './xgarage/core/component/order/order.component';
+import { OrderDetailsComponent } from './xgarage/core/component/order/orderdetails.component';
 import { AgmCoreModule } from '@agm/core';
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -333,6 +335,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ],
     // exports: [AppLoginComponent],
     declarations: [
+        OrderComponent,
+        OrderDetailsComponent,
         AddRowDirective,
         AppComponent,
         AppMainComponent,

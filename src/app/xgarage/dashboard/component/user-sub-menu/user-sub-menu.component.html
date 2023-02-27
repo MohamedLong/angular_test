@@ -49,10 +49,10 @@
 							{{usersubmenu.id}}
 						</td>
                         <td style="min-width: 12rem;">
-							{{usersubmenu.role.roleName}}
+							{{usersubmenu.role?.roleName}}
 						</td>
                         <td style="min-width: 12rem;">
-							{{usersubmenu.subMenu.pageName}}
+							{{usersubmenu.subMenu?.pageName}}
 						</td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editUserSubMenu(usersubmenu)" [disabled]="disableEditButton"></button>
@@ -78,21 +78,21 @@
                     <label for="roleId">Role</label>
                     <p-dropdown [options]="roles" [(ngModel)]="selectedRole" (onChange)="fetchUserMainMenus()" optionLabel="roleName" [showClear]="true" placeholder="Select a Role" ></p-dropdown>
                     <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !usersubmenu.role">Role is required.</small>
+                    <small class="p-error block" *ngIf="submitted && !selectedRole">Role is required.</small>
                 </div>
                 <div class="field">
                     <label for="roleId">Module</label>
                     <p-dropdown [options]="userMainMenus" [(ngModel)]="selectedUserMainMenu" (onChange)="fetchSubMenus()" optionLabel="mainMenu.pageName" [showClear]="true" placeholder="Select a Module">
                     </p-dropdown>
                     <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !usersubmenu.userMainMenu">Module is required.</small>
+                    <small class="p-error block" *ngIf="submitted && !selectedUserMainMenu">Module is required.</small>
                 </div>
                 <div class="field">
                     <label for="roleId">page</label>
                     <p-dropdown [options]="pages" [(ngModel)]="selectedPage" optionLabel="pageName" [showClear]="true" placeholder="Select a Page">
                     </p-dropdown>
                     <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !usersubmenu.subMenu">Page is required.</small>
+                    <small class="p-error block" *ngIf="submitted && !selectedPage">Page is required.</small>
                 </div>
                 <div class="">
                     <div class="field-checkbox">
@@ -119,6 +119,7 @@
                         <p-checkbox [(ngModel)]="usersubmenu.cancelConfirmAuth" binary="true" inputId="binary"></p-checkbox>
                         <label for="binary">Cancel Confirm</label>
                     </div>
+                    <small class="p-error block" *ngIf="submitted && auth">select at least one permission.</small>
                 </div>
             </ng-template>
 

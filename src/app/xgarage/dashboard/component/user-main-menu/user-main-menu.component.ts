@@ -88,7 +88,7 @@ export class UserMainMenuComponent implements OnInit {
       this.printAuth = this.route.routeConfig.data.printAuth;
       this.deleteAuth = this.route.routeConfig.data.deleteAuth;
       this.usermainmenus = usermainmenus;
-
+      //console.log(this.usermainmenus)
       this.loading = false;
 
       this.cols = [
@@ -116,7 +116,6 @@ export class UserMainMenuComponent implements OnInit {
   }
 
   editUserMainMenu(usermainmenu: UserMainMenu) {
-    console.log(usermainmenu.role.roleName+" "+usermainmenu.mainMenu.pageName);
     this.usermainmenu = { ...usermainmenu };
     this.selectedRole = usermainmenu.role;
     this.selectedModule = usermainmenu.mainMenu;
@@ -161,13 +160,12 @@ export class UserMainMenuComponent implements OnInit {
 
   saveUserMainMenu() {
     this.submitted = true;
-    if(this.selectedModule){
-      this.usermainmenu.mainMenu = this.selectedModule;
-    }
-    if (this.submitted) {
-      if(this.selectedRole){
+   // console.log(this.selectedModule, this.selectedRole)
+    if (this.selectedRole && this.selectedModule) {
+        this.submitted = false;
         this.usermainmenu.role = this.selectedRole;
-      }
+        this.usermainmenu.mainMenu = this.selectedModule;
+
       if (this.usermainmenu.id) {
         // @ts-ignore
         this.usermainmenuService.updateUserMainMenu(this.usermainmenu).subscribe(
@@ -186,7 +184,14 @@ export class UserMainMenuComponent implements OnInit {
       } else {
         // this.usermainmenu.id = this.createId();
         // @ts-ignore
-        this.usermainmenuService.saveUserMainMenu(this.usermainmenu).subscribe(
+        console.log(this.usermainmenu)
+        let reqBody = {
+            role: {id: this.usermainmenu.role.id},
+            userRootMenu: {id: this.usermainmenu.mainMenu.mainMenu.rootMenu.id},
+            mainMenu: {id: this.usermainmenu.mainMenu.id}
+        }
+
+        this.usermainmenuService.saveUserMainMenu(reqBody).subscribe(
           {
             next: (data) => {
               this.usermainmenu = data;
@@ -197,7 +202,7 @@ export class UserMainMenuComponent implements OnInit {
             },
             error: (e) => {
               console.error(e.message);
-              alert(e.message);
+              this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e.message, life: 3000 });
             }
           }
         );

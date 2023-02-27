@@ -1,4 +1,6 @@
-export interface SubMenu {
+import { GenericEntity } from "../../common/generic/genericentity";
+
+export interface SubMenu extends GenericEntity {
     pageId: number;
     pageName: string;
     uiComponent: string;

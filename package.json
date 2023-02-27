@@ -32,6 +32,7 @@
     "@ngx-translate/http-loader": "^7.0.0",
     "chart.js": "^3.3.2",
     "cors": "^2.8.5",
+    "dom-to-image": "^2.6.0",
     "http-loader": "^0.0.1",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.28",
