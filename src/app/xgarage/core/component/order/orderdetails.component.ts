@@ -47,6 +47,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     src: string = '';
     order: any = '';
     totalVat: number = 0;
+    sending: boolean = false;
     @ViewChild('invoice') invoice!: ElementRef;
 
     ngOnInit() {
@@ -91,7 +92,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     }
 
     downloadPDF() {
-
+        this.sending = true;
         var node = this.invoice.nativeElement;
 
         var img;
@@ -145,9 +146,10 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                     this.orderService.notify(formData).subscribe((res: MessageResponse) => {
                         //console.log(res)
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
-
+                        this.sending = false;
                     }, (err: MessageResponse) => {
-                        this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.message})
+                        this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.message});
+                        this.sending = false;
                     })
                 };
 

@@ -74,6 +74,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     rejectMultipleBidDialog: boolean = false;
     @ViewChild('toggleBid', { read: ElementRef }) input: ElementRef;
     visible: boolean = true;
+    selection: string = 'single';
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
@@ -252,13 +253,14 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     viewBidsByRequest(request: Request) {
         this.originalBidList = this.bidDtos;
         this.partName = request.part.name;
+        this.selection = 'single';
         this.bidDetailsDialog = true;
         this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
-
     }
 
     viewBidsBySupplier(bid: any) {
         this.originalBidList = this.bidDtos;
+        this.selection = 'multiple';
         this.bidDetailsDialog = true;
         this.bidDtos = this.bidDtos.filter(b => b.supplierId == bid.supplierId);
         this.supplierName = bid.supplierName;

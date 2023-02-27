@@ -62,7 +62,6 @@
 
         <div class="col-12">
             <!-- <div class="card"> -->
-
             <div class="mt-5">
                 <p-tabView (onChange)="handleChange($event)" [(activeIndex)]="activeTab">
                     <p-tabPanel header="{{ 'request.title' | translate }}">
@@ -146,7 +145,6 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-
                     <p-tabPanel *ngIf="role == 1" header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
                             <button (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
@@ -279,7 +277,8 @@
                     <ng-template pTemplate="body" let-bid>
                         <tr>
                             <td>
-                                <p-tableCheckbox [value]="bid" [disabled]="bid.statusId != 1"></p-tableCheckbox>
+                                <p-tableRadioButton *ngIf="selection == 'single'" [value]="bid" [disabled]="bid.statusId != 1"></p-tableRadioButton>
+                                <p-tableCheckbox *ngIf="selection == 'multiple'" [value]="bid" [disabled]="bid.statusId != 1"></p-tableCheckbox>
                             </td>
                             <td *ngIf="partName==null">
                                 {{bid.partName}}

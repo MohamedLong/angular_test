@@ -16,7 +16,7 @@
                 <p-confirmPopup></p-confirmPopup>
                 <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
                 <button pButton pRipple [disabled]="(editable)" class="mb-3 p-button-warning" type="button"
-                    icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
+                    icon="{{sending? 'pi pi-spin pi-spinner' : 'pi pi-fw pi-cog'}}" label="{{ 'operations.actions' | translate }}"
                     (click)="menu.toggle($event)"></button>
             </div>
             <div class="field col">
