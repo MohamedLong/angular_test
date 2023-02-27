@@ -11,6 +11,7 @@ import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
 import { OrderService } from '../../service/order.service';
 import { Status } from 'src/app/xgarage/common/model/status';
+import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 @Component({
     selector: 'order-details',
     templateUrl: './orderdetails.component.html',
@@ -51,7 +52,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     ngOnInit() {
         this.master = JSON.parse(localStorage.getItem('orderData'));
         this.order = JSON.parse(localStorage.getItem('order'));
-        console.log(this.master,this.order)
+        //console.log(this.master,this.order)
         this.master.forEach(element => {
             this.totalVat = this.totalVat + element.vat;
         });
@@ -141,10 +142,12 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                         formData.append(key, req[key]);
                     }
 
-                    this.orderService.notify(formData).subscribe(res => {
-                        console.log(res)
-                    }, err => {
-                        console.log(err)
+                    this.orderService.notify(formData).subscribe((res: MessageResponse) => {
+                        //console.log(res)
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
+
+                    }, (err: MessageResponse) => {
+                        this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.message})
                     })
                 };
 
