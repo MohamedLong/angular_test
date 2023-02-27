@@ -1,3 +1,4 @@
+import { TenantService } from './../../common/service/tenant.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 //import { Observable } from 'rxjs';
@@ -8,12 +9,14 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { GenericService } from '../../common/generic/genericservice';
 import { Supplier } from '../model/supplier';
 import { SupplierDto } from '../dto/supplierdto';
+import { MessageResponse } from '../../common/dto/messageresponse';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SupplierService extends GenericService<Supplier> {
-    constructor(protected http: HttpClient, private authService: AuthService) {
+    constructor(protected http: HttpClient, private authService: AuthService, 
+        private tenantService: TenantService) {
         super(http, config.coreApiUrl + '/supplier');
      }
 
@@ -28,6 +31,15 @@ export class SupplierService extends GenericService<Supplier> {
             })
         )
     }
+
+    createSupplier(supplier: Supplier) {
+        return this.http.post<MessageResponse>(config.coreApiUrl + '/supplier/signup', supplier)
+    }
+
+    checkSupplierByIdNumber(supplierId: number) {
+        return this.http.get<boolean>(`${config.coreApiUrl}/supplier/check/${supplierId}`);
+      }
+
 
     getSuppliers() {
         return this.http.get<SupplierDto[]>(config.coreApiUrl + '/supplier/all');

@@ -14,6 +14,7 @@ import { PartType } from '../../model/parttype';
 import { ServiceTypesService } from '../../service/servicetype.service';
 import { PartTypesService } from '../../service/parttype.service';
 
+
 @Component({
   selector: 'app-supplierprofile',
   templateUrl: './supplierprofile.component.html',
@@ -49,6 +50,10 @@ export class SupplierprofileComponent implements OnInit {
     private partTypesService: PartTypesService, private tenantService: TenantService,
     public breadcrumbService: AppBreadcrumbService) {}
 
+    lat = 23.658890;
+    lng = 58.108760;
+    zoom = 10;
+
     supplierForm: FormGroup;
     supplier: Supplier = {};
     brands: Brand[] = [];
@@ -58,7 +63,6 @@ export class SupplierprofileComponent implements OnInit {
     partTypes: PartType[] = [];
     selectedPartTypes: PartType[] = [];
     id: number = 52;
-
 
   ngOnInit(): void {
     const supplierId = parseInt(localStorage.getItem('supplierId'), 10);
@@ -72,6 +76,7 @@ export class SupplierprofileComponent implements OnInit {
       name: ['', Validators.required],
       cr: ['', Validators.required],
       phoneNumber: ['', [Validators.required, Validators.pattern(/^[279]\d{7}$/)]],
+      email: ['', [Validators.required, Validators.email]],
       serviceTypes: ['', Validators.required],
       partTypes: ['', Validators.required],
       brand: [[], Validators.required],
@@ -81,6 +86,12 @@ export class SupplierprofileComponent implements OnInit {
     });
     this.getSupplierByIdNumber(this.id);
   }
+
+  markerDragEnd($event: google.maps.MouseEvent) {
+    this.lat = $event.latLng.lat();
+    this.lng = $event.latLng.lng();
+  }
+
   getAllBrands() {
     this.brandService.getAll().subscribe(res =>{
       this.brands = res;
@@ -113,6 +124,7 @@ export class SupplierprofileComponent implements OnInit {
         name: res.name,
         cr: res.cr,
         phoneNumber: res.phoneNumber,
+        email: res.email,
         serviceTypes: res.serviceTypes,
         partTypes: res.partTypes,
         brand: res.brand,

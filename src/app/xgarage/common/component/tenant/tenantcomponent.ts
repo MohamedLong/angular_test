@@ -1,3 +1,8 @@
+import { Supplier } from './../../../core/model/supplier';
+import { SupplierService } from './../../../core/service/supplier.service';
+import { UserDto } from './../../dto/userdto';
+import { UserService } from './../../../dashboard/service/user.service';
+import { Tenant } from './../../model/tenant';
 import { DatePipe } from '@angular/common';
 import { GenericComponent } from './../../../common/generic/genericcomponent';
 import { AppBreadcrumbService } from '../../../../app.breadcrumb.service';
@@ -7,8 +12,8 @@ import { Component, OnInit } from '@angular/core';
 import { TenantService } from '../../service/tenant.service';
 import { TenantTypeService } from '../../service/tenanttype.service';
 import { TenantType } from '../../model/tenanttype';
-import { Tenant } from '../../model/tenant';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { User } from '../../model/user';
 
 @Component({
     selector: 'app-stock-order',
@@ -36,7 +41,9 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 export class TenantComponent extends GenericComponent implements OnInit {
 
     constructor(public route: ActivatedRoute, private authService: AuthService ,private router: Router, private tenantService: TenantService,
-        public messageService: MessageService, private tenantTypeService: TenantTypeService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
+        public messageService: MessageService, private tenantTypeService: TenantTypeService, 
+        public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService, private userService: UserService,
+        private supplierService: SupplierService) {
         super(route, datePipe, breadcrumbService);
     }
 
@@ -44,12 +51,16 @@ export class TenantComponent extends GenericComponent implements OnInit {
 
     tenantTypes: TenantType[];
     selectedTenantType: TenantType;
+    selectedTenant: Tenant = {};
+    users: UserDto[];
+    selectedUser: User;
+    selectedSupplier: Supplier = {};
+    selectedId: number;
 
     ngOnInit(): void {
         this.getAll();
         this.getTenantTypes();
         super.callInsideOnInit();
-
         this.breadcrumbService.setItems([{'label': 'Tenants', 'routerLink': ['tenant']}]);
     }
 
@@ -142,15 +153,42 @@ export class TenantComponent extends GenericComponent implements OnInit {
         })
     }
 
+    checkSupplierByIdNumber(supplierId: number){
+        this.supplierService.checkSupplierByIdNumber(supplierId).subscribe((res)=>{
+            if(res == true){
+                this.messageService.add({ severity: 'info', summary: 'Success', detail: 'Supplier Profile Already Exist!' })
+            } else{
+                this.createNewSupplierProfile();
+            }})
+    }
+
+    createNewSupplierProfile(){  
+        this.selectedSupplier.name = this.selectedTenant.name;
+        this.selectedSupplier.cr = this.selectedTenant.cr;
+        this.selectedSupplier.tenant = this.selectedTenant.id;
+        this.selectedSupplier.enabled = true;
+        this.supplierService.createSupplier(this.selectedSupplier).subscribe((res)  => {
+
+            if (res.messageCode == 200){
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'New Supplier Profile Created!' });
+            } else {
+                this.messageService.add({ severity: 'warning', summary: 'Warning', detail: 'Unexpected response from server' });
+            }
+        });        
+    }
+
     changeStatus(id: number, event) {
+        this.selectedTenant = this.masters.find(val => val.id == id);
         if (id != null) {
             this.tenantService.changeEnableStatus(id, event.checked).subscribe(
                 {
                     next: (data) => {
                         this.messageService.add({ severity: 'info', summary: 'Successful', detail: 'Tenant Status Changed', life: 3000});
                     }
-                }
-            )
+                })
+            if(this.selectedTenant.enabled == true && this.selectedTenant.tenantType.id == 3){  
+                this.checkSupplierByIdNumber(id);
+            }
         }
     }
 

@@ -216,6 +216,7 @@ import { BidDetailsComponent } from './xgarage/core/component/bid/bid-details/bi
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { SupplierDashbaordComponent } from './xgarage/dashboard/component/supplier-dashbaord/supplier-dashbaord.component';
 import { SupplierprofileComponent } from './xgarage/common/component/supplierprofile/supplierprofile.component';
+import { AgmCoreModule } from '@agm/core';
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
 }
@@ -228,6 +229,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 
 @NgModule({
     imports: [
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyADzH9TYbj2-CbcBpqMC73t8_hetC9CvAs'
+          }),
         ProgressSpinnerModule,
         BlockUIModule,
         CommonModule,
