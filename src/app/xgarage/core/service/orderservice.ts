@@ -12,7 +12,4 @@ export class OrderService extends GenericService<any> {
         super(http, config.storeApiUrl + '/orders');
     }
 
-    
-
-
 }

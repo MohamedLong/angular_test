@@ -499,13 +499,15 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.bidService.rejectMutltipleBids(rejectMultipleBids).subscribe({
                 next: (data) => {
                     if (data = true) {
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });                    }else{
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });                   
+                     }else{
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Rejection Failed', life: 3000 });
                     }
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.error, life: 3000 })
             });
             this.rejectMultipleBidDialog = false;
+
         }
     }
 
