@@ -6,17 +6,17 @@
         <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <a pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
+                    <a pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"  [disabled]="newAuth===true" 
                         class="p-button-success mr-2 mb-2" [routerLink]="['/jobs/new-job']" [hidden]="false"></a>
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000"
+                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000"
                         label="{{ 'operations.import' | translate }}"
                         chooseLabel="{{ 'operations.import' | translate }}"
-                        class="mr-2 mb-2 inline-block"></p-fileUpload>
+                        class="mr-2 mb-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload"
-                        class="p-button-help mb-2" (click)="dt.exportCSV()"></button>
+                        class="p-button-help mb-2" (click)="dt.exportCSV()" [disabled]="printAuth===true" ></button>
                 </ng-template>
             </p-toolbar>
 
@@ -83,9 +83,9 @@
 
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                                [disabled]="!editAuth" (click)="editParentAction(job)"></button>
+                            [disabled]="editAuth===true"  (click)="editParentAction(job)"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
-                                [disabled]="!deleteAuth" (click)="deleteJob(job)"></button>
+                            [disabled]="deleteAuth===true"  (click)="deleteJob(job)"></button>
                         </td>
                     </tr>
                 </ng-template>
@@ -123,8 +123,8 @@
             [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="masterDto">{{ 'operations.deleteMessage' | translate }} <b>Job
-                        #{{masterDto.jobNo}}</b>?</span>
+                <span *ngIf="masterDto">{{ 'operations.deleteMessage' | translate }} 
+                    <b>{{ 'job.jobNumber' | translate }} {{masterDto.jobNo}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"

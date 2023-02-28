@@ -140,24 +140,23 @@
                         </div>
                     </div>
                 </li> -->
+                <li class="layout-topbar-item" style="font-weight: bold;">
+                    {{firstName}} {{lastName}} |
+                    {{tenantType}} |
+                    {{tenantName}}
+                </li>
                 <li class="layout-topbar-item">
-                    <a class="layout-topbar-action flex flex-row justify-content-center align-items-center px-2 rounded-circle" (click)="appMain.onTopbarItemClick($event, 'profile')" pRipple>
-                        <img src="assets/demo/images/avatar/amyelsner.png" alt="avatar" style="width: 32px; height: 32px;">
-                    </a>
 
+                        <a class="layout-topbar-action flex flex-row justify-content-center align-items-center px-2 rounded-circle" (click)="appMain.onTopbarItemClick($event, 'profile')" pRipple>
+                            <img src="assets/demo/images/avatar/amyelsner.png" alt="avatar" style="width: 32px; height: 32px;">
+                        </a>
                     <ul class="layout-topbar-action-panel shadow-6" [@topbarActionPanelAnimation]="'visible'" *ngIf="appMain.activeTopbarItem === 'profile'">
-                        <li class="layout-topbar-action-item">
+                        <!-- <li class="layout-topbar-action-item">
                             <a class="flex flex-row align-items-center" pRipple>
                                 <i class="pi pi-cog" [ngClass]="{'mr-2': !app.isRTL, 'ml-2': app.isRTL}"></i>
                                 <span>Settings</span>
                             </a>
-                        </li>
-                        <li class="layout-topbar-action-item">
-                            <a class="flex flex-row align-items-center" pRipple [routerLink]="['/change-password']">
-                                <i class="pi pi-key" [ngClass]="{'mr-2': !app.isRTL, 'ml-2': app.isRTL}"></i>
-                                <span>Change Password</span>
-                            </a>
-                        </li>
+                        </li> -->
                         <li class="layout-topbar-action-item">
                             <a class="flex flex-row align-items-center" pRipple (click)="viewProfile(54)">
                                 <i class="pi pi-file-o" [ngClass]="{'mr-2': !app.isRTL, 'ml-2': app.isRTL}"></i>
@@ -165,15 +164,21 @@
                             </a>
                         </li>
                         <li class="layout-topbar-action-item">
+                            <a class="flex flex-row align-items-center" pRipple [routerLink]="['/change-password']">
+                                <i class="pi pi-key" [ngClass]="{'mr-2': !app.isRTL, 'ml-2': app.isRTL}"></i>
+                                <span>{{ 'common.changePassword' | translate }}</span>
+                            </a>
+                        </li>
+                        <!-- <li class="layout-topbar-action-item">
                             <a class="flex flex-row align-items-center" pRipple>
                                 <i class="pi pi-compass" [ngClass]="{'mr-2': !app.isRTL, 'ml-2': app.isRTL}"></i>
                                 <span>Support</span>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="layout-topbar-action-item" (click)="doLogout()">
                             <a class="flex flex-row align-items-center" pRipple>
                                 <i class="pi pi-power-off" [ngClass]="{'mr-2': !app.isRTL, 'ml-2': app.isRTL}"></i>
-                                <span>Logout</span>
+                                <span>{{ 'common.logout' | translate }}</span>
                             </a>
                         </li>
                     </ul>

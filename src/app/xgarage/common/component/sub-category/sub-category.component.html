@@ -7,14 +7,14 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        (click)="openNew()" [disabled]="newAuth===false"></button>
+                        (click)="openNew()" [disabled]="newAuth===true"></button>
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
-                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload>
+                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
+                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help mb-2"
-                        (click)="dt.exportCSV()"></button>
+                        (click)="dt.exportCSV()" [disabled]="printAuth===true"></button>
                 </ng-template>
             </p-toolbar>
 
@@ -53,16 +53,16 @@
                             {{master.name}}
                         </td>
                         <td>
-                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" [disabled]="!editAuth"
+                            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"  [disabled]="editAuth===true"
                               (click)="editMaster(master)"></button>
-                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2" [disabled]="!deleteAuth"
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2"  [disabled]="deleteAuth===true"
                               (click)="deleteAction(master)"></button>
                           </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        In total there are {{masters ? masters.length : 0 }} Sub Categories.
+                        {{'subcategory.table_footer' | translate: {length: masters ? masters.length : 0} }}
                     </div>
                 </ng-template>
             </p-table>
@@ -84,7 +84,7 @@
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times" class="p-button-text"
                     (click)="hideDialog()"></button>
-                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check" class="p-button-text" (click)="save()" [disabled]="!(editAuth && editable)"></button>
+                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check" class="p-button-text" (click)="save()" [disabled]="!(editable)"></button>
             </ng-template>
         </p-dialog>
 
