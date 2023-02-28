@@ -167,7 +167,9 @@
         "department": "Department",
         "saleCost": "Sales Account",
         "actions": "Actions",
-        "formRequired": "Please fill out required fields"
+        "formRequired": "Please fill out required fields",
+        "changePassword": "Change Password",
+        "logout": "Logout"
     },
     "currency": {
         "title": "Manage Currencies",
@@ -245,6 +247,7 @@
     },
     "tenant": {
         "title": "Manage Tenants",
+        "table_footer": "In total there are {{length}} Tenants",
         "tableColumn": {
             "id": "ID",
             "name": "Tenant Name",
@@ -266,6 +269,7 @@
     },
     "tenantType": {
         "title": "Manage Tenant Types",
+        "table_footer": "In total there are {{length}} Tenant Types",
         "tableColumn": {
             "id": "ID",
             "name": "Type Name",
@@ -525,6 +529,7 @@
     "job": {
         "title": "Requests",
         "table_footer": "In total there are {{length}} Requests",
+        "jobNumber": "Job#",
         "operations": {
             "approveBid": "Approve Bids",
             "approveMultipleBids": "Please confirm that the selected Bids will be approved, LPO will be generated and sent via emails to the selected suppliers? ",
@@ -639,6 +644,7 @@
     },
     "category": {
         "title": "Manage Categories",
+        "table_footer": "In total there are {{length}} Catogories",
         "tableColumn": {
             "id": "ID",
             "name": "Category Name",
@@ -651,6 +657,7 @@
     },
     "brand": {
         "title": "Manage Brands",
+        "table_footer": "In total there are {{length}} Brands",
         "tableColumn": {
             "id": "ID",
             "brandName": "Brand Name",
@@ -663,6 +670,7 @@
     },
     "subcategory": {
         "title": "Manage Sub-Categories",
+        "table_footer": "In total there are {{length}} Sub-Categories",
         "tableColumn": {
             "id": "ID",
             "name": "Sub-Category Name",
@@ -675,6 +683,7 @@
     },
     "carModel": {
         "title": "Manage Car Models",
+        "table_footer": "In total there are {{length}} Car Models",
         "tableColumn": {
             "id": "ID",
             "name": "Car Model Name",
@@ -748,6 +757,7 @@
         }
     },
     "orders": {
+        "table_footer": "In total there are {{length}} Orders",
         "table": {
             "tableTitle": "Orders",
             "date": "Date",
