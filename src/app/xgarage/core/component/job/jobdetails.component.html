@@ -98,7 +98,7 @@
                                     <th pColumn="status.nameEn">{{ 'common.status' | translate }}</th>
                                     <th [hidden]="role == 2" style="text-align:center">
                                         {{'operations.actions' | translate }}</th>
-                                    <th style="text-align:center">{{ 'bid.title' | translate }}</th>
+                                    <th [hidden]="role == 2" style="text-align:center">{{ 'bid.title' | translate }}</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-request>
@@ -125,13 +125,13 @@
                                         {{request.status.nameEn}}
                                     </td>
                                     <ng-container>
-                                        <td [hidden]="(printingMode)" style="text-align:center">
+                                        <td [hidden]="(printingMode || role == 2)" style="text-align:center">
                                             <button pButton pRipple type="button" icon="pi pi-pencil"
                                                 (click)="editAction(request)"
                                                 [disabled]="!(master.status.id == 1 && editAuth===true)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                             <button pButton pRipple type="button" icon="pi pi-times"
-                                                (click)="deleteAction(request)"
+                                                (click)="deleteAction(request || role == 2)"
                                                 [disabled]="!(master.status.id == 1 && editAuth===true)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                         </td>
