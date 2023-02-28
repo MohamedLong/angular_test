@@ -18,7 +18,7 @@
                 </ng-template>
             </p-toolbar> -->
 
-            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="masterDtos" (onPage)="loadOrders($event)" [columns]="cols" [rows]="10" [paginator]="true"
                 (onFilter)="onFilter($event, dt)"
                 [globalFilterFields]="['id','orderId','orderDate','insertDate', 'payedStatus', 'deliveryStatus', 'customerPartyName', 'statusNameEn', 'cuCurrencyCode']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"

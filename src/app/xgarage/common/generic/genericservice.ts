@@ -26,8 +26,9 @@ export abstract class GenericService<T> {
         return this.http.get<any[]>(this.apiServerUrl + '/user');
     }
 
-    public getForTenant() {
-        return this.http.get<any[]>(this.apiServerUrl + '/tenant');
+    public getForTenant(page?: number) {
+        let endpoint = page? `/tenant?pageNo=${page}&pageSize=50` : '/tenant';
+        return this.http.get<any[]>(this.apiServerUrl + endpoint);
     }
 
     public getById(entityId: number) {
