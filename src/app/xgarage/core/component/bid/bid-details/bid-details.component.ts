@@ -20,17 +20,18 @@ export class BidDetailsComponent implements OnInit {
     loading: boolean = false;
     status: any[] = ["All"];
     selectedState = 'All';
+    pageNo: number = 0;
     constructor(private breadcrumbService: AppBreadcrumbService, private bidService: BidService, private jobService: JobService, private msgService: MessageService) { }
 
     ngOnInit(): void {
-        this.getBids();
+        this.getBids(this.pageNo);
 
         this.breadcrumbService.setItems([{'label': 'My Bids', 'routerLink': ['bids']}]);
     }
 
-    getBids() {
+    getBids(page: number) {
         this.loading = true;
-        this.jobService.getBidsByJob().subscribe({
+        this.jobService.getBidsByJob(page).subscribe({
             next: (res) => {
                 this.bids = res;
                 this.fillteredBids = res;
@@ -82,6 +83,16 @@ export class BidDetailsComponent implements OnInit {
             this.fillteredBids = this.bids.filter(bid => {
                 return bid.jobStatus == state;
             });
+        }
+    }
+
+    loadBids(e) {
+        //console.log(e);
+        if (this.fillteredBids.length == 50) {
+            if ((this.fillteredBids.length - e.first) <= 10) {
+                this.pageNo++;
+                this.getBids(this.pageNo);
+            }
         }
     }
 
