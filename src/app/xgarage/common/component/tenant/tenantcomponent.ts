@@ -114,6 +114,7 @@ export class TenantComponent extends GenericComponent implements OnInit {
             this.master.updatedAt = new Date();
             if (this.master.id) {
                 // @ts-ignore
+                console.log(this.master)
                 this.tenantService.update(this.master).subscribe(
                     {
                         next: (data) => {

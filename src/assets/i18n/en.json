@@ -253,6 +253,7 @@
             "name": "Tenant Name",
             "nameSearch": "Search by tenant name",
             "cr": "Tenant CR",
+            "email": "Tenant Email",
             "crSearch": "Search by tenant cr",
             "location": "Location",
             "tenantType": "Tenant Type",
@@ -263,6 +264,7 @@
             "title": "Tenant Details",
             "nameRequired": "Tenant name is required.",
             "crRequired": "Tenant CR is required.",
+            "emailRequired": "Tenant Email is required.",
             "locationRequired": "Location is required.",
             "tenanTypeRequired": "Tenant Type is required."
         }

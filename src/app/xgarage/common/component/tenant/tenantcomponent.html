@@ -112,6 +112,11 @@
                         <input type="text" pInputText id="cr" #cr="ngModel" [(ngModel)]="master.cr" required />
                         <small class="p-error" *ngIf="submitted && !master.cr">{{ 'tenant.tenantDialog.crRequired' | translate }}</small>
                     </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="email">{{ 'tenant.tableColumn.email' | translate }}</label>
+                        <input type="text" pInputText id="email" #email="ngModel" [(ngModel)]="master.email" required />
+                        <small class="p-error" *ngIf="submitted && !master.email">{{ 'tenant.tenantDialog.emailRequired' | translate }}</small>
+                    </div>
                     <div class="field col-12 md:col-6" >
                         <label for="tenant">{{ 'tenant.tableColumn.tenantType' | translate }}</label>
                         <p-dropdown [options]="tenantTypes" [(ngModel)]="selectedTenantType"
