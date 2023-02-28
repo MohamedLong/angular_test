@@ -23,7 +23,7 @@ export class BidService extends GenericService<any> {
     }
 
     getByOrder(orderId: number){
-        return this.http.get<BidDto[]>(this.apiServerUrl + '/order/' + 342);
+        return this.http.get<BidDto[]>(this.apiServerUrl + '/order/' + orderId);
     }
 
     cancelBid(bidId: number){

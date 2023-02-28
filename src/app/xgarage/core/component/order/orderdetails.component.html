@@ -76,7 +76,7 @@
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">make & model: </th>
-                                    <td class="uppercase font-medium">{{master[0].requestTitle}}</td>
+                                    <td class="uppercase font-medium">{{master[0]? master[0].requestTitle : '-'}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">job card: </th>
@@ -111,7 +111,7 @@
                         <p class="uppercase">
                             please supply the following and debit our account for the value
                         </p>
-                        <p-table [columns]="dataCols" [value]="master" styleClass="p-invoice-datatable-responsive pb-3">
+                        <p-table *ngIf="master.length > 0" [columns]="dataCols" [value]="master" styleClass="p-invoice-datatable-responsive pb-3">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th *ngFor="let col of columns">

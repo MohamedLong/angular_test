@@ -1,6 +1,6 @@
 <div class="card">
     <p-toast></p-toast>
-    <p-table #dt styleClass="p-invoice-datatable-responsive" [rows]="10" [paginator]="true" dataKey="id"
+    <p-table #dt styleClass="p-invoice-datatable-responsive"  (onPage)="loadBids($event)" [rows]="10" [paginator]="true" dataKey="id"
         [globalFilterFields]="['jobTitle','client','partNames','jobStatus', 'totalPrice']"
         [loading]="loading" [value]="fillteredBids" responsiveLayout="scroll">
         <ng-template pTemplate="caption" class="pb-0">
