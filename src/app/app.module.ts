@@ -218,6 +218,7 @@ import { SupplierDashbaordComponent } from './xgarage/dashboard/component/suppli
 import { SupplierprofileComponent } from './xgarage/common/component/supplierprofile/supplierprofile.component';
 import { OrderComponent } from './xgarage/core/component/order/order.component';
 import { OrderDetailsComponent } from './xgarage/core/component/order/orderdetails.component';
+import { AgmCoreModule } from '@agm/core';
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
 }
@@ -230,6 +231,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 
 @NgModule({
     imports: [
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyADzH9TYbj2-CbcBpqMC73t8_hetC9CvAs'
+          }),
         ProgressSpinnerModule,
         BlockUIModule,
         CommonModule,

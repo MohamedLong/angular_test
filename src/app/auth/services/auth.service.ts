@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { of, Observable, throwError } from 'rxjs';
-import { catchError, mapTo, tap } from 'rxjs/operators';
+import { catchError, map, mapTo, tap } from 'rxjs/operators';
 import { Tokens } from '../models/tokens';
 import jwt_decode from "jwt-decode";
 import { config } from 'src/app/config';
@@ -29,6 +29,12 @@ export class AuthService {
 
   signup(user: User) {
     return this.http.post<MessageResponse>(this.apiUrl + '/web/signup', user);
+  };
+
+  newSignup(user: User): Observable<number> {
+    return this.http.post<number>(this.apiUrl + '/web/signup', user).pipe(
+      map(response => response as number)
+    );
   };
 
   login(user: { username: string, password: string }): Observable<any> {

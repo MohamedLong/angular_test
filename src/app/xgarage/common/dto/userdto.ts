@@ -10,6 +10,7 @@ export interface UserDto{
     createDate?: Date;
     roles?: string[];
     tenant?: string;
+    tenantId?: number;
     submittedRequests?: number;
     completedDeals?: number;
     userImage?: string;

@@ -1,3 +1,8 @@
+import { SupplierLocation } from './../../../xgarage/core/model/supplierlocation';
+import { PartType } from './../../../xgarage/common/model/parttype';
+import { ServiceType } from './../../../xgarage/common/model/servicetype';
+import { Supplier } from './../../../xgarage/core/model/supplier';
+import { SupplierService } from './../../../xgarage/core/service/supplier.service';
 import { User } from './../../../xgarage/common/model/user';
 
 import { Component, OnInit } from '@angular/core';
@@ -9,6 +14,7 @@ import { TenantType } from 'src/app/xgarage/common/model/tenanttype';
 import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 import { TenantTypeService } from 'src/app/xgarage/common/service/tenanttype.service';
 import { AuthService } from '../../services/auth.service';
+import { Brand } from 'src/app/xgarage/common/model/brand';
 
 @Component({
     selector: 'app-signup',
@@ -18,7 +24,9 @@ import { AuthService } from '../../services/auth.service';
 })
 export class SignupComponent implements OnInit {
 
-    constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private messageService: MessageService, private tenantService: TenantService, private tenantTypeService: TenantTypeService) { }
+    constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, 
+        private messageService: MessageService, private tenantService: TenantService, 
+        private tenantTypeService: TenantTypeService, private supplierService: SupplierService) { }
 
     signupForm: FormGroup = this.fb.group({
         firstName: ['', Validators.required],
@@ -32,12 +40,18 @@ export class SignupComponent implements OnInit {
         tenant: [null],
         newTenantName: [''],
         newCr: [''],
-        location: []
+        location: ['']
     });
 
+    serviceTypes: ServiceType[] = [{ id: 1}];
+    brands: Brand[] = [{ id: 1}];
+    partTypes: PartType[] = [{ id: 1}];
+    supplierLocations: SupplierLocation[] = [{ id: 1}];
+    userId: number;
+    supplier: Supplier= {};
     tenants: Tenant[];
     tenantTypes: TenantType[];
-    selectedType: TenantType;    
+    selectedType: TenantType = {};    
     selectedTenant: Tenant = {};
     newTenantTrigger = false;
 
@@ -80,6 +94,7 @@ export class SignupComponent implements OnInit {
                             tenant: this.selectedTenant.id,
                             userId: this.signupForm.get('email').value
                         });
+
                         this.createUserOnExistingTenant();
                     },
                     error: (e) => alert(e)
@@ -91,12 +106,10 @@ export class SignupComponent implements OnInit {
     createUserOnExistingTenant(){
         if (this.signupForm.valid) {
             let user = this.createUserObjectFromSignupForm();
-            this.authService.signup(user).subscribe(res => {
-                if(res.messageCode != 200) {
-                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail:  res.message });
-                    return;
-                }
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+            this.authService.newSignup(user).subscribe(res => {
+                this.userId = res;
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User successfully created, waiting for Approval.' });
+                // this.router.navigate[''];
             }, err => {
                 this.messageService.add({ severity: 'error', summary: 'Erorr', detail:  err.error.message });
             })
@@ -107,6 +120,8 @@ export class SignupComponent implements OnInit {
 
     private createUserObjectFromSignupForm() {
         this.selectedTenant.id = this.signupForm.controls.tenant.value;
+        this.selectedType.id = this.signupForm.controls.tenantType.value;
+        this.selectedTenant.tenantType = this.selectedType;
         let user: User = {
             createdDate : new Date(),
             email : this.signupForm.get('email').value,
