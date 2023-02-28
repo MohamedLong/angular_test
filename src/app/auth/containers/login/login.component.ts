@@ -36,10 +36,16 @@ export class LoginComponent implements OnInit {
     constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private messageService: MessageService) { }
 
     ngOnInit() {
+      console.log(this.authService.isLoggedIn())
         this.loginForm = this.formBuilder.group({
             username: [''],
             password: ['']
         });
+      // const redirectUrl = localStorage.getItem('redirectUrl');
+      // if (redirectUrl) {
+      //   localStorage.removeItem('redirectUrl');
+      //   this.router.navigateByUrl(redirectUrl);
+      // }
     }
 
     get f() { return this.loginForm.controls; }
@@ -56,7 +62,11 @@ export class LoginComponent implements OnInit {
         {
           next: (success) => {
             if(this.authService.isLoggedIn()){
+              // const link = this.router.createUrlTree(['/order-details', 338]).toString(); 
+              // this.authService.doStoreUser(this.authService.getJwtToken(), link);
               this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
+
+              
             }
           },
           error: (e) => {

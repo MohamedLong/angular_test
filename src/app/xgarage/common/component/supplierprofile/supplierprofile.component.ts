@@ -50,9 +50,9 @@ export class SupplierprofileComponent implements OnInit {
     private partTypesService: PartTypesService, private tenantService: TenantService,
     public breadcrumbService: AppBreadcrumbService) {}
 
-    lat = 23.658890;
-    lng = 58.108760;
-    zoom = 10;
+    lat = 23.588072;
+    lng = 58.382691;
+    zoom = 6.5;
 
     supplierForm: FormGroup;
     supplier: Supplier = {};

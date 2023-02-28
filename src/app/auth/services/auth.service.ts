@@ -105,6 +105,26 @@ export class AuthService {
       );
   }
 
+  
+  // doStoreUser(token: string, redirectUrl?: string) {
+  //   this.decoded = jwt_decode(token);
+  //   this.http.get<any>(this.apiUrl + '/user')
+  //     .subscribe({
+  //       next: (data) => {
+  //         this.storeUser(JSON.stringify(data));
+  //         this.getAuthorizedMenu();
+  //         if (redirectUrl) {
+  //           this.router.navigateByUrl(redirectUrl);
+  //         }
+  //       },
+  //       error: (e) => {
+  //         console.log("error : " + e.message);
+  //         alert(e);
+  //       }
+  //     });
+  // }
+  
+
   public doLogoutUser() {
     this.loggedUser = null;
     this.removeTokens();

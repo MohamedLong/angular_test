@@ -1,3 +1,4 @@
+import { NavigationStart, Router } from '@angular/router';
 import {Component, OnInit} from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
@@ -26,7 +27,7 @@ export class AppComponent implements OnInit{
     isRTL = false;
     darkMode: boolean;
 
-    constructor(public translate: TranslateService, private primengConfig: PrimeNGConfig) {
+    constructor(public translate: TranslateService, private primengConfig: PrimeNGConfig, router:Router) {
         translate.addLangs(['en', 'ar']);
         translate.setDefaultLang('en');
 
@@ -37,7 +38,8 @@ export class AppComponent implements OnInit{
             var lang = browserLang.match(/en|ar/) ? browserLang : 'en';
             translate.use(lang);
             localStorage.setItem('lang', lang);
-        }
+        }    
+
     }
 
     ngOnInit() {

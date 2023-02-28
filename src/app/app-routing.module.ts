@@ -140,7 +140,8 @@ const routes: Routes = [];
             // // {path: 'login', component: AppLoginComponent},
             // {path: 'landing', component: AppLandingComponent},
             // {path: 'pages/wizard', component: AppWizardComponent},
-            {path: 'login', component: LoginComponent, canActivate: [AuthGuard]},
+            {path: 'order-details/:id', component: OrderDetailsComponent, canActivate: [AuthGuard]},
+            {path: 'login', component: LoginComponent},
             {path: 'signup', component: SignupComponent},
             {path: '**', redirectTo: ''},
         ], {scrollPositionRestoration: 'enabled'})
@@ -151,8 +152,9 @@ export class AppRoutingModule {
   constructor(private router: Router, private authService: AuthService) {
     if(this.authService.isLoggedIn()) {
         this.authService.getAuthorizedMenu();
-    }else{
-        this.router.resetConfig(this.router.config);
     }
+    // else{
+    //     this.router.resetConfig(this.router.config);
+    // }
   }
 }

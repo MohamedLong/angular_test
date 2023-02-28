@@ -301,6 +301,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.bidDtos = this.originalBidList;
         this.bidDetailsDialog = false;
         this.selectedEntries = [];
+        
+        this.getBidsByJob();
     }
 
     getPartTypesAsString(partTypes: PartType[]) {
@@ -492,6 +494,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
             });
             this.approveMultipleBidDialog = false;
+            this.closeBidDialog();
         }
     }
 
@@ -548,6 +551,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
             });
             this.rejectMultipleBidDialog = false;
+            this.closeBidDialog();
 
         }
     }

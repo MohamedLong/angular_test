@@ -6,15 +6,15 @@
         <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        (click)="new()" [disabled]="newAuth===true" [hidden]="false"></button>
+                    <button  pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
+                        (click)="new()" [disabled]="newAuth===false" [hidden]="false"></button>
                 </ng-template>
 
                 <ng-template pTemplate="right">
                     <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
                         chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help mb-2"
-                        (click)="dt.exportCSV()" [disabled]="printAuth===true" ></button>
+                        (click)="dt.exportCSV()" [disabled]="printAuth===false" ></button>
                 </ng-template>
             </p-toolbar>
 
@@ -80,9 +80,9 @@
                         </td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" 
-                            [disabled]="!editAuth" (click)="edit(claim)" [disabled]="edituth===true" ></button>
+                            [disabled]="!editAuth" (click)="edit(claim)" [disabled]="edituth===false" ></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" 
-                            [disabled]="!editAuth" (click)="deleteAction(claim)" [disabled]="deleteAuth===true" ></button>
+                            [disabled]="!editAuth" (click)="deleteAction(claim)" [disabled]="deleteAuth===false" ></button>
                           </td>
                     </tr>
                 </ng-template>
@@ -121,7 +121,8 @@
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times" class="p-button-text"
                     (click)="hideDialog()"></button>
-                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
+                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check" class="p-button-text" 
+                (click)="save()" [disabled]="!(editable)"></button>
             </ng-template>
         </p-dialog>
 

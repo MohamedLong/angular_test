@@ -1,0 +1,31 @@
+{Menus} ------------------------
+
+Role_ٍSupplier has access to:
+1. My Requests - Request Details
+2. My Bids 
+3. My Orders - Order Details
+
+Role_User has access to:
+1. Claims 
+2. Cars 
+3. My Requests - Request Details
+4. My Bids 
+5. My Orders - Order Details
+
+Role_Admin has access to:
+1. Claims 
+2. Cars 
+3. My Requests - Request Details
+4. My Bids 
+5. My Orders - Order Details 
+6. Users
+7. Page Permissions
+8. Tenant Types
+9. Tenants
+10.Brands
+11.Car Models
+12.Categories
+13.Sub-Categories
+
+{Permissions} ------------------------
+

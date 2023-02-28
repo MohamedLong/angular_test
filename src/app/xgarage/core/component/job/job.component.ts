@@ -27,6 +27,7 @@ export class JobComponent extends GenericComponent implements OnInit {
         super(route, datePipe, breadcrumbService);
     }
 
+    role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
     selectedStatus: Status;
     statuses: Status[];
     valid: boolean = false;
@@ -40,7 +41,7 @@ export class JobComponent extends GenericComponent implements OnInit {
     ngOnInit(): void {
         super.callInsideOnInit();
         this.getAllForTenant(this.pageNo);
-
+        console.log(this.role)
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }]);
     }
 
