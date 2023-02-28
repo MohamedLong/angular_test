@@ -221,7 +221,7 @@
                             <div class="col-12 md:col-5">
                                 <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
                                     icon="pi pi-check" (click)="approveMultipleBidDialog = true"
-                                    [disabled]="selectedEntries.length == 0"
+                                    [disabled]="selectedEntries.length == 0 || selection == 'single'"
                                     class="p-button-success mr-2 mb-3"></button>
                             </div>
 
@@ -277,8 +277,7 @@
                     <ng-template pTemplate="body" let-bid>
                         <tr>
                             <td>
-                                <p-tableRadioButton *ngIf="selection == 'single'" [value]="bid" [disabled]="bid.statusId != 1"></p-tableRadioButton>
-                                <p-tableCheckbox *ngIf="selection == 'multiple'" [value]="bid" [disabled]="bid.statusId != 1"></p-tableCheckbox>
+                                <p-tableCheckbox [value]="bid" [disabled]="bid.statusId != 1"></p-tableCheckbox>
                             </td>
                             <td *ngIf="partName==null">
                                 {{bid.partName}}

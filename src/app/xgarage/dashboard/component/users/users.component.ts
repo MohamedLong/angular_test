@@ -10,7 +10,6 @@ import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 import { Tenant } from 'src/app/xgarage/common/model/tenant';
 import { UserDto } from 'src/app/xgarage/common/dto/userdto';
 import { DialogService } from 'primeng/dynamicdialog';
-import { ThrowStmt } from '@angular/compiler';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 
 @Component({

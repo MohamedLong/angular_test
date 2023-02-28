@@ -19,6 +19,8 @@ import { Status } from 'src/app/xgarage/common/model/status';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { RejectMultipleBids } from '../../dto/rejectmultiplebids';
+import { BidOrderDto } from '../../dto/bidorderdto';
+import { OrderType } from '../../dto/ordertype';
 
 @Component({
     selector: 'job-details',
@@ -256,6 +258,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.partName = request.part.name;
         this.selection = 'single';
         this.bidDetailsDialog = true;
+        this.selectedEntries = [];
         this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
     }
 
@@ -476,18 +479,54 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     approveMultipleBids() {
-        // if(this.selectedEntries.length > 0) {
-        //     this.bidService.approveMultipleBids(this.master.id, this.confirmStatus).subscribe({
-        //         next: (data) => {
-        //             this.updateCurrentObject(data);
-        //             if (statusCode == 6) {
-        //                 setTimeout(() => { this.goMaster(); }, 1500);
-        //             }
-        //         },
-        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-        //     });
-        // }
+        if(this.selectedEntries.length > 0) {
+            let bidOrder: BidOrderDto = this.prepareBidOrderObject();
+            this.bidService.approveMultipleBids(bidOrder).subscribe({
+                next: (data) => {
+                    if (data == true) {
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Approved Successfully', life: 3000 });                   
+                     }else{
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Approved Failed', life: 3000 });
+                    }
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
+            });
+            this.approveMultipleBidDialog = false;
+        }
+    }
 
+
+    prepareBidOrderObject() {
+            let approvedBids: number[] = [];
+            let totalVat = 0;
+            let totalOrderAmount = 0;
+            let totalTotalAmount = 0;
+
+            for (let i = 0; i < this.selectedEntries.length; i++) {
+                approvedBids[i] = this.selectedEntries[i].bidId;
+                totalOrderAmount = totalOrderAmount + this.selectedEntries[i].originalPrice;
+                totalVat = totalVat + this.selectedEntries[i].vat;
+                totalTotalAmount = totalTotalAmount + this.selectedEntries[i].price;
+            }
+
+            let bidOrder: BidOrderDto = {
+                bids: approvedBids,
+                shippingAddress: 1,
+                shippingMethod: 1,
+                paymentMethod: 1,
+                orderType: OrderType.Bid,
+                customer: JSON.parse(this.authService.getStoredUser()).id,
+                phone: JSON.parse(this.authService.getStoredUser()).phone,
+                supplier: this.selectedEntries.map(bid => bid.supplierId)[0],
+                deliveryFees: 0,
+                orderDate: new Date(),
+                orderAmount: totalOrderAmount,
+                vat: totalVat,
+                totalAmount: totalTotalAmount
+            };
+
+            return bidOrder;
+    
     }
 
     rejectMultipleBids() {
@@ -500,13 +539,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             rejectMultipleBids.bids = rejectedBids;
             this.bidService.rejectMutltipleBids(rejectMultipleBids).subscribe({
                 next: (data) => {
-                    if (data = true) {
+                    if (data == true) {
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });                   
                      }else{
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Rejection Failed', life: 3000 });
                     }
                 },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.error, life: 3000 })
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
             });
             this.rejectMultipleBidDialog = false;
 

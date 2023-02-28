@@ -234,9 +234,12 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onCancelBid(id: number) {
-        this.bidService.cancelBid(id).subscribe(res => {
-            console.log(res)
-        })
+        this.bidService.cancelBid(id).subscribe({
+            next: (data) => {
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Cancelled Successfully', life: 3000 });                      
+            },
+            error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
+        });
     }
 
     confirmCancel(id: number) {
