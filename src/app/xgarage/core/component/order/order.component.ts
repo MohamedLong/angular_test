@@ -41,13 +41,14 @@ export class OrderComponent extends GenericComponent implements OnInit {
     }
 
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
+    pageNo: number = 0;
 
     ngOnInit(): void {
-        this.getAll();
+        this.getAll(this.pageNo);
     }
 
-    getAll() {
-        this.orderService.getForTenant().subscribe(res => {
+    getAll(page: number) {
+        this.orderService.getForTenant(page).subscribe(res => {
             //console.log(res)
             this.masterDtos = res;
         }, err => {
@@ -55,15 +56,14 @@ export class OrderComponent extends GenericComponent implements OnInit {
         })
     }
 
-
-    openNew() {
-        super.openNew();
-        //this.setOtherDefaultParameters();
-    }
-
-    save() {
-        this.submitted = true;
-
+    loadOrders(e) {
+        //console.log(e);
+        if (this.masterDtos.length == 50) {
+            if ((this.masterDtos.length - e.first) <= 10) {
+                this.pageNo++;
+                this.getAll(this.pageNo);
+            }
+        }
     }
 
 

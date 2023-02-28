@@ -36,17 +36,18 @@ export class JobComponent extends GenericComponent implements OnInit {
     fillteredDto: any[] = [];
     status: any[] = ["All"];
     selectedState = 'All';
+    pageNo: number = 0;
     ngOnInit(): void {
         super.callInsideOnInit();
-        this.getAllForTenant();
+        this.getAllForTenant(this.pageNo);
 
-        this.breadcrumbService.setItems([{'label': 'Requests', routerLink: ['jobs']}]);
+        this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }]);
     }
 
-    getAllForTenant() {
+    getAllForTenant(page: number) {
         let user = this.authService.getStoredUser();
         if (JSON.parse(user).tenant) {
-            this.jobService.getForTenant().subscribe({
+            this.jobService.getForTenant(page).subscribe({
                 next: (data) => {
                     this.masterDtos = data;
                     this.masterDtos = this.masterDtos.filter(job => job.id != null);
@@ -155,6 +156,16 @@ export class JobComponent extends GenericComponent implements OnInit {
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });
+    }
+
+    loadRequests(e) {
+        //console.log(e);
+        if (this.masterDtos.length == 50) {
+            if ((this.masterDtos.length - e.first) <= 10) {
+                this.pageNo++;
+                this.getAllForTenant(this.pageNo);
+            }
+        }
     }
 
     setStatusNames(arr) {

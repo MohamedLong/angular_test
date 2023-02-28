@@ -20,7 +20,7 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="masterDtos" (onPage)="loadRequests($event)" [columns]="cols" [rows]="10" [paginator]="true"
                 [globalFilterFields]="['id','jobNo','claimNo','partNames','jobStatus','jobTitle']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -63,8 +63,10 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-job>
                     <tr>
-                        <td><span><a (click)="goDetails(job)" style="cursor: pointer;"><mark
-                                        class="text-blue-400 hover:text-pink-500">{{job.jobNo}}</mark></a></span>
+                        <td>
+                            <span><a (click)="goDetails(job)" style="cursor: pointer;"><mark
+                                        class="text-blue-400 hover:text-pink-500">{{job.jobNo}}</mark></a>
+                                    </span>
                         <td>
                             {{job.jobTitle}}
                         </td>
