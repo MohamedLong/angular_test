@@ -46,7 +46,7 @@
             <div class="field col">
                 <p-confirmPopup></p-confirmPopup>
                 <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
-                <button pButton pRipple [disabled]="(editable)" class="mb-3 p-button-warning" type="button"
+                <button pButton pRipple  [disabled]="editAuth===true"  class="mb-3 p-button-warning" type="button"
                     icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
                     (click)="menu.toggle($event)"></button>
             </div>
@@ -221,14 +221,14 @@
                             <div class="col-12 md:col-5">
                                 <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
                                     icon="pi pi-check" (click)="approveMultipleBidDialog = true"
-                                    [disabled]="selectedEntries.length == 0 || selection == 'single'"
+                                    [disabled]="selectedEntries.length == 0 || selection == 'single' || editAuth == false"
                                     class="p-button-success mr-2 mb-3"></button>
                             </div>
 
                             <div class="col-12 md:col-5">
                                 <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
                                     icon="pi pi-times" (click)="rejectMultipleBidDialog = true"
-                                    [disabled]="selectedEntries.length == 0" class="p-button-danger mr-2 mb-3"></button>
+                                    [disabled]="selectedEntries.length == 0 && editAuth===true" class="p-button-danger mr-2 mb-3"></button>
                             </div>
 
                             <div class="col-12 md:col-2">
@@ -501,7 +501,7 @@
             </div>
             <ng-template pTemplate="footer">
                 <div class="text-center pt-3">
-                    <p-button (click)="downloadPdf()" label="{{ 'bid.bidDialog.download' | translate }}"
+                    <p-button (click)="downloadPdf()" label="{{ 'bid.bidDialog.download' | translate }}"  [disabled]="printAuth===true" 
                         styleClass="p-button bg-indigo-100 text-indigo-600 border-0 font-light px-5"></p-button>
                     <p-button (click)="displayCompareBids=false" label="{{ 'bid.bidDialog.changeSupp' | translate }}"
                         styleClass="p-button"></p-button>

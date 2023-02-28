@@ -41,7 +41,8 @@ export class JobService extends GenericService<Job> {
         return this.http.patch<MessageResponse>(config.coreApiUrl + '/job/updateJob', dto);
     }
 
-    getBidsByJob() {
-        return this.http.get<any[]>(config.coreApiUrl + '/job/tenantSupplier');
+    getBidsByJob(page: number) {
+        let endpoint = page? `/job/tenantSupplier?pageNo=${page}&pageSize=50` : '/job/tenantSupplier';
+        return this.http.get<any[]>(config.coreApiUrl + endpoint);
     }
 }

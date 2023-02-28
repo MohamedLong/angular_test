@@ -2,6 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { AppBreadcrumbService } from './app.breadcrumb.service';
 import { Subscription } from 'rxjs';
 import { MenuItem } from 'primeng/api';
+import { AuthService } from './auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-breadcrumb',
@@ -15,7 +17,8 @@ export class AppBreadcrumbComponent implements OnDestroy {
 
     home: MenuItem;
 
-    constructor(public breadcrumbService: AppBreadcrumbService) {
+    constructor(public breadcrumbService: AppBreadcrumbService, private authService: AuthService, 
+        private router: Router) {
         this.subscription = breadcrumbService.itemsHandler.subscribe(response => {
             // console.log(response)
             this.items = response;
@@ -25,9 +28,15 @@ export class AppBreadcrumbComponent implements OnDestroy {
         this.home = { icon: 'pi pi-home', routerLink: '/' };
     }
 
-ngOnDestroy() {
-    if (this.subscription) {
-        this.subscription.unsubscribe();
+    doLogout(){
+
+        this.authService.doLogoutUser();
+        this.router.navigate(['/login']);
     }
-}
+
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
 }

@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AppMainComponent } from './app.main.component';
 import { AuthService } from './auth/services/auth.service';
 import { Router } from '@angular/router';
+import { Tenant } from "src/app/xgarage/common/model/tenant";
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html',
@@ -29,6 +30,13 @@ export class AppTopBarComponent {
 
     activeItem: number;
     userId: number;
+    firstName: string;
+    lastName: string;
+    tenant: Tenant;
+    tenantName: string;
+    tenantType: string;
+
+  
 
     model: MegaMenuItem[] = [
         {
@@ -120,6 +128,14 @@ export class AppTopBarComponent {
     ];
 
     @ViewChild('searchInput') searchInputViewChild: ElementRef;
+
+        
+    ngOnInit(): void {
+        this.firstName = JSON.parse(this.authService.getStoredUser()).firstName;
+        this.lastName = JSON.parse(this.authService.getStoredUser()).lastName;
+        this.tenantName = JSON.parse(this.authService.getStoredUser()).tenant.name;
+        this.tenantType = JSON.parse(this.authService.getStoredUser()).tenant.tenantType.name;
+    }
 
     onSearchAnimationEnd(event: AnimationEvent) {
         switch(event.toState) {

@@ -7,14 +7,14 @@
                 <ng-template pTemplate="left">
                     <!-- [disabled]="newAuth===false"-->
                     <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                    (click)="carDialog()" [hidden]="false"></button>                        
+                    (click)="carDialog()" [hidden]="false" [disabled]="newAuth===true"></button>                        
                 </ng-template>
                         
                 <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
-                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload>
+                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
+                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help mb-2"
-                        (click)="dt.exportCSV()"></button>
+                        (click)="dt.exportCSV()" [disabled]="printAuth===true"></button>
                 </ng-template>
             </p-toolbar>
 
@@ -77,9 +77,9 @@
                         <td>
                             <!-- [disabled]="!editAuth"  -->
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" 
-                            (click)="edit(car)"></button>
+                            (click)="edit(car)" [disabled]="editAuth===true"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" 
-                            [disabled]="!editAuth" (click)="deleteAction(car)"></button>
+                            [disabled]="deleteAuth===true"(click)="deleteAction(car)"></button>
                           </td>
                     </tr>
                 </ng-template>

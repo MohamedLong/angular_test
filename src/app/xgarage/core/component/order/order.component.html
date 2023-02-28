@@ -18,7 +18,7 @@
                 </ng-template>
             </p-toolbar> -->
 
-            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="masterDtos" (onPage)="loadOrders($event)" [columns]="cols" [rows]="10" [paginator]="true"
                 (onFilter)="onFilter($event, dt)"
                 [globalFilterFields]="['id','orderId','orderDate','insertDate', 'payedStatus', 'deliveryStatus', 'customerPartyName', 'statusNameEn', 'cuCurrencyCode']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
@@ -37,7 +37,7 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>ID</th>
+                        <th>{{'common.id' | translate}}</th>
                         <th>{{'orders.table.date' | translate}}</th>
                         <th *ngIf="role == 2">{{'orders.table.customerName' | translate}}</th>
                         <th *ngIf="role == 1">{{'orders.table.supplierName' | translate}}</th>
@@ -99,7 +99,7 @@
                 </ng-template>
                 <ng-template pTemplate="summary">
                     <div class="flex align-items-center justify-content-between">
-                        In total there are {{masterDtos ? masterDtos.length : 0 }} orders.
+                        {{'orders.table_footer' | translate: {length: masterDtos ? masterDtos.length : 0} }}
                     </div>
                 </ng-template>
             </p-table>

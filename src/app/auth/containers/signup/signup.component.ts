@@ -84,6 +84,7 @@ export class SignupComponent implements OnInit {
             this.selectedTenant.name = this.signupForm.controls.newTenantName.value;
             this.selectedTenant.cr = this.signupForm.controls.newCr.value;
             this.selectedTenant.location = this.signupForm.controls.location.value;
+            this.selectedTenant.email = this.signupForm.controls.email.value;
 
             this.tenantService.add(this.selectedTenant).subscribe(
                 {
