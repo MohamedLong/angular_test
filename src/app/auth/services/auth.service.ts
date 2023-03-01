@@ -105,7 +105,7 @@ export class AuthService {
       );
   }
 
-  
+
   // doStoreUser(token: string, redirectUrl?: string) {
   //   this.decoded = jwt_decode(token);
   //   this.http.get<any>(this.apiUrl + '/user')
@@ -123,12 +123,13 @@ export class AuthService {
   //       }
   //     });
   // }
-  
+
 
   public doLogoutUser() {
     this.loggedUser = null;
     this.removeTokens();
     this.removeUserFromStore();
+    this.removeAppData();
   }
 
   private getRefreshToken() {
@@ -159,6 +160,12 @@ export class AuthService {
 
   private removeUserFromStore() {
     localStorage.removeItem('user');
+  }
+
+  private removeAppData() {
+    localStorage.removeItem('job');
+    localStorage.removeItem('order');
+    localStorage.removeItem('orderData');
   }
 
   changePassword(body: any) {
