@@ -132,9 +132,11 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     }
 
     ngOnChanges(changes: SimpleChanges) {
+
         if (changes.edit && !changes.edit.firstChange) {
+            this.submitted = true;
+
             if (this.type == 'edit req') {
-                console.log('edit request')
                 this.responseBody.id = this.requestDetails.id;
                 this.responseBody.job = this.requestDetails.job;
                 this.responseBody.description = this.description;
@@ -145,25 +147,33 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 this.responseBody.requestTitle = this.requestDetails.requestTitle;
                 this.responseBody.user = this.requestDetails.user;
                 this.responseBody.partTypes = this.selectedPartTypes;
+                this.responseBody.qty = this.requestDetails.qty;
+
+                //console.log('edit request', this.responseBody)
             } else {
-                console.log('new request')
-                this.dataService.name.subscribe(res => {
-                    //console.log(res)
-                    this.responseBody.job = res.id;
-                    this.responseBody.description = this.description;
-                    this.responseBody.car = { 'id': res.car.id };
-                    this.responseBody.locationName = JSON.parse(this.authService.getStoredUser()).tenant.location;
-                    this.responseBody.suppliers = res.suppliers;
-                    this.responseBody.privacy = res.privacy;
-                    this.responseBody.requestTitle = res.jobTitle;
-                    this.responseBody.user = this.user;
-                    this.responseBody.partTypes = this.selectedPartTypes;
-                })
+
+                let job = JSON.parse(localStorage.getItem('job'));
+
+                this.responseBody.job = job.id;
+                this.responseBody.description = this.description;
+                this.responseBody.qty = this.qty;
+                this.responseBody.car = { 'id': job.car.id };
+                this.responseBody.locationName = JSON.parse(this.authService.getStoredUser()).tenant.location;
+                this.responseBody.suppliers = job.suppliers;
+                this.responseBody.privacy = job.privacy;
+                this.responseBody.requestTitle = job.jobTitle;
+                this.responseBody.user = this.user;
+                this.responseBody.partTypes = this.selectedPartTypes;
+
+                //console.log('new request', this.responseBody)
             }
 
             this.getPart();
-            console.log(this.responseBody)
-            this.formatThenSaveRequest();
+            if(this.selectedPartTypes.length > 0) {
+               // console.log('save req')
+                this.formatThenSaveRequest();
+            }
+
         }
     }
 
@@ -190,23 +200,24 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
 
     formatThenSaveRequest() {
         let stringRequestBody = JSON.stringify(this.responseBody);
-        let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId}
+        let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId }
         let reqFormData = new FormData();
         for (var key in req) {
             reqFormData.append(key, req[key]);
         }
-        for(let i = 0;i < this.partImages.length; i++) {
+        for (let i = 0; i < this.partImages.length; i++) {
             reqFormData.append('partImages', this.partImages[i]);
         }
         if (this.responseBody.hasOwnProperty('id')) {
             this.requestService.update(reqFormData).subscribe((res: MessageResponse) => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
             }, err => {
-                console.log(err.error)
+                //console.log(err.error)
                 this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
             });
 
-            this.hideDialog();
+            super.hideDialog();
+            this.submitted = false;
 
         } else {
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
@@ -220,14 +231,16 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
 
                 this.detailDialog = false;
                 this.isSending = false;
+                this.submitted = false;
             }, err => {
                 console.log(err)
                 if (this.type == 'new req') {
                     this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
-                    this.hideDialog();
+                    super.hideDialog();
                 }
                 this.isSending = false;
                 this.blocked = false;
+                this.submitted = false;
             });
         }
 
