@@ -35,26 +35,26 @@ export class AppComponent implements OnInit{
         const browserLang = translate.getBrowserLang();
         if(localStorage.getItem('lang')){
             translate.use(localStorage.getItem('lang'));
-        }else{
+        } else {
             var lang = browserLang.match(/en|ar/) ? browserLang : 'en';
             translate.use(lang);
             localStorage.setItem('lang', lang);
         }
 
-        let subscription: Subscription = this.router.events.subscribe((val) => {
-            // let job
-            console.log(val.toString().split('=')[1].substring(1,2))
-            //this.originalUrl = val.url;
-            subscription.unsubscribe();
-          });
+        // let subscription: Subscription = this.router.events.subscribe((val) => {
+        //     // let job
+        //     console.log(val)
+        //     //this.originalUrl = val.url;
+        //     subscription.unsubscribe();
+        //   });
 
     }
 
     ngOnInit() {
-        console.log('init')
-        if (this.route.snapshot.queryParams['id']) {
-            console.log('there is an id')
-        }
+        //console.log('init')
+        // if (this.route.snapshot.queryParams['id']) {
+        //     console.log('there is an id')
+        // }
         this.primengConfig.ripple = true;
     }
 }

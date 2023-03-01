@@ -12,7 +12,7 @@ export class RandomGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     // return this.canLoad();
     if (!this.authService.isLoggedIn()) {
-        console.log(state.url);
+        //console.log(state.url);
         this.router.navigate(['/login']);
       }
       return this.authService.isLoggedIn();
