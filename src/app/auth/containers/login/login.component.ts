@@ -36,45 +36,47 @@ export class LoginComponent implements OnInit {
     constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private messageService: MessageService) { }
 
     ngOnInit() {
-      console.log(this.authService.isLoggedIn())
+
+
+        console.log(this.authService.isLoggedIn())
         this.loginForm = this.formBuilder.group({
             username: [''],
             password: ['']
         });
-      // const redirectUrl = localStorage.getItem('redirectUrl');
-      // if (redirectUrl) {
-      //   localStorage.removeItem('redirectUrl');
-      //   this.router.navigateByUrl(redirectUrl);
-      // }
+        // const redirectUrl = localStorage.getItem('redirectUrl');
+        // if (redirectUrl) {
+        //   localStorage.removeItem('redirectUrl');
+        //   this.router.navigateByUrl(redirectUrl);
+        // }
     }
 
     get f() { return this.loginForm.controls; }
 
-  login() {
-    this.isLoading = !this.isLoading;
-    this.authService.login(
-      {
-        username: this.f.username.value,
-        password: this.f.password.value
-      }
-    )
-      .subscribe(
-        {
-          next: (success) => {
-            if(this.authService.isLoggedIn()){
-              // const link = this.router.createUrlTree(['/order-details', 338]).toString(); 
-              // this.authService.doStoreUser(this.authService.getJwtToken(), link);
-              this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
-
-              
+    login() {
+        this.isLoading = !this.isLoading;
+        this.authService.login(
+            {
+                username: this.f.username.value,
+                password: this.f.password.value
             }
-          },
-          error: (e) => {
-            this.isLoading = false;
-            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
-          }
-        }
-      );
-  }
+        )
+            .subscribe(
+                {
+                    next: (success) => {
+                        if (this.authService.isLoggedIn()) {
+                            // const link = this.router.createUrlTree(['/order-details', 338]).toString();
+                            // this.authService.doStoreUser(this.authService.getJwtToken(), link);
+                            this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
+
+
+                        }
+                    },
+                    error: (e) => {
+                        this.isLoading = false;
+                        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
+                    }
+                }
+            );
+    }
 
 }

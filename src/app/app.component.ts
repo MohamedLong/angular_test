@@ -1,8 +1,9 @@
-import { NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import {Component, OnInit} from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
-
+import { AuthService } from './auth/services/auth.service';
+import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit{
     isRTL = false;
     darkMode: boolean;
 
-    constructor(public translate: TranslateService, private primengConfig: PrimeNGConfig, router:Router) {
+    constructor(private route: ActivatedRoute, public translate: TranslateService, private primengConfig: PrimeNGConfig, private router: Router) {
         translate.addLangs(['en', 'ar']);
         translate.setDefaultLang('en');
 
@@ -38,11 +39,22 @@ export class AppComponent implements OnInit{
             var lang = browserLang.match(/en|ar/) ? browserLang : 'en';
             translate.use(lang);
             localStorage.setItem('lang', lang);
-        }    
+        }
+
+        let subscription: Subscription = this.router.events.subscribe((val) => {
+            // let job
+            console.log(val.toString().split('=')[1].substring(1,2))
+            //this.originalUrl = val.url;
+            subscription.unsubscribe();
+          });
 
     }
 
     ngOnInit() {
+        console.log('init')
+        if (this.route.snapshot.queryParams['id']) {
+            console.log('there is an id')
+        }
         this.primengConfig.ripple = true;
     }
 }

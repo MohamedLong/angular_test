@@ -95,7 +95,12 @@ export class AuthService {
           next: (data) => {
             this.storeUser(JSON.stringify(data));
             this.getAuthorizedMenu();
-            router.navigate(['', 1]);
+            if (localStorage.getItem('job')) {
+                router.navigate(['job-details']);
+            } else {
+                router.navigate(['', 1]);
+            }
+
           },
           error: (e) => {
             console.log("error : " + e.message);
