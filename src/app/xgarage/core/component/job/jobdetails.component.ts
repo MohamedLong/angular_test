@@ -84,6 +84,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     ngOnInit() {
+        //console.log('init')
         if (localStorage.getItem('job')) {
             let data = JSON.parse(localStorage.getItem('job'));
             this.master = data;
@@ -95,11 +96,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.selectedEntries = [];
             this.callInsideOnInit();
             this.initActionMenu();
-            // this.activeTab = 1;
+            // this.activeTab = 1;);
         }
 
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
-
     }
 
     initActionMenu() {
@@ -300,7 +300,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.bidDtos = this.originalBidList;
         this.bidDetailsDialog = false;
         this.selectedEntries = [];
-        
+
         this.getBidsByJob();
     }
 
@@ -452,12 +452,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     downloadPdf() {
         const doc = new jsPDF();
-        autoTable(doc, { html: '#bids-table',
-        // didParseCell: function (data) {
-        //     var rows = data.table.body;
-        //     data.row. = 'flex';
-        // }
-     });
+        autoTable(doc, {
+            html: '#bids-table',
+            // didParseCell: function (data) {
+            //     var rows = data.table.body;
+            //     data.row. = 'flex';
+            // }
+        });
         doc.save('bids.pdf')
     }
 
@@ -480,13 +481,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     approveMultipleBids() {
-        if(this.selectedEntries.length > 0) {
+        if (this.selectedEntries.length > 0) {
             let bidOrder: BidOrderDto = this.prepareBidOrderObject();
             this.bidService.approveMultipleBids(bidOrder).subscribe({
                 next: (data) => {
                     if (data == true) {
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Approved Successfully', life: 3000 });                   
-                     }else{
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Approved Successfully', life: 3000 });
+                    } else {
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Approved Failed', life: 3000 });
                     }
                 },
@@ -499,40 +500,40 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
 
     prepareBidOrderObject() {
-            let approvedBids: number[] = [];
-            let totalVat = 0;
-            let totalOrderAmount = 0;
-            let totalTotalAmount = 0;
+        let approvedBids: number[] = [];
+        let totalVat = 0;
+        let totalOrderAmount = 0;
+        let totalTotalAmount = 0;
 
-            for (let i = 0; i < this.selectedEntries.length; i++) {
-                approvedBids[i] = this.selectedEntries[i].bidId;
-                totalOrderAmount = totalOrderAmount + this.selectedEntries[i].originalPrice;
-                totalVat = totalVat + this.selectedEntries[i].vat;
-                totalTotalAmount = totalTotalAmount + this.selectedEntries[i].price;
-            }
+        for (let i = 0; i < this.selectedEntries.length; i++) {
+            approvedBids[i] = this.selectedEntries[i].bidId;
+            totalOrderAmount = totalOrderAmount + this.selectedEntries[i].originalPrice;
+            totalVat = totalVat + this.selectedEntries[i].vat;
+            totalTotalAmount = totalTotalAmount + this.selectedEntries[i].price;
+        }
 
-            let bidOrder: BidOrderDto = {
-                bids: approvedBids,
-                shippingAddress: 1,
-                shippingMethod: 1,
-                paymentMethod: 1,
-                orderType: OrderType.Bid,
-                customer: JSON.parse(this.authService.getStoredUser()).id,
-                phone: JSON.parse(this.authService.getStoredUser()).phone,
-                supplier: this.selectedEntries.map(bid => bid.supplierId)[0],
-                deliveryFees: 0,
-                orderDate: new Date(),
-                orderAmount: totalOrderAmount,
-                vat: totalVat,
-                totalAmount: totalTotalAmount
-            };
+        let bidOrder: BidOrderDto = {
+            bids: approvedBids,
+            shippingAddress: 1,
+            shippingMethod: 1,
+            paymentMethod: 1,
+            orderType: OrderType.Bid,
+            customer: JSON.parse(this.authService.getStoredUser()).id,
+            phone: JSON.parse(this.authService.getStoredUser()).phone,
+            supplier: this.selectedEntries.map(bid => bid.supplierId)[0],
+            deliveryFees: 0,
+            orderDate: new Date(),
+            orderAmount: totalOrderAmount,
+            vat: totalVat,
+            totalAmount: totalTotalAmount
+        };
 
-            return bidOrder;
-    
+        return bidOrder;
+
     }
 
     rejectMultipleBids() {
-        if(this.selectedEntries.length > 0) {
+        if (this.selectedEntries.length > 0) {
             let rejectMultipleBids: RejectMultipleBids = {}
             let rejectedBids: number[] = [];
             for (let i = 0; i < this.selectedEntries.length; i++) {
@@ -542,8 +543,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.bidService.rejectMutltipleBids(rejectMultipleBids).subscribe({
                 next: (data) => {
                     if (data == true) {
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });                   
-                     }else{
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });
+                    } else {
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Rejection Failed', life: 3000 });
                     }
                 },

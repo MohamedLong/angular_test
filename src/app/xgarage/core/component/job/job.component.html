@@ -6,7 +6,7 @@
         <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <a *ngIf="role == 1 && role !== 2" pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"  [disabled]="newAuth===false" 
+                    <a *ngIf="role && role == 1 && role !== 2" pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"  [disabled]="newAuth===false"
                         class="p-button-success mr-2 mb-2" [routerLink]="['/jobs/new-job']" [hidden]="false"></a>
                 </ng-template>
 
@@ -56,7 +56,7 @@
                         </th>
                         <th pColumn="claimNo">{{ 'job.tableColumn.claimNo' | translate }}
                         </th>
-                        <th *ngIf="role == 1 && role !== 2"
+                        <th *ngIf="role && role == 1 && role !== 2"
                             pColumn="actions">{{'common.actions' | translate }}
                         </th>
 
@@ -84,7 +84,7 @@
                             {{job.claimNo}}
                         </td>
 
-                        <td *ngIf="role == 1 && role !== 2">
+                        <td *ngIf="role && role == 1 && role !== 2">
                             <button  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
                             [disabled]="editAuth===false"  (click)="editParentAction(job)"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
@@ -126,7 +126,7 @@
             [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="masterDto">{{ 'operations.deleteMessage' | translate }} 
+                <span *ngIf="masterDto">{{ 'operations.deleteMessage' | translate }}
                     <b>{{ 'job.jobNumber' | translate }} {{masterDto.jobNo}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">

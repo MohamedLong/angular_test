@@ -27,7 +27,7 @@ export class JobComponent extends GenericComponent implements OnInit {
         super(route, datePipe, breadcrumbService);
     }
 
-    role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
+    role: number = this.authService.isLoggedIn()? JSON.parse(this.authService.getStoredUser()).roles[0].id : 0;
     selectedStatus: Status;
     statuses: Status[];
     valid: boolean = false;
@@ -39,6 +39,10 @@ export class JobComponent extends GenericComponent implements OnInit {
     selectedState = 'All';
     pageNo: number = 0;
     ngOnInit(): void {
+        if(localStorage.getItem('job')) {
+            localStorage.removeItem('job');
+        }
+
         super.callInsideOnInit();
         this.getAllForTenant(this.pageNo);
         console.log(this.role)
@@ -145,7 +149,6 @@ export class JobComponent extends GenericComponent implements OnInit {
     }
 
 
-
     goDetails(dto: any) {
         this.jobService.getById(dto.id).subscribe(
             {
@@ -154,6 +157,11 @@ export class JobComponent extends GenericComponent implements OnInit {
                     this.master.claimNo = dto.claimNo;
                     localStorage.setItem('job', JSON.stringify(this.master));
                     this.router.navigate(['job-details']);
+
+                    // this.router.navigate(['job-details'], {
+                    //     queryParams: {
+                    //       id: this.master.id
+                    //     }});
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });
@@ -161,7 +169,7 @@ export class JobComponent extends GenericComponent implements OnInit {
 
     loadRequests(e) {
         //console.log(e);
-        if (this.masterDtos.length == 50) {
+        if (this.masterDtos.length == 100) {
             if ((this.masterDtos.length - e.first) <= 10) {
                 this.pageNo++;
                 this.getAllForTenant(this.pageNo);

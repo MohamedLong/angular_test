@@ -66,20 +66,23 @@ export class LoginComponent implements OnInit {
         username: this.f.username.value,
         password: this.f.password.value
       }
-    )
-      .subscribe(
-        {
-          next: (success) => {
-            if(this.authService.isLoggedIn()){
-              this.authService.doStoreUser(this.authService.getJwtToken(), this.router, this.destination);
-            }
-          },
-          error: (e) => {
-            this.isLoading = false;
-            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
-          }
-        }
-      );
-  }
+    ).subscribe(
+                {
+                    next: (success) => {
+                        if (this.authService.isLoggedIn()) {
+                            // const link = this.router.createUrlTree(['/order-details', 338]).toString();
+                            // this.authService.doStoreUser(this.authService.getJwtToken(), link);
+                            this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
+
+
+                        }
+                    },
+                    error: (e) => {
+                        this.isLoading = false;
+                        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
+                    }
+                }
+            );
+    }
 
 }

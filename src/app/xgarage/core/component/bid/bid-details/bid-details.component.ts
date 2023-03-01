@@ -88,7 +88,7 @@ export class BidDetailsComponent implements OnInit {
 
     loadBids(e) {
         //console.log(e);
-        if (this.fillteredBids.length == 50) {
+        if (this.fillteredBids.length == 100) {
             if ((this.fillteredBids.length - e.first) <= 10) {
                 this.pageNo++;
                 this.getBids(this.pageNo);
