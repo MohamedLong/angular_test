@@ -12,7 +12,7 @@
             <input min="1" [(ngModel)]="qty" class="width-100" type="number" pInputText placeholder="" />
             <small
                 *ngIf="qty < 1"
-                class="p-error mt-2">Quantity can't be less than 1</small>
+                class="p-error mt-2">{{ 'request.form.qtyRequired' | translate }}</small>
         </div>
         <div class="field col-12 md:col-9">
             <label for="">{{ 'request.form.desc' | translate }}</label>

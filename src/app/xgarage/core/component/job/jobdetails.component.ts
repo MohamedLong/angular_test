@@ -87,7 +87,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         if (localStorage.getItem('job')) {
             let data = JSON.parse(localStorage.getItem('job'));
             this.master = data;
-            //console.log(this.master)
             this.master.claimNo = data.claimNo;
             this.masters.push(this.master);
             this.getRequestsByJob();

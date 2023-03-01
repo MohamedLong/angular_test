@@ -2,6 +2,7 @@ import { NavigationStart, Router } from '@angular/router';
 import {Component, OnInit} from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-root',
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit{
     isRTL = false;
     darkMode: boolean;
 
-    constructor(public translate: TranslateService, private primengConfig: PrimeNGConfig, router:Router) {
+    constructor(public translate: TranslateService, private primengConfig: PrimeNGConfig, private router:Router) {
         translate.addLangs(['en', 'ar']);
         translate.setDefaultLang('en');
 
@@ -44,5 +45,14 @@ export class AppComponent implements OnInit{
 
     ngOnInit() {
         this.primengConfig.ripple = true;
+
+        let subscription: Subscription = this.router.events.subscribe((val) => {
+            // let job
+            console.log(val)
+            //this.originalUrl = val.url;
+            subscription.unsubscribe();
+          });
     }
+
+    
 }

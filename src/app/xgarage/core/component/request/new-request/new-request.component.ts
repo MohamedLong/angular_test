@@ -148,7 +148,6 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             } else {
                 console.log('new request')
                 this.dataService.name.subscribe(res => {
-                    //console.log(res)
                     this.responseBody.job = res.id;
                     this.responseBody.description = this.description;
                     this.responseBody.car = { 'id': res.car.id };
@@ -209,6 +208,9 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.hideDialog();
 
         } else {
+            
+            console.log(this.responseBody);
+            console.log(reqFormData);
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
                 if (this.type == 'new req') {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });

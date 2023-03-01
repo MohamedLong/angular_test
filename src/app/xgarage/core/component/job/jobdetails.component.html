@@ -221,7 +221,7 @@
                             <div class="col-12 md:col-5">
                                 <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
                                     icon="pi pi-check" (click)="approveMultipleBidDialog = true"
-                                    [disabled]="selectedEntries.length == 0 || editAuth == false"
+                                    [disabled]="selectedEntries.length == 0 || selection == 'single'  || editAuth == false"
                                     class="p-button-success mr-2 mb-3"></button>
                             </div>
 

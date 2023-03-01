@@ -9,23 +9,29 @@ export class AuthGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) { }
 
-  canActivate() {
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate(['']);
+  // canActivate() {
+  //   if (this.authService.isLoggedIn()) {
+  //     this.router.navigate(['']);
+  //   }
+  //   console.log(this.authService.isLoggedIn());
+  //   return !this.authService.isLoggedIn();
+  // }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+
+    const isLoggedIn = this.authService.isLoggedIn();
+    const isLoginPage = state.url.includes('/login');
+    
+    if (isLoggedIn) {
+      return true;
     }
-    console.log(this.authService.isLoggedIn());
-    return !this.authService.isLoggedIn();
+
+    if (!isLoginPage) {
+      this.router.navigate(['/login'], { queryParams: { destination: state.url } });
+      console.log(state.url)
+    }
+
+    return false;
   }
 
-  // canActivate(
-  //   next: ActivatedRouteSnapshot,
-  //   state: RouterStateSnapshot): boolean {
-  //   if (this.authService.isLoggedIn()) {
-  //     return true;
-  //   } else {
-  //     localStorage.setItem('redirectUrl', state.url);
-  //     this.router.navigate(['/login']);
-  //     return false;
-  //   }
-  // }
 }

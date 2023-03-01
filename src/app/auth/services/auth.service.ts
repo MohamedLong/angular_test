@@ -87,7 +87,25 @@ export class AuthService {
     this.loggedUser = username;
   }
 
-  doStoreUser(token: string, router: Router){
+  // doStoreUser(token: string, router: Router){
+  //   this.decoded = jwt_decode(token);
+  //   this.http.get<any>(this.apiUrl + '/user')
+  //   .subscribe(
+  //       {
+  //         next: (data) => {
+  //           this.storeUser(JSON.stringify(data));
+  //           this.getAuthorizedMenu();
+  //           router.navigate(['', 1]);
+  //         },
+  //         error: (e) => {
+  //           console.log("error : " + e.message);
+  //           alert(e);
+  //         }
+  //       }
+  //     );
+  // }
+
+  doStoreUser(token: string, router: Router, destination?: string){
     this.decoded = jwt_decode(token);
     this.http.get<any>(this.apiUrl + '/user')
     .subscribe(
@@ -95,7 +113,14 @@ export class AuthService {
           next: (data) => {
             this.storeUser(JSON.stringify(data));
             this.getAuthorizedMenu();
-            router.navigate(['', 1]);
+            if (destination) {
+              console.log("LINK OK");
+              router.navigateByUrl(destination);
+            } else {
+              console.log("NO LINK");
+
+              router.navigate(['']);
+            }
           },
           error: (e) => {
             console.log("error : " + e.message);
@@ -105,25 +130,6 @@ export class AuthService {
       );
   }
 
-  
-  // doStoreUser(token: string, redirectUrl?: string) {
-  //   this.decoded = jwt_decode(token);
-  //   this.http.get<any>(this.apiUrl + '/user')
-  //     .subscribe({
-  //       next: (data) => {
-  //         this.storeUser(JSON.stringify(data));
-  //         this.getAuthorizedMenu();
-  //         if (redirectUrl) {
-  //           this.router.navigateByUrl(redirectUrl);
-  //         }
-  //       },
-  //       error: (e) => {
-  //         console.log("error : " + e.message);
-  //         alert(e);
-  //       }
-  //     });
-  // }
-  
 
   public doLogoutUser() {
     this.loggedUser = null;
