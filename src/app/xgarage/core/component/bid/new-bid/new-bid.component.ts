@@ -3,6 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
+import { StatusConstants } from 'src/app/xgarage/common/model/statusconstatnts';
 import { BidService } from '../../../service/bidservice.service';
 import { RequestService } from '../../../service/request.service';
 
@@ -236,7 +237,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     onCancelBid(id: number) {
         this.bidService.cancelBid(id).subscribe({
             next: (data) => {
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Cancelled Successfully', life: 3000 });                      
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Cancelled Successfully', life: 3000 });             
             },
             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
         });
@@ -250,6 +251,33 @@ export class NewBidComponent implements OnInit, OnChanges {
             }
         });
     }
+
+    getStatusName(statusId: number) {
+        switch (statusId) {
+          case StatusConstants.OPEN_STATUS:
+            return 'Open';
+          case StatusConstants.INPROGRESS_STATUS:
+            return 'Initial Approval';
+          case StatusConstants.ONHOLD_STATUS:
+            return 'On Hold';
+          case StatusConstants.COMPLETED_STATUS:
+            return 'Completed';
+          case StatusConstants.REJECTED_STATUS:
+            return 'Rejected';
+          case StatusConstants.APPROVED_STATUS:
+            return 'Approved';
+          case StatusConstants.CANCELED_STATUS:
+            return 'Canceled';
+          case StatusConstants.REVISION_STATUS:
+            return 'Revision';
+          case StatusConstants.LOST_STATUS:
+            return 'Lost';
+          case StatusConstants.REVISED_STATUS:
+            return 'Revised';
+          default:
+            return 'Unknown';
+        }
+      }
 
     showModal(part) {
         console.log(part)

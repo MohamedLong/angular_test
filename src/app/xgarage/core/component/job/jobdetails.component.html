@@ -128,16 +128,16 @@
                                         <td [hidden]="(printingMode || role == 2)" style="text-align:center">
                                             <button pButton pRipple type="button" icon="pi pi-pencil"
                                                 (click)="editAction(request)"
-                                                [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                                [disabled]="!(master.status.id == 1 && editAuth===true) || disabledRequest(request)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                             <button pButton pRipple type="button" icon="pi pi-times"
                                                 (click)="deleteAction(request || role == 2)"
-                                                [disabled]="!(master.status.id == 1 && editAuth===true)"
+                                                [disabled]="!(master.status.id == 1 && editAuth===true) || disabledRequest(request)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                         </td>
                                     </ng-container>
                                     <td [hidden]="role == 2">
-                                        <button pButton pRipple icon="pi pi-eye"
+                                        <button pButton pRipple icon="pi pi-eye" [disabled]="disabledRequest(request)"
                                             class="p-button-rounded p-button-success mr-2"
                                             (click)="viewBidsByRequest(request)"></button>
                                     </td>
@@ -295,19 +295,19 @@
                                 {{bid.deliverDays ? 0 : bid.deliverDays}} Days
                             </td>
                             <td>
-                                {{bid.qty ? bid.qty : 1}}
+                                {{bid.qty}}
                             </td>
                             <td>
-                                {{bid.originalPrice ? 0 : bid.originalPrice}}
+                                {{bid.originalPrice}}
                             </td>
                             <td>
                                 {{bid.dicount ? 0 : bid.discount}}
                             </td>
                             <td>
-                                {{bid.vat ? 0 : bid.vat}}
+                                {{bid.vat}}
                             </td>
                             <td>
-                                {{bid.price ? 0 : bid.price}}
+                                {{bid.price}}
                             </td>
                             <td>
                                 {{getStatusName(bid.statusId)}}
