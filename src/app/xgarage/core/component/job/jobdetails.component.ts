@@ -98,13 +98,29 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.callInsideOnInit();
             this.initActionMenu();
 
-            if(localStorage.getItem('bidView')) {
-                this.activeTab = 1;
-            }
+
+        } else if(this.route.snapshot.queryParams['id']) {
+            this.jobService.getById(this.route.snapshot.queryParams['id']).subscribe(
+                {
+                    next: (data) => {
+                        this.master = data;
+                        this.master.claimNo = data.claimNo;
+                        this.masters.push(this.master);
+                        this.getRequestsByJob();
+                        this.getBidsByJob();
+                        this.detailRouter = 'jobs';
+                        this.selectedEntries = [];
+                        this.callInsideOnInit();
+                        this.initActionMenu();
+                    },
+                    error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+                });
+
         }
 
-
-
+        if(localStorage.getItem('bidView')) {
+            this.activeTab = 1;
+        }
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
     }
 

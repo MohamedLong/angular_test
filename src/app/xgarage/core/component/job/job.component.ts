@@ -158,11 +158,6 @@ export class JobComponent extends GenericComponent implements OnInit {
                     this.master.claimNo = dto.claimNo;
                     localStorage.setItem('job', JSON.stringify(this.master));
                     this.router.navigate(['job-details']);
-
-                    // this.router.navigate(['job-details'], {
-                    //     queryParams: {
-                    //       id: this.master.id
-                    //     }});
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });

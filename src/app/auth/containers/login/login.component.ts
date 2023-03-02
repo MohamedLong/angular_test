@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
                     if (this.authService.isLoggedIn()) {
                         // const link = this.router.createUrlTree(['/order-details', 338]).toString();
                         // this.authService.doStoreUser(this.authService.getJwtToken(), link);
-                        this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
+                        this.authService.doStoreUser(this.authService.getJwtToken(), this.router, this.destination);
 
 
                     }

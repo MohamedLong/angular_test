@@ -51,7 +51,7 @@
                     (click)="menu.toggle($event)"></button>
             </div>
             <div class="field" *ngIf="role == 1 && role !== 2">
-                <button pButton pRipple label="{{ 'part.addPart' | translate }}" icon="pi pi-plus" (click)="openNew()"
+                <button *ngIf="master && master.length > 0" pButton pRipple label="{{ 'part.addPart' | translate }}" icon="pi pi-plus" (click)="openNew()"
                     class="p-button-success mr-2 mb-3"
                     [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
             </div>
@@ -70,7 +70,7 @@
                                 styleClass="custom-spinner" strokeWidth="8" fill="var(--surface-ground)"
                                 animationDuration=".5s"></p-progressSpinner>
                         </div>
-                        <div class="pt-5 text-center" *ngIf="!isFetching && fillteredDetails.length  == 0">
+                        <div class="py-5 text-center" *ngIf="!isFetching && fillteredDetails.length  == 0">
                             this job has no requests
                         </div>
                         <p-table *ngIf="fillteredDetails.length > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
