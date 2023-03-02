@@ -10,7 +10,7 @@
                     <p-skeleton class="absolute top-0 left-0 z-1" size="150px"
                         *ngIf="!imageLoaded && master.car?.document !== null"></p-skeleton>
                     <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="150"
-                        src="{{master.car?.document? 'http://localhost:6060/api/v1/document/' + master.car?.document?.name : ''}}"
+                        src="{{master.car?.document? master.car?.document?.name : ''}}"
                         alt="">
                 </div>
                 <div class="py-2">
@@ -327,7 +327,7 @@
         <p-dialog [(visible)]="detailDialog" [style]="{width: '800px'}"
             header="{{ 'request.requestDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
             <ng-template pTemplate="content">
-                <app-new-request [type]="type" [requestDetails]="detail" [edit]="updateRequest"></app-new-request>
+                <app-new-request (request)="onReq($event)" [type]="type" [requestDetails]="detail" [edit]="updateRequest"></app-new-request>
             </ng-template>
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
@@ -501,7 +501,7 @@
             </div>
             <ng-template pTemplate="footer">
                 <div class="text-center pt-3">
-                    <p-button (click)="downloadPdf()" label="{{ 'bid.bidDialog.download' | translate }}"  [disabled]="printAuth===true" 
+                    <p-button (click)="downloadPdf()" label="{{ 'bid.bidDialog.download' | translate }}"  [disabled]="printAuth===true"
                         styleClass="p-button bg-indigo-100 text-indigo-600 border-0 font-light px-5"></p-button>
                     <p-button (click)="displayCompareBids=false" label="{{ 'bid.bidDialog.changeSupp' | translate }}"
                         styleClass="p-button"></p-button>

@@ -53,7 +53,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     @Input() type: string = 'new req';
     @Input() requestDetails: any = '';
     @Input() edit: boolean = false;
-    @Output() request = new EventEmitter<null>();
+    @Output() request = new EventEmitter<null | any>();
     blocked: boolean = false;
     isSending: boolean = false;
     buttonTxt = 'Send Request';
@@ -212,23 +212,28 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         }
         if (this.responseBody.hasOwnProperty('id')) {
             this.requestService.update(reqFormData).subscribe((res: MessageResponse) => {
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+                //console.log(res)
+                //this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+                this.request.emit(res);
             }, err => {
                 //console.log(err.error)
-                this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
+                //this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
+                this.request.emit(err);
             });
 
-            super.hideDialog();
+            // super.hideDialog();
             this.submitted = false;
 
         } else {
-            
-            console.log(this.responseBody);
-            console.log(reqFormData);
+
+            //console.log(this.responseBody);
+            //console.log(reqFormData);
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
+                //console.log(res)
                 if (this.type == 'new req') {
-                    this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
-                    this.hideDialog();
+                    //this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+                    this.request.emit(res);
+                    //super.hideDialog();
                 } else {
                     this.blocked = true;
                     this.buttonTxt = 'Request Sent Successfully';
@@ -238,10 +243,11 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 this.isSending = false;
                 this.submitted = false;
             }, err => {
-                console.log(err)
+                //console.log(err)
                 if (this.type == 'new req') {
-                    this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
-                    super.hideDialog();
+                    //this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
+                    //super.hideDialog();
+                    this.request.emit(err);
                 }
                 this.isSending = false;
                 this.blocked = false;
