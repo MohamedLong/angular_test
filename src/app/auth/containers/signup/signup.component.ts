@@ -19,13 +19,13 @@ import { Brand } from 'src/app/xgarage/common/model/brand';
 @Component({
     selector: 'app-signup',
     templateUrl: './signup.component.html',
-    // styleUrls: ['./signup.component.scss'],
+    styles: ['.pages-body{height: 100%}', '.pages-body .topbar {background-color: #fff;}'],
     providers: [MessageService]
 })
 export class SignupComponent implements OnInit {
 
-    constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, 
-        private messageService: MessageService, private tenantService: TenantService, 
+    constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
+        private messageService: MessageService, private tenantService: TenantService,
         private tenantTypeService: TenantTypeService, private supplierService: SupplierService) { }
 
     signupForm: FormGroup = this.fb.group({
@@ -51,7 +51,7 @@ export class SignupComponent implements OnInit {
     supplier: Supplier= {};
     tenants: Tenant[];
     tenantTypes: TenantType[];
-    selectedType: TenantType = {};    
+    selectedType: TenantType = {};
     selectedTenant: Tenant = {};
     newTenantTrigger = false;
 
@@ -77,7 +77,7 @@ export class SignupComponent implements OnInit {
         this.getTenantsByType(event.value);
     }
 
-    
+
     createUserWithNewTenant(){
         if (this.signupForm.controls.newTenantName.value && this.signupForm.controls.newCr.value) {
             this.selectedTenant.tenantType = this.tenantTypes.find(val => val.id == this.signupForm.controls.tenantType.value);
@@ -90,7 +90,7 @@ export class SignupComponent implements OnInit {
                 {
                     next: (data) => {
                         this.selectedTenant = data;
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'New Tenant Has Been Registered' });                    
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'New Tenant Has Been Registered' });
                         this.signupForm.patchValue({
                             tenant: this.selectedTenant.id,
                             userId: this.signupForm.get('email').value
@@ -101,7 +101,7 @@ export class SignupComponent implements OnInit {
                     error: (e) => alert(e)
                 }
             );
-        }        
+        }
     }
 
     createUserOnExistingTenant(){

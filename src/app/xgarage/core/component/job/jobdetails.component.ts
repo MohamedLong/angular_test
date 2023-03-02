@@ -97,8 +97,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.selectedEntries = [];
             this.callInsideOnInit();
             this.initActionMenu();
-            // this.activeTab = 1;);
+
+            if(localStorage.getItem('bidView')) {
+                this.activeTab = 1;
+            }
         }
+
+
 
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
     }

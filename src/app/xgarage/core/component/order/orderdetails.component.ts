@@ -10,7 +10,6 @@ import { DatePipe } from '@angular/common';
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
 import { OrderService } from '../../service/order.service';
-import { Status } from 'src/app/xgarage/common/model/status';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 @Component({
     selector: 'order-details',

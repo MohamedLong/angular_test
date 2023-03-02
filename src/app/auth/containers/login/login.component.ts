@@ -24,6 +24,8 @@ import { AuthService } from '../../services/auth.service';
       margin-right: 1rem;
       color: var(--primary-color) !important;
     }
+
+    .pages-body .topbar {background-color: #fff;}
   `],
     providers: [MessageService]
 })

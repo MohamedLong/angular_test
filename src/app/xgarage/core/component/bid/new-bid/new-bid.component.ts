@@ -36,6 +36,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     bidTotalOriginalPrice: number = 0;
     bidTotalPrice: number = 0;
     bidTotalDiscount: number = 0;
+    isSavingBid: boolean = false;
 
     ngOnInit(): void {
 
@@ -139,10 +140,11 @@ export class NewBidComponent implements OnInit, OnChanges {
         } else if (part.preferred.id == 4) {
             this.reqService.setSupplierNotInterested(part.id).subscribe(res => {
                 part.saved = true;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'part add as not interested' });
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'part added as not interested' });
             }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message }))
 
         } else {
+            part.isSending = true;
             let bid = { bidBody: JSON.stringify(bidBody), voiceNote: '' }
             let bidFormData = new FormData();
             for (var key in bid) {
@@ -157,11 +159,14 @@ export class NewBidComponent implements OnInit, OnChanges {
             if ((part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
                 this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
                     part.saved = true;
+                    part.isSending = false;
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
                 }, err => {
+                    part.isSending = false;
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
                 })
             } else {
+                part.isSending = false;
                 this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'some fileds are not valid, please try again.' });
             }
         }
@@ -230,6 +235,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             bid.totalPrice = 0.0,
             bid.statuses = this.statuses,
             bid.saved = false,
+            bid.isSending = false;
             bid.qty2 = bid.qty
     }
 
@@ -246,7 +252,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     onCancelBid(id: number) {
         this.bidService.cancelBid(id).subscribe({
             next: (data) => {
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Cancelled Successfully', life: 3000 });             
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Cancelled Successfully', life: 3000 });
             },
             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
         });

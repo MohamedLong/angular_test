@@ -69,6 +69,7 @@ export class SupplierDashbaordComponent implements OnInit {
                     this.master = data;
                     this.master.claimNo = dto.claimNo;
                     localStorage.setItem('job', JSON.stringify(this.master));
+                    localStorage.setItem('bidView', 'true');
                     this.router.navigate(['job-details']);
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })

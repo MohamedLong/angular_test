@@ -41,6 +41,7 @@ export class JobComponent extends GenericComponent implements OnInit {
     ngOnInit(): void {
         if(localStorage.getItem('job')) {
             localStorage.removeItem('job');
+            localStorage.removeItem('bidView');
         }
 
         super.callInsideOnInit();
