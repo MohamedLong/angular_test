@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 
@@ -32,15 +32,30 @@ export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     decodedToken: string;
     isLoading: boolean = false;
+    destination: string;
 
-    constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private messageService: MessageService) { }
+    constructor(private authService: AuthService, private formBuilder: FormBuilder, 
+      private route: ActivatedRoute,
+      private router: Router, private messageService: MessageService) { }
+
+    // ngOnInit() {
+    //   console.log(this.authService.isLoggedIn())
+    //     this.loginForm = this.formBuilder.group({
+    //         username: [''],
+    //         password: ['']
+    //     });
+    // }
 
     ngOnInit() {
-        this.loginForm = this.formBuilder.group({
-            username: [''],
-            password: ['']
-        });
+      this.route.queryParams.subscribe(params => {
+        this.destination = params['destination'];
+      });
+      this.loginForm = this.formBuilder.group({
+        username: [''],
+        password: ['']
+      });
     }
+
 
     get f() { return this.loginForm.controls; }
 
@@ -51,20 +66,23 @@ export class LoginComponent implements OnInit {
         username: this.f.username.value,
         password: this.f.password.value
       }
-    )
-      .subscribe(
-        {
-          next: (success) => {
-            if(this.authService.isLoggedIn()){
-              this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
-            }
-          },
-          error: (e) => {
-            this.isLoading = false;
-            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
-          }
-        }
-      );
-  }
+    ).subscribe(
+                {
+                    next: (success) => {
+                        if (this.authService.isLoggedIn()) {
+                            // const link = this.router.createUrlTree(['/order-details', 338]).toString();
+                            // this.authService.doStoreUser(this.authService.getJwtToken(), link);
+                            this.authService.doStoreUser(this.authService.getJwtToken(), this.router);
+
+
+                        }
+                    },
+                    error: (e) => {
+                        this.isLoading = false;
+                        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
+                    }
+                }
+            );
+    }
 
 }

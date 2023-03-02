@@ -42,7 +42,7 @@ export class JobService extends GenericService<Job> {
     }
 
     getBidsByJob(page: number) {
-        let endpoint = page? `/job/tenantSupplier?pageNo=${page}&pageSize=50` : '/job/tenantSupplier';
+        let endpoint = page? `/job/tenantSupplier?pageNo=${page}&pageSize=100` : '/job/tenantSupplier';
         return this.http.get<any[]>(config.coreApiUrl + endpoint);
     }
 }

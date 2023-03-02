@@ -13,18 +13,18 @@ import { Tenant } from "src/app/xgarage/common/model/tenant";
     animations: [
         trigger('topbarActionPanelAnimation', [
             transition(':enter', [
-                style({opacity: 0, transform: 'scaleY(0.8)'}),
+                style({ opacity: 0, transform: 'scaleY(0.8)' }),
                 animate('.12s cubic-bezier(0, 0, 0.2, 1)', style({ opacity: 1, transform: '*' })),
-              ]),
-              transition(':leave', [
+            ]),
+            transition(':leave', [
                 animate('.1s linear', style({ opacity: 0 }))
-              ])
+            ])
         ])
     ]
 })
 export class AppTopBarComponent {
 
-    constructor(public appMain: AppMainComponent, public app: AppComponent, 
+    constructor(public appMain: AppMainComponent, public app: AppComponent,
         private authService: AuthService, private router: Router, private tenantService: TenantService) {
     }
 
@@ -36,7 +36,7 @@ export class AppTopBarComponent {
     tenantName: string;
     tenantType: string;
 
-  
+
 
     model: MegaMenuItem[] = [
         {
@@ -129,32 +129,33 @@ export class AppTopBarComponent {
 
     @ViewChild('searchInput') searchInputViewChild: ElementRef;
 
-        
-    ngOnInit(): void {
-        this.firstName = JSON.parse(this.authService.getStoredUser()).firstName;
-        this.lastName = JSON.parse(this.authService.getStoredUser()).lastName;
-        this.tenantName = JSON.parse(this.authService.getStoredUser()).tenant.name;
-        this.tenantType = JSON.parse(this.authService.getStoredUser()).tenant.tenantType.name;
-    }
 
-    onSearchAnimationEnd(event: AnimationEvent) {
-        switch(event.toState) {
-            case 'visible':
-                this.searchInputViewChild.nativeElement.focus();
-            break;
+    ngOnInit(): void {
+        if (this.authService.isLoggedIn()) {
+
+            this.firstName = JSON.parse(this.authService.getStoredUser()).firstName;
+            this.lastName = JSON.parse(this.authService.getStoredUser()).lastName;
+            this.tenantName = JSON.parse(this.authService.getStoredUser()).tenant.name;
+            this.tenantType = JSON.parse(this.authService.getStoredUser()).tenant.tenantType.name;
         }
     }
 
-    viewProfile(id: number){
+    onSearchAnimationEnd(event: AnimationEvent) {
+        switch (event.toState) {
+            case 'visible':
+                this.searchInputViewChild.nativeElement.focus();
+                break;
+        }
+    }
+
+    viewProfile(id: number) {
         localStorage.removeItem('supplierId');
         this.userId = JSON.parse(this.authService.getStoredUser()).id;
-        console.log(this.userId);
         this.tenantService.selectedTenantId = this.userId;
-        console.log(this.tenantService.selectedTenantId);
         this.router.navigate(['/supplier-profile']);
     }
 
-    doLogout(){
+    doLogout() {
         this.authService.doLogoutUser();
         this.router.navigate(['/login']);
     }

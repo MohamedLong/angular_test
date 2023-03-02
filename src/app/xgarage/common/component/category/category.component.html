@@ -7,7 +7,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus" 
-                    class="p-button-success mr-2 mb-2" (click)="openNew()"  [disabled]="newAuth===true"></button>
+                    class="p-button-success mr-2 mb-2" (click)="openNew()"  [disabled]="newAuth===false"></button>
                     <!-- <button pButton pRipple label="{{ 'operations.delete' | translate }}" icon="pi pi-trash" 
                     class="p-button-danger mb-2" (click)="deleteSelectedEntries()" [disabled]="!selectedEntries || !selectedEntries.length"></button> -->
                 </ng-template>
@@ -15,7 +15,7 @@
                 <ng-template pTemplate="right">
                     <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{'operations.import' | translate}}" chooseLabel="Import" class="mr-2 mb-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="{{'operations.export' | translate}}" icon="pi pi-upload" 
-                    class="p-button-help mb-2" (click)="dt.exportCSV()"  [disabled]="printAuth===true"></button>
+                    class="p-button-help mb-2" (click)="dt.exportCSV()"  [disabled]="printAuth===false"></button>
                 </ng-template>
             </p-toolbar>
 
@@ -57,9 +57,9 @@
                         </td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" 
-                            (click)="editAction(category)"  [disabled]="editAuth===true"></button>
+                            (click)="editAction(category)"  [disabled]="editAuth===false"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" 
-                            (click)="deleteAction(category)"  [disabled]="deleteAuth===true"></button>
+                            (click)="deleteAction(category)"  [disabled]="deleteAuth===false"></button>
                         </td>
                     </tr>
                 </ng-template>

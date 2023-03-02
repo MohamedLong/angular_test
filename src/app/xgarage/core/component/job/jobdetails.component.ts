@@ -85,10 +85,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     ngOnInit() {
+        //console.log('init')
         if (localStorage.getItem('job')) {
             let data = JSON.parse(localStorage.getItem('job'));
             this.master = data;
-            //console.log(this.master)
             this.master.claimNo = data.claimNo;
             this.masters.push(this.master);
             this.getRequestsByJob();
@@ -97,11 +97,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.selectedEntries = [];
             this.callInsideOnInit();
             this.initActionMenu();
-            // this.activeTab = 1;
+            // this.activeTab = 1;);
         }
 
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
-
     }
 
     initActionMenu() {
@@ -302,6 +301,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.bidDtos = this.originalBidList;
         this.bidDetailsDialog = false;
         this.selectedEntries = [];
+
+        this.getBidsByJob();
     }
 
     getPartTypesAsString(partTypes: PartType[]) {
@@ -452,12 +453,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     downloadPdf() {
         const doc = new jsPDF();
-        autoTable(doc, { html: '#bids-table',
-        // didParseCell: function (data) {
-        //     var rows = data.table.body;
-        //     data.row. = 'flex';
-        // }
-     });
+        autoTable(doc, {
+            html: '#bids-table',
+            // didParseCell: function (data) {
+            //     var rows = data.table.body;
+            //     data.row. = 'flex';
+            // }
+        });
         doc.save('bids.pdf')
     }
 
@@ -480,7 +482,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     approveMultipleBids() {
-        if(this.selectedEntries.length > 0) {
+        if (this.selectedEntries.length > 0) {
             let bidOrder: BidOrderDto = this.prepareBidOrderObject();
             console.log('bidOrder: ', bidOrder);
             this.bidService.approveMultipleBids(bidOrder).subscribe({
@@ -488,7 +490,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                     if (data == true) {
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Approved Successfully', life: 3000 });    
                         this.selectedEntries.map(bid => bid.statusId = StatusConstants.INPROGRESS_STATUS);
-                        console.log('selctedEntries after approval: ', this.selectedEntries);
                         for(let i = 0; i < this.selectedEntries.length; i++) {
                             this.bidDtos[this.findIndexById(this.selectedEntries[i].bidId, this.bidDtos)] = this.selectedEntries[i];  
                         }       
@@ -500,45 +501,46 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
             });
             this.approveMultipleBidDialog = false;
+            this.closeBidDialog();
         }
     }
 
 
     prepareBidOrderObject() {
-            let approvedBids: number[] = [];
-            let totalVat = 0;
-            let totalOrderAmount = 0;
-            let totalTotalAmount = 0;
+        let approvedBids: number[] = [];
+        let totalVat = 0;
+        let totalOrderAmount = 0;
+        let totalTotalAmount = 0;
 
-            for (let i = 0; i < this.selectedEntries.length; i++) {
-                approvedBids[i] = this.selectedEntries[i].bidId;
-                totalOrderAmount = totalOrderAmount + this.selectedEntries[i].originalPrice;
-                totalVat = totalVat + this.selectedEntries[i].vat;
-                totalTotalAmount = totalTotalAmount + this.selectedEntries[i].price;
-            }
+        for (let i = 0; i < this.selectedEntries.length; i++) {
+            approvedBids[i] = this.selectedEntries[i].bidId;
+            totalOrderAmount = totalOrderAmount + this.selectedEntries[i].originalPrice;
+            totalVat = totalVat + this.selectedEntries[i].vat;
+            totalTotalAmount = totalTotalAmount + this.selectedEntries[i].price;
+        }
 
-            let bidOrder: BidOrderDto = {
-                bids: approvedBids,
-                shippingAddress: 1,
-                shippingMethod: 1,
-                paymentMethod: 1,
-                orderType: OrderType.Bid,
-                customer: JSON.parse(this.authService.getStoredUser()).id,
-                phone: JSON.parse(this.authService.getStoredUser()).phone,
-                supplier: this.selectedEntries.map(bid => bid.supplierId)[0],
-                deliveryFees: 0,
-                orderDate: new Date(),
-                orderAmount: totalOrderAmount,
-                vat: totalVat,
-                totalAmount: totalTotalAmount
-            };
+        let bidOrder: BidOrderDto = {
+            bids: approvedBids,
+            shippingAddress: 1,
+            shippingMethod: 1,
+            paymentMethod: 1,
+            orderType: OrderType.Bid,
+            customer: JSON.parse(this.authService.getStoredUser()).id,
+            phone: JSON.parse(this.authService.getStoredUser()).phone,
+            supplier: this.selectedEntries.map(bid => bid.supplierId)[0],
+            deliveryFees: 0,
+            orderDate: new Date(),
+            orderAmount: totalOrderAmount,
+            vat: totalVat,
+            totalAmount: totalTotalAmount
+        };
 
-            return bidOrder;
-    
+        return bidOrder;
+
     }
 
     rejectMultipleBids() {
-        if(this.selectedEntries.length > 0) {
+        if (this.selectedEntries.length > 0) {
             let rejectMultipleBids: RejectMultipleBids = {}
             let rejectedBids: number[] = [];
             for (let i = 0; i < this.selectedEntries.length; i++) {
@@ -561,6 +563,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
             });
             this.rejectMultipleBidDialog = false;
+            this.closeBidDialog();
 
         }
     }

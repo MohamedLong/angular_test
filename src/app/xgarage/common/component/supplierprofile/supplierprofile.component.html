@@ -88,10 +88,11 @@
                 </form>
                 <div class="flex-column md:col-6">
                     <div>
-                        <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" >
+                        <agm-map [latitude]="21.4735" [longitude]="55.9754" [zoom]="zoom" >
                             <agm-marker [latitude]="lat" [longitude]="lng" [markerDraggable]="true"
-                             (markerDragEnd)="markerDragEnd($event)"></agm-marker>
-                        </agm-map>
+                                        (markerDragEnd)="markerDragEnd($event)">
+                            </agm-marker>
+                          </agm-map>
                     </div>
                 </div>
             </div>

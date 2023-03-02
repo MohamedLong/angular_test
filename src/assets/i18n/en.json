@@ -604,6 +604,7 @@
             "desc": "Description",
             "descPlaceholder": "Add a short description about your parts",
             "sendReq": "{{text}}",
+            "qtyRequired": "{{Quantity can't be less than 1}}",
             "uploadImages": "Upload Part Images"
         },
         "requestDialog": {

@@ -87,7 +87,7 @@ export class AuthService {
     this.loggedUser = username;
   }
 
-  doStoreUser(token: string, router: Router){
+  doStoreUser(token: string, router: Router, destination?: string){
     this.decoded = jwt_decode(token);
     this.http.get<any>(this.apiUrl + '/user')
     .subscribe(
@@ -95,7 +95,14 @@ export class AuthService {
           next: (data) => {
             this.storeUser(JSON.stringify(data));
             this.getAuthorizedMenu();
-            router.navigate(['', 1]);
+            if (destination) {
+              console.log("LINK OK");
+              router.navigateByUrl(destination);
+            } else {
+              console.log("NO LINK");
+
+              router.navigate(['']);
+            }
           },
           error: (e) => {
             console.log("error : " + e.message);
@@ -105,10 +112,14 @@ export class AuthService {
       );
   }
 
+
+
+
   public doLogoutUser() {
     this.loggedUser = null;
     this.removeTokens();
     this.removeUserFromStore();
+    this.removeAppData();
   }
 
   private getRefreshToken() {
@@ -139,6 +150,12 @@ export class AuthService {
 
   private removeUserFromStore() {
     localStorage.removeItem('user');
+  }
+
+  private removeAppData() {
+    localStorage.removeItem('job');
+    localStorage.removeItem('order');
+    localStorage.removeItem('orderData');
   }
 
   changePassword(body: any) {

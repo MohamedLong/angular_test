@@ -6,7 +6,7 @@
     <p-toolbar styleClass="mb-3 align-items-start">
         <ng-template pTemplate="left" *ngIf="master">
             <div class="flex py-2">
-                <div class="mr-3 relative">
+                <div class="mr-3 relative" style="min-width: 150px;">
                     <p-skeleton class="absolute top-0 left-0 z-1" size="150px"
                         *ngIf="!imageLoaded && master.car?.document !== null"></p-skeleton>
                     <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="150"
@@ -50,7 +50,7 @@
                     icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
                     (click)="menu.toggle($event)"></button>
             </div>
-            <div class="field">
+            <div class="field" *ngIf="role == 1 && role !== 2">
                 <button pButton pRipple label="{{ 'part.addPart' | translate }}" icon="pi pi-plus" (click)="openNew()"
                     class="p-button-success mr-2 mb-3"
                     [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
@@ -221,14 +221,14 @@
                             <div class="col-12 md:col-5">
                                 <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
                                     icon="pi pi-check" (click)="approveMultipleBidDialog = true"
-                                    [disabled]="selectedEntries.length == 0 || selection == 'single' || editAuth == false"
+                                    [disabled]="selectedEntries.length == 0 || selection == 'single'  || editAuth == false"
                                     class="p-button-success mr-2 mb-3"></button>
                             </div>
 
                             <div class="col-12 md:col-5">
                                 <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
                                     icon="pi pi-times" (click)="rejectMultipleBidDialog = true"
-                                    [disabled]="selectedEntries.length == 0 && editAuth===true" class="p-button-danger mr-2 mb-3"></button>
+                                    [disabled]="selectedEntries.length == 0 || editAuth ==false" class="p-button-danger mr-2 mb-3"></button>
                             </div>
 
                             <div class="col-12 md:col-2">

@@ -38,11 +38,17 @@ export class NewBidComponent implements OnInit, OnChanges {
     bidTotalDiscount: number = 0;
 
     ngOnInit(): void {
-        console.log('init')
+
         if (this.type == 'new bid') {
+            this.requests = this.requests.filter(req => {
+                return req.status.id !== 7 && req.status.id !== 4;
+            });
+
+
             this.requests.forEach((req, index) => {
-                req.images = [],
-                    this.resetBid(req);
+                req.images = [];
+                this.resetBid(req);
+
                 let notInterestedSupplier = req.notInterestedSuppliers.filter(supplier => {
                     return supplier.user = JSON.parse(this.authService.getStoredUser()).id;
                 });
@@ -51,6 +57,9 @@ export class NewBidComponent implements OnInit, OnChanges {
                     this.requests[index].saved = true
                 }
             });
+
+
+            //console.log(this.requests)
         }
 
     }
@@ -124,7 +133,7 @@ export class NewBidComponent implements OnInit, OnChanges {
         }
 
 
-        console.log(bidBody)
+       // console.log(bidBody)
         if (part.preferred.id == 5) {
             this.messageService.add({ severity: 'warn', summary: 'Error', detail: "you can't submit a bid for unvailable part" });
         } else if (part.preferred.id == 4) {

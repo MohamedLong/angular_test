@@ -8,7 +8,7 @@
                 <ng-template pTemplate="left">
                     <div class="my-2">
                         <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus" class="p-button-success mr-2"
-                        [disabled]="newAuth === true" (click)="openNew()"></button>
+                        [disabled]="newAuth === false" (click)="openNew()"></button>
                         <!-- <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button> -->
                     </div>
                 </ng-template>
@@ -128,9 +128,9 @@
                         </td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                                (click)="editUser(user)" [disabled]="editAuth === true"></button>
+                                (click)="editUser(user)" [disabled]="editAuth === false"></button>
                             <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mt-2"
-                                [disabled]="deleteAuth === true" (click)="deleteUser(user)"></button>
+                                [disabled]="deleteAuth === false" (click)="deleteUser(user)"></button>
                         </td>
                     </tr>
                 </ng-template>
