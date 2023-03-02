@@ -21,6 +21,7 @@ import autoTable from 'jspdf-autotable';
 import { RejectMultipleBids } from '../../dto/rejectmultiplebids';
 import { BidOrderDto } from '../../dto/bidorderdto';
 import { OrderType } from '../../dto/ordertype';
+import { StatusConstants } from '../../model/statusconstatnts';
 
 @Component({
     selector: 'job-details',
@@ -88,7 +89,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         if (localStorage.getItem('job')) {
             let data = JSON.parse(localStorage.getItem('job'));
             this.master = data;
-            //console.log(this.master)
             this.master.claimNo = data.claimNo;
             this.masters.push(this.master);
             this.getRequestsByJob();
@@ -484,11 +484,17 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     approveMultipleBids() {
         if (this.selectedEntries.length > 0) {
             let bidOrder: BidOrderDto = this.prepareBidOrderObject();
+            console.log('bidOrder: ', bidOrder);
             this.bidService.approveMultipleBids(bidOrder).subscribe({
                 next: (data) => {
                     if (data == true) {
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Approved Successfully', life: 3000 });
-                    } else {
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Approved Successfully', life: 3000 });    
+                        this.selectedEntries.map(bid => bid.statusId = StatusConstants.INPROGRESS_STATUS);
+                        for(let i = 0; i < this.selectedEntries.length; i++) {
+                            this.bidDtos[this.findIndexById(this.selectedEntries[i].bidId, this.bidDtos)] = this.selectedEntries[i];  
+                        }       
+                        this.selectedEntries = [];   
+                     }else{
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Approved Failed', life: 3000 });
                     }
                 },
@@ -544,8 +550,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.bidService.rejectMutltipleBids(rejectMultipleBids).subscribe({
                 next: (data) => {
                     if (data == true) {
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });
-                    } else {
+                        this.selectedEntries.map(bid => bid.statusId = StatusConstants.REJECTED_STATUS);
+                        for(let i = 0; i < this.selectedEntries.length; i++) {
+                            this.bidDtos[this.findIndexById(this.selectedEntries[i].bidId, this.bidDtos)] = this.selectedEntries[i];  
+                        }  
+                        this.selectedEntries = [];
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });                   
+                     }else{
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Rejection Failed', life: 3000 });
                     }
                 },
@@ -555,6 +566,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.closeBidDialog();
 
         }
+    }
+
+    disabledRequest(request: Request) {
+        return (request.status.id == StatusConstants.COMPLETED_STATUS || request.status.id == StatusConstants.CANCELED_STATUS)
     }
 
 }

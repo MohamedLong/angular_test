@@ -41,13 +41,6 @@ export class AppComponent implements OnInit{
             localStorage.setItem('lang', lang);
         }
 
-        // let subscription: Subscription = this.router.events.subscribe((val) => {
-        //     // let job
-        //     console.log(val)
-        //     //this.originalUrl = val.url;
-        //     subscription.unsubscribe();
-        //   });
-
     }
 
     ngOnInit() {
@@ -56,5 +49,9 @@ export class AppComponent implements OnInit{
         //     console.log('there is an id')
         // }
         this.primengConfig.ripple = true;
+
+
     }
+
+    
 }

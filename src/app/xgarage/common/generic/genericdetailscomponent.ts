@@ -324,7 +324,7 @@ export class GenericDetailsComponent{
           case StatusConstants.OPEN_STATUS:
             return 'Open';
           case StatusConstants.INPROGRESS_STATUS:
-            return 'In Progress';
+            return 'Initial Approval';
           case StatusConstants.ONHOLD_STATUS:
             return 'On Hold';
           case StatusConstants.COMPLETED_STATUS:

@@ -222,6 +222,9 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.submitted = false;
 
         } else {
+            
+            console.log(this.responseBody);
+            console.log(reqFormData);
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
                 if (this.type == 'new req') {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
