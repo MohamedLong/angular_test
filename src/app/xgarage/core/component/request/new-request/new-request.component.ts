@@ -137,6 +137,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.submitted = true;
 
             if (this.type == 'edit req') {
+                console.log(this.requestDetails)
                 this.responseBody.id = this.requestDetails.id;
                 this.responseBody.job = this.requestDetails.job;
                 this.responseBody.description = this.description;
@@ -181,6 +182,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         console.log('setting req info')
         this.selectedPartTypes = this.requestDetails.partTypes; //set part types
         this.description = this.requestDetails.description; //set description
+        this.qty = this.requestDetails.qty; //set qty
     }
 
     getPart() {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../services/auth.service';
 
@@ -33,16 +33,24 @@ export class LoginComponent implements OnInit {
     decodedToken: string;
     isLoading: boolean = false;
 
-    constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private messageService: MessageService) { }
+    constructor(private route: ActivatedRoute, private authService: AuthService, private formBuilder: FormBuilder, private router: Router, private messageService: MessageService) { }
 
     ngOnInit() {
 
 
-        console.log(this.authService.isLoggedIn())
+        //console.log(this.authService.isLoggedIn())
         this.loginForm = this.formBuilder.group({
             username: [''],
             password: ['']
         });
+
+        // if(this.route.snapshot.queryParams['redirectTo']) {
+        //     if(this.authService.isLoggedIn()) {
+        //         localStorage.setItem('job', this.route.snapshot.queryParams.get('redirectTo'))
+        //         this.router.navigate(['job-details']);
+        //     }
+        // }
+
         // const redirectUrl = localStorage.getItem('redirectUrl');
         // if (redirectUrl) {
         //   localStorage.removeItem('redirectUrl');
