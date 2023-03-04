@@ -42,7 +42,7 @@ export class NewPartComponent implements OnInit {
     getPartCategories() {
         this.categoryService.getAll().subscribe(res => {
             this.categories = res;
-            if(this.partDetails) {
+            if (this.partDetails) {
                 this.showPart(this.partDetails);
             }
         });
@@ -60,18 +60,17 @@ export class NewPartComponent implements OnInit {
             this.selectedPart = this.parts.find(s => s.id == part.id);
             this.part = part;
             this.requestService.part.next(this.part)
-            this.disableList = this.type == 'edit req'? false : true;
+            this.disableList = this.type == 'edit req' ? false : true;
         });
     }
 
     onSearchPart(event: any) {
         this.isFetching = true;
         this.partService.getPartByPartName(event.query).subscribe(res => {
-            if(res.length > 0) {
+            if (res.length > 0) {
                 this.parts = res;
                 this.isFetching = false;
-                this.disableList = true;
-            }else{
+            } else {
                 this.disableList = false;
                 this.selectedPart = null;
                 this.isFetching = false;
@@ -81,6 +80,12 @@ export class NewPartComponent implements OnInit {
             this.selectedPart = null;
             this.isFetching = false;
         })
+
+    }
+
+    onClearSearchPart() {
+        this.disableList = false;
+        this.isFetching = false;
     }
 
     onChoosePart(part: Part) {
@@ -118,14 +123,14 @@ export class NewPartComponent implements OnInit {
     }
 
     createNewPart() {
-        if(this.checked == true && !this.selectedPart) {
+        if (this.checked == true && !this.selectedPart) {
             this.part.id = null;
             this.part.name = this.partName;
             this.part.status = 0;
             this.part.subCategoryId = this.selectedSubCategory.id;
-        }else if(this.checked == false && this.selectedPart){
+        } else if (this.checked == false && this.selectedPart) {
             this.part = this.selectedPart;
-        }else{
+        } else {
             this.part = {};
         }
 

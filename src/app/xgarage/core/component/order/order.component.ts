@@ -42,14 +42,22 @@ export class OrderComponent extends GenericComponent implements OnInit {
 
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
     pageNo: number = 0;
-
+    totalOrderAmount = 0;
+    totalAmount = 0;
+    delivaryTotal = 0;
     ngOnInit(): void {
         this.getAll(this.pageNo);
+        this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['orders'] }]);
     }
 
     getAll(page: number) {
         this.orderService.getForTenant(page).subscribe(res => {
-            //console.log(res)
+            console.log(res)
+            res.forEach(data => {
+                this.totalOrderAmount = this.totalOrderAmount + data.orderAmount;
+                this.totalAmount = this.totalAmount + data.totalAmount;
+                this.delivaryTotal = this.delivaryTotal + data.deliveryFees;
+            })
             this.masterDtos = res;
         }, err => {
             this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.error.statusMsg, life: 3000 })

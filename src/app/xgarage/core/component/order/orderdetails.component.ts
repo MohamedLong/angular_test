@@ -52,7 +52,8 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     ngOnInit() {
         this.master = JSON.parse(localStorage.getItem('orderData'));
         this.order = JSON.parse(localStorage.getItem('order'));
-        //console.log(this.master,this.order)
+        console.log('data:', this.master)
+        console.log('order:', this.order)
         this.master.forEach(element => {
             this.totalVat = this.totalVat + element.vat;
         });
@@ -65,13 +66,12 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
             { field: 'price', header: 'UNIT RATE' },
             { field: 'price', header: 'UNIT VALUE' },
             { field: 'discount', header: 'DISC' },
-            // { field: 'vat', header: 'TAX' },
-            { field: 'vat', header: 'TAX AMT' },
+            { field: 'vat', header: 'TAX AMT %' },
             { field: 'price', header: 'LINE VALUE' }
         ];
 
          this.initActionMenu();
-
+         this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['orders'] }, { 'label': 'Order Details', routerLink: ['order-details'] }]);
     }
 
     getPdf() {

@@ -22,6 +22,7 @@ import { RejectMultipleBids } from '../../dto/rejectmultiplebids';
 import { BidOrderDto } from '../../dto/bidorderdto';
 import { OrderType } from '../../dto/ordertype';
 import { StatusConstants } from '../../model/statusconstatnts';
+import { UpdateJobDto } from '../../dto/updatedjobdto';
 
 @Component({
     selector: 'job-details',
@@ -79,6 +80,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     @ViewChild('toggleBid', { read: ElementRef }) input: ElementRef;
     visible: boolean = true;
     selection: string = 'single';
+    jobDto: UpdateJobDto = {};
+
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
@@ -121,6 +124,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         if(localStorage.getItem('bidView')) {
             this.activeTab = 1;
         }
+
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
     }
 
@@ -193,6 +197,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.isFetching = true;
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
+                console.log(requests)
                 this.details = requests;
                 this.fillteredDetails = requests;
                 this.setStatusNames(this.details)
@@ -281,6 +286,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.bidDetailsDialog = true;
         this.selectedEntries = [];
         this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
+
+        console.log(this.bidDtos)
     }
 
     viewBidsBySupplier(bid: any) {
@@ -594,14 +601,57 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     onReq(event) {
-        //console.log(event)
+        console.log(event)
         this.hideDialog();
-        if(event.messageCode == 200) {
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: event.message });
-        } else {
+        if(event.error) {
             this.messageService.add({ severity: 'erorr', summary: 'Error', detail: event.error.message });
+        } else {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: event.message });
+            let index = this.fillteredDetails.findIndex((el) => el.id === event.id);
+            this.fillteredDetails[index] = event;
         }
     }
 
+
+    editJobNumber(dto: any) {
+        console.log(dto)
+        this.jobDto.id = dto.id;
+        this.jobDto.jobNumber = dto.jobNo;
+        this.jobDto.status = dto.status;
+        this.masterDialog = true;
+    }
+
+    updateJobNumber() {
+        this.submitted = true;
+        if (this.jobDto.jobNumber) {
+            this.jobService.partialUpdate(this.jobDto).subscribe(
+                {
+                    next: (data) => {
+                        if (data.messageCode == 200) {
+                            this.master.jobNo = this.jobDto.jobNumber;
+                            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Job Updated', life: 3000 });
+                            this.masterDialog = false;
+                        } else {
+                            this.messageService.add({ severity: 'error', summary: 'Server Error', detail: data.message, life: 3000 })
+                        }
+                    },
+                    error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
+                }
+            );
+        }
+    }
+
+    hideJObNoDialog(): void {
+        this.masterDialog = false;
+    }
+
+    modalPart: any = [];
+    displayModal: boolean = false;
+
+    showModal(part) {
+        this.modalPart = part;
+        this.modalPart.bidImages = this.modalPart.bidImages !== null? this.modalPart.bidImages.split(',') : null;
+        this.displayModal = true;
+    }
 }
 

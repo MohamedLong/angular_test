@@ -745,6 +745,7 @@
             "partImgs": "Part Images",
             "modifyBid": "Modify Bid",
             "noImgs": "this part has no images",
+            "noImgsBySupplier": "Supplier has not submitted any images for this part",
             "comment": "Comment from client",
             "bidOnReq": "Bid on a request",
             "Reqlatest": "Latest Request",

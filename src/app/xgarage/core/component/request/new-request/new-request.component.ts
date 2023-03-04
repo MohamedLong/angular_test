@@ -148,7 +148,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 this.responseBody.requestTitle = this.requestDetails.requestTitle;
                 this.responseBody.user = this.requestDetails.user;
                 this.responseBody.partTypes = this.selectedPartTypes;
-                this.responseBody.qty = this.requestDetails.qty;
+                this.responseBody.qty = this.qty;
 
                 //console.log('edit request', this.responseBody)
             } else {

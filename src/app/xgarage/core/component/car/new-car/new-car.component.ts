@@ -113,7 +113,7 @@ export class NewCarComponent implements OnInit {
             if (!this.carForm.get('chassisNumber').errors) {
                 this.carService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
                     //console.log('res:', res.document.name)
-                    this.image = config.apiUrl + '/v1/document/' + res.document.name;
+                    this.image = res.document? config.apiUrl + '/v1/document/' + res.document.name : '';
                     this.found = true;
                     this.notFound = !this.found;
                     this.setSelectedCar(res);
