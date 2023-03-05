@@ -91,9 +91,14 @@
                 </ng-template>
                 <ng-template pTemplate="footer">
                     <tr>
-                        <td colspan="5" class="text-right">Total</td>
-                        <td>{{amountTotal | number}}</td>
-                        <td colspan="5" class="text-right"></td>
+                        <!-- <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td> -->
+                        <td colspan="4" class="text-left">Total</td>
+                        <td>{{totalOrderAmount| number}}</td>
+                        <td colspan="2" >{{totalAmount | number}}</td>
+                        <td>{{delivaryTotal | number}}</td>
                     </tr>
 
                 </ng-template>

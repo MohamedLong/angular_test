@@ -190,7 +190,7 @@
         </ng-container>
     </div>
     <ng-template #noimages>
-        <p>{{'bid.bidDetails.noImgs' | translate}}</p>
+        <p-message severity="warn" text="{{'bid.bidDetails.noImgs' | translate}}" styleClass="mr-2"></p-message>
     </ng-template>
     <div *ngIf="modalPart.description">
         <h5 class="mb-2">{{modalPart.part.name}}</h5>

@@ -10,8 +10,7 @@
                     <p-skeleton class="absolute top-0 left-0 z-1" size="150px"
                         *ngIf="!imageLoaded && master.car?.document !== null"></p-skeleton>
                     <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="150"
-                        src="{{master.car?.document? master.car?.document?.name : ''}}"
-                        alt="">
+                        src="{{master.car?.document? master.car?.document?.name : ''}}" alt="">
                 </div>
                 <div class="py-2">
                     <div class="mb-3">
@@ -35,7 +34,11 @@
                             <p class="font-medium muted-text">{{master.claimNo}}</p>
                         </div>
                         <div class="mr-8">
-                            <h6 class="mb-2">{{'job.tableColumn.jobNo' | translate}}</h6>
+                            <h6 class="mb-2 flex align-items-center">{{'job.tableColumn.jobNo' | translate}} <button
+                                    [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
+                                    type="button" icon="pi pi-pencil"
+                                    class="ml-1 py-0 p-button-rounded p-button-success p-button-text"></button>
+                            </h6>
                             <p class="font-medium muted-text">{{master.jobNo}}</p>
                         </div>
                         <div>
@@ -57,8 +60,8 @@
                     (click)="menu.toggle($event)"></button>
             </div>
             <div class="field" *ngIf="role == 1 && role !== 2">
-                <button *ngIf="master && master.length > 0" pButton pRipple label="{{ 'part.addPart' | translate }}" icon="pi pi-plus" (click)="openNew()"
-                    class="p-button-success mr-2 mb-3"
+                <button *ngIf="master && master.length > 0" pButton pRipple label="{{ 'part.addPart' | translate }}"
+                    icon="pi pi-plus" (click)="openNew()" class="p-button-success mr-2 mb-3"
                     [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
             </div>
         </ng-template>
@@ -104,7 +107,8 @@
                                     <th pColumn="status.nameEn">{{ 'common.status' | translate }}</th>
                                     <th [hidden]="role == 2" style="text-align:center">
                                         {{'operations.actions' | translate }}</th>
-                                    <th [hidden]="role == 2" style="text-align:center">{{ 'bid.title' | translate }}</th>
+                                    <th [hidden]="role == 2" style="text-align:center">{{ 'bid.title' | translate }}
+                                    </th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-request>
@@ -208,8 +212,7 @@
             </div>
 
         </div>
-        <p-dialog [(visible)]="bidDetailsDialog" [style]="{width: '1300px'}" [modal]="true" styleClass="p-fluid"
-            (onHide)="closeBidDialog()">
+        <p-dialog [(visible)]="bidDetailsDialog" [modal]="true" styleClass="" (onHide)="closeBidDialog()">
             <ng-template pTemplate="header">
 
                 <p-toolbar styleClass="mb-2" [style]="{width: '1270px'}">
@@ -234,7 +237,8 @@
                             <div class="col-12 md:col-5">
                                 <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
                                     icon="pi pi-times" (click)="rejectMultipleBidDialog = true"
-                                    [disabled]="selectedEntries.length == 0 || editAuth ==false" class="p-button-danger mr-2 mb-3"></button>
+                                    [disabled]="selectedEntries.length == 0 || editAuth ==false"
+                                    class="p-button-danger mr-2 mb-3"></button>
                             </div>
 
                             <div class="col-12 md:col-2">
@@ -287,9 +291,13 @@
                             </td>
                             <td *ngIf="partName==null">
                                 {{bid.partName}}
+                                <i (click)="showModal(bid)" style="cursor: pointer; border-right: 1px solid #dee2e6;"
+                                    class="pi pi-images fs-large m-2 ml-3 text-blue-500"></i>
                             </td>
                             <td *ngIf="partName">
                                 {{bid.supplierName}}
+                                <i (click)="showModal(bid)" style="cursor: pointer; border-right: 1px solid #dee2e6;"
+                                    class="pi pi-images fs-large m-2 ml-3 text-blue-500"></i>
                             </td>
                             <td>
                                 {{bid.partType}}
@@ -329,11 +337,27 @@
 
             </ng-template>
         </p-dialog>
-
+        <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{'max-width': '80vw'}" [resizable]="true">
+            <ng-template pTemplate="header">
+                {{modalPart.supplierName}}
+            </ng-template>
+            <div class="align-items-start flex justify-content-between mb-3"
+                *ngIf="modalPart.bidImages; else noimages">
+                <ng-container *ngFor="let img of modalPart.bidImages">
+                    <img class="car-image rounded-large  shadow-3 mx-2"
+                        src="{{'http://letsgo-oman.com:6060/api/v1/document/' + img.trim()}}" alt="{{modalPart.partName}}">
+                </ng-container>
+            </div>
+            <ng-template #noimages>
+                <p-message severity="warn" text="{{'bid.bidDetails.noImgsBySupplier' | translate}}"
+                    styleClass="mr-2"></p-message>
+            </ng-template>
+        </p-dialog>
         <p-dialog [(visible)]="detailDialog" [style]="{width: '800px'}"
             header="{{ 'request.requestDialog.title' | translate }}" [modal]="true" styleClass="p-fluid">
             <ng-template pTemplate="content">
-                <app-new-request (request)="onReq($event)" [type]="type" [requestDetails]="detail" [edit]="updateRequest"></app-new-request>
+                <app-new-request (request)="onReq($event)" [type]="type" [requestDetails]="detail"
+                    [edit]="updateRequest"></app-new-request>
             </ng-template>
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
@@ -362,7 +386,9 @@
             [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-check-circle mr-3" style="font-size: 2rem"></i>
-                <span [ngStyle]="{color:'var(--green-700)'}"><h6>{{ 'job.operations.approveMultipleBids' | translate }}</h6></span>
+                <span [ngStyle]="{color:'var(--green-700)'}">
+                    <h6>{{ 'job.operations.approveMultipleBids' | translate }}</h6>
+                </span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
@@ -376,7 +402,9 @@
             [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-times-circle mr-3" style="font-size: 2rem"></i>
-                <span [ngStyle]="{color:'var(--orange-700)'}"><h6>{{ 'job.operations.rejectMultipleBids' | translate }}</h6></span>
+                <span [ngStyle]="{color:'var(--orange-700)'}">
+                    <h6>{{ 'job.operations.rejectMultipleBids' | translate }}</h6>
+                </span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
@@ -401,8 +429,9 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag" header="{{ 'bid.compareBids' | translate }}" [(visible)]="displayCompareBids" [modal]="true" [style]="{width: '90vw'}"
-            [draggable]="false" [resizable]="false" (onHide)="onHideCompareBids()">
+        <p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag"
+            header="{{ 'bid.compareBids' | translate }}" [(visible)]="displayCompareBids" [modal]="true"
+            [style]="{width: '90vw'}" [draggable]="false" [resizable]="false" (onHide)="onHideCompareBids()">
             <div class="p-datatable p-datatable-gridlines">
                 <table class="p-datatable-table" id="bids-table">
                     <thead class="p-datatable-thead">
@@ -423,13 +452,13 @@
                     <tbody class="p-element p-datatable-tbody">
                         <tr *ngFor="let part of groupedBypart">
                             <th class="border-1 border-300">{{part.partName}}</th>
-                        <td class="p-0">
-                            <tr class="flex flex-column">
-                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
-                                        class="p-2" *ngFor="let bid of part.bids; let i = index">
-                                        {{bid.supplierName}}
-                                </td>
-                            </tr>
+                            <td class="p-0">
+                        <tr class="flex flex-column">
+                            <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                {{bid.supplierName}}
+                            </td>
+                        </tr>
                         </td>
                         <td class="p-0">
                             <tr class="flex flex-column">
@@ -507,11 +536,33 @@
             </div>
             <ng-template pTemplate="footer">
                 <div class="text-center pt-3">
-                    <p-button (click)="downloadPdf()" label="{{ 'bid.bidDialog.download' | translate }}"  [disabled]="printAuth===true"
+                    <p-button (click)="downloadPdf()" label="{{ 'bid.bidDialog.download' | translate }}"
+                        [disabled]="printAuth===true"
                         styleClass="p-button bg-indigo-100 text-indigo-600 border-0 font-light px-5"></p-button>
                     <p-button (click)="displayCompareBids=false" label="{{ 'bid.bidDialog.changeSupp' | translate }}"
                         styleClass="p-button"></p-button>
                 </div>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="masterDialog" [style]="{width: '300px'}" header="{{ 'job.jobDialog.title' | translate }}"
+            [modal]="true" styleClass="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="formgrid grid">
+                    <div class="field col-12">
+                        <label for="jobNo">{{ 'job.tableColumn.jobNo' | translate }}</label>
+                        <input type="text" pInputText id="jobNo" [(ngModel)]="jobDto.jobNumber" required autofocus />
+                        <small class="p-error" *ngIf="submitted && !jobDto.jobNumber">{{
+                            'job.form.jobNoRequired' | translate }}</small>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
+                    class="p-button-text" (click)="hideJObNoDialog()"></button>
+                <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
+                    class="p-button-text" (click)="updateJobNumber()"
+                    [disabled]="!(jobDto.status == 1 && editAuth===true)"></button>
             </ng-template>
         </p-dialog>
     </div>

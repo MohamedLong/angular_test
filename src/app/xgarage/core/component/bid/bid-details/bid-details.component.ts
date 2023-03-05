@@ -25,7 +25,6 @@ export class BidDetailsComponent implements OnInit {
 
     ngOnInit(): void {
         this.getBids(this.pageNo);
-
         this.breadcrumbService.setItems([{'label': 'My Bids', 'routerLink': ['bids']}]);
     }
 
@@ -33,6 +32,7 @@ export class BidDetailsComponent implements OnInit {
         this.loading = true;
         this.jobService.getBidsByJob(page).subscribe({
             next: (res) => {
+                console.log(res)
                 this.bids = res;
                 this.fillteredBids = res;
                 this.loading = false;
