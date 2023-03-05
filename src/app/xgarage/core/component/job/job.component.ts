@@ -10,6 +10,7 @@ import { JobService } from '../../service/job.service';
 import { InsuranceType } from '../../model/insurancetype';
 import { UpdateJobDto } from '../../dto/updatedjobdto';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
+import { StatusConstants } from '../../model/statusconstatnts';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class JobComponent extends GenericComponent implements OnInit {
     }
 
     role: number = this.authService.isLoggedIn()? JSON.parse(this.authService.getStoredUser()).roles[0].id : 0;
-    selectedStatus: Status;
+    selectedStatus: Status = {};
     statuses: Status[];
     valid: boolean = false;
     insuranceTypes = Object.values(InsuranceType);
@@ -57,6 +58,14 @@ export class JobComponent extends GenericComponent implements OnInit {
                 next: (data) => {
                     this.masterDtos = data;
                     this.masterDtos = this.masterDtos.filter(job => job.id != null);
+                    this.cols = [
+                        { field: 'jobNo', header: 'Job Number' },
+                        { field: 'jobTitle', header: 'Job Tilte' },
+                        { field: 'partNames', header: 'Part Names' },
+                        { field: 'submittedBids', header: 'No. Of Submitted Bids' },
+                        { field: 'jobStatus', header: 'Job Status' },
+                        { field: 'claimNo', header: 'Claim Number' }
+                    ];
                     this.loading = false;
                     this.fillteredDto = this.masterDtos;
                     this.setStatusNames(this.masterDtos)
@@ -96,21 +105,6 @@ export class JobComponent extends GenericComponent implements OnInit {
         }
     }
 
-    confirmDelete() {
-        this.jobService.delete(this.masterDto.id).subscribe(res => {
-            if (res.messageCode == 200) {
-                this.masterDtos = this.masterDtos.filter(val => val.id != this.masterDto.id);
-                this.messageService.add({ severity: 'success', summary: 'Request Deleted successfully' });
-                this.deleteSingleDialog = false;
-            }
-            else {
-                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Delete Request', life: 3000 });
-            }
-        }, err => {
-            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.Message, life: 3000 });
-        })
-    }
-
     editParentAction(dto: any) {
         this.jobDto.id = dto.id;
         this.jobDto.jobNumber = dto.jobNo;
@@ -144,9 +138,22 @@ export class JobComponent extends GenericComponent implements OnInit {
         this.editable = false;
     }
 
-    deleteJob(dto: any) {
-        this.deleteSingleDialog = true;
-        this.masterDto = { ...dto };
+    confirmDelete() {
+        let cancelStatus: Status = {
+            id: StatusConstants.CANCELED_STATUS
+          }
+        this.jobService.cancelJob(this.master.id, cancelStatus).subscribe(res => {
+            if(res.messageCode == 200){
+                this.messageService.add({ severity: 'success', summary: 'Job cancelled successfully' });
+                this.deleteSingleDialog = false;
+                this.getAllForTenant(this.pageNo);
+            }
+              else{
+                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });
+              }
+            }, err => {
+                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.error.message, life: 3000 });
+            })
     }
 
 

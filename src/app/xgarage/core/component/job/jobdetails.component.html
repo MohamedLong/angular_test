@@ -22,8 +22,14 @@
                         <p class="font-medium muted-text">{{'job.tableColumn.carChassisNumber' | translate}}:
                             {{master.car.chassisNumber}}</p>
                     </div>
-
                     <div class="flex mb-3">
+                        <div class="mr-8">
+                            <h6 class="mb-2">{{'job.form.status' | translate}}</h6>
+                            <p *ngIf="master.status.nameEn === 'Open'" class="font-medium muted-text text-blue-500">{{master.status.nameEn}}</p>
+                            <p *ngIf="master.status.nameEn === 'Approved'" class="font-medium muted-text text-green-500">{{master.status.nameEn}}</p>
+                            <p *ngIf="master.status.nameEn === 'Canceled'" class="font-medium muted-text text-orange-700">{{master.status.nameEn}}</p>
+
+                        </div>
                         <div class="mr-8">
                             <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
                             <p class="font-medium muted-text">{{master.claimNo}}</p>
@@ -34,7 +40,7 @@
                         </div>
                         <div>
                             <h6 class="mb-2">{{'job.form.garageLocation' | translate}}</h6>
-                            <p class="font-medium muted-text text-blue-500">{{details[0]?details[0].locationName : '-'}}
+                            <p class="font-medium muted-text">{{details[0]?details[0].locationName : '-'}}
                             </p>
                         </div>
                     </div>
@@ -46,7 +52,7 @@
             <div class="field col">
                 <p-confirmPopup></p-confirmPopup>
                 <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
-                <button pButton pRipple  [disabled]="editAuth===true"  class="mb-3 p-button-warning" type="button"
+                <button pButton pRipple  [disabled]="editAuth===false"  class="mb-3 p-button-warning" type="button"
                     icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
                     (click)="menu.toggle($event)"></button>
             </div>

@@ -4,19 +4,19 @@
 
         <!-- //Sale invoice Components  -->
         <div class="card">
-            <!-- <p-toolbar styleClass="mb-4">
+            <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        (click)="openNew()" [disabled]="newAuth===false"></button>
+                    <!-- <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
+                        (click)="openNew()" [disabled]="newAuth===false"></button> -->
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
-                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload>
+                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
+                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help mb-2"
                         (click)="dt.exportCSV()"></button>
                 </ng-template>
-            </p-toolbar> -->
+            </p-toolbar>
 
             <p-table #dt [value]="masterDtos" (onPage)="loadOrders($event)" [columns]="cols" [rows]="10" [paginator]="true"
                 (onFilter)="onFilter($event, dt)"

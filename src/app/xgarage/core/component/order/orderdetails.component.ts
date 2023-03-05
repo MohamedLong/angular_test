@@ -71,6 +71,8 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
         ];
 
          this.initActionMenu();
+         this.breadcrumbService.setItems([{'label': 'Order Details', 'routerLink': ['order-details']}]);
+
 
     }
 

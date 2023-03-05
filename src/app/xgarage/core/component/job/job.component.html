@@ -44,6 +44,8 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th pColumn="id">{{ 'common.id' | translate }}
+                        </th>
                         <th pColumn="jobNo">{{ 'job.tableColumn.jobNo' | translate }}
                         </th>
                         <th pColumn="jobTitle">{{ 'job.tableColumn.jobTitle' | translate }}
@@ -56,14 +58,17 @@
                         </th>
                         <th pColumn="claimNo">{{ 'job.tableColumn.claimNo' | translate }}
                         </th>
-                        <th *ngIf="role && role == 1 && role !== 2"
+                        <!-- <th *ngIf="role && role == 1 && role !== 2"
                             pColumn="actions">{{'common.actions' | translate }}
-                        </th>
+                        </th> -->
 
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-job>
                     <tr>
+                        <td>
+                            {{job.id}}
+                        </td>
                         <td>
                             <span><a (click)="goDetails(job)" style="cursor: pointer;"><mark
                                         class="text-blue-400 hover:text-pink-500">{{job.jobNo}}</mark></a>
@@ -84,12 +89,12 @@
                             {{job.claimNo}}
                         </td>
 
-                        <td *ngIf="role && role == 1 && role !== 2">
+                        <!-- <td *ngIf="role && role == 1 && role !== 2">
                             <button  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
                             [disabled]="editAuth===false"  (click)="editParentAction(job)"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
-                            [disabled]="deleteAuth===false"  (click)="deleteJob(job)"></button>
-                        </td>
+                            [disabled]="deleteAuth===false"  (click)="deleteAction(job)"></button>
+                        </td> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="summary">
@@ -126,8 +131,7 @@
             [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="masterDto">{{ 'operations.deleteMessage' | translate }}
-                    <b>{{ 'job.jobNumber' | translate }} {{masterDto.jobNo}}</b>?</span>
+                <span >{{ 'operations.cancelMessage' | translate }}</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"

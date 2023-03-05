@@ -45,12 +45,24 @@ export class OrderComponent extends GenericComponent implements OnInit {
 
     ngOnInit(): void {
         this.getAll(this.pageNo);
+        this.breadcrumbService.setItems([{'label': 'Orders', 'routerLink': ['orders']}]);
     }
 
     getAll(page: number) {
         this.orderService.getForTenant(page).subscribe(res => {
             //console.log(res)
             this.masterDtos = res;
+            this.cols = [
+                { field: 'id', header: 'id' },
+                { field: 'createdAt', header: 'Brand Name' },
+                { field: 'customerName', header: 'Car Model' },
+                { field: 'supplierName', header: 'Model Type' },
+                { field: 'jobNumber', header: 'Model Year' },
+                { field: 'orderAmount', header: 'Order Amount' },
+                { field: 'totalAmount', header: 'Total Amount' },
+                { field: 'orderStatus', header: 'Order Status' },
+                { field: 'deliveryFees', header: 'Delivery Fees' }
+            ];
         }, err => {
             this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.error.statusMsg, life: 3000 })
         })

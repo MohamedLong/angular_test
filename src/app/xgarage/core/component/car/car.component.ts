@@ -66,6 +66,16 @@ export class CarComponent extends GenericComponent implements OnInit {
     this.carService.getAll().subscribe({
       next: (masters) => {
         this.masterDtos = masters;
+        this.cols = [
+          { field: 'id', header: 'id' },
+          { field: 'brandName', header: 'Brand Name' },
+          { field: 'carModel', header: 'Car Model' },
+          { field: 'carModelType', header: 'Model Type' },
+          { field: 'carModelYear', header: 'Model Year' },
+          { field: 'plateNumber', header: 'Plate #' },
+          { field: 'chassisNumber', header: 'Chassis Number' },
+          { field: 'gearType', header: 'Gear Type' }
+      ];
         this.loading = false;
       },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })

@@ -31,6 +31,8 @@ tenants: Tenant[];
 selectedStatus: Status;
 statuses: Status[];
 active: boolean = true;
+today: string = new Date().toISOString().slice(0, 10);
+
 
   ngOnInit(): void {
     this.getAll();
@@ -56,6 +58,15 @@ active: boolean = true;
       this.claimService.getByTenant(tenant).subscribe({
         next: (masters) => {
           this.masterDtos = masters;
+          this.cols = [
+            { field: 'id', header: 'ID' },
+            { field: 'claimNo', header: 'Claim Number' },
+            { field: 'claimDate', header: 'Claim Date' },
+            { field: 'tenantName', header: 'Tenant Name' },
+            { field: 'createdUser', header: 'Created By' },
+            { field: 'statusDate', header: 'Status Date' },
+            { field: 'status', header: 'Status' }
+        ];
           this.loading = false;
         },
       error: (e) => this.messageService.add({ severity: 'error', summary: 'Error', detail: e.error.message, life: 3000 })

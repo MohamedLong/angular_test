@@ -112,7 +112,7 @@
                     </div>
                     <div class="field col-12" >
                         <label for="claimDate">{{ 'claim.tableColumn.claimDate' | translate }}</label>
-                        <input type="date" pInputText id="claimDate" [(ngModel)]="master.claimDate" required/>
+                        <input type="date" pInputText id="claimDate" [(ngModel)]="master.claimDate" [max]="today" required/>
                         <small class="p-invalid" *ngIf="submitted && !master.claimDate">{{ 'claim.claimDialog.claimDateRequired' | translate }}</small>
                     </div>
                 </div>

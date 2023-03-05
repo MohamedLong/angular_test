@@ -554,6 +554,7 @@
             "enterclaimNo": "Enter Calim Number",
             "ot/dp": "OD/TP",
             "newReq": "Add New Request",
+            "status": "Job Status",
             "selectInsurance": "Select Insurance From"
         },
 
@@ -583,6 +584,8 @@
         "tableColumn": {
             "id": "Request #",
             "requestTitle": "Request Title",
+            "newRequest": "Create New Spare Part Request Now",
+            "homePage": "Looking for a Spare Part?",
             "description": "Description",
             "location": "Request Location",
             "bidDate": "Bid Closing Date",
