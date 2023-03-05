@@ -27,20 +27,26 @@
                             <p *ngIf="master.status.nameEn === 'Open'" class="font-medium muted-text text-blue-500">{{master.status.nameEn}}</p>
                             <p *ngIf="master.status.nameEn === 'Approved'" class="font-medium muted-text text-green-500">{{master.status.nameEn}}</p>
                             <p *ngIf="master.status.nameEn === 'Canceled'" class="font-medium muted-text text-orange-700">{{master.status.nameEn}}</p>
-
                         </div>
                         <div class="mr-8">
                             <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
                             <p class="font-medium muted-text">{{master.claimNo}}</p>
                         </div>
-                        <div class="mr-8">
-                            <h6 class="mb-2 flex align-items-center">{{'job.tableColumn.jobNo' | translate}} <button
-                                    [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
-                                    type="button" icon="pi pi-pencil"
-                                    class="ml-1 py-0 p-button-rounded p-button-success p-button-text"></button>
-                            </h6>
-                            <p class="font-medium muted-text">{{master.jobNo}}</p>
+                        <div class="mr-0">
+                            <button 
+                            [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
+                            type="button" icon="pi pi-pencil"
+                            class="ml-1 py-0 p-button-rounded p-button-success p-button-text" style="align-self: flex-start;">
+                             </button>
                         </div>
+                        <div class="mr-8">
+                            <h6 class="mb-2 flex align-items-center">{{'job.tableColumn.jobNo' | translate}} </h6>
+                            <p class="font-medium muted-text" style="display: flex; align-items: flex-start;" >{{master.jobNo}} 
+                            </p>
+                        </div>
+
+
+
                         <div>
                             <h6 class="mb-2">{{'job.form.garageLocation' | translate}}</h6>
                             <p class="font-medium muted-text">{{details[0]?details[0].locationName : '-'}}

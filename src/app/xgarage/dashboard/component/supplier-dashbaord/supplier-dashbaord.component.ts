@@ -5,6 +5,9 @@ import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Job } from 'src/app/xgarage/core/model/job';
 import { JobService } from 'src/app/xgarage/core/service/job.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ProductService } from 'src/app/demo/service/productservice';
+
 
 @Component({
     selector: 'app-supplier-dashbaord',
@@ -13,17 +16,42 @@ import { JobService } from 'src/app/xgarage/core/service/job.service';
     providers: [MessageService]
 })
 export class SupplierDashbaordComponent implements OnInit {
-    constructor(private router: Router, private authService: AuthService, private jobService: JobService, private messageService: MessageService, private breadcrumbService: AppBreadcrumbService) { }
+    constructor(private router: Router, private authService: AuthService, private jobService: JobService, 
+        private messageService: MessageService, private breadcrumbService: AppBreadcrumbService,
+        private dialogService: DialogService, private productService: ProductService) { }
     requests = [];
     latestRequest= [];
     master: Job;
+    job: Job;
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
+    searchResults: any[];
 
     ngOnInit(): void {
         this.getAllForTenant();
 
         this.breadcrumbService.setItems([]);
     }
+
+    search(event){
+        const searchTerm = event.query;
+        this.jobService.searchlJob(searchTerm).subscribe(jobs => {
+            this.searchResults = jobs;
+          });
+    }
+
+    onSelect(event: any) {
+        this.jobService.getById(event.id).subscribe(
+            {
+                next: (data) => {
+                    this.job = data;
+                    this.job.claimNo = event.claimNo;
+                    localStorage.setItem('job', JSON.stringify(this.job));
+                    localStorage.setItem('bidView', 'false');
+                    this.router.navigate(['job-details']);
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            });
+      }
 
     getAllForTenant() {
         let user = this.authService.getStoredUser();
@@ -45,9 +73,6 @@ export class SupplierDashbaordComponent implements OnInit {
                             }
                         })
                     }
-
-                    //console.log(this.requests)
-                    //console.log(this.latestRequest)
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error, life: 3000 })
             });
