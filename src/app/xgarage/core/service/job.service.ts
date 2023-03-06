@@ -44,7 +44,7 @@ export class JobService extends GenericService<Job> {
     }
 
     searchlJob(searchTerm: string) {
-        return this.http.get<any>(config.coreApiUrl + '/job/brandOrPartNameLike/' + searchTerm).pipe(
+        return this.http.get<any[]>(config.coreApiUrl + '/job/brandOrPartNameLike/' + searchTerm).pipe(
             tap(res => {
                 return res
             }), catchError(err => {

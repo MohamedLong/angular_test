@@ -1,21 +1,37 @@
 <div class="relative">
-    <div class="field col-12 md:col-6 text-center mx-auto absolute">
+    <div *ngIf="role== 2" class="field col-12 md:col-6 text-center mx-auto absolute">
         <h1 class="text-white">{{ 'bid.bidDetails.bidOnReq' | translate }}</h1>
-        <span class="p-input-icon-right block">
+        <span>
             <i class="pi pi-search z-1"></i>
-            <p-autoComplete class="width-100"
-                placeholder="Search request with brand name or parts name"></p-autoComplete>
-        </span>
+            <p-autoComplete align="left"
+                placeholder="Search request with brand name or parts name"
+                [(ngModel)]="searchTerm"
+                (completeMethod)="search($event)"
+                [suggestions]="searchResults"
+                (onSelect)="onSelect($event)">
+              <ng-template let-job pTemplate="item">
+                <div class="dropdown-item">
+                    <span class="partNames" style="font-weight: bold">{{ 'common.parts' | translate }}:</span>
+                    <span class="partNames">{{ job.partNames }}</span>
+                    <span class="partNames" style="font-weight: bold">  {{ 'common.for' | translate }}:</span>
+                    <span class="partNames">{{ job.jobTitle }}</span>
+                </div>
+              </ng-template>
+            </p-autoComplete>
+          </span>
+    </div>
+    <div *ngIf="role== 1" class="field col-12 md:col-6 text-center mx-auto absolute">
+        <h1 class="text-white">{{ 'request.tableColumn.homePage' | translate }}</h1>
     </div>
     <img class="img-fluid width-100" src="assets/layout/images/supplier-header-bg.png" alt="">
 </div>
-<div class="grid justify-content-center mx-auto p-3 md:p-5  mb-5">
+<div *ngIf="role== 2" class="grid justify-content-center mx-auto p-3 md:p-5  mb-5">
     <div class="col-12">
         <h4>{{ 'bid.bidDetails.Reqlatest' | translate }}</h4>
     </div>
     <div class="col-12 md:col-4" *ngFor="let req of latestRequest">
-        <p-card header="{{req.jobTitle}}" subheader="Chassis No.: Ex: 291919AD1914"
-            styleClass="p-card-shadow height-100">
+        <p-card header="{{req.jobTitle}}" subheader=""
+            styleClass="p-card-shadow height-100 dashbaord-card">
             <ng-template pTemplate="header">
                 <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png">
             </ng-template>
@@ -29,8 +45,13 @@
                 <a *ngIf="req.parts.length > 2">...{{ 'bid.bidDetails.seeAll' | translate }}</a>
             </div>
             <ng-template pTemplate="footer">
-                <p-button styleClass="width-100" label="{{role == 1? 'View Bid': 'Bid Now'}}" (click)="onBid(req)"></p-button>
+                <p-button styleClass="width-100 mb-3" label="{{role == 1? 'View Bid': 'Bid Now'}}" (click)="onBid(req)"></p-button>
             </ng-template>
         </p-card>
     </div>
 </div>
+<div *ngIf="role== 1" class="grid justify-content-center mx-auto p-3 md:p-5  mb-5">
+    <h5>{{ 'request.tableColumn.newRequest' | translate }}</h5>
+    <app-newjob></app-newjob>
+</div>
+

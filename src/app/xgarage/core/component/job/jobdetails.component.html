@@ -7,10 +7,10 @@
         <ng-template pTemplate="left" *ngIf="master">
             <div class="flex py-2">
                 <div class="mr-3 relative" style="min-width: 150px;">
-                    <p-skeleton class="absolute top-0 left-0 z-1" size="150px"
+                    <p-skeleton animation="{{master.car?.document.length == 0? 'none' : 'wave'}}" class="absolute top-0 left-0 z-1" size="150px"
                         *ngIf="!imageLoaded && master.car?.document !== null"></p-skeleton>
                     <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="150"
-                        src="{{master.car?.document? master.car?.document?.name : ''}}" alt="">
+                        src="{{master.car?.document? 'http://letsgo-oman.com:6060/api/v1/document/' + master.car?.document?.name : ''}}" alt="">
                 </div>
                 <div class="py-2">
                     <div class="mb-3">
@@ -27,20 +27,26 @@
                             <p *ngIf="master.status.nameEn === 'Open'" class="font-medium muted-text text-blue-500">{{master.status.nameEn}}</p>
                             <p *ngIf="master.status.nameEn === 'Approved'" class="font-medium muted-text text-green-500">{{master.status.nameEn}}</p>
                             <p *ngIf="master.status.nameEn === 'Canceled'" class="font-medium muted-text text-orange-700">{{master.status.nameEn}}</p>
-
                         </div>
                         <div class="mr-8">
                             <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
                             <p class="font-medium muted-text">{{master.claimNo}}</p>
                         </div>
-                        <div class="mr-8">
-                            <h6 class="mb-2 flex align-items-center">{{'job.tableColumn.jobNo' | translate}} <button
-                                    [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
-                                    type="button" icon="pi pi-pencil"
-                                    class="ml-1 py-0 p-button-rounded p-button-success p-button-text"></button>
-                            </h6>
-                            <p class="font-medium muted-text">{{master.jobNo}}</p>
+                        <div class="mr-0">
+                            <button
+                            [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
+                            type="button" icon="pi pi-pencil"
+                            class="ml-1 py-0 p-button-rounded p-button-success p-button-text" style="align-self: flex-start;">
+                             </button>
                         </div>
+                        <div class="mr-8">
+                            <h6 class="mb-2 flex align-items-center">{{'job.tableColumn.jobNo' | translate}} </h6>
+                            <p class="font-medium muted-text" style="display: flex; align-items: flex-start;" >{{master.jobNo}}
+                            </p>
+                        </div>
+
+
+
                         <div>
                             <h6 class="mb-2">{{'job.form.garageLocation' | translate}}</h6>
                             <p class="font-medium muted-text">{{details[0]?details[0].locationName : '-'}}

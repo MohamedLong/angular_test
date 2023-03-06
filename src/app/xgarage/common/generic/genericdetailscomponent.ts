@@ -91,7 +91,7 @@ export class GenericDetailsComponent{
         this.printingMode = false;
     }
 
-   
+
 
 
     getMinDate(){
@@ -281,7 +281,9 @@ export class GenericDetailsComponent{
 
     print() {
         this.printingMode = true;
-        setTimeout(function(){window.print();},10);
+        setTimeout(function(){
+            window.print();
+        },10);
         window.onafterprint = () => this.disablePrintingMode();
     }
 

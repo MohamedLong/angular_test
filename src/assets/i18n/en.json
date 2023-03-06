@@ -167,6 +167,8 @@
         "department": "Department",
         "saleCost": "Sales Account",
         "actions": "Actions",
+        "parts": "Parts",
+        "for": "For",
         "formRequired": "Please fill out required fields",
         "changePassword": "Change Password",
         "logout": "Logout"

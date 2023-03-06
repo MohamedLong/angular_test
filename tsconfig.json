@@ -26,5 +26,8 @@
         "strictInjectionParameters": false,
         "strictInputAccessModifiers": false,
         "strictTemplates": false
-    }
+    },
+    "files": [
+        "src/app/app.module.ts"
+      ]
 }
