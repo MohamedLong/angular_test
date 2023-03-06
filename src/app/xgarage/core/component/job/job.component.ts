@@ -39,8 +39,8 @@ export class JobComponent extends GenericComponent implements OnInit {
     selectedState = 'All';
     pageNo: number = 0;
     ngOnInit(): void {
-        if(localStorage.getItem('job')) {
-            localStorage.removeItem('job');
+        if(localStorage.getItem('jobId')) {
+            localStorage.removeItem('jobId');
             localStorage.removeItem('bidView');
         }
 
@@ -157,16 +157,8 @@ export class JobComponent extends GenericComponent implements OnInit {
 
 
     goDetails(dto: any) {
-        this.jobService.getById(dto.id).subscribe(
-            {
-                next: (data) => {
-                    this.master = data;
-                    this.master.claimNo = dto.claimNo;
-                    localStorage.setItem('job', JSON.stringify(this.master));
-                    this.router.navigate(['job-details']);
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-            });
+        localStorage.setItem('jobId', dto.id);
+        this.router.navigate(['job-details']);
     }
 
     loadRequests(e) {

@@ -9,6 +9,7 @@ export interface BidOrderDto{
     orderAmount?: number;
     deliveryFees?: number;
     vat?: number;
+    discount?: number;
     totalAmount?: number;
     shippingMethod?: number;
     shippingAddress?: number;

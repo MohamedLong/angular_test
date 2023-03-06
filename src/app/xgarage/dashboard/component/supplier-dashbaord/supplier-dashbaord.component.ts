@@ -40,17 +40,8 @@ export class SupplierDashbaordComponent implements OnInit {
     }
 
     onSelect(event: any) {
-        this.jobService.getById(event.id).subscribe(
-            {
-                next: (data) => {
-                    this.job = data;
-                    this.job.claimNo = event.claimNo;
-                    localStorage.setItem('job', JSON.stringify(this.job));
-                    localStorage.setItem('bidView', 'false');
-                    this.router.navigate(['job-details']);
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-            });
+        localStorage.setItem('jobId', event.id);
+        this.router.navigate(['job-details']);
       }
 
     getAllForTenant() {
