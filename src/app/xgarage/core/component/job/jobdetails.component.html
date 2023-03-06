@@ -4,7 +4,7 @@
         rejectButtonStyleClass="p-button-text"></p-confirmDialog> -->
 
     <p-toolbar styleClass="mb-3 align-items-start">
-        <ng-template pTemplate="left" *ngIf="master">
+        <ng-template pTemplate="left">
             <div class="flex py-2">
                 <div class="mr-3 relative" style="min-width: 150px;">
                     <p-skeleton animation="{{master.car?.document.length == 0? 'none' : 'wave'}}"
@@ -30,12 +30,10 @@
                     <div class="flex mb-3">
                         <div class="mr-8">
                             <h6 class="mb-2">{{'job.form.status' | translate}}</h6>
-                            <p *ngIf="master.status.nameEn === 'Open'" class="font-medium muted-text text-blue-500">
-                                {{master.status.nameEn}}</p>
-                            <p *ngIf="master.status.nameEn === 'Approved'"
-                                class="font-medium muted-text text-green-500">{{master.status.nameEn}}</p>
-                            <p *ngIf="master.status.nameEn === 'Canceled'"
-                                class="font-medium muted-text text-orange-700">{{master.status.nameEn}}</p>
+                            <p *ngIf="master.status.nameEn === 'Open'" class="font-medium muted-text text-blue-500">{{master.status.nameEn}}</p>
+                            <p *ngIf="master.status.nameEn === 'Approved'" class="font-medium muted-text text-green-500">{{master.status.nameEn}}</p>
+                            <p *ngIf="master.status.nameEn === 'Canceled'" class="font-medium muted-text text-orange-700">{{master.status.nameEn}}</p>
+
                         </div>
                         <div class="mr-8">
                             <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
@@ -54,9 +52,6 @@
                                 {{master.jobNo}}
                             </p>
                         </div>
-
-
-
                         <div>
                             <h6 class="mb-2">{{'job.form.garageLocation' | translate}}</h6>
                             <p class="font-medium muted-text">{{details[0]?details[0].locationName : '-'}}
@@ -231,7 +226,7 @@
         <p-dialog [(visible)]="bidDetailsDialog" [modal]="true" styleClass="" (onHide)="closeBidDialog()">
             <ng-template pTemplate="header">
 
-                <p-toolbar styleClass="mb-1" [style]="{width: '1320px'}">
+                <p-toolbar styleClass="mb-2" [style]="{width: '1320px'}">
 
                     <ng-template pTemplate="left">
                         <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' |
@@ -575,7 +570,7 @@
             </ng-template>
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times"
-                    class="p-button-text" (click)="hideJObNoDialog()"></button>
+                    class="p-button-text" (click)="hideJobNoDialog()"></button>
                 <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check"
                     class="p-button-text" (click)="updateJobNumber()"
                     [disabled]="!(jobDto.status == 1 && editAuth===true)"></button>

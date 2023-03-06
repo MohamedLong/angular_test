@@ -91,47 +91,38 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     ngOnInit() {
         //console.log('init')
-        console.log(localStorage.getItem('job'));
-        if (localStorage.getItem('job')) {
-            let data = JSON.parse(localStorage.getItem('job'));
-            this.master = data;
-            this.master.claimNo = data.claimNo;
-            this.masters.push(this.master);
-            this.getRequestsByJob();
-            this.getBidsByJob();
-            this.detailRouter = 'jobs';
-            this.selectedEntries = [];
-            this.callInsideOnInit();
-            this.initActionMenu();
-
-
+        console.log(localStorage.getItem('jobId'));
+        if (localStorage.getItem('jobId')) {
+            this.getJobObject(JSON.parse(localStorage.getItem('jobId')));
         } else if (this.route.snapshot.queryParams['id']) {
-            this.jobService.getById(this.route.snapshot.queryParams['id']).subscribe(
-                {
-                    next: (data) => {
-                        this.master = data;
-                        this.master.claimNo = data.claimNo;
-                        this.masters.push(this.master);
-                        this.getRequestsByJob();
-                        this.getBidsByJob();
-                        this.detailRouter = 'jobs';
-                        this.selectedEntries = [];
-                        this.callInsideOnInit();
-                        this.initActionMenu();
-                    },
-                    error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-                });
-
+            this.getJobObject(this.route.snapshot.queryParams['id']);
         }
 
         if (localStorage.getItem('bidView')) {
             this.activeTab = 1;
         }
-
+        
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
     }
 
-    getJobDetails() { }
+    getJobObject(id: number) {
+        this.jobService.getById(id).subscribe(
+            {
+                next: (data) => {
+                    this.master = data;
+                    this.master.claimNo = data.claimNo;
+                    this.masters.push(this.master);
+                    this.getRequestsByJob();
+                    this.getBidsByJob();
+                    this.detailRouter = 'jobs';
+                    this.selectedEntries = [];
+                    this.callInsideOnInit();
+                    this.initActionMenu();
+    
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            });
+    }
 
     initActionMenu() {
         this.menuItems = [
@@ -528,7 +519,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     approveMultipleBids() {
         if (this.selectedEntries.length > 0) {
             let bidOrder: BidOrderDto = this.prepareBidOrderObject();
-            console.log('bidOrder: ', bidOrder);
             this.bidService.approveMultipleBids(bidOrder).subscribe({
                 next: (data) => {
                     if (data == true) {
@@ -553,13 +543,15 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     prepareBidOrderObject() {
         let approvedBids: number[] = [];
         let totalVat = 0;
+        let totalDiscount = 0;
         let totalOrderAmount = 0;
         let totalTotalAmount = 0;
 
         for (let i = 0; i < this.selectedEntries.length; i++) {
             approvedBids[i] = this.selectedEntries[i].bidId;
             totalOrderAmount = totalOrderAmount + this.selectedEntries[i].originalPrice;
-            totalVat = totalVat + this.selectedEntries[i].vat;
+            totalDiscount = totalDiscount + this.selectedEntries[i].discount;
+            totalVat = totalVat + this.getValueAfterVat(this.selectedEntries[i].originalPrice, this.selectedEntries[i].discount, this.selectedEntries[i].vat);
             totalTotalAmount = totalTotalAmount + this.selectedEntries[i].price;
         }
 
@@ -576,11 +568,16 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             orderDate: new Date(),
             orderAmount: totalOrderAmount,
             vat: totalVat,
+            discount: totalDiscount,
             totalAmount: totalTotalAmount
         };
 
         return bidOrder;
 
+    }
+
+    getValueAfterVat(price: number, vat: number, discount: number) {
+        return price + ((price - discount) * vat)/100;
     }
 
     rejectMultipleBids() {
