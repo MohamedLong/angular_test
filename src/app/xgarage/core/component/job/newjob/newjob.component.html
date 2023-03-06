@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="wizard-body">
     <div class="wizard-wrapper">
         <div class="wizard-content">
@@ -11,7 +12,7 @@
                         </div>
                         <!-- (click)="clickToNavigate('request')"  -->
                         <div class="col-6 tab flex align-items-center justify-content-center request-tab"
-                            [ngClass]="{'selected-tab': activeTab === 'request'}">
+                            [ngClass]="{'selected-tab': activeTab === 'request'}" (click)="clickToNavigate('request')">
                             <div class="title">{{ 'job.form.createRequest' | translate }}</div>
                         </div>
                     </div>
@@ -21,7 +22,6 @@
                     <app-new-car type="new job" (carEvent)="onCarFormEvent($event)"></app-new-car>
                 </div>
                 <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'request'}">
-                    <p-toast appendTo="body"></p-toast>
                     <form [formGroup]="jobForm" (ngSubmit)="onJobFormSubmit()">
                         <div class="grid">
                             <div class="col-12" *ngIf="jobForm.get('car').value">

@@ -7,10 +7,16 @@
         <ng-template pTemplate="left">
             <div class="flex py-2">
                 <div class="mr-3 relative" style="min-width: 150px;">
-                    <p-skeleton class="absolute top-0 left-0 z-1" size="150px"
+                    <p-skeleton animation="{{master.car?.document.length == 0? 'none' : 'wave'}}"
+                        class="absolute top-0 left-0 z-1" size="150px"
                         *ngIf="!imageLoaded && master.car?.document !== null"></p-skeleton>
+                    <div
+                        class="height-100 align-items-center bg-black-alpha-20 flex flex-column justify-content-center rounded-normal" *ngIf="!imageLoaded && master.car?.document == null">
+                        <p-message styleClass="mx-2 text-center" severity="warn" text="no images"></p-message>
+                    </div>
                     <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="150"
-                        src="{{master.car?.document? master.car?.document?.name : ''}}" alt="">
+                        src="{{master.car?.document? 'http://letsgo-oman.com:6060/api/v1/document/' + master.car?.document?.name : ''}}"
+                        alt="">
                 </div>
                 <div class="py-2">
                     <div class="mb-3">
@@ -33,13 +39,18 @@
                             <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
                             <p class="font-medium muted-text">{{master.claimNo}}</p>
                         </div>
+                        <div class="mr-0">
+                            <button [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
+                                type="button" icon="pi pi-pencil"
+                                class="ml-1 py-0 p-button-rounded p-button-success p-button-text"
+                                style="align-self: flex-start;">
+                            </button>
+                        </div>
                         <div class="mr-8">
-                            <h6 class="mb-2 flex align-items-center">{{'job.tableColumn.jobNo' | translate}} <button
-                                    [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
-                                    type="button" icon="pi pi-pencil"
-                                    class="ml-1 py-0 p-button-rounded p-button-success p-button-text"></button>
-                            </h6>
-                            <p class="font-medium muted-text">{{master.jobNo}}</p>
+                            <h6 class="mb-2 flex align-items-center">{{'job.tableColumn.jobNo' | translate}} </h6>
+                            <p class="font-medium muted-text" style="display: flex; align-items: flex-start;">
+                                {{master.jobNo}}
+                            </p>
                         </div>
                         <div>
                             <h6 class="mb-2">{{'job.form.garageLocation' | translate}}</h6>
@@ -55,7 +66,7 @@
             <div class="field col">
                 <p-confirmPopup></p-confirmPopup>
                 <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
-                <button pButton pRipple  [disabled]="editAuth===false"  class="mb-3 p-button-warning" type="button"
+                <button pButton pRipple [disabled]="editAuth===false" class="mb-3 p-button-warning" type="button"
                     icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
                     (click)="menu.toggle($event)"></button>
             </div>
@@ -341,11 +352,11 @@
             <ng-template pTemplate="header">
                 {{modalPart.supplierName}}
             </ng-template>
-            <div class="align-items-start flex justify-content-between mb-3"
-                *ngIf="modalPart.bidImages; else noimages">
+            <div class="align-items-start flex justify-content-between mb-3" *ngIf="modalPart.bidImages; else noimages">
                 <ng-container *ngFor="let img of modalPart.bidImages">
                     <img class="car-image rounded-large  shadow-3 mx-2"
-                        src="{{'http://letsgo-oman.com:6060/api/v1/document/' + img.trim()}}" alt="{{modalPart.partName}}">
+                        src="{{'http://letsgo-oman.com:6060/api/v1/document/' + img.trim()}}"
+                        alt="{{modalPart.partName}}">
                 </ng-container>
             </div>
             <ng-template #noimages>

@@ -19,13 +19,7 @@ export class JobService extends GenericService<Job> {
     }
 
     getJobByClaimNumber(cno: string) {
-        return this.http.get<any>(config.coreApiUrl + '/job/claimNo/' + cno).pipe(
-            tap(res => {
-                return res
-            }), catchError(err => {
-                return throwError(err)
-            })
-        )
+        return this.http.get<any>(config.coreApiUrl + '/job/claimNo/' + cno);
     }
 
     saveJob(body: any) {
