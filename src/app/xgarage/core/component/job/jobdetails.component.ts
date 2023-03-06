@@ -101,7 +101,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         if (localStorage.getItem('bidView')) {
             this.activeTab = 1;
         }
-        
+
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
     }
 
@@ -109,6 +109,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.jobService.getById(id).subscribe(
             {
                 next: (data) => {
+                    console.log(data)
                     this.master = data;
                     this.master.claimNo = data.claimNo;
                     this.masters.push(this.master);
@@ -118,7 +119,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                     this.selectedEntries = [];
                     this.callInsideOnInit();
                     this.initActionMenu();
-    
+
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });

@@ -176,7 +176,7 @@ export class NewJobComponent implements OnInit {
                 }, (err) => {
                     this.jobFound.multiple = false;
                     if(err.status == 0) {
-                        this.messageService.add({severity:'error', summary: 'No Connection', detail: 'please check your connection and try again'});
+                        this.messageService.add({severity:'error', summary: 'Error', detail: 'something went wrong, please try again'});
                     } else {
                         this.messageService.add({severity:'error', summary: 'Error', detail: 'Claim Not Found'});
                     }
@@ -255,6 +255,7 @@ export class NewJobComponent implements OnInit {
             this.addOneMoreRequest = true;
             this.submitted = false;
         } else {
+            this.messageService.add({severity:'error', summary: 'Error', detail: 'some fields are not valid'});
             console.log('form is not valid');
             console.log(this.jobForm.errors);
             console.log(this.jobForm.value);

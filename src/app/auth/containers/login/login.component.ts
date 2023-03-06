@@ -80,8 +80,9 @@ export class LoginComponent implements OnInit {
                     }
                 },
                 error: (e) => {
+                    console.log(e)
                     this.isLoading = false;
-                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
+                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'something went wrong, please try again later.' });
                 }
             }
         );

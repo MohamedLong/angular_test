@@ -87,13 +87,13 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     sendRequest() {
         this.request.emit();
         this.submitted = true;
-        this.isSending = true;
+
         setTimeout(() => {
             this.dataService.name.subscribe({
                 next: (data) => {
                     if (data && JSON.stringify(data) !== '{}') {
                         console.log(data)
-
+                        this.isSending = true;
                         let updatedSuppliers = [];
                         if (data.suppliers && data.suppliers.length > 0) {
                             data.suppliers.forEach(element => {
@@ -125,9 +125,6 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                             this.isSending = false;
                         }
 
-                    } else {
-                        this.submitted = true;
-                        this.isSending = true;
                     }
                 }
             }).unsubscribe();
@@ -252,11 +249,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                     //super.hideDialog();
                     this.request.emit(err);
                 } else {
-                    if(err.status == 0) {
-                        this.messageService.add({severity:'error', summary: 'No Connection', detail: 'please check your connection and try again'});
-                    } else {
-                        this.messageService.add({severity:'error', summary: 'Error', detail: 'Something went wrong, please try again.'});
-                    }
+                    this.messageService.add({severity:'error', summary: 'Error', detail: 'something went wrong, please try again.'});
                 }
 
                 this.isSending = false;
