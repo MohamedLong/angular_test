@@ -16,8 +16,8 @@
                 <p-confirmPopup></p-confirmPopup>
                 <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
                 <button pButton pRipple [disabled]="(editable)" class="mb-3 p-button-warning" type="button"
-                    icon="{{sending? 'pi pi-spin pi-spinner' : 'pi pi-fw pi-cog'}}" label="{{ 'operations.actions' | translate }}"
-                    (click)="menu.toggle($event)"></button>
+                    icon="{{sending? 'pi pi-spin pi-spinner' : 'pi pi-fw pi-cog'}}"
+                    label="{{ 'operations.actions' | translate }}" (click)="menu.toggle($event)"></button>
             </div>
             <div class="field col">
                 <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
@@ -25,7 +25,7 @@
             </div>
         </ng-template>
     </p-toolbar>
-    <div class="layout-invoice-page">
+    <div class="layout-invoice-content">
         <div class="card">
             <div class="grid">
                 <div class="col-12" id="invoice" #invoice>
@@ -111,7 +111,8 @@
                         <p class="uppercase">
                             please supply the following and debit our account for the value
                         </p>
-                        <p-table *ngIf="master.length > 0" [columns]="dataCols" [value]="master" styleClass="p-invoice-datatable-responsive pb-3">
+                        <p-table *ngIf="master.length > 0" [columns]="dataCols" [value]="master"
+                            styleClass="p-invoice-datatable-responsive pb-3">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th *ngFor="let col of columns">
@@ -176,3 +177,5 @@
             </div>
         </div>
     </div>
+
+</div>

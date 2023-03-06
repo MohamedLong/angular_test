@@ -81,6 +81,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     visible: boolean = true;
     selection: string = 'single';
     jobDto: UpdateJobDto = {};
+    modalPart: any = [];
+    displayModal: boolean = false;
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
@@ -103,7 +105,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.initActionMenu();
 
 
-        } else if(this.route.snapshot.queryParams['id']) {
+        } else if (this.route.snapshot.queryParams['id']) {
             this.jobService.getById(this.route.snapshot.queryParams['id']).subscribe(
                 {
                     next: (data) => {
@@ -122,14 +124,14 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
         }
 
-        if(localStorage.getItem('bidView')) {
+        if (localStorage.getItem('bidView')) {
             this.activeTab = 1;
         }
 
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
     }
 
-    getJobDetails(){}
+    getJobDetails() { }
 
     initActionMenu() {
         this.menuItems = [
@@ -204,7 +206,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });
             this.confirmActionDialog = false;
-        } 
+        }
     }
 
     // confirm(event) {
@@ -532,11 +534,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                     if (data == true) {
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Approved Successfully', life: 3000 });
                         this.selectedEntries.map(bid => bid.statusId = StatusConstants.INPROGRESS_STATUS);
-                        for(let i = 0; i < this.selectedEntries.length; i++) {
+                        for (let i = 0; i < this.selectedEntries.length; i++) {
                             this.bidDtos[this.findIndexById(this.selectedEntries[i].bidId, this.bidDtos)] = this.selectedEntries[i];
                         }
                         this.selectedEntries = [];
-                     }else{
+                    } else {
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Approved Failed', life: 3000 });
                     }
                 },
@@ -593,12 +595,12 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 next: (data) => {
                     if (data == true) {
                         this.selectedEntries.map(bid => bid.statusId = StatusConstants.REJECTED_STATUS);
-                        for(let i = 0; i < this.selectedEntries.length; i++) {
+                        for (let i = 0; i < this.selectedEntries.length; i++) {
                             this.bidDtos[this.findIndexById(this.selectedEntries[i].bidId, this.bidDtos)] = this.selectedEntries[i];
                         }
                         this.selectedEntries = [];
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bids Rejection Successfully', life: 3000 });
-                     }else{
+                    } else {
                         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Bids Rejection Failed', life: 3000 });
                     }
                 },
@@ -617,7 +619,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     onReq(event) {
         console.log(event)
         this.hideDialog();
-        if(event.error) {
+        if (event.error) {
             this.messageService.add({ severity: 'erorr', summary: 'Error', detail: event.error.message });
         } else {
             this.messageService.add({ severity: 'success', summary: 'Success', detail: event.message });
@@ -655,16 +657,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         }
     }
 
-    hideJObNoDialog(): void {
+    hideJobNoDialog(): void {
         this.masterDialog = false;
     }
 
-    modalPart: any = [];
-    displayModal: boolean = false;
-
     showModal(part) {
         this.modalPart = part;
-        this.modalPart.bidImages = this.modalPart.bidImages !== null? this.modalPart.bidImages.split(',') : null;
+        this.modalPart.bidImages = this.modalPart.bidImages !== null ? this.modalPart.bidImages.split(',') : null;
         this.displayModal = true;
     }
 }

@@ -16,22 +16,10 @@ import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
     templateUrl: './orderdetails.component.html',
     styleUrls: ['../../../../demo/view/tabledemo.scss'],
     styles: [`
-        :host ::ng-deep .p-dialog .product-image {
-            width: 150px;
-            margin: 0 auto 2rem auto;
-            display: block;
+        .layout-invoice-page {
+            width: auto;
+    display: block!important;
         }
-
-        @media screen and (max-width: 960px) {
-            :host ::ng-deep .p-datatable.p-datatable-customers .p-datatable-tbody > tr > td:last-child {
-                text-align: center;
-            }
-
-            :host ::ng-deep .p-datatable.p-datatable-customers .p-datatable-tbody > tr > td:nth-child(6) {
-                display: flex;
-            }
-        }
-
     `],
     providers: [MessageService, ConfirmationService, DialogService, DatePipe]
 })
@@ -70,8 +58,8 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
             { field: 'price', header: 'LINE VALUE' }
         ];
 
-         this.initActionMenu();
-         this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['orders'] }, { 'label': 'Order Details', routerLink: ['order-details'] }]);
+        this.initActionMenu();
+        this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['orders'] }, { 'label': 'Order Details', routerLink: ['order-details'] }]);
     }
 
     getPdf() {
@@ -136,7 +124,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                     var blob = doc.output('blob');
                     var formData = new FormData();
 
-                    let req = { "orderId": this.order.id, "lpo": blob};
+                    let req = { "orderId": this.order.id, "lpo": blob };
 
                     for (var key in req) {
                         formData.append(key, req[key]);
@@ -147,7 +135,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
                         this.sending = false;
                     }, (err: MessageResponse) => {
-                        this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.message});
+                        this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.message });
                         this.sending = false;
                     })
                 };
@@ -169,5 +157,11 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
         ];
     }
 
+    printPage() {
+        window.frames["print_frame"].window.focus();
+        setTimeout(function() {
+            window.frames["print_frame"].window.print();
+        }, 0);
+    }
 }
 
