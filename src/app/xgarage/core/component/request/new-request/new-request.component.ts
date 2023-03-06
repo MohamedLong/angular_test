@@ -125,6 +125,9 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                             this.isSending = false;
                         }
 
+                    } else {
+                        this.submitted = true;
+                        this.isSending = true;
                     }
                 }
             }).unsubscribe();
@@ -243,12 +246,19 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 this.isSending = false;
                 this.submitted = false;
             }, err => {
-                //console.log(err)
+                console.log(err)
                 if (this.type == 'new req') {
                     //this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
                     //super.hideDialog();
                     this.request.emit(err);
+                } else {
+                    if(err.status == 0) {
+                        this.messageService.add({severity:'error', summary: 'No Connection', detail: 'please check your connection and try again'});
+                    } else {
+                        this.messageService.add({severity:'error', summary: 'Error', detail: 'Something went wrong, please try again.'});
+                    }
                 }
+
                 this.isSending = false;
                 this.blocked = false;
                 this.submitted = false;
