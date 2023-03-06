@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { InsuranceType } from '../../../model/insurancetype';
@@ -135,7 +136,7 @@ export class NewJobComponent implements OnInit {
         this.ClaimTypingTimer = setTimeout(() => {
             if (this.jobForm.get('claim').value !== "") {
                 this.jobService.getJobByClaimNumber(this.jobForm.get('claim').value).subscribe(res => {
-                    console.log(res)
+                    // console.log(res)
                     this.claimId = res.claimId;
                     if (res.jobs.length > 0) {
                         let updatedJobs = res.jobs.filter(job => {
@@ -149,7 +150,7 @@ export class NewJobComponent implements OnInit {
                             this.jobFound.multiple = false;
                             this.jobFound.found = false;
 
-                            console.log(this.jobs, this.jobForm.get('jobId').value)
+                            //console.log(this.jobs, this.jobForm.get('jobId').value)
                         }
                         else if (updatedJobs.length == 1) {
                             this.jobFound.found = true;
@@ -172,10 +173,13 @@ export class NewJobComponent implements OnInit {
 
                         console.log(this.jobs, this.jobForm.get('jobId').value)
                     }
-                }, err => {
+                }, (err) => {
                     this.jobFound.multiple = false;
-                    this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error });
-                    //console.log('err:', err.error)
+                    if(err.status == 0) {
+                        this.messageService.add({severity:'error', summary: 'No Connection', detail: 'please check your connection and try again'});
+                    } else {
+                        this.messageService.add({severity:'error', summary: 'Error', detail: 'Claim Not Found'});
+                    }
                 })
             }
 
@@ -205,7 +209,7 @@ export class NewJobComponent implements OnInit {
     }
 
     onJobFormSubmit() {
-        console.log(this.jobForm.value)
+        //console.log(this.jobForm.value)
         this.submitted = true;
         if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
             this.sendRequest();

@@ -44,7 +44,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
 
         console.log('order:', this.order)
         this.master.forEach(order => {
-            order.taxAmount = (order.vat / 100) * order.originalPrice;
+            order.taxAmount = (order.vat / 100) * (order.originalPrice * order.qty - order.discount);
             this.totalVat = this.totalVat + order.taxAmount;
         });
 
