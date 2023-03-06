@@ -4,7 +4,7 @@
             <label>{{'part.tableColumn.partName' | translate}}</label>
             <span class="p-input-icon-right block">
                 <i class="pi pi-search z-1" *ngIf="!isFetching"></i>
-                <p-autoComplete class="width-100" [(ngModel)]="partName" [suggestions]="parts" field="name"
+                <p-autoComplete [showEmptyMessage]="true" class="width-100" [(ngModel)]="partName" [suggestions]="parts" field="name"
                     (completeMethod)="onSearchPart($event)" (onClear)="onClearSearchPart()" (onSelect)="onChoosePart($event)"
                     placeholder="Ex: Break Shoe"></p-autoComplete>
             </span>

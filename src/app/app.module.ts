@@ -219,6 +219,7 @@ import { SupplierprofileComponent } from './xgarage/common/component/supplierpro
 import { OrderComponent } from './xgarage/core/component/order/order.component';
 import { OrderDetailsComponent } from './xgarage/core/component/order/orderdetails.component';
 import { AgmCoreModule } from '@agm/core';
+import { NumToWordsPipe } from './xgarage/common/pipes/num-to-words.pipe';
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
 }
@@ -423,7 +424,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         NewBidComponent,
         BidDetailsComponent,
         SupplierDashbaordComponent,
-        SupplierprofileComponent
+        SupplierprofileComponent,
+        NumToWordsPipe
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,

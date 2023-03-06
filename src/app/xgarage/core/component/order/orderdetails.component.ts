@@ -35,16 +35,20 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     order: any = '';
     totalVat: number = 0;
     sending: boolean = false;
+    taxAmount: number = 0;
     @ViewChild('invoice') invoice!: ElementRef;
 
     ngOnInit() {
         this.master = JSON.parse(localStorage.getItem('orderData'));
         this.order = JSON.parse(localStorage.getItem('order'));
-        console.log('data:', this.master)
+
         console.log('order:', this.order)
-        this.master.forEach(element => {
-            this.totalVat = this.totalVat + element.vat;
+        this.master.forEach(order => {
+            order.taxAmount = (order.vat / 100) * order.originalPrice;
+            this.totalVat = this.totalVat + order.taxAmount;
         });
+
+        console.log('data:', this.master)
 
         this.dataCols = [
             { field: 'bidId', header: 'SL.NO' },
@@ -54,7 +58,8 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
             { field: 'price', header: 'UNIT RATE' },
             { field: 'price', header: 'UNIT VALUE' },
             { field: 'discount', header: 'DISC' },
-            { field: 'vat', header: 'TAX AMT %' },
+            { field: 'vat', header: 'TAX%' },
+            { field: 'taxAmount', header: 'TAX AMT' },
             { field: 'price', header: 'LINE VALUE' }
         ];
 
