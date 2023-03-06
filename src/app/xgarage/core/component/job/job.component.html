@@ -20,7 +20,7 @@
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="masterDtos" (onPage)="loadRequests($event)" [columns]="cols" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="fillteredDto" (onPage)="loadRequests($event)" [columns]="cols" [rows]="10" [paginator]="true"
                 [globalFilterFields]="['id','jobNo','claimNo','partNames','jobStatus','jobTitle']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"

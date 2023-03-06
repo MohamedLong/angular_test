@@ -9,7 +9,6 @@ import { Status } from 'src/app/xgarage/common/model/status';
 import { JobService } from '../../service/job.service';
 import { InsuranceType } from '../../model/insurancetype';
 import { UpdateJobDto } from '../../dto/updatedjobdto';
-import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { StatusConstants } from '../../model/statusconstatnts';
 
 
@@ -197,13 +196,12 @@ export class JobComponent extends GenericComponent implements OnInit {
     }
 
     filterByStatus(state: any) {
+        console.log('state: ', state);
         this.selectedState = state;
         if (state == 'All') {
             this.fillteredDto = this.masterDtos;
         } else {
-            this.fillteredDto = this.masterDtos.filter(master => {
-                return master.jobStatus == state;
-            });
+            this.fillteredDto = this.masterDtos.filter(master => master.jobStatus == state);
         }
     }
 
