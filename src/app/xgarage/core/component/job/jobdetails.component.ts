@@ -17,12 +17,12 @@ import { Request } from '../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Status } from 'src/app/xgarage/common/model/status';
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { RejectMultipleBids } from '../../dto/rejectmultiplebids';
 import { BidOrderDto } from '../../dto/bidorderdto';
 import { OrderType } from '../../dto/ordertype';
 import { StatusConstants } from '../../model/statusconstatnts';
 import { UpdateJobDto } from '../../dto/updatedjobdto';
+import html2canvas from 'html2canvas';
 
 @Component({
     selector: 'job-details',
@@ -77,7 +77,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     supplierNames: any[] = [];
     approveMultipleBidDialog: boolean = false;
     rejectMultipleBidDialog: boolean = false;
-    @ViewChild('toggleBid', { read: ElementRef }) input: ElementRef;
+    @ViewChild('bidsTable', { read: ElementRef }) bidsTable: ElementRef;
     visible: boolean = true;
     selection: string = 'single';
     jobDto: UpdateJobDto = {};
@@ -508,15 +508,16 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     downloadPdf() {
-        const doc = new jsPDF();
-        autoTable(doc, {
-            html: '#bids-table',
-            // didParseCell: function (data) {
-            //     var rows = data.table.body;
-            //     data.row. = 'flex';
-            // }
+        let DATA: any = this.bidsTable.nativeElement;
+        html2canvas(DATA).then((canvas) => {
+          let fileWidth = 208;
+          let fileHeight = (canvas.height * fileWidth) / canvas.width;
+          const FILEURI = canvas.toDataURL('image/png');
+          let PDF = new jsPDF('p', 'mm', 'a4');
+          let position = 0;
+          PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+          PDF.save('bids.pdf');
         });
-        doc.save('bids.pdf')
     }
 
     approveMultipleBids() {

@@ -444,7 +444,7 @@
             header="{{ 'bid.compareBids' | translate }}" [(visible)]="displayCompareBids" [modal]="true"
             [style]="{width: '90vw'}" [draggable]="false" [resizable]="false" (onHide)="onHideCompareBids()">
             <div class="p-datatable p-datatable-gridlines">
-                <table class="p-datatable-table" id="bids-table">
+                <table class="p-datatable-table" id="bids-table" #bidsTable>
                     <thead class="p-datatable-thead">
                         <tr>
                             <th>{{ 'request.tableColumn.partName' | translate }}</th>
