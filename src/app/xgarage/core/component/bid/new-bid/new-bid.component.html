@@ -51,7 +51,7 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <p-dropdown [options]="part.statuses" optionLabel="partType" appendTo="body"
-                            [(ngModel)]="part.preferred" [style]="{'width':'100%'}" (onChange)="onNotInterested(part)"></p-dropdown>
+                            [(ngModel)]="part.preferred" [style]="{'width':'100%'}" (onChange)="onProposedChange(part)"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{type == 'new bid'? part.preferred.partType : part.partType}}

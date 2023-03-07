@@ -729,7 +729,8 @@
             "status": "Status",
             "bidValue": "Bid Value",
             "bidDate": "Submitted Time",
-            "submittedBids": "Submitted Bids"
+            "submittedBids": "Submitted Bids",
+            "notInterested": "Not Interested Suppliers"
         },
         "bidDetails": {
             "partName": "Part Name",

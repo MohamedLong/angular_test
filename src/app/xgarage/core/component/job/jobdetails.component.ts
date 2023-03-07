@@ -83,6 +83,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     jobDto: UpdateJobDto = {};
     modalPart: any = [];
     displayModal: boolean = false;
+    displayNotIntrestedSuppliers: boolean = false;
+    NotIntrestedSuppliers: any[] = [];
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
@@ -223,7 +225,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.isFetching = true;
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
-                console.log(requests)
+                // console.log(requests)
                 this.details = requests;
                 this.fillteredDetails = requests;
                 this.setStatusNames(this.details)
@@ -324,6 +326,22 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.bidDetailsDialog = true;
         this.bidDtos = this.bidDtos.filter(b => b.supplierId == bid.supplierId);
         this.supplierName = bid.supplierName;
+    }
+
+    viewNotInterestedSuppliers(id: number) {
+        this.requestService.getNotInterestedSuppliers(id).subscribe(res => {
+            console.log(res)
+            if(res.length > 0) {
+                this.NotIntrestedSuppliers = res;
+            }
+
+            this.displayNotIntrestedSuppliers = true;
+        }, err => console.log(err))
+    }
+
+    onHideNotIntrestedSupplier() {
+        this.displayNotIntrestedSuppliers = false;
+        this.NotIntrestedSuppliers = [];
     }
 
     handleChange(e) {

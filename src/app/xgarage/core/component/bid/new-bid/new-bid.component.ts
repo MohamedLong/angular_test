@@ -24,7 +24,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     checked: boolean = false;
     @Input() requests: any[] = [];
     @Input() type: string = 'new bid';
-    statuses: PartType[] = [{ "id": 4, "partType": "Not Interested" }, { "id": 5, "partType": "Not Available" }];
+    statuses: PartType[] = [{ "id": 4, "partType": "Not Interested / Not Available" }];
     preferredTypes: string = '';
     bids: any[] = [];
     total: number = 0.0;
@@ -50,17 +50,14 @@ export class NewBidComponent implements OnInit, OnChanges {
                 req.images = [];
                 this.resetBid(req);
 
-                let notInterestedSupplier = req.notInterestedSuppliers.filter(supplier => {
-                    return supplier.user = JSON.parse(this.authService.getStoredUser()).id;
+                //console.log(req.notInterestedSuppliers, JSON.parse(this.authService.getStoredUser()).id)
+                req.notInterestedSuppliers.forEach(supplier => {
+                    if(supplier.user == JSON.parse(this.authService.getStoredUser()).id) {
+                        req.saved = true;
+                    }
                 });
-
-                if (notInterestedSupplier.length > 0) {
-                    this.requests[index].saved = true
-                }
             });
 
-
-            //console.log(this.requests)
         }
 
     }
@@ -138,12 +135,10 @@ export class NewBidComponent implements OnInit, OnChanges {
 
 
        // console.log(bidBody)
-        if (part.preferred.id == 5) {
-            this.messageService.add({ severity: 'warn', summary: 'Error', detail: "you can't submit a bid for unvailable part" });
-        } else if (part.preferred.id == 4) {
+        if (part.preferred.id == 4) {
             this.reqService.setSupplierNotInterested(part.id).subscribe(res => {
                 part.saved = true;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'part added as not interested' });
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'part added as not interested / not available' });
             }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message }))
 
         } else {
@@ -228,7 +223,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     resetBid(bid) {
-        bid.preferred = { "id": 4, "partType": "Not Interested" },
+        bid.preferred = { "id": 4, "partType": "Not Interested / Not Available" },
             bid.warranty = 0,
             bid.availability = 0,
             bid.originalPrice = 1,
@@ -304,7 +299,7 @@ export class NewBidComponent implements OnInit, OnChanges {
         this.displayModal = true;
     }
 
-    onNotInterested(part) {
+    onProposedChange(part) {
         // console.log(part)
         if(part.preferred.id == 4 || part.preferred.id == 5) {
             part.isNotInterested = true;
