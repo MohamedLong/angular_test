@@ -42,7 +42,6 @@ export class NewCarComponent implements OnInit {
     notFound: boolean = false;
     image: string = '';
     saving: boolean = false;
-
     carForm: FormGroup = this.formBuilder.group({
         chassisNumber: ['', [Validators.minLength(13), Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
         brandId: ['', Validators.required],
@@ -268,5 +267,4 @@ export class NewCarComponent implements OnInit {
         this.carForm.get('plateNumber').enable();
         this.carForm.get('gearType').enable();
     }
-
 }

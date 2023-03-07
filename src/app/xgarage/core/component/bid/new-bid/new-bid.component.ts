@@ -70,7 +70,7 @@ export class NewBidComponent implements OnInit, OnChanges {
         this.bidTotalPrice = 0;
         this.bidTotalOriginalPrice = 0;
         this.bidTotalDiscount = 0;
-        console.log(changes)
+        //console.log(changes)
         if (this.type == 'edit bid') {
             this.requests.forEach(req => {
                 req.qty2 = req.qty
@@ -86,7 +86,10 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onRowEditInit(part) {
-        // console.log('edit')
+        // console.log(part.statuses)
+        // part.statuses == this.statuses;
+
+        // console.log(part.statuses)
         part.partTypes.forEach(type => {
             if (!part.statuses.includes(type)) {
                 part.statuses.unshift(type);
@@ -95,9 +98,9 @@ export class NewBidComponent implements OnInit, OnChanges {
 
         });
 
-        this.requests.forEach(req => {
-            req.statuses = part.statuses
-        });
+        // this.requests.forEach(req => {
+        //     req.statuses = this.statuses
+        // });
     }
 
     onRowEditSave(part) {
@@ -235,6 +238,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             bid.totalPrice = 0.0,
             bid.statuses = this.statuses,
             bid.saved = false,
+            bid.isNotInterested = false,
             bid.isSending = false;
             bid.qty2 = bid.qty
     }
@@ -298,5 +302,15 @@ export class NewBidComponent implements OnInit, OnChanges {
         console.log(part)
         this.modalPart = part;
         this.displayModal = true;
+    }
+
+    onNotInterested(part) {
+        // console.log(part)
+        if(part.preferred.id == 4 || part.preferred.id == 5) {
+            part.isNotInterested = true;
+        } else {
+            part.isNotInterested = false;
+        }
+
     }
 }

@@ -32,7 +32,7 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="1" max="{{part.qty}}" (input)="onQty(part)" pInputText type="number"
-                            [style]="{'width':'100%'}" [(ngModel)]="part.qty2">
+                            [style]="{'width':'100%'}" [(ngModel)]="part.qty2"  [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.qty2}}
@@ -51,7 +51,7 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <p-dropdown [options]="part.statuses" optionLabel="partType" appendTo="body"
-                            [(ngModel)]="part.preferred" [style]="{'width':'100%'}"></p-dropdown>
+                            [(ngModel)]="part.preferred" [style]="{'width':'100%'}" (onChange)="onNotInterested(part)"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{type == 'new bid'? part.preferred.partType : part.partType}}
@@ -61,7 +61,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.warranty">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.warranty" [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.warranty}}
@@ -71,7 +71,7 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.availability">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.availability" [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{type == 'new bid'? part.availability : part.deliverDays}}
@@ -82,7 +82,7 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="1" pInputText type="number" (input)="onOriginalPrice(part)"
-                            [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice">
+                            [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice" [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.originalPrice | number}}
@@ -104,7 +104,7 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="0" max="{{part.originalPrice}}" (input)="onDiscount(part)" pInputText type="number"
-                            [style]="{'width':'100%'}" [(ngModel)]="part.discount">
+                            [style]="{'width':'100%'}" [(ngModel)]="part.discount" [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.discount}}
@@ -115,7 +115,7 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="0" pInputText type="number" (input)="onVat(part)" [style]="{'width':'100%'}"
-                            [(ngModel)]="part.vat">
+                            [(ngModel)]="part.vat" [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.vat}}
@@ -128,7 +128,7 @@
                     <ng-template pTemplate="input">
                         <p-fileUpload chooseIcon="{{part.images.length > 0? 'pi pi-check' : 'pi pi-plus' }}"
                             mode="basic" auto="true" accept="image/*" multiple="multiple"
-                            (onSelect)="part.images = $event.currentFiles"></p-fileUpload>
+                            (onSelect)="part.images = $event.currentFiles" [disabled]="part.isNotInterested"></p-fileUpload>
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.images.length + ' files selected'}}
