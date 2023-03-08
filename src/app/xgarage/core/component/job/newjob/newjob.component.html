@@ -71,7 +71,7 @@
                                 <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
                                 <p-dropdown class="mb-2" *ngIf="jobFound.multiple" [options]="jobs"
                                     formControlName="jobId" optionLabel="jobNo" optionValue="id"
-                                    placeholder="select a job"></p-dropdown>
+                                    placeholder="select a job" (onChange)="onJobSelection($event)"></p-dropdown>
                                 <small
                                     *ngIf="jobFound.multiple && submitted && !jobForm.get('jobId').valid  && jobForm.get('jobId').errors?.['required']"
                                     class="p-error">{{ 'job.form.enterJob' | translate }}</small>

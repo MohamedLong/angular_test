@@ -84,7 +84,7 @@
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">job card: </th>
-                                    <td class="uppercase font-medium">{{order.jobTitle? order.jobTitle : '-'}}</td>
+                                    <td class="uppercase font-medium">{{order.jobNumber? order.jobNumber : '-'}}</td>
                                 </tr>
                             </table>
                             <table class="">
@@ -100,7 +100,7 @@
                                 <tr>
                                     <th class="text-left capitalize font-medium"><span class="uppercase">lbo</span>
                                         date: </th>
-                                    <td class="uppercase font-medium">{{order.createdAt? order.createdAt : '-'}}</td>
+                                    <td class="uppercase font-medium">{{order.createdAt  | date: 'dd/MM/yyyy'}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">currency </th>
@@ -139,22 +139,22 @@
                                         {{order.qty}}
                                     </td>
                                     <td>
-                                        {{order.originalPrice}}
+                                        {{order.originalPrice | number}}
                                     </td>
                                     <td>
-                                        {{order.originalPrice}}
+                                        {{order.originalPrice * order.qty | number}}
                                     </td>
                                     <td>
                                         {{order.discount? order.discount : 0}}
                                     </td>
                                     <td>
-                                        {{order.vat}}
+                                        {{order.vat | number}}
                                     </td>
                                     <td>
-                                        {{order.taxAmount}}
+                                        {{order.taxAmount | number}}
                                     </td>
                                     <td>
-                                        {{order.price}}
+                                        {{order.price | number}}
                                     </td>
                                 </tr>
                             </ng-template>
@@ -166,15 +166,15 @@
                             <table class="ml-auto">
                                 <tr>
                                     <th class="text-left uppercase font-medium">gross total: </th>
-                                    <td class="uppercase font-medium">{{order.orderAmount}}</td>
+                                    <td class="uppercase font-medium">{{order.orderAmount  | number}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left uppercase font-medium">vat amount: </th>
-                                    <td class="uppercase font-medium">{{totalVat}}</td>
+                                    <td class="uppercase font-medium">{{totalVat  | number}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left uppercase font-medium">net total: </th>
-                                    <td class="uppercase font-medium">{{order.totalAmount}}</td>
+                                    <td class="uppercase font-medium">{{order.totalAmount  | number}}</td>
                                 </tr>
 
                             </table>

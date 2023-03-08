@@ -154,8 +154,9 @@ export class NewJobComponent implements OnInit {
                         }
                         else if (updatedJobs.length == 1) {
                             this.jobFound.found = true;
-                            this.jobForm.patchValue({ 'job': updatedJobs[0].jobNo, 'jobId': updatedJobs[0].id });
+                            this.jobForm.patchValue({ 'job': updatedJobs[0].jobNo, 'jobId': updatedJobs[0].id, location:  updatedJobs[0].location });
                             this.jobForm.get('job').disable();
+                            this.jobForm.get('location').disable();
                         }
                         else if (updatedJobs.length > 1) {
                             this.jobFound.multiple = true;
@@ -170,8 +171,6 @@ export class NewJobComponent implements OnInit {
                         this.jobForm.patchValue({ 'job': "", 'jobId': 0 });
                         this.jobFound.multiple = false;
                         this.jobFound.found = false;
-
-                        console.log(this.jobs, this.jobForm.get('jobId').value)
                     }
                 }, (err) => {
                     this.jobFound.multiple = false;
@@ -221,6 +220,7 @@ export class NewJobComponent implements OnInit {
     onNewJob() {
         this.jobFound.multiple = false;
         this.jobForm.get('job').enable();
+        this.jobForm.get('location').enable();
         this.jobForm.patchValue({
             job: "",
             jobId: ""
@@ -232,6 +232,7 @@ export class NewJobComponent implements OnInit {
         let jobBody = {
             jobNo: this.jobForm.get('job').value,
             claim: this.claimId,
+            location: this.jobForm.get('location').value,
             insuranceType: this.jobForm.get('insuranceFrom').value,
             car: { 'id': this.jobForm.get('car').value.id },
             privacy: this.jobForm.get('privacy').value,
@@ -245,8 +246,24 @@ export class NewJobComponent implements OnInit {
                 this.sendRequest();
             }
         }, err => {
-            console.log('err', err)
+            this.messageService.add({severity:'error', summary: 'Error', detail: err.erorr});
         })
+    }
+
+    onJobSelection(event) {
+        let job = this.jobs.filter(job => {
+            return job.id == event.value
+        });
+
+        if(job[0].location) {
+            this.jobForm.patchValue({ location:  job[0].location });
+            this.jobForm.get('location').disable();
+        } else {
+            this.jobForm.patchValue({ location:  JSON.parse(this.authService.getStoredUser()).tenant?.location ?
+                JSON.parse(this.authService.getStoredUser()).tenant.location
+                : '' });
+        }
+
     }
 
     sendRequest() {

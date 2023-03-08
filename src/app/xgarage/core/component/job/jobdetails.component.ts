@@ -111,7 +111,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.jobService.getById(id).subscribe(
             {
                 next: (data) => {
-                    //console.log(data)
+                    console.log(data)
                     this.master = data;
                     this.master.claimNo = data.claimNo;
                     this.masters.push(this.master);
