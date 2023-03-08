@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
@@ -37,9 +37,10 @@ export class NewBidComponent implements OnInit, OnChanges {
     bidTotalPrice: number = 0;
     bidTotalDiscount: number = 0;
     isSavingBid: boolean = false;
+    discountType = [{id: 1, name: 'Amount'}, {id: 2, name: 'Precentage'}];
+    selectedDiscountType: number;
 
     ngOnInit(): void {
-
         if (this.type == 'new bid') {
             this.requests = this.requests.filter(req => {
                 return req.status.id !== 7 && req.status.id !== 4;
@@ -190,6 +191,10 @@ export class NewBidComponent implements OnInit, OnChanges {
         }
     }
 
+    onDiscountTypeChange(event) {
+        console.log(event.value)
+    }
+
     onOriginalPrice($event) {
         if ($event.originalPrice == null || $event.originalPrice <= 0) {
             this.messageService.add({ severity: 'error', summary: 'Original Price is Not Valid', detail: 'Original Price Can Not be Less Than 1' });
@@ -240,7 +245,10 @@ export class NewBidComponent implements OnInit, OnChanges {
 
     updatePrice(part) {
         let price = part.originalPrice * part.qty2;
-        let priceAfterDiscount = price - part.discount;
+        let discount =
+        this.selectedDiscountType == 1?
+        part.discount : (price * part.discount) / 100;
+        let priceAfterDiscount = price - discount;
         let vat = (priceAfterDiscount * part.vat) / 100;
         let totalPrice = priceAfterDiscount + vat;
 

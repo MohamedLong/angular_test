@@ -12,7 +12,10 @@
             <th>{{'bid.bidDetails.deliverDays' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.originalPrice' | translate}}</th>
             <th>{{'bid.bidDetails.price' | translate}}</th>
-            <th>{{'bid.bidDetails.discount' | translate}}</th>
+            <th>
+                {{'bid.bidDetails.discount' | translate}}
+                <p-dropdown (onChange)="onDiscountTypeChange($event)" [options]="discountType" [(ngModel)]="selectedDiscountType" optionLabel="name" optionValue="id"></p-dropdown>
+            </th>
             <th>{{'bid.bidDetails.vat' | translate}}</th>
             <th>{{'bid.bidDetails.totalPrice' | translate}}</th>
             <th *ngIf="type == 'new bid'">{{'bid.bidDetails.partImgs' | translate}}</th>
@@ -32,7 +35,7 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="1" max="{{part.qty}}" (input)="onQty(part)" pInputText type="number"
-                            [style]="{'width':'100%'}" [(ngModel)]="part.qty2"  [disabled]="part.isNotInterested">
+                            [style]="{'width':'100%'}" [(ngModel)]="part.qty2" [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.qty2}}
@@ -51,7 +54,8 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <p-dropdown [options]="part.statuses" optionLabel="partType" appendTo="body"
-                            [(ngModel)]="part.preferred" [style]="{'width':'100%'}" (onChange)="onProposedChange(part)"></p-dropdown>
+                            [(ngModel)]="part.preferred" [style]="{'width':'100%'}"
+                            (onChange)="onProposedChange(part)"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{type == 'new bid'? part.preferred.partType : part.partType}}
@@ -61,7 +65,8 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.warranty" [disabled]="part.isNotInterested">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.warranty"
+                            [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.warranty}}
@@ -71,7 +76,8 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.availability" [disabled]="part.isNotInterested">
+                        <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.availability"
+                            [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{type == 'new bid'? part.availability : part.deliverDays}}
@@ -82,7 +88,8 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="1" pInputText type="number" (input)="onOriginalPrice(part)"
-                            [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice" [disabled]="part.isNotInterested">
+                            [style]="{'width':'100%'}" [(ngModel)]="part.originalPrice"
+                            [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.originalPrice | number}}
@@ -128,7 +135,8 @@
                     <ng-template pTemplate="input">
                         <p-fileUpload chooseIcon="{{part.images.length > 0? 'pi pi-check' : 'pi pi-plus' }}"
                             mode="basic" auto="true" accept="image/*" multiple="multiple"
-                            (onSelect)="part.images = $event.currentFiles" [disabled]="part.isNotInterested"></p-fileUpload>
+                            (onSelect)="part.images = $event.currentFiles"
+                            [disabled]="part.isNotInterested"></p-fileUpload>
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.images.length + ' files selected'}}
@@ -137,14 +145,14 @@
             </td>
             <td *ngIf="type == 'new bid'">
                 <div class="flex align-items-center justify-content-center gap-2">
-                    <button *ngIf="!editing && !part.isSending" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                        (click)="onRowEditInit(part)" class="p-button-rounded p-button-text"
+                    <button *ngIf="!editing && !part.isSending" pButton pRipple type="button" pInitEditableRow
+                        icon="pi pi-pencil" (click)="onRowEditInit(part)" class="p-button-rounded p-button-text"
                         [disabled]="part.saved"></button>
-                    <button *ngIf="editing && !part.isSending" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                        (click)="onRowEditSave(part)"
+                    <button *ngIf="editing && !part.isSending" pButton pRipple type="button" pSaveEditableRow
+                        icon="pi pi-check" (click)="onRowEditSave(part)"
                         class="p-button-rounded p-button-text p-button-success mr-2"></button>
-                    <button *ngIf="editing && !part.isSending" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                        (click)="onRowEditCancel(part, ri)"
+                    <button *ngIf="editing && !part.isSending" pButton pRipple type="button" pCancelEditableRow
+                        icon="pi pi-times" (click)="onRowEditCancel(part, ri)"
                         class="p-button-rounded p-button-text p-button-danger"></button>
                     <i *ngIf="part.isSending" class="pi pi-spin pi-spinner" style="color: #22c55e"></i>
                 </div>
@@ -178,19 +186,23 @@
     <p>this request has no parts for bid</p>
 </div>
 
-<p-dialog [(visible)]="displayModal" [modal]="true" [style]="{'max-width': '80vw'}" [resizable]="true">
+<p-dialog [(visible)]="displayModal" [modal]="true" [style]="{'max-width': '90vw', 'width': 'auto'}" [resizable]="true">
     <ng-template pTemplate="header">
         {{type == 'new bid'? 'Part Images': modalPart.partName}}
     </ng-template>
     <div class="align-items-start flex justify-content-between mb-3"
         *ngIf="modalPart.documents?.length > 0; else noimages">
         <ng-container *ngFor="let doc of modalPart.documents">
-            <img class="car-image rounded-large  shadow-3"
-                src="{{'http://letsgo-oman.com:6060/api/v1/document/' + doc.name}}" alt="">
+            <div class="mr-2">
+                <img class="car-image rounded-large shadow-3"
+                    src="{{'http://letsgo-oman.com:6060/api/v1/document/' + doc.name}}" alt="">
+            </div>
         </ng-container>
     </div>
     <ng-template #noimages>
-        <p-message severity="warn" text="{{'bid.bidDetails.noImgs' | translate}}" styleClass="mr-2"></p-message>
+        <div class="text-center mb-3">
+            <p-message severity="warn" text="{{'bid.bidDetails.noImgs' | translate}}" styleClass="mr-2"></p-message>
+        </div>
     </ng-template>
     <div *ngIf="modalPart.description">
         <h5 class="mb-2">{{modalPart.part.name}}</h5>
