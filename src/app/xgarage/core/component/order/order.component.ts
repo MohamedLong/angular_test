@@ -93,7 +93,7 @@ export class OrderComponent extends GenericComponent implements OnInit {
                     this.master = data;
                     localStorage.removeItem('orderData');
                     localStorage.removeItem('order');
-
+                    console.log('order object: ', this.master);
                     localStorage.setItem('orderData', JSON.stringify(this.master));
                     localStorage.setItem('order', JSON.stringify(order));
                     this.router.navigate(['order-details']);
