@@ -366,9 +366,11 @@
             </ng-template>
             <div class="align-items-start flex justify-content-between mb-3" *ngIf="modalPart.bidImages; else noimages">
                 <ng-container *ngFor="let img of modalPart.bidImages">
-                    <img class="car-image rounded-large  shadow-3 mx-2"
+                    <div class="mr-2">
+                        <img class="car-image rounded-large  shadow-3 mx-2"
                         src="{{'http://letsgo-oman.com:6060/api/v1/document/' + img.trim()}}"
                         alt="{{modalPart.partName}}">
+                    </div>
                 </ng-container>
             </div>
             <ng-template #noimages>
