@@ -1,3 +1,74 @@
-<p>part works!</p>
-<a pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
-                        [routerLink]="['/parts/new-part']"></a>
+<div class="grid">
+    <div class="col-12">
+        <p-toast></p-toast>
+
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <button  pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
+                    [routerLink]="['/parts/new-part']" [disabled]="newAuth===false" [hidden]="false"></button>
+                </ng-template>
+                <ng-template pTemplate="right">
+                    <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help mb-2"
+                        (click)="dt.exportCSV()" [disabled]="printAuth===false" ></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
+                [globalFilterFields]="['id','name','subCategory','category']"
+                [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                (onFilter)="onFilter($event, dt)"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between table-header">
+                        <h5 class="m-0">{{ 'part.title' | translate }}</h5>
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="{{ 'operations.filter' | translate }}" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id">{{ 'common.id' | translate }}<p-sortIcon field="id"></p-sortIcon>
+                        </th>
+                        <th pColumn="name">{{ 'part.tableColumn.partName' | translate }}
+                        </th>
+                        <th pColumn="subCategory">{{ 'part.tableColumn.partSubCategory' | translate }}
+                        </th>
+                        <th pColumn="category">{{ 'part.tableColumn.partCategory' | translate }}
+                        </th>
+                        <!-- <th pColumn="actions">{{'common.actions' | translate }}
+                        </th> -->
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-part>
+                    <tr>
+                        <td>
+                            {{part.id}}
+                        </td>
+                        <td>
+                            {{part.name}}
+                        </td>
+                        <td>
+                            {{part.subCategoryName}}
+                        </td>
+                        <td>
+                            {{part.categoryName}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">
+                        {{'part.table_footer' | translate: {length: masters ? masters.length : 0} }}
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+</div>
+

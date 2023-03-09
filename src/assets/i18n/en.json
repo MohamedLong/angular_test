@@ -365,8 +365,9 @@
             "itemTypeNameRequired": "Item Type Name is required."
         }
     },
-    "part": {
+    "part": { 
         "title": "Manage Parts",
+        "table_footer": "In total there are {{length}} Parts",
         "export": "Export",
         "dividerTitle": " Or Select Manually",
         "addPart": "Add Part",
@@ -374,9 +375,9 @@
             "id": "ID",
             "partName": "Part Name",
             "partNameSearch": "Search by part name",
-            "partCategory": "Part Category",
+            "partCategory": "Category",
             "partCategorySearch": "Search by part category",
-            "partSubCategory": "Part Sub Category",
+            "partSubCategory": "Sub-Category",
             "partSubCategorySearch": "Search by part sub category"
         },
         "partDialog": {
@@ -741,7 +742,6 @@
             "qty": "Qty",
             "originalPrice": "Original Price",
             "discount": "Discount",
-            "DiscountType": "Discount Type",
             "vat": "Vat (%)",
             "totalPrice": "Total Price",
             "days": "(days)",
@@ -779,8 +779,7 @@
             "total": "Total Amount",
             "sttaus": "Order Status",
             "delivery": "Delivery Fees",
-            "payment": "Payment Status",
-            "carInfo": "Car Info"
+            "payment": "Payment Status"
         }
     }
 
