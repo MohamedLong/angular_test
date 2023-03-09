@@ -119,8 +119,7 @@
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <p-dropdown [disabled]="part.isNotInterested" (onChange)="onDiscountTypeChange(part)"
-                            [options]="discountType" [(ngModel)]="part.discountType" optionLabel="name"
-                            optionValue="name"></p-dropdown>
+                            [options]="discountType" [(ngModel)]="part.discountType"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.discountType}}

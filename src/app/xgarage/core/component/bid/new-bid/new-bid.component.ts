@@ -50,7 +50,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     bidTotalPrice: number = 0;
     bidTotalDiscount: number = 0;
     isSavingBid: boolean = false;
-
+    discountType = ['fixed', 'flat'];
     ngOnInit(): void {
         if (this.type == 'new bid') {
             this.requests = this.requests.filter(req => {
@@ -130,39 +130,39 @@ export class NewBidComponent implements OnInit, OnChanges {
 
 
         console.log(bidBody)
-        // if (part.preferred.id == 4) {
-        //     this.reqService.setSupplierNotInterested(part.id).subscribe(res => {
-        //         part.saved = true;
-        //         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'part added as not interested / not available' });
-        //     }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message }))
+        if (part.preferred.id == 4) {
+            this.reqService.setSupplierNotInterested(part.id).subscribe(res => {
+                part.saved = true;
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'part added as not interested / not available' });
+            }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message }))
 
-        // } else {
-        //     part.isSending = true;
-        //     let bid = { bidBody: JSON.stringify(bidBody), voiceNote: '' }
-        //     let bidFormData = new FormData();
-        //     for (var key in bid) {
-        //         bidFormData.append(key, bid[key]);
-        //     }
-        //     for (let i = 0; i < part.images.length; i++) {
-        //         bidFormData.append('bidImages', part.images[i]);
-        //     }
+        } else {
+            part.isSending = true;
+            let bid = { bidBody: JSON.stringify(bidBody), voiceNote: '' }
+            let bidFormData = new FormData();
+            for (var key in bid) {
+                bidFormData.append(key, bid[key]);
+            }
+            for (let i = 0; i < part.images.length; i++) {
+                bidFormData.append('bidImages', part.images[i]);
+            }
 
-        //     this.total = this.total + part.totalPrice;
+            this.total = this.total + part.totalPrice;
 
-        //     if ((part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
-        //         this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
-        //             part.saved = true;
-        //             part.isSending = false;
-        //             this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
-        //         }, err => {
-        //             part.isSending = false;
-        //             this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
-        //         })
-        //     } else {
-        //         part.isSending = false;
-        //         this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'some fileds are not valid, please try again.' });
-        //     }
-        // }
+            if ((part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
+                this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
+                    part.saved = true;
+                    part.isSending = false;
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
+                }, err => {
+                    part.isSending = false;
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
+                })
+            } else {
+                part.isSending = false;
+                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'some fileds are not valid, please try again.' });
+            }
+        }
     }
 
     onRowEditCancel(data) {
@@ -320,8 +320,8 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onProposedChange(part) {
-        console.log('val changed')
-        console.log(part)
+        // console.log('val changed')
+        // console.log(part)
         if (part.preferred.id == 4) {
             part.isNotInterested = true;
         } else {
