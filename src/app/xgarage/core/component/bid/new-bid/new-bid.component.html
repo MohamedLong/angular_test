@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 <p-table [value]="requests" dataKey="id" [tableStyle]="{'min-width': '50rem', 'width':'100%'}" editMode="row" #partTable
-    *ngIf="requests.length > 0">
+    *ngIf="requests.length > 0" styleClass="p-datatable-sm">
 
     <ng-template pTemplate="header">
         <tr>
@@ -153,7 +153,7 @@
             <td *ngIf="type == 'new bid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-fileUpload chooseIcon="{{part.images.length > 0? 'pi pi-check' : 'pi pi-plus' }}"
+                        <p-fileUpload styleClass="choose-btn" chooseLabel="{{part.images.length > 0? part.images.length + ' files selected': ''}}" chooseIcon="{{part.images.length > 0? '' : 'pi pi-plus' }}"
                             mode="basic" auto="true" accept="image/*" multiple="multiple"
                             (onSelect)="part.images = $event.currentFiles"
                             [disabled]="part.isNotInterested"></p-fileUpload>
