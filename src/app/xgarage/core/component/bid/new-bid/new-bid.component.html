@@ -1,20 +1,22 @@
 <p-toast></p-toast>
 <p-table [value]="requests" dataKey="id" [tableStyle]="{'min-width': '50rem', 'width':'100%'}" editMode="row" #partTable
-    *ngIf="requests.length > 0">
+    *ngIf="requests.length > 0" styleClass="p-datatable-sm">
 
     <ng-template pTemplate="header">
         <tr>
             <th>{{'bid.bidDetails.partName' | translate}}</th>
             <th>{{'bid.bidDetails.qty' | translate}}</th>
-            <th>{{'bid.bidDetails.Preferred' | translate}}</th>
+            <!-- <th>{{'bid.bidDetails.Preferred' | translate}}</th> -->
             <th>{{'bid.bidDetails.Proposed' | translate}}</th>
             <th>{{'bid.bidDetails.warranty' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.deliverDays' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.originalPrice' | translate}}</th>
             <th>{{'bid.bidDetails.price' | translate}}</th>
             <th>
+                {{'bid.bidDetails.DiscountType' | translate}}
+            </th>
+            <th>
                 {{'bid.bidDetails.discount' | translate}}
-                <p-dropdown (onChange)="onDiscountTypeChange($event)" [options]="discountType" [(ngModel)]="selectedDiscountType" optionLabel="name" optionValue="id"></p-dropdown>
             </th>
             <th>{{'bid.bidDetails.vat' | translate}}</th>
             <th>{{'bid.bidDetails.totalPrice' | translate}}</th>
@@ -42,20 +44,26 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td *ngIf="type == 'new bid'">
+            <!-- <td *ngIf="type == 'new bid'">
                 <ng-container *ngFor="let type of part.partTypes">
                     {{type.partType + ' '}}
                 </ng-container>
             </td>
             <td *ngIf="type == 'edit bid'">
                 {{part.partType}}
-            </td>
+            </td> -->
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-dropdown [options]="part.statuses" optionLabel="partType" appendTo="body"
-                            [(ngModel)]="part.preferred" [style]="{'width':'100%'}"
-                            (onChange)="onProposedChange(part)"></p-dropdown>
+                        <p-dropdown [style]="{'width':'100%'}" optionLabel="partType" [options]="part.statuses"
+                            [(ngModel)]="part.preferred" [group]="true" optionDisabled="disabled"
+                            (onChange)="onProposedChange(part)">
+                            <ng-template let-group pTemplate="group">
+                                <div class="flex align-items-center" [ngClass]="">
+                                    <span>{{group.partType}}</span>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{type == 'new bid'? part.preferred.partType : part.partType}}
@@ -110,6 +118,17 @@
             <td>
                 <p-cellEditor>
                     <ng-template pTemplate="input">
+                        <p-dropdown [disabled]="part.isNotInterested" (onChange)="onDiscountTypeChange(part)"
+                            [options]="discountType" [(ngModel)]="part.discountType"></p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.discountType}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
                         <input min="0" max="{{part.originalPrice}}" (input)="onDiscount(part)" pInputText type="number"
                             [style]="{'width':'100%'}" [(ngModel)]="part.discount" [disabled]="part.isNotInterested">
                     </ng-template>
@@ -129,11 +148,11 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>{{type == 'new bid'? part.totalPrice : part.price}}</td>
+            <td>{{type == 'new bid'? (part.totalPrice | number ): (part.price | number)}}</td>
             <td *ngIf="type == 'new bid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-fileUpload chooseIcon="{{part.images.length > 0? 'pi pi-check' : 'pi pi-plus' }}"
+                        <p-fileUpload styleClass="choose-btn" chooseLabel="{{part.images.length > 0? part.images.length + ' files selected': ''}}" chooseIcon="{{part.images.length > 0? '' : 'pi pi-plus' }}"
                             mode="basic" auto="true" accept="image/*" multiple="multiple"
                             (onSelect)="part.images = $event.currentFiles"
                             [disabled]="part.isNotInterested"></p-fileUpload>
@@ -146,8 +165,7 @@
             <td *ngIf="type == 'new bid'">
                 <div class="flex align-items-center justify-content-center gap-2">
                     <button *ngIf="!editing && !part.isSending" pButton pRipple type="button" pInitEditableRow
-                        icon="pi pi-pencil" (click)="onRowEditInit(part)" class="p-button-rounded p-button-text"
-                        [disabled]="part.saved"></button>
+                        icon="pi pi-pencil" class="p-button-rounded p-button-text" [disabled]="part.saved"></button>
                     <button *ngIf="editing && !part.isSending" pButton pRipple type="button" pSaveEditableRow
                         icon="pi pi-check" (click)="onRowEditSave(part)"
                         class="p-button-rounded p-button-text p-button-success mr-2"></button>

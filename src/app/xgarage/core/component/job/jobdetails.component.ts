@@ -35,6 +35,10 @@ import html2canvas from 'html2canvas';
             display: block;
         }
 
+        .nis {
+            font-size: 10px
+        }
+
         .active {border-bottom: 2px solid #6366F1 !important;border-radius: 0;}
 
         @media screen and (max-width: 960px) {
@@ -333,9 +337,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             console.log(res)
             if(res.length > 0) {
                 this.NotIntrestedSuppliers = res;
+                this.displayNotIntrestedSuppliers = true;
+            } else {
+                this.messageService.add({ severity: 'info', summary: 'Not Interested Suppliers Are Empty' });
             }
-
-            this.displayNotIntrestedSuppliers = true;
         }, err => console.log(err))
     }
 

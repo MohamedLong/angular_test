@@ -41,12 +41,12 @@
                         <th>{{'orders.table.date' | translate}}</th>
                         <th *ngIf="role == 2">{{'orders.table.customerName' | translate}}</th>
                         <th *ngIf="role == 1">{{'orders.table.supplierName' | translate}}</th>
+                        <th>{{'orders.table.carInfo' | translate}}</th>
                         <th>{{'orders.table.number' | translate}}</th>
                         <th>{{'orders.table.amount' | translate}}</th>
                         <th>{{'orders.table.total' | translate}}</th>
                         <th>{{'orders.table.sttaus' | translate}}</th>
                         <th>{{'orders.table.delivery' | translate}}</th>
-                        <!-- <th>{{'orders.table.payment' | translate}}</th> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
@@ -70,6 +70,9 @@
                             {{order.supplierName}}
                         </td>
                         <td>
+                            {{order.jobTitle?  order.jobTitle : '-'}}
+                        </td>
+                        <td>
                             {{order.jobNumber? order.jobNumber : '-'}}
                         </td>
                         <td>
@@ -84,18 +87,11 @@
                         <td>
                             {{order.deliveryFees}}
                         </td>
-                        <!-- <td>
-                            {{order.orderStatus}}
-                        </td> -->
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="footer">
                     <tr>
-                        <!-- <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td> -->
-                        <td colspan="4" class="text-left">Total</td>
+                        <td colspan="5" class="text-left">Total</td>
                         <td>{{totalOrderAmount| number}}</td>
                         <td colspan="2" >{{totalAmount | number}}</td>
                         <td>{{delivaryTotal | number}}</td>

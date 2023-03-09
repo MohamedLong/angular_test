@@ -741,6 +741,7 @@
             "qty": "Qty",
             "originalPrice": "Original Price",
             "discount": "Discount",
+            "DiscountType": "Discount Type",
             "vat": "Vat (%)",
             "totalPrice": "Total Price",
             "days": "(days)",
@@ -778,7 +779,8 @@
             "total": "Total Amount",
             "sttaus": "Order Status",
             "delivery": "Delivery Fees",
-            "payment": "Payment Status"
+            "payment": "Payment Status",
+            "carInfo": "Car Info"
         }
     }
 

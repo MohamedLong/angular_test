@@ -24,7 +24,20 @@ export class NewBidComponent implements OnInit, OnChanges {
     checked: boolean = false;
     @Input() requests: any[] = [];
     @Input() type: string = 'new bid';
-    statuses: PartType[] = [{ "id": 4, "partType": "Not Interested / Not Available" }];
+    partTypes: PartType[] = [
+        {
+          "id": 2,
+          "partType": "Aftermarket"
+        },
+        {
+          "id": 1,
+          "partType": "Genuine-OEM"
+        },
+        {
+          "id": 3,
+          "partType": "Used"
+        }
+      ];
     preferredTypes: string = '';
     bids: any[] = [];
     total: number = 0.0;
@@ -37,9 +50,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     bidTotalPrice: number = 0;
     bidTotalDiscount: number = 0;
     isSavingBid: boolean = false;
-    discountType = [{id: 1, name: 'Amount'}, {id: 2, name: 'Precentage'}];
-    selectedDiscountType: number;
-
+    discountType = ['fixed', 'flat'];
     ngOnInit(): void {
         if (this.type == 'new bid') {
             this.requests = this.requests.filter(req => {
@@ -53,7 +64,7 @@ export class NewBidComponent implements OnInit, OnChanges {
 
                 //console.log(req.notInterestedSuppliers, JSON.parse(this.authService.getStoredUser()).id)
                 req.notInterestedSuppliers.forEach(supplier => {
-                    if(supplier.user == JSON.parse(this.authService.getStoredUser()).id) {
+                    if (supplier.user == JSON.parse(this.authService.getStoredUser()).id) {
                         req.saved = true;
                     }
                 });
@@ -83,24 +94,6 @@ export class NewBidComponent implements OnInit, OnChanges {
         console.log(e)
     }
 
-    onRowEditInit(part) {
-        // console.log(part.statuses)
-        // part.statuses == this.statuses;
-
-        // console.log(part.statuses)
-        part.partTypes.forEach(type => {
-            if (!part.statuses.includes(type)) {
-                part.statuses.unshift(type);
-                part.preferred = type;
-            }
-
-        });
-
-        // this.requests.forEach(req => {
-        //     req.statuses = this.statuses
-        // });
-    }
-
     onRowEditSave(part) {
         let date = new Date();
         let getYear = date.toLocaleString("default", { year: "numeric" });
@@ -126,6 +119,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             warranty: part.warranty,
             location: part.locationName,
             discount: part.discount,
+            discountType: part.discountType,
             vat: part.vat,
             originalPrice: part.originalPrice,
             reviseVoiceNote: null,
@@ -135,7 +129,7 @@ export class NewBidComponent implements OnInit, OnChanges {
         }
 
 
-       // console.log(bidBody)
+        console.log(bidBody)
         if (part.preferred.id == 4) {
             this.reqService.setSupplierNotInterested(part.id).subscribe(res => {
                 part.saved = true;
@@ -176,23 +170,27 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onDiscount($event) {
-        if ($event.originalPrice > 0 && $event.discount >= 0) {
+        let price = $event.originalPrice * $event.qty2;
+        let discount = $event.discountType == 'fixed' ? $event.discount : (price * $event.discount) / 100;
+
+        if ($event.originalPrice > 0 && discount >= 0) {
             this.updatePrice($event);
         }
 
-        if ($event.discount < 0 || $event.discount == null) {
+        if (discount < 0 || discount == null) {
             this.messageService.add({ severity: 'error', summary: 'Discount is Not Valid', detail: 'Discount Can Not be Less Than 0' });
-            $event.discount = 0;
+            discount = 0;
         }
 
-        if ($event.discount >= $event.originalPrice) {
+        if (discount >= $event.originalPrice) {
             this.messageService.add({ severity: 'error', summary: 'Discount is Not Valid', detail: 'Discount Can Not be More Than Original Price' });
             $event.discount = 0;
         }
     }
 
     onDiscountTypeChange(event) {
-        console.log(event.value)
+        //console.log(event.value)
+        this.updatePrice(event);
     }
 
     onOriginalPrice($event) {
@@ -228,7 +226,12 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     resetBid(bid) {
-        bid.preferred = { "id": 4, "partType": "Not Interested / Not Available" },
+        console.log(bid)
+        bid.partTypes.forEach(type => {
+            type.disabled = true;
+        });
+
+        bid.preferred = bid.partTypes[0],
             bid.warranty = 0,
             bid.availability = 0,
             bid.originalPrice = 1,
@@ -236,24 +239,33 @@ export class NewBidComponent implements OnInit, OnChanges {
             bid.price = 0.0,
             bid.vat = 5.0,
             bid.totalPrice = 0.0,
-            bid.statuses = this.statuses,
+            bid.statuses = [
+                {
+                    partType: 'Proposed',
+                    items: [...this.partTypes, { "id": 4, "partType": "Not Interested/Not Available" }]
+                },
+                {
+                    partType: 'Preferred',
+                    items: bid.partTypes
+                }
+            ],
             bid.saved = false,
             bid.isNotInterested = false,
-            bid.isSending = false;
+            bid.isSending = false,
             bid.qty2 = bid.qty
     }
 
     updatePrice(part) {
         let price = part.originalPrice * part.qty2;
-        let discount =
-        this.selectedDiscountType == 1?
-        part.discount : (price * part.discount) / 100;
+        let discount = part.discountType == 'fixed' ? part.discount : (price * part.discount) / 100;
         let priceAfterDiscount = price - discount;
         let vat = (priceAfterDiscount * part.vat) / 100;
         let totalPrice = priceAfterDiscount + vat;
 
         part.price = price;
         part.totalPrice = totalPrice;
+
+        // this.part = part;
     }
 
     onCancelBid(id: number) {
@@ -276,30 +288,30 @@ export class NewBidComponent implements OnInit, OnChanges {
 
     getStatusName(statusId: number) {
         switch (statusId) {
-          case StatusConstants.OPEN_STATUS:
-            return 'Open';
-          case StatusConstants.INPROGRESS_STATUS:
-            return 'Initial Approval';
-          case StatusConstants.ONHOLD_STATUS:
-            return 'On Hold';
-          case StatusConstants.COMPLETED_STATUS:
-            return 'Completed';
-          case StatusConstants.REJECTED_STATUS:
-            return 'Rejected';
-          case StatusConstants.APPROVED_STATUS:
-            return 'Approved';
-          case StatusConstants.CANCELED_STATUS:
-            return 'Canceled';
-          case StatusConstants.REVISION_STATUS:
-            return 'Revision';
-          case StatusConstants.LOST_STATUS:
-            return 'Lost';
-          case StatusConstants.REVISED_STATUS:
-            return 'Revised';
-          default:
-            return 'Unknown';
+            case StatusConstants.OPEN_STATUS:
+                return 'Open';
+            case StatusConstants.INPROGRESS_STATUS:
+                return 'Initial Approval';
+            case StatusConstants.ONHOLD_STATUS:
+                return 'On Hold';
+            case StatusConstants.COMPLETED_STATUS:
+                return 'Completed';
+            case StatusConstants.REJECTED_STATUS:
+                return 'Rejected';
+            case StatusConstants.APPROVED_STATUS:
+                return 'Approved';
+            case StatusConstants.CANCELED_STATUS:
+                return 'Canceled';
+            case StatusConstants.REVISION_STATUS:
+                return 'Revision';
+            case StatusConstants.LOST_STATUS:
+                return 'Lost';
+            case StatusConstants.REVISED_STATUS:
+                return 'Revised';
+            default:
+                return 'Unknown';
         }
-      }
+    }
 
     showModal(part) {
         console.log(part)
@@ -308,8 +320,9 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onProposedChange(part) {
+        // console.log('val changed')
         // console.log(part)
-        if(part.preferred.id == 4 || part.preferred.id == 5) {
+        if (part.preferred.id == 4) {
             part.isNotInterested = true;
         } else {
             part.isNotInterested = false;

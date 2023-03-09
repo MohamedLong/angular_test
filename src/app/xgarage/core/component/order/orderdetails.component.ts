@@ -33,23 +33,25 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     dataCols: any[];
     pdfName: string = 'invoice';
     src: string = '';
-    order: any = '';
+    bidList: any = [];
     totalVat: number = 0;
     sending: boolean = false;
     taxAmount: number = 0;
     @ViewChild('invoice') invoice!: ElementRef;
 
     ngOnInit() {
-        this.master = JSON.parse(localStorage.getItem('orderData'));
-        this.order = JSON.parse(localStorage.getItem('order'));
+        this.bidList = JSON.parse(localStorage.getItem('orderData'));
 
-        console.log('order:', this.order)
-        this.master.forEach(order => {
+        //masterDTO
+        this.masterDto = JSON.parse(localStorage.getItem('order'));
+
+        console.log('order:', this.masterDto)
+        this.bidList.forEach(order => {
             order.taxAmount = (order.vat / 100) * (order.originalPrice * order.qty - order.discount);
             this.totalVat = this.totalVat + order.taxAmount;
         });
 
-        console.log('data:', this.master)
+        console.log('data:', this.bidList)
 
         this.dataCols = [
             { field: 'bidId', header: 'SL.NO' },
@@ -66,22 +68,6 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
 
         this.initActionMenu();
         this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['orders'] }, { 'label': 'Order Details', routerLink: ['order-details'] }]);
-    }
-
-    getPdf() {
-        domtoimage.toPng(this.invoice.nativeElement)
-            .then((dataUrl) => {
-                this.src = dataUrl;
-                console.log(dataUrl)
-                let a = document.createElement('a');
-                document.body.appendChild(a);
-                a.download = 'invoice';
-                a.href = dataUrl;
-                a.click();
-            })
-            .catch(function (error) {
-                console.error('oops, something went wrong!', error);
-            });
     }
 
     downloadPDF() {
@@ -130,7 +116,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                     var blob = doc.output('blob');
                     var formData = new FormData();
 
-                    let req = { "orderId": this.order.id, "lpo": blob };
+                    let req = { "orderId": this.masterDto.id, "lpo": blob };
 
                     for (var key in req) {
                         formData.append(key, req[key]);
@@ -162,7 +148,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                 }
             },
             {
-                label: 'Accept Order', icon: 'pi pi-check', visible: (this.order.orderStatus == 'ACTIVE'), command: () => {
+                label: 'Accept Order', icon: 'pi pi-check', visible: (this.masterDto.orderStatus == 'ACTIVE'), command: () => {
                     const confirmStatus: Status = {
                         id: 6,
                         nameEn: 'Accept',
@@ -174,7 +160,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                 }
             },
             {
-                label: 'Cancel Order', icon: 'pi pi-times', visible: (this.order.orderStatus == 'ACTIVE'), command: () => {
+                label: 'Cancel Order', icon: 'pi pi-times', visible: (this.masterDto.orderStatus == 'ACTIVE'), command: () => {
                     const cancelStatus: Status = {
                         id: 7,
                         nameEn: 'Canceled',
@@ -188,28 +174,21 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
         ];
     }
 
-    printPage() {
-        window.frames["print_frame"].window.focus();
-        setTimeout(function() {
-            window.frames["print_frame"].window.print();
-        }, 0);
-    }
-
     confirm() {
         if (this.confirmType === 'accept') {
-            this.orderService.changeStatus(this.order.id, this.confirmStatus).subscribe({
+            this.orderService.changeStatus(this.masterDto.id, this.confirmStatus).subscribe({
                 next: (data) => {
                     this.updateCurrentObject(data);
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });
         }else if(this.confirmType === 'cancel') {
-            this.orderService.changeStatus(this.order.id, this.confirmStatus).subscribe({
+            this.orderService.changeStatus(this.masterDto.id, this.confirmStatus).subscribe({
                 next: (data) => {
                     this.updateCurrentObject(data);
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-            }); 
+            });
         }else if(this.confirmType === 'email') {
             this.downloadPDF();
         }
