@@ -93,7 +93,6 @@ export class OrderComponent extends GenericComponent implements OnInit {
                     this.master = data;
                     localStorage.removeItem('orderData');
                     localStorage.removeItem('order');
-                    localStorage.removeItem('chassisNumber');
 
                     localStorage.setItem('orderData', JSON.stringify(this.master));
                     localStorage.setItem('order', JSON.stringify(order));

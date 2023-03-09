@@ -11,6 +11,7 @@ import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
 import { OrderService } from '../../service/order.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
+import { Status } from 'src/app/xgarage/common/model/status';
 @Component({
     selector: 'order-details',
     templateUrl: './orderdetails.component.html',
@@ -142,11 +143,57 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     initActionMenu() {
         this.menuItems = [
             {
-                label: 'Send Email', icon: 'pi pi-email', command: () => {
-                    this.downloadPDF()
+                label: 'Send Order', icon: 'pi pi-envelope', command: () => {
+                    this.confirmType = 'email';
+                    this.confirmActionDialog = true;
                 }
-            }
+            },
+            {
+                label: 'Accept Order', icon: 'pi pi-check', visible: (this.masterDto.orderStatus == 'ACTIVE'), command: () => {
+                    const confirmStatus: Status = {
+                        id: 6,
+                        nameEn: 'Accept',
+                        nameAr: 'مؤكد'
+                    }
+                    this.confirmType = 'accept';
+                    this.confirmStatus = confirmStatus;
+                    this.confirmActionDialog = true;
+                }
+            },
+            {
+                label: 'Cancel Order', icon: 'pi pi-times', visible: (this.masterDto.orderStatus == 'ACTIVE'), command: () => {
+                    const cancelStatus: Status = {
+                        id: 7,
+                        nameEn: 'Canceled',
+                        nameAr: 'ملغي'
+                    }
+                    this.confirmType = 'cancel';
+                    this.confirmStatus = cancelStatus;
+                    this.confirmActionDialog = true;
+                }
+            },
         ];
+    }
+
+    confirm() {
+        if (this.confirmType === 'accept') {
+            this.orderService.changeStatus(this.masterDto.id, this.confirmStatus).subscribe({
+                next: (data) => {
+                    this.updateCurrentObject(data);
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            });
+        }else if(this.confirmType === 'cancel') {
+            this.orderService.changeStatus(this.masterDto.id, this.confirmStatus).subscribe({
+                next: (data) => {
+                    this.updateCurrentObject(data);
+                },
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+            });
+        }else if(this.confirmType === 'email') {
+            this.downloadPDF();
+        }
+        this.confirmActionDialog = false;
     }
 }
 
