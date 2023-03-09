@@ -146,10 +146,10 @@
                                         {{order.originalPrice | number}}
                                     </td>
                                     <td>
-                                        {{order.originalPrice * order.qty | number}}
+                                        {{order.originalPrice | number}}
                                     </td>
                                     <td>
-                                        {{order.discount? order.discount : 0}}
+                                        {{order.discount? order.discountType == 'fixed'?  order.discount : order.discount + '%': 0}}
                                     </td>
                                     <td>
                                         {{order.vat | number}}
