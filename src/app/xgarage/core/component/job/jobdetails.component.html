@@ -66,14 +66,14 @@
         </ng-template>
 
         <ng-template pTemplate="right">
-            <div class="field col">
+            <div class="field col" *ngIf="role == 1">
                 <p-confirmPopup></p-confirmPopup>
                 <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
                 <button pButton pRipple [disabled]="editAuth===false" class="mb-3 p-button-warning" type="button"
                     icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
                     (click)="menu.toggle($event)"></button>
             </div>
-            <div class="field" *ngIf="role == 1 && role !== 2">
+            <div class="field" *ngIf="role == 1">
                 <button *ngIf="master && master.length > 0" pButton pRipple label="{{ 'part.addPart' | translate }}"
                     icon="pi pi-plus" (click)="openNew()" class="p-button-success mr-2 mb-3"
                     [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
