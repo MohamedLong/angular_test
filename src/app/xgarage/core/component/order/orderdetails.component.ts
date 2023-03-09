@@ -32,23 +32,26 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     dataCols: any[];
     pdfName: string = 'invoice';
     src: string = '';
-    order: any = '';
+    masterDto: any = '';
+    bidList: any = [];
     totalVat: number = 0;
     sending: boolean = false;
     taxAmount: number = 0;
     @ViewChild('invoice') invoice!: ElementRef;
 
     ngOnInit() {
-        this.master = JSON.parse(localStorage.getItem('orderData'));
-        this.order = JSON.parse(localStorage.getItem('order'));
+        this.bidList = JSON.parse(localStorage.getItem('orderData'));
 
-        console.log('order:', this.order)
-        this.master.forEach(order => {
+        //masterDTO
+        this.masterDto = JSON.parse(localStorage.getItem('order'));
+
+        console.log('order:', this.masterDto)
+        this.bidList.forEach(order => {
             order.taxAmount = (order.vat / 100) * (order.originalPrice * order.qty - order.discount);
             this.totalVat = this.totalVat + order.taxAmount;
         });
 
-        console.log('data:', this.master)
+        console.log('data:', this.bidList)
 
         this.dataCols = [
             { field: 'bidId', header: 'SL.NO' },
@@ -65,22 +68,6 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
 
         this.initActionMenu();
         this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['orders'] }, { 'label': 'Order Details', routerLink: ['order-details'] }]);
-    }
-
-    getPdf() {
-        domtoimage.toPng(this.invoice.nativeElement)
-            .then((dataUrl) => {
-                this.src = dataUrl;
-                console.log(dataUrl)
-                let a = document.createElement('a');
-                document.body.appendChild(a);
-                a.download = 'invoice';
-                a.href = dataUrl;
-                a.click();
-            })
-            .catch(function (error) {
-                console.error('oops, something went wrong!', error);
-            });
     }
 
     downloadPDF() {
@@ -129,7 +116,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                     var blob = doc.output('blob');
                     var formData = new FormData();
 
-                    let req = { "orderId": this.order.id, "lpo": blob };
+                    let req = { "orderId": this.masterDto.id, "lpo": blob };
 
                     for (var key in req) {
                         formData.append(key, req[key]);
@@ -160,13 +147,6 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                 }
             }
         ];
-    }
-
-    printPage() {
-        window.frames["print_frame"].window.focus();
-        setTimeout(function() {
-            window.frames["print_frame"].window.print();
-        }, 0);
     }
 }
 

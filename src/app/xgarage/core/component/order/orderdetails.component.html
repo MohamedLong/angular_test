@@ -56,11 +56,11 @@
                             <table class="">
                                 <tr>
                                     <th class="text-left capitalize font-medium">supplier name: </th>
-                                    <td class="uppercase font-bold">{{order.supplierName}}</td>
+                                    <td class="uppercase font-bold">{{masterDto.supplierName}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">supplier address: </th>
-                                    <td class="uppercase font-medium">{{order.supplierAddress}}</td>
+                                    <td class="uppercase font-medium">{{masterDto.supplierAddress}}</td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -68,11 +68,11 @@
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">customer Name: </th>
-                                    <td class="uppercase font-bold">{{order.customerName}}</td>
+                                    <td class="uppercase font-bold">{{masterDto.customerName}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">customer address: </th>
-                                    <td class="uppercase font-medium">{{order.customerAddress}}</td>
+                                    <td class="uppercase font-medium">{{masterDto.customerAddress}}</td>
                                 </tr>
                                 <tr>
                                     <td></td>
@@ -80,11 +80,15 @@
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">make & model: </th>
-                                    <td class="uppercase font-medium">{{master[0]? master[0].requestTitle : '-'}}</td>
+                                    <td class="uppercase font-medium">{{bidList[0]? bidList[0].requestTitle : '-'}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-left capitalize font-medium">vin number</th>
+                                    <td class="uppercase font-medium">{{masterDto.chassisNumber}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">job card: </th>
-                                    <td class="uppercase font-medium">{{order.jobNumber? order.jobNumber : '-'}}</td>
+                                    <td class="uppercase font-medium">{{masterDto.jobNumber? masterDto.jobNumber : '-'}}</td>
                                 </tr>
                             </table>
                             <table class="">
@@ -95,27 +99,27 @@
                                 <tr>
                                     <th class="text-left capitalize font-medium"><span class="uppercase">lbo</span>
                                         number: </th>
-                                    <td class="uppercase font-medium">{{order.id}}</td>
+                                    <td class="uppercase font-medium">{{masterDto.id}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium"><span class="uppercase">lbo</span>
                                         date: </th>
-                                    <td class="uppercase font-medium">{{order.createdAt  | date: 'dd/MM/yyyy'}}</td>
+                                    <td class="uppercase font-medium">{{masterDto.createdAt  | date: 'dd/MM/yyyy'}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">currency </th>
-                                    <td class="uppercase font-medium">{{order.currency}}</td>
+                                    <td class="uppercase font-medium">{{masterDto.currency}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left capitalize font-medium">country: </th>
-                                    <td class="uppercase font-medium">{{order.country}}</td>
+                                    <td class="uppercase font-medium">{{masterDto.country}}</td>
                                 </tr>
                             </table>
                         </div>
                         <p class="uppercase">
                             please supply the following and debit our account for the value
                         </p>
-                        <p-table *ngIf="master.length > 0" [columns]="dataCols" [value]="master"
+                        <p-table *ngIf="bidList.length > 0" [columns]="dataCols" [value]="bidList"
                             styleClass="p-invoice-datatable-responsive pb-3">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
@@ -166,7 +170,7 @@
                             <table class="ml-auto">
                                 <tr>
                                     <th class="text-left uppercase font-medium">gross total: </th>
-                                    <td class="uppercase font-medium">{{order.orderAmount  | number}}</td>
+                                    <td class="uppercase font-medium">{{masterDto.orderAmount  | number}}</td>
                                 </tr>
                                 <tr>
                                     <th class="text-left uppercase font-medium">vat amount: </th>
@@ -174,7 +178,7 @@
                                 </tr>
                                 <tr>
                                     <th class="text-left uppercase font-medium">net total: </th>
-                                    <td class="uppercase font-medium">{{order.totalAmount  | number}}</td>
+                                    <td class="uppercase font-medium">{{masterDto.totalAmount  | number}}</td>
                                 </tr>
 
                             </table>
