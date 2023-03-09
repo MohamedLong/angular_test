@@ -730,7 +730,7 @@
             "bidValue": "Bid Value",
             "bidDate": "Submitted Time",
             "submittedBids": "Submitted Bids",
-            "notInterested": "NIS"
+            "notInterested": "*NIS"
         },
         "bidDetails": {
             "partName": "Part Name",
