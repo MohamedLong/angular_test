@@ -33,7 +33,6 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     dataCols: any[];
     pdfName: string = 'invoice';
     src: string = '';
-    masterDto: any = '';
     bidList: any = [];
     totalVat: number = 0;
     sending: boolean = false;

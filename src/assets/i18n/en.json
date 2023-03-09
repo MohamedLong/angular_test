@@ -741,6 +741,7 @@
             "qty": "Qty",
             "originalPrice": "Original Price",
             "discount": "Discount",
+            "DiscountType": "Discount Type",
             "vat": "Vat (%)",
             "totalPrice": "Total Price",
             "days": "(days)",
