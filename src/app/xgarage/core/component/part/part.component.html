@@ -15,7 +15,7 @@
             </p-toolbar>
 
             <p-table #dt [value]="masters" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['id','name','subCategory','category']"
+                [globalFilterFields]="['id','name','subCategory','category', 'statusText']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)"
@@ -40,8 +40,11 @@
                         </th>
                         <th pColumn="category">{{ 'part.tableColumn.partCategory' | translate }}
                         </th>
-                        <!-- <th pColumn="actions">{{'common.actions' | translate }}
-                        </th> -->
+                        <th pSortableColumn="status">{{ 'part.tableColumn.status' | translate }}<p-sortIcon field="status"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="enabled">{{'part.tableColumn.enabled' | translate}}
+                        </th>
+
 
                     </tr>
                 </ng-template>
@@ -58,6 +61,17 @@
                         </td>
                         <td>
                             {{part.categoryName}}
+                        </td>
+                        <td>
+                            {{part.statusText}}
+                        </td>
+                        <td>
+                            <button *ngIf="part.status == 0" pButton pRipple label="{{ 'operations.approve' | translate }}"  
+                            class="p-button-success mr-2 mb-2" (click)="approvePart(part.id)">
+                            </button>
+                            <button *ngIf="part.status == 0" pButton pRipple label="{{ 'operations.reject' | translate }}"  
+                            class="p-button-danger mr-2 mb-2" (click)="rejectPart(part.id)">
+                            </button>
                         </td>
                     </tr>
                 </ng-template>

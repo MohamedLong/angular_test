@@ -52,7 +52,7 @@ export class BidDetailsComponent implements OnInit {
                 this.jobBids = res;
                 this.displayModal = true;
             } else {
-                this.msgService.add({ severity: 'erorr', summary: 'this job has no bids', detail: ''})
+                this.msgService.add({ severity: 'info', summary: 'this job has no bids', life: 3000 });
             }
 
         }, err => {
