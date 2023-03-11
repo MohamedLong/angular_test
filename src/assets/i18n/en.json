@@ -378,7 +378,9 @@
             "partCategory": "Category",
             "partCategorySearch": "Search by part category",
             "partSubCategory": "Sub-Category",
-            "partSubCategorySearch": "Search by part sub category"
+            "partSubCategorySearch": "Search by part sub category",
+            "status": "Status",
+            "enabled": "Enabled"
         },
         "partDialog": {
             "title": "Part Details",
