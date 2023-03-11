@@ -42,15 +42,16 @@
                             <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
                             <p class="font-medium muted-text">{{master.claimNo}}</p>
                         </div>
-                        <div class="mr-0">
-                            <button [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
+                        <div class="mr-8">
+                            <div class="mr-3 flex align-items-center">
+                                <h6 class="mb-0">{{'job.tableColumn.jobNo' | translate}} </h6>
+                                <button pTooltip="Edit Job Number" tooltipPosition="top" [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
                                 type="button" icon="pi pi-pencil"
                                 class="ml-1 py-0 p-button-rounded p-button-success p-button-text"
                                 style="align-self: flex-start;">
                             </button>
-                        </div>
-                        <div class="mr-8">
-                            <h6 class="mb-2 flex align-items-center">{{'job.tableColumn.jobNo' | translate}} </h6>
+
+                            </div>
                             <p class="font-medium muted-text" style="display: flex; align-items: flex-start;">
                                 {{master.jobNo}}
                             </p>
@@ -97,7 +98,8 @@
                             this job has no requests
                         </div>
                         <p-table *ngIf="fillteredDetails.length > 0" dataKey="id" #dt [columns]="cols" [rows]="10"
-                            [value]="fillteredDetails" styleClass="p-invoice-datatable-responsive pb-3">
+                            [value]="fillteredDetails" styleClass="p-invoice-datatable-responsive pb-3"
+                            [paginator]="true">
                             <ng-template pTemplate="caption" class="pb-0">
                                 <div class="border-300 border-bottom-1">
                                     <ng-container *ngFor="let state of status">
@@ -185,7 +187,7 @@
                         </div>
 
                         <p-table [columns]="cols" [rows]="10" [value]="supplierBids"
-                            styleClass="p-invoice-datatable-responsive pb-3" *ngIf="visible">
+                            styleClass="p-invoice-datatable-responsive pb-3" *ngIf="visible" [paginator]="true">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th>Select</th>
@@ -368,8 +370,8 @@
                 <ng-container *ngFor="let img of modalPart.bidImages">
                     <div class="mr-2">
                         <img class="car-image rounded-large  shadow-3 mx-2"
-                        src="{{'http://letsgo-oman.com:6060/api/v1/document/' + img.trim()}}"
-                        alt="{{modalPart.partName}}">
+                            src="{{'http://letsgo-oman.com:6060/api/v1/document/' + img.trim()}}"
+                            alt="{{modalPart.partName}}">
                     </div>
                 </ng-container>
             </div>
