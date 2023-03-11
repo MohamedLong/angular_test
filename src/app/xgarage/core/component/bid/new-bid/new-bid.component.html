@@ -13,7 +13,7 @@
             <th>{{'bid.bidDetails.originalPrice' | translate}}</th>
             <th>{{'bid.bidDetails.price' | translate}}</th>
             <th>
-                {{'bid.bidDetails.DiscountType' | translate}}
+                {{'bid.bidDetails.discountType' | translate}}
             </th>
             <th>
                 {{'bid.bidDetails.discount' | translate}}
@@ -70,7 +70,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>
+            <td class="text-center">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.warranty"
@@ -122,7 +122,7 @@
                             [options]="discountType" [(ngModel)]="part.discountType"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.discountType}}
+                        {{part.discountType == null ? 'Fixed' : part.discountType}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -185,10 +185,11 @@
             </td>
         </tr>
         <tr class="font-bold prices" *ngIf="type == 'edit bid'">
-            <td colspan="5"></td>
+            <td colspan="4"></td>
             <td>Total</td>
             <td>{{bidTotalOriginalPrice | number}}</td>
             <td>{{bidTotalPrice | number}}</td>
+            <td></td>
             <td>{{bidTotalDiscount}}</td>
             <td></td>
             <td>{{bidTotalPrice | number}}</td>

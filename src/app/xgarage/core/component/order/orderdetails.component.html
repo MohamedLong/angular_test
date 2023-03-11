@@ -2,26 +2,26 @@
     <p-toast></p-toast>
     <p-confirmDialog key="cfmdialog" [style]="{width: '50vw'}" [baseZIndex]="10000"
         rejectButtonStyleClass="p-button-text"></p-confirmDialog>
-    <p-toolbar styleClass="mb-2">
+    <p-toolbar styleClass="mb-2 py-1">
         <ng-template pTemplate="left">
         </ng-template>
 
         <ng-template pTemplate="right">
-            <div class="field col">
+            <div class="field col mb-0">
                 <button pButton pRipple type="button" [style]="{'width':'150px'}"
                     label="{{ 'operations.addPayment' | translate }}" icon="pi pi-dollar" *ngIf="(master?.statusId===2)"
-                    (click)="addPayment()" class="mb-3 p-button-success"></button>
+                    (click)="addPayment()" class="p-button-success"></button>
             </div>
-            <div class="field col">
+            <div class="field col mb-0">
                 <p-confirmPopup></p-confirmPopup>
                 <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
-                <button pButton pRipple [disabled]="(editable)" class="mb-3 p-button-warning" type="button"
+                <button pButton pRipple [disabled]="(editable)" class="p-button-warning" type="button"
                     icon="{{sending? 'pi pi-spin pi-spinner' : 'pi pi-fw pi-cog'}}"
                     label="{{ 'operations.actions' | translate }}" (click)="menu.toggle($event)"></button>
             </div>
-            <div class="field col">
+            <div class="field col mb-0">
                 <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
-                    (click)="print()" class="mb-3"></button>
+                    (click)="print()" class=""></button>
             </div>
         </ng-template>
     </p-toolbar>
