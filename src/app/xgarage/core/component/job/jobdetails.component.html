@@ -42,18 +42,18 @@
                             <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
                             <p class="font-medium muted-text">{{master.claimNo}}</p>
                         </div>
-                        <div class="mr-0">
-                            <button [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
-                                type="button" icon="pi pi-pencil"
-                                class="ml-1 py-0 p-button-rounded p-button-success p-button-text"
-                                style="align-self: flex-start;">
-                            </button>
-                        </div>
                         <div class="mr-8">
                             <h6 class="mb-2 flex align-items-center">{{'job.tableColumn.jobNo' | translate}} </h6>
                             <p class="font-medium muted-text" style="display: flex; align-items: flex-start;">
                                 {{master.jobNo}}
                             </p>
+                        </div>
+                        <div class="mr-0" *ngIf="role == 1">
+                            <button [disabled]="editAuth===false" (click)="editJobNumber(master)" pButton pRipple
+                                type="button" icon="pi pi-pencil"
+                                class="ml-1 py-0 p-button-rounded p-button-success p-button-text"
+                                style="align-self: flex-start;">
+                            </button>
                         </div>
                         <div>
                             <h6 class="mb-2">{{'job.form.garageLocation' | translate}}</h6>
