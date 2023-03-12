@@ -1,3 +1,4 @@
+import { Part } from './../../model/part';
 import { SubCategory } from './../../model/subcategory';
 import { Category } from './../../model/category';
 import { SubCategoryService } from './../../service/subcategory.service';
@@ -29,18 +30,20 @@ export class PartComponent  extends GenericComponent implements OnInit {
 
   category: Category;
   categories: Category[];
-  subCategory: SubCategory;
-  subCategories: SubCategory[];
+  subCategory: SubCategory = {};
+  subCategories: SubCategory[] = [];
+  selectedPart: Part = {};
+  enabled: boolean = false;
 
   ngOnInit(): void {
-    this.getAllCategories();
-    this.getAllSubCategories();
     this.getAll();
 
     this.breadcrumbService.setItems([{'label': 'Parts', routerLink: ['parts']}]);
   }
 
   getAll() {
+    this.getAllCategories();
+    this.getAllSubCategories();
     this.partService.getAll().subscribe({
       next: (parts) => {
         this.masters = parts.map(part => {
@@ -49,13 +52,14 @@ export class PartComponent  extends GenericComponent implements OnInit {
           return {
             ...part,
             categoryName: this.category?.name,
-            subCategoryName: this.subCategory?.name
+            subCategoryName: this.subCategory?.name,
+            statusText: this.getStatusText(part.status) 
           };
         });
         this.cols = [
           { field: 'id', header: 'id' },
           { field: 'name', header: 'Part Name' },
-          { field: 'status', header: 'Status' },
+          { field: 'statusText', header: 'Status' },
           { field: 'subCategoryName', header: 'Sub-Category' },
           { field: 'categoryName', header: 'Category' }
         ];
@@ -81,6 +85,48 @@ export class PartComponent  extends GenericComponent implements OnInit {
       },
       error: (e) => alert(e)
     })
+  }
+
+  changeStatus(id: number) {
+    if (id != null) {
+        this.partService.update(this.selectedPart).subscribe(
+            {
+                next: (data) => {
+                  this.master = data;
+                  this.getAll();
+                  this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Part Status Changed', life: 3000});
+                },
+                error: (e) => {
+                  this.messageService.add({ severity: 'error', summary: 'Error',
+                  detail: e.error.message })
+                }
+            })
+    }
+  }
+
+  approvePart(id: number) {
+    this.selectedPart = this.masters.find(val => val.id == id);
+    this.selectedPart.status = 1;
+    this.changeStatus(id);
+  }
+
+  rejectPart(id: number) {
+    this.selectedPart = this.masters.find(val => val.id == id);
+    this.selectedPart.status = -1;
+    this.changeStatus(id);
+  }
+
+  getStatusText(status: number): string {
+    switch (status) {
+      case 0:
+        return 'Pending';
+      case 1:
+        return 'Approved';
+      case -1:
+        return 'Rejected';
+      default:
+        return '';
+    }
   }
 
 }

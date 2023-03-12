@@ -17,7 +17,7 @@ import { Request } from '../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Status } from 'src/app/xgarage/common/model/status';
 import jsPDF from 'jspdf';
-import { RejectMultipleBids } from '../../dto/rejectmultiplebids';
+import { MultipleBids } from '../../dto/multiplebids';
 import { BidOrderDto } from '../../dto/bidorderdto';
 import { OrderType } from '../../dto/ordertype';
 import { StatusConstants } from '../../model/statusconstatnts';
@@ -609,12 +609,15 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     rejectMultipleBids() {
         if (this.selectedEntries.length > 0) {
-            let rejectMultipleBids: RejectMultipleBids = {}
+            let rejectMultipleBids: MultipleBids = {
+                processOrder: true
+            };
             let rejectedBids: number[] = [];
             for (let i = 0; i < this.selectedEntries.length; i++) {
                 rejectedBids[i] = this.selectedEntries[i].bidId;
             }
             rejectMultipleBids.bids = rejectedBids;
+            rejectMultipleBids.processOrder = true;
             this.bidService.rejectMutltipleBids(rejectMultipleBids).subscribe({
                 next: (data) => {
                     if (data == true) {

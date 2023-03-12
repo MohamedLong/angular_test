@@ -1,9 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GenericService } from '../../common/generic/genericservice';
 import { config } from 'src/app/config';
 import { BidDto } from '../dto/biddto';
-import { RejectMultipleBids } from '../dto/rejectmultiplebids';
+import { MultipleBids} from '../dto/multiplebids';
 import { BidOrderDto } from '../dto/bidorderdto';
 
 @Injectable({
@@ -34,7 +34,7 @@ export class BidService extends GenericService<any> {
         return this.http.post(this.apiServerUrl + '/approveBid/multiple', bidOrderDto);
     }
 
-    rejectMutltipleBids(bidList: RejectMultipleBids) {
+    rejectMutltipleBids(bidList: MultipleBids) {
         return this.http.post(this.apiServerUrl + '/rejectBid/multiple/', bidList);
     }
 }
