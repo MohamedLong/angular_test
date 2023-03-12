@@ -114,12 +114,22 @@ input[type=number] {
     justify-content: space-between;
 }
 
-.choose-btn {
+.choose-btn .p-fileupload-buttonbar .p-button {
     padding: 0.5rem !important;
     font-size: 10px !important;
 }
 
-// .choose-btn .p-button.p-fileupload-choose {
-//     padding: 0.5rem !important;
-//     font-size: 10px !important;
-// }
+.choose-btn .p-fileupload .p-fileupload-content, .choose-btn .p-fileupload-row, .choose-btn .p-fileupload-content .p-progressbar {
+    display: none;
+}
+
+.choose-btn .p-fileupload-buttonbar, .choose-btn .p-fileupload-content {
+    background: none !important;
+    padding: 0 !important;
+    border: none !important;
+    color: #343a40 !important;
+    border-bottom: none !important;
+    border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}
+

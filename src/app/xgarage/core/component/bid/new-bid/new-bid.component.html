@@ -152,10 +152,11 @@
             <td *ngIf="type == 'new bid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-fileUpload styleClass="choose-btn" chooseLabel="{{part.images.length > 0? part.images.length + ' files selected': ''}}" chooseIcon="{{part.images.length > 0? '' : 'pi pi-plus' }}"
-                            mode="basic" auto="true" accept="image/*" multiple="multiple"
+                        <p-fileUpload styleClass="choose-btn" chooseStyleClass="choose-btn" chooseLabel="{{part.images.length > 0? part.images.length + ' files selected': ''}}" chooseIcon="{{part.images.length > 0? '' : 'pi pi-plus' }}"
+                            auto="true" accept="image/*" multiple="multiple"
                             (onSelect)="part.images = $event.currentFiles"
                             [disabled]="part.isNotInterested"></p-fileUpload>
+                            <!-- <input type="file"> -->
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.images.length + ' files selected'}}
