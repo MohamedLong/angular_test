@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
     decodedToken: string;
     isLoading: boolean = false;
     destination: string;
+    showPassword: boolean = false;
 
     constructor(private authService: AuthService, private formBuilder: FormBuilder,
         private route: ActivatedRoute,

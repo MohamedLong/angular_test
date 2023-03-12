@@ -82,10 +82,18 @@ export class NewBidComponent implements OnInit, OnChanges {
         //console.log(changes)
         if (this.type == 'edit bid') {
             this.requests.forEach(req => {
+                // console.log(req.discountType)
                 req.qty2 = req.qty
                 this.bidTotalPrice = this.bidTotalPrice + req.price;
                 this.bidTotalOriginalPrice = this.bidTotalOriginalPrice + req.originalPrice;
-                this.bidTotalDiscount = this.bidTotalDiscount + req.discount;
+                //this.bidTotalDiscount = this.bidTotalDiscount + req.discount;
+
+
+                if(req.discountType == 'fixed' || req.discountType == null) {
+                    this.bidTotalDiscount = this.bidTotalDiscount + req.discount;
+                } else if(req.discountType == 'flat') {
+                    this.bidTotalDiscount = this.bidTotalDiscount + (req.discount * (req.originalPrice * req.qty)) / 100;
+                }
             })
         }
     }
