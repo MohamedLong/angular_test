@@ -365,7 +365,7 @@
             "itemTypeNameRequired": "Item Type Name is required."
         }
     },
-    "part": { 
+    "part": {
         "title": "Manage Parts",
         "table_footer": "In total there are {{length}} Parts",
         "export": "Export",

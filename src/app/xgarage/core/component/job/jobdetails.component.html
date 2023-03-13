@@ -42,13 +42,13 @@
                             <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
                             <p class="font-medium muted-text">{{master.claimNo}}</p>
                         </div>
-      
+
                         <div class="mr-8">
                             <div class="mr-3 flex align-items-center">
                                 <h6 class="mb-2">{{'job.tableColumn.jobNo' | translate}} </h6>
                             </div>
                             <div *ngIf="role == 1" class="mr-2 flex align-items-center">
-                                <p class="font-medium muted-text" style="display: flex; align-items: flex-start; cursor: pointer;" 
+                                <p class="font-medium muted-text" style="display: flex; align-items: flex-start; cursor: pointer;"
                                 title="Edit Job Number" (click)="editJobNumber(master)" ><span style="color: blue">{{master.jobNo}}</span>
                                 <span style="margin-left: 5px;"><i class="pi pi-pencil"></i></span>
                                 </p>
@@ -81,7 +81,6 @@
     </p-toolbar>
 
     <div class="grid layout-invoice-content">
-
         <div class="col-12">
             <!-- <div class="card"> -->
             <div class="mt-5">
@@ -236,10 +235,7 @@
 
         </div>
         <p-dialog [(visible)]="bidDetailsDialog" [modal]="true" styleClass="" (onHide)="closeBidDialog()">
-            <ng-template pTemplate="header">
-
-                <p-toolbar styleClass="mb-2" [style]="{width: '1320px'}">
-
+                <p-toolbar styleClass="mb-2 width-100">
                     <ng-template pTemplate="left">
                         <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' |
                             translate }} {{partName}}</p>
@@ -248,7 +244,6 @@
                     </ng-template>
 
                     <ng-template pTemplate="right">
-
                         <div class="grid p-fluid">
                             <div class="col-12 md:col-5">
                                 <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
@@ -272,7 +267,6 @@
 
                     </ng-template>
                 </p-toolbar>
-            </ng-template>
             <ng-template pTemplate="content">
 
                 <p-table #dt [value]="bidDtos" [columns]="cols" [rows]="10" [paginator]="true"
@@ -302,6 +296,8 @@
                             <th pColumn="vat">{{ 'bid.bidDetails.vat' | translate }}
                             </th>
                             <th pColumn="totalPrice">{{ 'bid.bidDetails.totalPrice' | translate }}
+                            </th>
+                            <th pColumn="vat">{{ 'common.notes' | translate }}
                             </th>
                             <th pColumn="status">{{ 'common.status' | translate }}
                             </th>
@@ -345,6 +341,9 @@
                             </td>
                             <td>
                                 {{bid.price}}
+                            </td>
+                            <td>
+                                {{bid.comments}}
                             </td>
                             <td>
                                 {{getStatusName(bid.statusId)}}

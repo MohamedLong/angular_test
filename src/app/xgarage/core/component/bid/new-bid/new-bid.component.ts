@@ -46,11 +46,12 @@ export class NewBidComponent implements OnInit, OnChanges {
     images: Document[] = [];
     modalPart: any = [];
     displayModal: boolean = false;
+    displayNotesModal: boolean = false;
     bidTotalOriginalPrice: number = 0;
     bidTotalPrice: number = 0;
     bidTotalDiscount: number = 0;
     isSavingBid: boolean = false;
-    discountType = ['fixed', 'flat'];
+    discountType = ['OMR', '%'];
     ngOnInit(): void {
         if (this.type == 'new bid') {
             this.requests = this.requests.filter(req => {
@@ -127,7 +128,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             warranty: part.warranty,
             location: part.locationName,
             discount: part.discount,
-            discountType: part.discountType,
+            discountType: part.discountType == 'OMR'? 'fixed' : 'flat',
             vat: part.vat,
             originalPrice: part.originalPrice,
             reviseVoiceNote: null,
@@ -137,7 +138,7 @@ export class NewBidComponent implements OnInit, OnChanges {
         }
 
 
-        console.log(bidBody)
+        //console.log(bidBody)
         if (part.preferred.id == 4) {
             this.reqService.setSupplierNotInterested(part.id).subscribe(res => {
                 part.saved = true;
@@ -179,7 +180,7 @@ export class NewBidComponent implements OnInit, OnChanges {
 
     onDiscount($event) {
         let price = $event.originalPrice * $event.qty2;
-        let discount = $event.discountType == 'fixed' ? $event.discount : (price * $event.discount) / 100;
+        let discount = $event.discountType == 'OMR' ? $event.discount : (price * $event.discount) / 100;
 
         if ($event.originalPrice > 0 && discount >= 0) {
             this.updatePrice($event);
@@ -234,7 +235,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     resetBid(bid) {
-        console.log(bid)
+        //console.log(bid)
         bid.partTypes.forEach(type => {
             type.disabled = true;
         });
@@ -260,12 +261,13 @@ export class NewBidComponent implements OnInit, OnChanges {
             bid.saved = false,
             bid.isNotInterested = false,
             bid.isSending = false,
-            bid.qty2 = bid.qty
+            bid.qty2 = bid.qty,
+            bid.comments = ''
     }
 
     updatePrice(part) {
         let price = part.originalPrice * part.qty2;
-        let discount = part.discountType == 'fixed' ? part.discount : (price * part.discount) / 100;
+        let discount = part.discountType == 'OMR' ? part.discount : (price * part.discount) / 100;
         let priceAfterDiscount = price - discount;
         let vat = (priceAfterDiscount * part.vat) / 100;
         let totalPrice = priceAfterDiscount + vat;
@@ -322,12 +324,17 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     showModal(part) {
-        console.log(part)
+        //console.log(part)
         this.modalPart = part;
         this.displayModal = true;
     }
 
-    onProposedChange(part) {
+    showNotes(notes: string) {
+        this.note = notes;
+        this.displayNotesModal = true
+    }
+
+    onProposedChange(part)  {
         // console.log('val changed')
         // console.log(part)
         if (part.preferred.id == 4) {
