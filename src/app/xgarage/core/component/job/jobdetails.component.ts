@@ -89,18 +89,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     displayModal: boolean = false;
     displayNotIntrestedSuppliers: boolean = false;
     NotIntrestedSuppliers: any[] = [];
-
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
     }
 
     ngOnInit() {
-        //console.log('init')
-        console.log(localStorage.getItem('jobId'));
-        if (this.route.snapshot.queryParams['id']) {
-            this.getJobObject(this.route.snapshot.queryParams['id']);
-        } else if (localStorage.getItem('jobId')) {
+         if (localStorage.getItem('jobId')) {
             this.getJobObject(JSON.parse(localStorage.getItem('jobId')));
         }
 
@@ -115,7 +110,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.jobService.getById(id).subscribe(
             {
                 next: (data) => {
-                    console.log(data)
+                    //console.log(data)
                     this.master = data;
                     this.master.claimNo = data.claimNo;
                     this.masters.push(this.master);
@@ -312,7 +307,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     viewBidsByRequest(request: Request) {
-    //console.log('request:',this.bidDtos)
+        //console.log('request:',this.bidDtos)
         this.originalBidList = this.bidDtos;
         this.partName = request.part.name;
         this.selection = 'single';
@@ -335,7 +330,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     viewNotInterestedSuppliers(id: number) {
         this.requestService.getNotInterestedSuppliers(id).subscribe(res => {
             console.log(res)
-            if(res.length > 0) {
+            if (res.length > 0) {
                 this.NotIntrestedSuppliers = res;
                 this.displayNotIntrestedSuppliers = true;
             } else {
@@ -533,13 +528,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     downloadPdf() {
         let DATA: any = this.bidsTable.nativeElement;
         html2canvas(DATA).then((canvas) => {
-          let fileWidth = 208;
-          let fileHeight = (canvas.height * fileWidth) / canvas.width;
-          const FILEURI = canvas.toDataURL('image/png');
-          let PDF = new jsPDF('p', 'mm', 'a4');
-          let position = 0;
-          PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
-          PDF.save('bids.pdf');
+            let fileWidth = 208;
+            let fileHeight = (canvas.height * fileWidth) / canvas.width;
+            const FILEURI = canvas.toDataURL('image/png');
+            let PDF = new jsPDF('p', 'mm', 'a4');
+            let position = 0;
+            PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+            PDF.save('bids.pdf');
         });
     }
 
@@ -604,7 +599,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     getValueAfterVat(price: number, vat: number, discount: number) {
-        return price + ((price - discount) * vat)/100;
+        return price + ((price - discount) * vat) / 100;
     }
 
     rejectMultipleBids() {

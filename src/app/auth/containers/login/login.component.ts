@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
                 next: (success) => {
                     if (this.authService.isLoggedIn()) {
                         this.authService.doStoreUser(this.authService.getJwtToken(), this.router, this.destination);
-
+                       //localStorage.setItem('jobIdFromRedirect', this.route.snapshot.queryParams['id']);
                     }
                 },
                 error: (e) => {

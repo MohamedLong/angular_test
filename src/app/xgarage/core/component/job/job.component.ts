@@ -27,7 +27,7 @@ export class JobComponent extends GenericComponent implements OnInit {
         super(route, datePipe, breadcrumbService);
     }
 
-    role: number = this.authService.isLoggedIn()? JSON.parse(this.authService.getStoredUser()).roles[0].id : 0;
+    role: number = this.authService.isLoggedIn() ? JSON.parse(this.authService.getStoredUser()).roles[0].id : 0;
     selectedStatus: Status = {};
     statuses: Status[];
     valid: boolean = false;
@@ -39,7 +39,7 @@ export class JobComponent extends GenericComponent implements OnInit {
     selectedState = 'All';
     pageNo: number = 0;
     ngOnInit(): void {
-        if(localStorage.getItem('jobId')) {
+        if (localStorage.getItem('jobId')) {
             localStorage.removeItem('jobId');
             localStorage.removeItem('bidView');
         }
@@ -140,19 +140,19 @@ export class JobComponent extends GenericComponent implements OnInit {
     confirmDelete() {
         let cancelStatus: Status = {
             id: StatusConstants.CANCELED_STATUS
-          }
+        }
         this.jobService.cancelJob(this.master.id, cancelStatus).subscribe(res => {
-            if(res.messageCode == 200){
+            if (res.messageCode == 200) {
                 this.messageService.add({ severity: 'success', summary: 'Job cancelled successfully' });
                 this.deleteSingleDialog = false;
                 this.getAllForTenant(this.pageNo);
             }
-              else{
+            else {
                 this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Job', life: 3000 });
-              }
-            }, err => {
-                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.error.message, life: 3000 });
-            })
+            }
+        }, err => {
+            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.error.message, life: 3000 });
+        })
     }
 
 
