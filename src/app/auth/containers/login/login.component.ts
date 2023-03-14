@@ -41,18 +41,11 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router, private messageService: MessageService) { }
 
-    // ngOnInit() {
-    //   console.log(this.authService.isLoggedIn())
-    //     this.loginForm = this.formBuilder.group({
-    //         username: [''],
-    //         password: ['']
-    //     });
-    // }
-
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
             this.destination = params['destination'];
         });
+
         this.loginForm = this.formBuilder.group({
             username: [''],
             password: ['']
@@ -73,10 +66,7 @@ export class LoginComponent implements OnInit {
             {
                 next: (success) => {
                     if (this.authService.isLoggedIn()) {
-                        // const link = this.router.createUrlTree(['/order-details', 338]).toString();
-                        // this.authService.doStoreUser(this.authService.getJwtToken(), link);
                         this.authService.doStoreUser(this.authService.getJwtToken(), this.router, this.destination);
-
 
                     }
                 },

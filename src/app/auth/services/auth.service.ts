@@ -100,7 +100,6 @@ export class AuthService {
               router.navigateByUrl(destination);
             } else {
               console.log("NO LINK");
-
               router.navigate(['']);
             }
           },

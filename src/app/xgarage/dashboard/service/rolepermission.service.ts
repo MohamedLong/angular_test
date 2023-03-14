@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RolePermission } from '../../common/model/rolepermission';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class RolePermissionService {
 
     constructor(private http: HttpClient) { }

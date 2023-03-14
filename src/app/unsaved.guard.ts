@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 export interface ComponentCanDeactivate {
   canDeactivate: () => boolean | Observable<any>;
 }
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UnsavedChangesGaurd
   implements CanDeactivate<any>
 {

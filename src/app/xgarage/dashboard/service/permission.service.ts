@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { config } from 'src/app/config';
 import { Permission } from '../../common/model/permission';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class PermissionService {
 
     constructor(private http: HttpClient) { }

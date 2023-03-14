@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { Product } from '../domain/product';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ProductService {
 
     constructor(private http: HttpClient) { }

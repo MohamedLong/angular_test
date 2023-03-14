@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { config } from 'src/app/config';
 import { SubMenu } from '../model/submenu';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class SubMenuService {
 
     constructor(private http: HttpClient) { }
@@ -14,5 +14,5 @@ export class SubMenuService {
             .then(res => res as SubMenu[])
             .then(data => data);
     }
-    
+
 }

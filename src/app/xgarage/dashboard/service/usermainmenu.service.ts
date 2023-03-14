@@ -4,7 +4,7 @@ import { config } from 'src/app/config';
 import { MessageResponse } from '../../common/dto/messageresponse';
 import { UserMainMenu } from '../model/usermainmenu';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class UserMainMenuService {
 
     constructor(private http: HttpClient) { }

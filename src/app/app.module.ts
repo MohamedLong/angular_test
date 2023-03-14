@@ -1,5 +1,4 @@
 import { ClaimComponent } from './xgarage/core/component/claim/claim.component';
-import { ClaimService } from './xgarage/core/service/claimservice';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
@@ -99,81 +98,11 @@ import {AppRightMenuComponent} from './app.rightmenu.component';
 import {AppBreadcrumbComponent} from './app.breadcrumb.component';
 import {AppTopBarComponent} from './app.topbar.component';
 import {AppFooterComponent} from './app.footer.component';
-import {DashboardComponent} from './demo/view/dashboard.component';
-import {DashboardAnalyticsComponent} from './demo/view/dashboardanalytics.component';
-import {FormLayoutDemoComponent} from './demo/view/formlayoutdemo.component';
-import {FloatLabelDemoComponent} from './demo/view/floatlabeldemo.component';
-import {InvalidStateDemoComponent} from './demo/view/invalidstatedemo.component';
-import {InputDemoComponent} from './demo/view/inputdemo.component';
-import {ButtonDemoComponent} from './demo/view/buttondemo.component';
-import {TableDemoComponent} from './demo/view/tabledemo.component';
-import {ListDemoComponent} from './demo/view/listdemo.component';
-import {TreeDemoComponent} from './demo/view/treedemo.component';
-import {PanelsDemoComponent} from './demo/view/panelsdemo.component';
-import {OverlaysDemoComponent} from './demo/view/overlaysdemo.component';
-import {MediaDemoComponent} from './demo/view/mediademo.component';
-import {MenusDemoComponent} from './demo/view/menusdemo.component';
-import {MessagesDemoComponent} from './demo/view/messagesdemo.component';
-import {MiscDemoComponent} from './demo/view/miscdemo.component';
-import {EmptyDemoComponent} from './demo/view/emptydemo.component';
-import {ChartsDemoComponent} from './demo/view/chartsdemo.component';
-import {FileDemoComponent} from './demo/view/filedemo.component';
-import {DocumentationComponent} from './demo/view/documentation.component';
-import {DisplayComponent} from './utilities/display.component';
-import {ElevationComponent} from './utilities/elevation.component';
-import {FlexboxComponent} from './utilities/flexbox.component';
-import {GridComponent} from './utilities/grid.component';
-import {IconsComponent} from './utilities/icons.component';
-import {WidgetsComponent} from './utilities/widgets.component';
-import {SpacingComponent} from './utilities/spacing.component';
-import {TypographyComponent} from './utilities/typography.component';
-import {TextComponent} from './utilities/text.component';
-import {AppCrudComponent} from './pages/app.crud.component';
-import {AppCalendarComponent} from './pages/app.calendar.component';
-import {AppInvoiceComponent} from './pages/app.invoice.component';
-import {AppHelpComponent} from './pages/app.help.component';
-import {AppNotfoundComponent} from './pages/app.notfound.component';
-import {AppErrorComponent} from './pages/app.error.component';
-import {AppAccessdeniedComponent} from './pages/app.accessdenied.component';
-// import {AppLoginComponent} from './pages/app.login.component';
-import { LoginComponent } from './auth/containers/login/login.component';
 import { AuthModule } from './auth/auth.module';
-import {AppTimelineDemoComponent} from './pages/app.timelinedemo.component';
-import {AppWizardComponent} from './pages/app.wizard.component';
-import {AppLandingComponent} from './pages/app.landing.component';
-
-import {CountryService} from './demo/service/countryservice';
-import {CustomerService} from './demo/service/customerservice';
-import {EventService} from './demo/service/eventservice';
-import {IconService} from './demo/service/iconservice';
-import {NodeService} from './demo/service/nodeservice';
-import {PhotoService} from './demo/service/photoservice';
-import {ProductService} from './demo/service/productservice';
-import { UserService } from './xgarage/dashboard/service/user.service';
-
-import {MenuService} from './app.menu.service';
-import {AppBreadcrumbService} from './app.breadcrumb.service';
-import {AppContactusComponent} from './pages/app.contactus.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {BlockUIModule} from 'primeng/blockui';
-// import dayGridPlugin from '@fullcalendar/daygrid';
-// import timeGridPlugin from '@fullcalendar/timegrid';
-// import interactionPlugin from '@fullcalendar/interaction';
-import {CurrencyComponent} from './xgarage/common/component/currency/currency.component';
-import { CurrencyService } from './xgarage/common/service/currency.service';
-import {MetricService} from './xgarage/common/service/metric.service';
-import {MetricComponent} from './xgarage/common/component/metric/metric.component';
-import { StatusService } from './xgarage/common/service/status.service';
-import { StatusComponent } from './xgarage/common/component/status/status.component';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { DataService } from './xgarage/common/generic/dataservice';
 import { AddRowDirective } from './add-row.directive';
-import { UnsavedChangesGaurd } from './unsaved.guard';
-import { UserSubMenuService } from './xgarage/dashboard/service/usersubmenu.service';
-import { MainMenuService } from './xgarage/dashboard/service/mainmenu.service';
-import { SubMenuService } from './xgarage/dashboard/service/submenu.service';
-import { UserMainMenuService } from './xgarage/dashboard/service/usermainmenu.service';
-import { TenantService } from './xgarage/common/service/tenant.service';
 import { UsersComponent } from './xgarage/dashboard/component/users/users.component';
 import { UserRolesComponent } from './xgarage/dashboard/component/user-roles/user-roles.component';
 import { UserMainMenuComponent } from './xgarage/dashboard/component/user-main-menu/user-main-menu.component';
@@ -182,15 +111,10 @@ import { PermissionsComponent } from './xgarage/dashboard/component/persmissions
 import { ResetPasswordComponent } from './xgarage/dashboard/component/changepassword/changepassword.component';
 import { RolesComponent } from './xgarage/dashboard/component/roles/roles.component';
 import { RolePermissionsComponent } from './xgarage/dashboard/component/role-permissions/role-permissions.component';
-import { PermissionService } from './xgarage/dashboard/service/permission.service';
-import { RoleService } from './xgarage/dashboard/service/role.service';
-import { RolePermissionService } from './xgarage/dashboard/service/rolepermission.service';
 import { TenantComponent } from './xgarage/common/component/tenant/tenantcomponent';
 import { SuppliersComponent } from './xgarage/core/component/supplier/suppliers.component';
 import { JobComponent} from './xgarage/core/component/job/job.component';
-import { TenantTypeService } from './xgarage/common/service/tenanttype.service';
 import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
-import { JobService } from './xgarage/core/service/job.service';
 import { NewJobComponent } from './xgarage/core/component/job/newjob/newjob.component';
 import { RequestComponent } from './xgarage/core/component/request/request.component';
 import { CarComponent } from './xgarage/core/component/car/car.component';
@@ -198,19 +122,12 @@ import { NewCarComponent } from './xgarage/core/component/car/new-car/new-car.co
 import { PartComponent } from './xgarage/core/component/part/part.component';
 import { NewPartComponent } from './xgarage/core/component/part/new-part/new-part.component';
 import { JobDetailsComponent } from './xgarage/core/component/job/jobdetails.component';
-import { RequestService } from './xgarage/core/service/request.service';
-import { GenericService } from './xgarage/common/generic/genericservice';
 import { NewRequestComponent } from './xgarage/core/component/request/new-request/new-request.component';
-import { BidService } from './xgarage/core/service/bidservice.service';
 import { RequestDetailsComponent } from './xgarage/core/component/request/requestdetails.component';
 import { BrandComponent } from './xgarage/common/component/brand/brand.component';
 import { CarModelComponent } from './xgarage/common/component/car-model/car-model.component';
 import { CategoryComponent } from './xgarage/common/component/category/category.component';
 import { SubCategoryComponent } from './xgarage/common/component/sub-category/sub-category.component';
-import { BrandService } from './xgarage/common/service/brand.service';
-import { CarModelService } from './xgarage/common/service/carmodel.service';
-import { CategoryService } from './xgarage/common/service/category.service';
-import { SubCategoryService } from './xgarage/common/service/subcategory.service';
 import { NewBidComponent } from './xgarage/core/component/bid/new-bid/new-bid.component';
 import { BidDetailsComponent } from './xgarage/core/component/bid/bid-details/bid-details.component';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
@@ -224,11 +141,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
 }
 
-// FullCalendarModule.registerPlugins([
-//     // dayGridPlugin,
-//     timeGridPlugin,
-//     interactionPlugin
-// ]);
 
 @NgModule({
     imports: [
@@ -334,7 +246,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
           }),
           AppRoutingModule
     ],
-    // exports: [AppLoginComponent],
     declarations: [
         OrderComponent,
         OrderDetailsComponent,
@@ -349,52 +260,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         AppBreadcrumbComponent,
         AppTopBarComponent,
         AppFooterComponent,
-        DashboardComponent,
-        DashboardAnalyticsComponent,
-        FormLayoutDemoComponent,
-        FloatLabelDemoComponent,
-        InvalidStateDemoComponent,
-        InputDemoComponent,
-        ButtonDemoComponent,
-        TableDemoComponent,
-        ListDemoComponent,
-        TreeDemoComponent,
-        PanelsDemoComponent,
-        OverlaysDemoComponent,
-        MediaDemoComponent,
-        MenusDemoComponent,
-        MessagesDemoComponent,
-        MessagesDemoComponent,
-        MiscDemoComponent,
-        ChartsDemoComponent,
-        EmptyDemoComponent,
-        FileDemoComponent,
-        DocumentationComponent,
-        DisplayComponent,
-        ElevationComponent,
-        FlexboxComponent,
-        GridComponent,
-        IconsComponent,
-        WidgetsComponent,
-        SpacingComponent,
-        TypographyComponent,
-        TextComponent,
-        AppCrudComponent,
-        AppCalendarComponent,
-        // AppLoginComponent,
-        // LoginComponent,
-        AppLandingComponent,
-        AppInvoiceComponent,
-        AppHelpComponent,
-        AppNotfoundComponent,
-        AppErrorComponent,
-        AppAccessdeniedComponent,
-        AppTimelineDemoComponent,
-        AppWizardComponent,
-        AppContactusComponent,
-        CurrencyComponent,
-        MetricComponent,
-        StatusComponent,
         UsersComponent,
         UserRolesComponent,
         UserMainMenuComponent,
@@ -428,11 +293,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         NumToWordsPipe
     ],
     providers: [
-        {provide: LocationStrategy, useClass: HashLocationStrategy},UnsavedChangesGaurd, UserService, TenantService, TenantTypeService,
-        CountryService, CustomerService, EventService, UserService, IconService, NodeService, SubMenuService, JobService, DataService, BidService,
-        PhotoService, ProductService, MenuService, AppBreadcrumbService, MetricService, StatusService, TenantService, CurrencyService, RequestService,
-        DialogService, UserSubMenuService, UserMainMenuService, MainMenuService, SubMenuService, PermissionService, RoleService, RolePermissionService,
-        ClaimService, BrandService, CarModelService, CategoryService, SubCategoryService
+        {provide: LocationStrategy, useClass: HashLocationStrategy}, DialogService
     ],
     bootstrap: [AppComponent]
 })

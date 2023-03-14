@@ -1,6 +1,5 @@
 import {Router, RouterModule, Routes} from '@angular/router';
 import {NgModule} from '@angular/core';
-import {DashboardComponent} from './demo/view/dashboard.component';
 import {AppMainComponent} from './app.main.component';
 import { LoginComponent } from './auth/containers/login/login.component';
 import { RandomGuard } from './auth/guards/random.guard';
@@ -19,8 +18,6 @@ import { RequestComponent } from './xgarage/core/component/request/request.compo
 import { JobComponent } from './xgarage/core/component/job/job.component';
 import { AuthService } from './auth/services/auth.service';
 import { TenantTypeComponent } from './xgarage/common/component/tenanttype/tenanttype.component';
-//import { RequestComponent } from './xgarage/core/component/request/request.component';
-//import { RequestComponent } from './xgarage/core/component/request/request.component';
 import { NewJobComponent } from './xgarage/core/component/job/newjob/newjob.component';
 import { CarComponent } from './xgarage/core/component/car/car.component';
 import { NewCarComponent } from './xgarage/core/component/car/new-car/new-car.component';
@@ -79,68 +76,8 @@ const routes: Routes = [];
                     {path: 'user-sub-menu', component: UserSubMenuComponent},
                     {path: 'orders', component: OrderComponent},
                     {path: 'order-details', component: OrderDetailsComponent},
-                    // {path: 'favorites/dashboardanalytics', component: DashboardAnalyticsComponent},
-                    // {path: 'uikit/formlayout', component: FormLayoutDemoComponent},
-                    // {path: 'uikit/floatlabel', component: FloatLabelDemoComponent},
-                    // {path: 'uikit/invalidstate', component: InvalidStateDemoComponent},
-                    // {path: 'uikit/input', component: InputDemoComponent},
-                    // {path: 'uikit/button', component: ButtonDemoComponent},
-                    // {path: 'uikit/table', component: TableDemoComponent},
-                    // {path: 'uikit/list', component: ListDemoComponent},
-                    // {path: 'uikit/tree', component: TreeDemoComponent},
-                    // {path: 'uikit/panel', component: PanelsDemoComponent},
-                    // {path: 'uikit/overlay', component: OverlaysDemoComponent},
-                    // {path: 'uikit/menu', component: MenusDemoComponent},
-                    // {path: 'uikit/media', component: MediaDemoComponent},
-                    // {path: 'uikit/message', component: MessagesDemoComponent},
-                    // {path: 'uikit/misc', component: MiscDemoComponent},
-                    // {path: 'uikit/charts', component: ChartsDemoComponent},
-                    // {path: 'uikit/file', component: FileDemoComponent},
-                    // {path: 'utilities/display', component: DisplayComponent},
-                    // {path: 'utilities/elevation', component: ElevationComponent},
-                    // {path: 'utilities/flexbox', component: FlexboxComponent},
-                    // {path: 'utilities/grid', component: GridComponent},
-                    // {path: 'utilities/icons', component: IconsComponent},
-                    // {path: 'utilities/widgets', component: WidgetsComponent},
-                    // {path: 'utilities/spacing', component: SpacingComponent},
-                    // {path: 'utilities/typography', component: TypographyComponent},
-                    // {path: 'utilities/text', component: TextComponent},
-                    // {path: 'pages/crud', component: InvoiceComponent},
-                    // {path: 'pages/purchRevert', component: PurchRevertComponent},
-                    // {path: 'pages/purchRevertDetails', component: PurchRevertDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // {path: 'pages/receipt', component: ReceiptComponent},
-                    // {path: 'pages/receiptDetails', component: ReceiptDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // {path: 'pages/saleRevert', component: RevertComponent},
-                    // {path: 'pages/revertDetails', component: RevertDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // {path: 'pages/bill', component: BillComponent},
-                    // {path: 'pages/billDetails', component: BillDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // {path: 'pages/performa', component: PerformaComponent},
-                    // {path: 'pages/performaDetails', component: PerformaDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // {path: 'pages/grn', component: GrnComponent},
-                    // {path: 'pages/grnDetails', component: GrnDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // // {path: 'pages/invoice', component: AppInvoiceComponent},
-                    // {path: 'pages/saleInvoice', component: InvoiceComponent},
-                    // {path: 'pages/invoiceDetails', component: InvoiceDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // {path: 'pages/stockOrder', component: StockOrderComponent},
-                    // {path: 'pages/stockOrderDetails', component: StockOrderDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // {path: 'pages/purchOrder', component: PurchaseOrderComponent},
-                    // {path: 'pages/purchOrderDetails', component: PurchaseOrderDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // {path: 'pages/purchRequest', component: PurchaseRequestComponent},
-                    // {path: 'pages/purchRequestDetails', component: PurchaseRequestDetailsComponent, canDeactivate: [UnsavedChangesGaurd]},
-                    // {path: 'pages/calendar', component: StockOrderComponent},
-                    // {path: 'pages/timeline', component: AppTimelineDemoComponent},
-                    // {path: 'pages/help', component: AppHelpComponent},
-                    // {path: 'pages/empty', component: EmptyDemoComponent},
                 ]
             },
-            // {path: 'error', component: AppErrorComponent},
-            // {path: 'access', component: AppAccessdeniedComponent},
-            // {path: 'notfound', component: AppNotfoundComponent},
-            // {path: 'contactus', component: AppContactusComponent},
-            // // {path: 'login', component: AppLoginComponent},
-            // {path: 'landing', component: AppLandingComponent},
-            // {path: 'pages/wizard', component: AppWizardComponent},
-            // {path: 'order-details/:id', component: OrderDetailsComponent, canActivate: [AuthGuard]},
             {path: 'login', component: LoginComponent},
             {path: 'signup', component: SignupComponent},
             {path: '**', redirectTo: ''},
@@ -153,8 +90,5 @@ export class AppRoutingModule {
     if(this.authService.isLoggedIn()) {
         this.authService.getAuthorizedMenu();
     }
-    // else{
-    //     this.router.resetConfig(this.router.config);
-    // }
   }
 }

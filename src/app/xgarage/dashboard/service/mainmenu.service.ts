@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { config } from 'src/app/config';
 import { MainMenu } from '../model/mainmenu';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MainMenuService {
 
     constructor(private http: HttpClient) { }

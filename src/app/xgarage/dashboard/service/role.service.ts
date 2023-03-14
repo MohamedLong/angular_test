@@ -4,7 +4,7 @@ import { config } from 'src/app/config';
 import { MessageResponse } from '../../common/dto/messageresponse';
 import { Role } from '../../common/model/role';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class RoleService {
 
     constructor(private http: HttpClient) { }
