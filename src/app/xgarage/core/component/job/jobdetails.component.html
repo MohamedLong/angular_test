@@ -48,12 +48,15 @@
                                 <h6 class="mb-2">{{'job.tableColumn.jobNo' | translate}} </h6>
                             </div>
                             <div *ngIf="role == 1" class="mr-2 flex align-items-center">
-                                <p class="font-medium muted-text" style="display: flex; align-items: flex-start; cursor: pointer;"
-                                title="Edit Job Number" (click)="editJobNumber(master)" ><span style="color: blue">{{master.jobNo}}</span>
-                                <span style="margin-left: 5px;"><i class="pi pi-pencil"></i></span>
+                                <p class="font-medium muted-text"
+                                    style="display: flex; align-items: flex-start; cursor: pointer;"
+                                    title="Edit Job Number" (click)="editJobNumber(master)"><span
+                                        style="color: blue">{{master.jobNo}}</span>
+                                    <span style="margin-left: 5px;"><i class="pi pi-pencil"></i></span>
                                 </p>
                             </div>
-                            </div>
+                            <p *ngIf="role !== 1" class="font-medium muted-text">{{master.jobNo}}</p>
+                        </div>
                         <div>
                             <h6 class="mb-2">{{'job.form.garageLocation' | translate}}</h6>
                             <p class="font-medium muted-text">{{master.location? master.location : '-'}}
@@ -235,38 +238,38 @@
 
         </div>
         <p-dialog [(visible)]="bidDetailsDialog" [modal]="true" styleClass="" (onHide)="closeBidDialog()">
-                <p-toolbar styleClass="mb-2 width-100">
-                    <ng-template pTemplate="left">
-                        <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' |
-                            translate }} {{partName}}</p>
-                        <p *ngIf="partName==null" class="font-medium muted-text text-xl">{{
-                            'bid.bidDialog.titleBySupplier' | translate }} {{supplierName}}</p>
-                    </ng-template>
+            <p-toolbar styleClass="mb-2 width-100">
+                <ng-template pTemplate="left">
+                    <p *ngIf="partName" class="font-medium muted-text text-xl">{{ 'bid.bidDialog.titleByPart' |
+                        translate }} {{partName}}</p>
+                    <p *ngIf="partName==null" class="font-medium muted-text text-xl">{{
+                        'bid.bidDialog.titleBySupplier' | translate }} {{supplierName}}</p>
+                </ng-template>
 
-                    <ng-template pTemplate="right">
-                        <div class="grid p-fluid">
-                            <div class="col-12 md:col-5">
-                                <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
-                                    icon="pi pi-check" (click)="approveMultipleBidDialog = true"
-                                    [disabled]="selectedEntries.length == 0 || selection == 'single'  || editAuth == false"
-                                    class="p-button-success mr-2 mb-3"></button>
-                            </div>
-
-                            <div class="col-12 md:col-5">
-                                <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
-                                    icon="pi pi-times" (click)="rejectMultipleBidDialog = true"
-                                    [disabled]="selectedEntries.length == 0 || editAuth ==false"
-                                    class="p-button-danger mr-2 mb-3"></button>
-                            </div>
-
-                            <div class="col-12 md:col-2">
-                                <button pButton pRipple type="button" icon="pi pi-times" (click)="closeBidDialog()"
-                                    class="mb-3"></button>
-                            </div>
+                <ng-template pTemplate="right">
+                    <div class="grid p-fluid">
+                        <div class="col-12 md:col-5">
+                            <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
+                                icon="pi pi-check" (click)="approveMultipleBidDialog = true"
+                                [disabled]="selectedEntries.length == 0 || selection == 'single'  || editAuth == false"
+                                class="p-button-success mr-2 mb-3"></button>
                         </div>
 
-                    </ng-template>
-                </p-toolbar>
+                        <div class="col-12 md:col-5">
+                            <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
+                                icon="pi pi-times" (click)="rejectMultipleBidDialog = true"
+                                [disabled]="selectedEntries.length == 0 || editAuth ==false"
+                                class="p-button-danger mr-2 mb-3"></button>
+                        </div>
+
+                        <div class="col-12 md:col-2">
+                            <button pButton pRipple type="button" icon="pi pi-times" (click)="closeBidDialog()"
+                                class="mb-3"></button>
+                        </div>
+                    </div>
+
+                </ng-template>
+            </p-toolbar>
             <ng-template pTemplate="content">
 
                 <p-table #dt [value]="bidDtos" [columns]="cols" [rows]="10" [paginator]="true"
