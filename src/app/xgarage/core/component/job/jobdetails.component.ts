@@ -27,7 +27,7 @@ import html2canvas from 'html2canvas';
 @Component({
     selector: 'job-details',
     templateUrl: './jobdetails.component.html',
-    styleUrls: ['../../../../demo/view/tabledemo.scss'],
+    // styleUrls: ['../../../../demo/view/tabledemo.scss'],
     styles: [`
         :host ::ng-deep .p-dialog .product-image {
             width: 150px;
