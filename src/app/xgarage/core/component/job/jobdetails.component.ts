@@ -95,6 +95,15 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     ngOnInit() {
+
+        // if (this.route.snapshot.queryParams['id']) {
+        //     localStorage.setItem('jobId', this.route.snapshot.queryParams['id']);
+        //     this.router.navigate(
+        //         ['job-details'],
+        //         { relativeTo: this.route, queryParams: {} }
+        //     );
+        // }
+
          if (localStorage.getItem('jobId')) {
             this.getJobObject(JSON.parse(localStorage.getItem('jobId')));
         }

@@ -6,7 +6,6 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { Job } from 'src/app/xgarage/core/model/job';
 import { JobService } from 'src/app/xgarage/core/service/job.service';
 import { DialogService } from 'primeng/dynamicdialog';
-import { ProductService } from 'src/app/demo/service/productservice';
 
 
 @Component({
@@ -16,9 +15,9 @@ import { ProductService } from 'src/app/demo/service/productservice';
     providers: [MessageService]
 })
 export class SupplierDashbaordComponent implements OnInit {
-    constructor(private router: Router, private authService: AuthService, private jobService: JobService, 
+    constructor(private router: Router, private authService: AuthService, private jobService: JobService,
         private messageService: MessageService, private breadcrumbService: AppBreadcrumbService,
-        private dialogService: DialogService, private productService: ProductService) { }
+        private dialogService: DialogService) { }
     requests = [];
     latestRequest= [];
     master: Job;
