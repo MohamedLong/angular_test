@@ -133,22 +133,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     initActionMenu() {
         this.menuItems = [
-            // {
-            //     label: 'Draft', icon: 'pi pi-pencil', visible: (this.master.status.id != 1), command: () => {
-            //         const newStatus: Status = {
-            //             id: 1,
-            //             nameEn: 'Draft',
-            //             nameAr: 'مسودة'
-            //         }
-            //         this.confirmStatus = newStatus;
-            //         this.confirmActionDialog = true;
-            //     }
-            // },
             {
-                label: 'Confirm', icon: 'pi pi-check', visible: (this.master.status.id == 1), command: () => {
+                label: 'Approve', icon: 'pi pi-check', visible: (this.master.status.id == 1), command: () => {
                     const confirmStatus: Status = {
                         id: 6,
-                        nameEn: 'Confirm',
+                        nameEn: 'Approve',
                         nameAr: 'مؤكد'
                     }
                     this.confirmStatus = confirmStatus;
@@ -168,29 +157,9 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             },
             {
                 label: 'Print', icon: 'pi pi-print', command: () => {
-                    // this.confirmType = 'cloneConfirm';
-                    // this.confirmActionDialog = true;
-                    // visible: (this.master.status.id==2)
                     this.print();
                 }
-            },
-            // {
-            //     label: 'Clone', icon: 'pi pi-clone', command: (event: any) => {
-            //         this.confirmType = 'cloneConfirm';
-            //         this.confirmActionDialog = true;
-            //     }
-            // },
-            // {
-            //     label: 'Delete', icon: 'pi pi-trash', visible: (this.master.status.id != 2), command: (event: any) => {
-            //         const deleteStatus: Status = {
-            //             id: 6,
-            //             nameEn: 'Deleted',
-            //             nameAr: 'محذوف'
-            //         }
-            //         this.confirmStatus = deleteStatus;
-            //         this.confirmActionDialog = true;
-            //     }
-            // }
+            }
 
         ];
     }
@@ -206,24 +175,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.confirmActionDialog = false;
         }
     }
-
-    // confirm(event) {
-    //     if (this.confirmType === 'confirm') {
-    //         let statusCode = this.confirmStatus.id;
-    //         this.changeStatusService.changeStatus(this.master.id, this.confirmStatus).subscribe({
-    //             next: (data) => {
-    //                 this.updateCurrentObject(data);
-    //                 if (statusCode == 6) {
-    //                     setTimeout(() => { this.goMaster(); }, 1500);
-    //                 }
-    //             },
-    //             error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-    //         });
-    //         this.confirmActionDialog = false;
-    //     } else if (this.confirmType === 'cloneConfirm') {
-    //         this.cloneObject();
-    //     }
-    // }
 
     getRequestsByJob() {
         this.isFetching = true;
@@ -660,10 +611,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
 
     editJobNumber(dto: any) {
-        console.log(dto)
+        console.log('jobDto: ', dto);
+        console.log('this.editAuth: ', this.editAuth);
         this.jobDto.id = dto.id;
         this.jobDto.jobNumber = dto.jobNo;
-        this.jobDto.status = dto.status;
+        this.jobDto.status = dto.status.id;
         this.masterDialog = true;
     }
 
