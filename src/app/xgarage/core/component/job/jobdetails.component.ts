@@ -27,7 +27,7 @@ import html2canvas from 'html2canvas';
 @Component({
     selector: 'job-details',
     templateUrl: './jobdetails.component.html',
-    styleUrls: ['../../../../demo/view/tabledemo.scss'],
+    // styleUrls: ['../../../../demo/view/tabledemo.scss'],
     styles: [`
         :host ::ng-deep .p-dialog .product-image {
             width: 150px;
@@ -95,6 +95,15 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     ngOnInit() {
+
+        // if (this.route.snapshot.queryParams['id']) {
+        //     localStorage.setItem('jobId', this.route.snapshot.queryParams['id']);
+        //     this.router.navigate(
+        //         ['job-details'],
+        //         { relativeTo: this.route, queryParams: {} }
+        //     );
+        // }
+
          if (localStorage.getItem('jobId')) {
             this.getJobObject(JSON.parse(localStorage.getItem('jobId')));
         }
