@@ -733,7 +733,8 @@
             "bidValue": "Bid Value",
             "bidDate": "Submitted Time",
             "submittedBids": "Submitted Bids",
-            "notInterested": "*NIS"
+            "notInterested": "*NIS",
+            "notInterestedSuppliers": "Not Interested Suppliers"
         },
         "bidDetails": {
             "partName": "Part Name",

@@ -27,7 +27,7 @@ import html2canvas from 'html2canvas';
 @Component({
     selector: 'job-details',
     templateUrl: './jobdetails.component.html',
-    // styleUrls: ['../../../../demo/view/tabledemo.scss'],
+    styleUrls: ['../../../../demo/view/tabledemo.scss'],
     styles: [`
         :host ::ng-deep .p-dialog .product-image {
             width: 150px;
@@ -87,24 +87,20 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     jobDto: UpdateJobDto = {};
     modalPart: any = [];
     displayModal: boolean = false;
-    displayNotIntrestedSuppliers: boolean = false;
-    NotIntrestedSuppliers: any[] = [];
+    displayNotInterestedSuppliers: boolean = false;
+    notInterestedSuppliers: any[] = [];
+
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
     }
 
     ngOnInit() {
-
-        // if (this.route.snapshot.queryParams['id']) {
-        //     localStorage.setItem('jobId', this.route.snapshot.queryParams['id']);
-        //     this.router.navigate(
-        //         ['job-details'],
-        //         { relativeTo: this.route, queryParams: {} }
-        //     );
-        // }
-
-         if (localStorage.getItem('jobId')) {
+        //console.log('init')
+        console.log(localStorage.getItem('jobId'));
+        if (this.route.snapshot.queryParams['id']) {
+            this.getJobObject(this.route.snapshot.queryParams['id']);
+        } else if (localStorage.getItem('jobId')) {
             this.getJobObject(JSON.parse(localStorage.getItem('jobId')));
         }
 
@@ -119,7 +115,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.jobService.getById(id).subscribe(
             {
                 next: (data) => {
-                    //console.log(data)
+                    console.log(data)
                     this.master = data;
                     this.master.claimNo = data.claimNo;
                     this.masters.push(this.master);
@@ -316,13 +312,17 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     viewBidsByRequest(request: Request) {
-        //console.log('request:',this.bidDtos)
+    //console.log('request:',this.bidDtos)
         this.originalBidList = this.bidDtos;
         this.partName = request.part.name;
         this.selection = 'single';
-        this.bidDetailsDialog = true;
         this.selectedEntries = [];
         this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
+        if(this.bidDtos.length > 0) {
+            this.bidDetailsDialog = true;
+        }else{
+            this.messageService.add({ severity: 'success', summary: 'No Bids for this Part.' }); 
+        }
 
         //console.log('bids:',this.bidDtos)
     }
@@ -338,19 +338,18 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     viewNotInterestedSuppliers(id: number) {
         this.requestService.getNotInterestedSuppliers(id).subscribe(res => {
-            console.log(res)
-            if (res.length > 0) {
-                this.NotIntrestedSuppliers = res;
-                this.displayNotIntrestedSuppliers = true;
+            if(res.length > 0) {
+                this.notInterestedSuppliers = res;
+                this.displayNotInterestedSuppliers = true;
             } else {
-                this.messageService.add({ severity: 'info', summary: 'Not Interested Suppliers Are Empty' });
+                this.messageService.add({ severity: 'info', summary: 'There is no not-interested suppliers.' });
             }
         }, err => console.log(err))
     }
 
     onHideNotIntrestedSupplier() {
-        this.displayNotIntrestedSuppliers = false;
-        this.NotIntrestedSuppliers = [];
+        this.displayNotInterestedSuppliers = false;
+        this.notInterestedSuppliers = [];
     }
 
     handleChange(e) {
@@ -537,13 +536,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     downloadPdf() {
         let DATA: any = this.bidsTable.nativeElement;
         html2canvas(DATA).then((canvas) => {
-            let fileWidth = 208;
-            let fileHeight = (canvas.height * fileWidth) / canvas.width;
-            const FILEURI = canvas.toDataURL('image/png');
-            let PDF = new jsPDF('p', 'mm', 'a4');
-            let position = 0;
-            PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
-            PDF.save('bids.pdf');
+          let fileWidth = 208;
+          let fileHeight = (canvas.height * fileWidth) / canvas.width;
+          const FILEURI = canvas.toDataURL('image/png');
+          let PDF = new jsPDF('p', 'mm', 'a4');
+          let position = 0;
+          PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+          PDF.save('bids.pdf');
         });
     }
 
@@ -608,7 +607,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     getValueAfterVat(price: number, vat: number, discount: number) {
-        return price + ((price - discount) * vat) / 100;
+        return price + ((price - discount) * vat)/100;
     }
 
     rejectMultipleBids() {

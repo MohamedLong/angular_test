@@ -165,12 +165,12 @@
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                         </td>
                                     </ng-container>
-                                    <td [hidden]="role == 2">
+                                    <td [hidden]="role > 1">
                                         <button pButton pRipple icon="pi pi-eye" [disabled]="disabledRequest(request)"
                                             class="p-button-rounded p-button-success mr-2"
                                             (click)="viewBidsByRequest(request)"></button>
                                     </td>
-                                    <td [hidden]="role == 2" class="text-center  px-0">
+                                    <td [hidden]="role > 1" class="text-center  px-0">
                                         <button pButton pRipple icon="pi pi-user-minus"
                                             [disabled]="disabledRequest(request)"
                                             class="p-button-rounded p-button-secondary p-button-outlined mr-2"
@@ -180,7 +180,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="role == 1" header="{{ 'job.tableColumn.receivedBids' | translate }}">
+                    <p-tabPanel *ngIf="role != 2" header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
                             <button (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
                                 class="p-button-rounded bg-indigo-100 text-indigo-600 border-0 font-light px-5"></button>
@@ -594,12 +594,12 @@
         </p-dialog>
 
         <p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag"
-            header="{{ 'bid.tableColumn.notInterested' | translate }}" [(visible)]="displayNotIntrestedSuppliers"
+            header="{{ 'bid.tableColumn.notInterestedSuppliers' | translate }}" [(visible)]="displayNotInterestedSuppliers"
             [modal]="true" [style]="{width: '50vw'}" [draggable]="false" [resizable]="false"
             (onHide)="onHideNotIntrestedSupplier()">
             <div class="p-datatable p-datatable-gridlines">
-                <p-table [columns]="cols" [rows]="10" *ngIf="NotIntrestedSuppliers.length > 0"
-                    [value]="NotIntrestedSuppliers" styleClass="p-invoice-datatable-responsive">
+                <p-table [columns]="cols" [rows]="10" *ngIf="notInterestedSuppliers.length > 0"
+                    [value]="notInterestedSuppliers" styleClass="p-invoice-datatable-responsive">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>
