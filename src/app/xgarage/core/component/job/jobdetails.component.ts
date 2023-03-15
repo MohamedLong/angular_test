@@ -87,8 +87,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     jobDto: UpdateJobDto = {};
     modalPart: any = [];
     displayModal: boolean = false;
-    displayNotIntrestedSuppliers: boolean = false;
-    NotIntrestedSuppliers: any[] = [];
+    displayNotInterestedSuppliers: boolean = false;
+    notInterestedSuppliers: any[] = [];
 
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
@@ -316,9 +316,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.originalBidList = this.bidDtos;
         this.partName = request.part.name;
         this.selection = 'single';
-        this.bidDetailsDialog = true;
         this.selectedEntries = [];
         this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
+        if(this.bidDtos.length > 0) {
+            this.bidDetailsDialog = true;
+        }else{
+            this.messageService.add({ severity: 'success', summary: 'No Bids for this Part.' }); 
+        }
 
         //console.log('bids:',this.bidDtos)
     }
@@ -334,19 +338,18 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     viewNotInterestedSuppliers(id: number) {
         this.requestService.getNotInterestedSuppliers(id).subscribe(res => {
-            console.log(res)
             if(res.length > 0) {
-                this.NotIntrestedSuppliers = res;
-                this.displayNotIntrestedSuppliers = true;
+                this.notInterestedSuppliers = res;
+                this.displayNotInterestedSuppliers = true;
             } else {
-                this.messageService.add({ severity: 'info', summary: 'Not Interested Suppliers Are Empty' });
+                this.messageService.add({ severity: 'info', summary: 'There is no not-interested suppliers.' });
             }
         }, err => console.log(err))
     }
 
     onHideNotIntrestedSupplier() {
-        this.displayNotIntrestedSuppliers = false;
-        this.NotIntrestedSuppliers = [];
+        this.displayNotInterestedSuppliers = false;
+        this.notInterestedSuppliers = [];
     }
 
     handleChange(e) {
