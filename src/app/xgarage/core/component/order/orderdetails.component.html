@@ -50,16 +50,16 @@
                             <p class="mb-0 font-medium">هانف: 24503692, فاكس: 24503692, س.ت. رقم: 1237250</p>
                         </div>
                     </div>
-                    <h5 class="text-center">Purchase Order</h5>
+                    <h5 class="text-center">{{'orders.orderDetails.PurchaseOrder' | translate}}</h5>
                     <div class="p-3">
                         <div class="flex mb-3 justify-content-between">
                             <table class="">
                                 <tr>
-                                    <th class="text-left capitalize font-medium">supplier name: </th>
+                                    <th class="text-left capitalize font-medium">{{'common.supplier' | translate}}: </th>
                                     <td class="uppercase font-bold">{{masterDto.supplierName}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium">supplier address: </th>
+                                    <th class="text-left capitalize font-medium">{{'orders.orderDetails.supplierAdd' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.supplierAddress}}</td>
                                 </tr>
                                 <tr>
@@ -67,11 +67,11 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium">customer Name: </th>
+                                    <th class="text-left capitalize font-medium">{{'common.customer' | translate}}: </th>
                                     <td class="uppercase font-bold">{{masterDto.customerName}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium">customer address: </th>
+                                    <th class="text-left capitalize font-medium">{{'orders.orderDetails.customerAdd' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.customerAddress}}</td>
                                 </tr>
                                 <tr>
@@ -79,45 +79,45 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium">make & model: </th>
+                                    <th class="text-left capitalize font-medium">{{'orders.orderDetails.makeModel' | translate}}: </th>
                                     <td class="uppercase font-medium">{{bidList[0]? bidList[0].requestTitle : '-'}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium">vin number</th>
+                                    <th class="text-left capitalize font-medium">{{'orders.orderDetails.vinNumber' | translate}}</th>
                                     <td class="uppercase font-medium">{{masterDto.chassisNumber}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium">job card: </th>
+                                    <th class="text-left capitalize font-medium">{{'orders.orderDetails.jobCard' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.jobNumber? masterDto.jobNumber : '-'}}</td>
                                 </tr>
                             </table>
                             <table class="">
                                 <tr>
-                                    <th class="text-left capitalize font-medium">page no: </th>
+                                    <th class="text-left capitalize font-medium">{{'orders.orderDetails.pageNo' | translate}}: </th>
                                     <td class="uppercase font-medium">1 of 1</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium"><span class="uppercase">lbo</span>
+                                    <th class="text-left capitalize font-medium"><span class="uppercase">{{'orders.orderDetails.lbo' | translate}}</span>
                                         number: </th>
                                     <td class="uppercase font-medium">{{masterDto.id}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium"><span class="uppercase">lbo</span>
-                                        date: </th>
+                                    <th class="text-left capitalize font-medium"><span class="uppercase">{{'orders.orderDetails.lbo' | translate}}</span>
+                                        {{'orders.table.date' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.createdAt  | date: 'dd/MM/yyyy'}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium">currency </th>
+                                    <th class="text-left capitalize font-medium">{{'common.currency' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.currency}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left capitalize font-medium">country: </th>
+                                    <th class="text-left capitalize font-medium">{{'common.country' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.country}}</td>
                                 </tr>
                             </table>
                         </div>
                         <p class="uppercase">
-                            please supply the following and debit our account for the value
+                            {{'orders.orderDetails.tableNote' | translate}}
                         </p>
                         <p-table *ngIf="bidList.length > 0" [columns]="dataCols" [value]="bidList"
                             styleClass="p-invoice-datatable-responsive pb-3">
@@ -169,15 +169,15 @@
                             </p> -->
                             <table class="ml-auto">
                                 <tr>
-                                    <th class="text-left uppercase font-medium">gross total: </th>
+                                    <th class="text-left uppercase font-medium">{{'orders.orderDetails.grossTotal' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.orderAmount  | number}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left uppercase font-medium">vat amount: </th>
+                                    <th class="text-left uppercase font-medium">{{'orders.orderDetails.vatAmount' | translate}}: </th>
                                     <td class="uppercase font-medium">{{totalVat  | number}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left uppercase font-medium">net total: </th>
+                                    <th class="text-left uppercase font-medium">{{'orders.orderDetails.netTotal' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.totalAmount  | number}}</td>
                                 </tr>
 

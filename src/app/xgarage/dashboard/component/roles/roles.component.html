@@ -1,7 +1,7 @@
 <div class="grid">
   <div class="col-12">
     <div class="card">
-      <p class="text-lg font-bold">Roles</p>
+      <p class="text-lg font-bold">{{'role.title' | translate}}</p>
       <p-toast key="tst" [baseZIndex]="99999"></p-toast>
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
@@ -34,17 +34,17 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon>
+            <th pSortableColumn="id">{{'common.id' | translate}} <p-sortIcon field="id"></p-sortIcon>
             </th>
             <th>
               <div class="flex justify-content-between align-items-center">
-                Role Name
+                {{'role.RoleName' | translate}}
                 <p-columnFilter type="text" field="roleName" display="menu" placeholder="Search by name"></p-columnFilter>
               </div>
-            </th>
+            </th>{{'role.RoleDescription' | translate}}
             <th>
               <div class="flex justify-content-between align-items-center">
-                Role Description
+
                 <p-columnFilter type="text" field="roleDescription" display="menu"
                   placeholder="Search by role description">
                 </p-columnFilter>
@@ -52,7 +52,7 @@
             </th>
             <th>
               <div class="flex justify-content-between align-items-center">
-                Created At
+                {{'Permissions.CreatedAt' | translate}}
                 <p-columnFilter type="date" field="createdAt" display="menu" placeholder="mm/dd/yyyy"></p-columnFilter>
               </div>
             </th>
@@ -95,12 +95,12 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="7">No roles found.</td>
+            <td colspan="7">{{'Permissions.noRole' | translate}}</td>
           </tr>
         </ng-template>
         <ng-template pTemplate="loadingbody">
           <tr>
-            <td colspan="7">Loading roles data. Please wait.</td>
+            <td colspan="7">{{'role.loadingRole' | translate}}</td>
           </tr>
         </ng-template>
       </p-table>
@@ -109,10 +109,10 @@
     <p-dialog [(visible)]="roleDialog" [style]="{width: '450px'}" header="Role Details" [modal]="true" class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
-          <label for="roleName">Role Name</label>
+          <label for="roleName">{{'role.RoleName' | translate}}</label>
           <input type="text" pInputText id="roleName" [(ngModel)]="role.roleName" required autofocus
             [ngClass]="{'ng-invalid ng-dirty' : submitted && !role.roleName}" />
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !role.roleName">Role Name is required.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !role.roleName">{{'role.RoleNameRequired' | translate}}</small>
         </div>
         <!-- <div class="field">
           <label for="permissions">Permissions</label>
@@ -122,11 +122,10 @@
             required.</small>
         </div> -->
         <div class="field">
-          <label for="roleDescription">Role Description</label>
+          <label for="roleDescription">{{'role.RoleDescription' | translate}}</label>
           <input type="text" pInputText id="roleDescription" [(ngModel)]="role.roleDescription" required autofocus
             [ngClass]="{'ng-invalid ng-dirty' : submitted && !role.roleDescription}" />
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !role.roleDescription">Role Description is
-            required.</small>
+          <small class="ng-dirty ng-invalid" *ngIf="submitted && !role.roleDescription">{{'role.RoleDescriptionRequired' | translate}}</small>
         </div>
       </ng-template>
 
@@ -139,7 +138,7 @@
     <p-dialog [(visible)]="deleteRoleDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="role">Are you sure you want to delete <b>{{role.name}}</b>?</span>
+        <span *ngIf="role">{{'Permissions.deletePermission'}} <b>{{role.name}}</b>?</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
@@ -151,7 +150,7 @@
     <p-dialog [(visible)]="deleteRolesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span>Are you sure you want to delete selected roles?</span>
+        <span>{{'Permissions.deleteSelectedRoles'}}</span>
       </div>
       <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"

@@ -91,6 +91,7 @@
         "notes": "Notes",
         "terms": "Terms and Conditions:  ",
         "currency": "Currency",
+        "country": "Country",
         "currencySearch": "Search by currency",
         "currencyRequired": "Currency is required.",
         "cuRate": "Currency Rate",
@@ -397,6 +398,7 @@
     },
     "USER": {
         "TITLE": "Users",
+        "TITLE_2": "Manage Users",
         "NEW": "New",
         "EXPORT": "Export",
         "TABLEFILTER": {
@@ -436,12 +438,21 @@
             "PASSWORD": "Password",
             "PASSWORDREQUIRED": "Password is Required",
             "ROLESELECTOR": "select a role",
+            "TenantSELECTOR": "Select a Tenant",
             "CANCEL": "Cancel",
             "SAVE": "Save",
             "DELETEPROMPT": "Are you sure you want to delete ",
             "PROMPTNOOPTION": "No",
             "PROMPTYESOPTION": "Yes"
         }
+    },
+    "UserRoles": {
+        "title": "User Roles",
+        "UserId": "User Id",
+        "RoleId": "Role Id",
+        "notFound": "No user roles found",
+        "loading": "Loading user roles data. Please wait.",
+        "deleteRole": "Are you sure you want to delete selected user role?"
     },
     "USERMAINMENU": {
         "TITLE": "User Main Menues",
@@ -470,6 +481,7 @@
             "CANCEL": "Cancel",
             "SAVE": "Save",
             "DELETEPROMPT": "Are you sure you want to delete ",
+            "MENUDELETEPROMPT": "Are you sure you want to delete selected usermainmenus?",
             "PROMPTNOOPTION": "No",
             "PROMPTYESOPTION": "Yes"
         }
@@ -496,6 +508,7 @@
             "ROLESELECTOR": "select a role",
             "ROLEREQUIRED": "Role is Required",
             "MODULE": "Module",
+            "MODULEREQUIRED": "Module is Required",
             "MODULESELECTOR": "select a module",
             "PAGE": "Page",
             "PAGESELECTOR": "select a page",
@@ -509,8 +522,10 @@
             "CANCEL": "Cancel",
             "SAVE": "Save",
             "DELETEPROMPT": "Are you sure you want to delete ",
+            "DELETESELECTEDPROMPT": "Are you sure you want to delete selected users?",
             "PROMPTNOOPTION": "No",
-            "PROMPTYESOPTION": "Yes"
+            "PROMPTYESOPTION": "Yes",
+            "PERMISSIONSELECTOR": "select at least one permission."
         }
     },
     "CHANGEPASSWORD": {
@@ -613,7 +628,8 @@
             "descPlaceholder": "Add a short description about your parts",
             "sendReq": "{{text}}",
             "qtyRequired": "{{Quantity can't be less than 1}}",
-            "uploadImages": "Upload Part Images"
+            "uploadImages": "Upload Part Images",
+            "searchRequest": "Search request with brand name or parts name"
         },
         "requestDialog": {
             "newRequest": "Add Request",
@@ -785,6 +801,49 @@
             "sttaus": "Order Status",
             "delivery": "Delivery Fees",
             "payment": "Payment Status"
+        },
+        "orderDetails": {
+           "PurchaseOrder": "Purchase Order",
+           "supplierAdd": "supplier address",
+           "customerAdd": "customer address",
+           "makeModel": "make & model",
+           "vinNumber": "vin number",
+           "jobCard": "job card",
+           "pageNo": "page no",
+           "lbo": "lbo",
+           "lboDate": "lbo date",
+           "tableNote": "please supply the following and debit our account for the value",
+           "grossTotal": "gross total",
+           "vatAmount": "vat amount",
+           "netTotal": "net total"
+        },
+        "Permissions": {
+            "Permissions": "Permissions",
+            "PermissionName":"Permission Name",
+            "SearchbyName": "Search by Permission Name",
+            "PermissionURL": "Permission URL",
+            "SearchbyURL": "Search by Permission URL",
+            "CreatedAt": "Created At",
+            "NoPermissions": "No permissions found.",
+            "LoadingPermissions": "Loading permissions data. Please wait.",
+            "PermissionNameRequired.": "Permission Name is required.",
+            "PermissionURLRequired": "Permission URL is required.",
+            "deletePermission": "Are you sure you want to delete",
+            "deleteSelectedPermission": "Are you sure you want to delete selected permissions?",
+            "PermissionID": "Permission ID",
+            "NoRoleFound": "No role permissions found.",
+            "LoadingRolePermissions": "Loading role permissions data. Please wait."
+
+        },
+        "role": {
+            "title": "Roles",
+            "RoleName": "Role Name",
+            "RoleNameRequired": "Role Name is required.",
+            "RoleDescriptionRequired": "Role Description is required.",
+            "RoleDescription": "Role Description",
+            "loadingRole": "Loading roles data. Please wait.",
+            "noRole": "No roles found.",
+            "deleteSelectedRoles": "Are you sure you want to delete selected roles?"
         }
     }
 

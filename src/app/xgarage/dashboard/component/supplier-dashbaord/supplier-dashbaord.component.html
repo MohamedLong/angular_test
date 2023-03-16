@@ -4,7 +4,7 @@
         <span>
             <i class="pi pi-search z-1"></i>
             <p-autoComplete align="left"
-                placeholder="Search request with brand name or parts name"
+                placeholder="{{ 'request.form.searchRequest' | translate }}"
                 [(ngModel)]="searchTerm"
                 (completeMethod)="search($event)"
                 [suggestions]="searchResults"

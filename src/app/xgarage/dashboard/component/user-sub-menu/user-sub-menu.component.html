@@ -1,7 +1,7 @@
 <div class="grid">
 	<div class="col-12">
 		<div class="card">
-			<p class="text-lg font-bold">User Sub Menus</p>
+			<p class="text-lg font-bold">{{'USERSUBMENU.TITLE' | translate}}</p>
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
@@ -12,7 +12,7 @@
 
                 <ng-template pTemplate="right">
                     <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload> -->
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                    <button pButton pRipple label="{{'USERMAINMENU.EXPORT' | translate}}" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
                 </ng-template>
             </p-toolbar>
 			<p-table #dt [value]="usersubmenus" [columns]="cols" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['id','role.roleName']" responsiveLayout="scroll">
@@ -27,17 +27,17 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-                        <th pSortableColumn="id">ID<p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="id">{{'USERSUBMENU.TABLECOLUMN.ID' | translate}}<p-sortIcon field="id"></p-sortIcon></th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
-								Role
+								{{'USERSUBMENU.TABLECOLUMN.ROLE' | translate}}
 								<!-- <p-columnFilter type="text" field="usersubmenusName" display="menu" placeholder="Search by usersubmenu name"></p-columnFilter> -->
 							</div>
 						</th>
                         <th>
 							<div class="flex justify-content-between align-items-center">
-								Page
-								<p-columnFilter type="text" field="subMenu.pageName" display="menu" placeholder="Search by page"></p-columnFilter>
+								{{'USERSUBMENU.TABLECOLUMN.PAGE' | translate}}
+								<p-columnFilter type="text" field="subMenu.pageName" display="menu" placeholder="{{'USERSUBMENU.TABLECOLUMN.PAGEFILTER' | translate}}"></p-columnFilter>
 							</div>
 						</th>
                         <th></th>
@@ -62,64 +62,64 @@
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
-						<td colspan="7">No user submenus found.</td>
+						<td colspan="7">{{'USERSUBMENU.TABLECOLUMN.EMPTYMESSAGE' | translate}}</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="loadingbody">
 					<tr>
-						<td colspan="7">Loading user submenus data. Please wait.</td>
+						<td colspan="7">{{'USERSUBMENU.TABLECOLUMN.LOADING' | translate}}</td>
 					</tr>
 				</ng-template>
     		</p-table>
 		</div>
-        <p-dialog [(visible)]="usersubmenuDialog" [style]="{width: '450px'}" header="User Sub Menu Details" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="usersubmenuDialog" [style]="{width: '450px'}" header="{{'USERSUBMENU.DIALOG.TITLE' | translate}}" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <div class="field">
-                    <label for="roleId">Role</label>
+                    <label for="roleId">{{'USERSUBMENU.DIALOG.ROLE' | translate}}</label>
                     <p-dropdown [options]="roles" [(ngModel)]="selectedRole" (onChange)="fetchUserMainMenus()" optionLabel="roleName" [showClear]="true" placeholder="Select a Role" ></p-dropdown>
                     <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
-                    <small class="p-error block" *ngIf="submitted && !selectedRole">Role is required.</small>
+                    <small class="p-error block" *ngIf="submitted && !selectedRole">{{'USERSUBMENU.DIALOG.ROLEREQUIRED' | translate}}</small>
                 </div>
                 <div class="field">
-                    <label for="roleId">Module</label>
-                    <p-dropdown [options]="userMainMenus" [(ngModel)]="selectedUserMainMenu" (onChange)="fetchSubMenus()" optionLabel="mainMenu.pageName" [showClear]="true" placeholder="Select a Module">
+                    <label for="roleId">{{'USERSUBMENU.DIALOG.MODULE' | translate}}</label>
+                    <p-dropdown [options]="userMainMenus" [(ngModel)]="selectedUserMainMenu" (onChange)="fetchSubMenus()" optionLabel="mainMenu.pageName" [showClear]="true" placeholder="{{'USERSUBMENU.DIALOG.MODULESELECTOR' | translate}}">
                     </p-dropdown>
                     <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
-                    <small class="p-error block" *ngIf="submitted && !selectedUserMainMenu">Module is required.</small>
+                    <small class="p-error block" *ngIf="submitted && !selectedUserMainMenu">{{'USERSUBMENU.DIALOG.MODULEREQUIRED' | translate}}</small>
                 </div>
                 <div class="field">
-                    <label for="roleId">page</label>
-                    <p-dropdown [options]="pages" [(ngModel)]="selectedPage" optionLabel="pageName" [showClear]="true" placeholder="Select a Page">
+                    <label for="roleId">{{'USERSUBMENU.TABLECOLUMN.PAGE' | translate}}</label>
+                    <p-dropdown [options]="pages" [(ngModel)]="selectedPage" optionLabel="pageName" [showClear]="true" placeholder="{{'USERSUBMENU.DIALOG.PAGESELECTOR' | translate}}">
                     </p-dropdown>
                     <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
-                    <small class="p-error block" *ngIf="submitted && !selectedPage">Page is required.</small>
+                    <small class="p-error block" *ngIf="submitted && !selectedPage">{{'USERSUBMENU.DIALOG.PAGEREQUIRED' | translate}}</small>
                 </div>
                 <div class="">
                     <div class="field-checkbox">
                         <p-checkbox [(ngModel)]="usersubmenu.newAuth" binary="true" inputId="binary"></p-checkbox>
-                        <label for="binary">New</label>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.NEWAUTH' | translate}}</label>
                     </div>
                     <div class="field-checkbox">
                         <p-checkbox [(ngModel)]="usersubmenu.editAuth" binary="true" inputId="binary"></p-checkbox>
-                        <label for="binary">Edit</label>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.EDITAUTH' | translate}}</label>
                     </div>
                     <div class="field-checkbox">
                         <p-checkbox [(ngModel)]="usersubmenu.deleteAuth" binary="true" inputId="binary"></p-checkbox>
-                        <label for="binary">Delete</label>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.DELETEAUTH' | translate}}</label>
                     </div>
                     <div class="field-checkbox">
                         <p-checkbox [(ngModel)]="usersubmenu.printAuth" binary="true" inputId="binary"></p-checkbox>
-                        <label for="binary">Print</label>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.PRINTAUTH' | translate}}</label>
                     </div>
                     <div class="field-checkbox">
                         <p-checkbox [(ngModel)]="usersubmenu.confirmAuth" binary="true" inputId="binary"></p-checkbox>
-                        <label for="binary">Confirm</label>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.CONFIRMAUTH' | translate}}</label>
                     </div>
                     <div class="field-checkbox">
                         <p-checkbox [(ngModel)]="usersubmenu.cancelConfirmAuth" binary="true" inputId="binary"></p-checkbox>
-                        <label for="binary">Cancel Confirm</label>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.CONFIRMCANCELAUTH' | translate}}</label>
                     </div>
-                    <small class="p-error block" *ngIf="submitted && auth">select at least one permission.</small>
+                    <small class="p-error block" *ngIf="submitted && auth">{{'USERSUBMENU.DIALOG.PERMISSIONSELECTOR' | translate}}</small>
                 </div>
             </ng-template>
 
