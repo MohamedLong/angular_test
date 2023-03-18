@@ -45,8 +45,14 @@ export class OrderComponent extends GenericComponent implements OnInit {
     totalOrderAmount = 0;
     totalAmount = 0;
     delivaryTotal = 0;
+
     ngOnInit(): void {
+        if(localStorage.getItem('order')) {
+            localStorage.removeItem('order')
+        }
+
         this.getAll(this.pageNo);
+
         this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['orders'] }]);
     }
 
@@ -59,6 +65,19 @@ export class OrderComponent extends GenericComponent implements OnInit {
                 this.delivaryTotal = this.delivaryTotal + data.deliveryFees;
             })
             this.masterDtos = res;
+
+            if (this.route.snapshot.queryParams['id']) {
+                let order = this.masterDtos.filter(dto => {
+                    return dto.id == this.route.snapshot.queryParams['id'];
+                });
+
+                if(order.length > 0) {
+                    this.goOrderDetails(order[0]);
+                } else {
+                    this.messageService.add({ severity: 'info', summary: 'Error', detail: 'this order does not exist, please select from orders table', life: 3000 })
+                }
+            }
+
             this.cols = [
                 { field: 'id', header: 'id' },
                 { field: 'createdAt', header: 'Brand Name' },
@@ -87,19 +106,8 @@ export class OrderComponent extends GenericComponent implements OnInit {
 
 
     goOrderDetails(order: any) {
-        this.bidService.getByOrder(order.id).subscribe(
-            {
-                next: (data) => {
-                    this.master = data;
-                    localStorage.removeItem('orderData');
-                    localStorage.removeItem('order');
-
-                    localStorage.setItem('orderData', JSON.stringify(this.master));
-                    localStorage.setItem('order', JSON.stringify(order));
-                    this.router.navigate(['order-details']);
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-            });
+        localStorage.setItem('order', JSON.stringify(order));
+        this.router.navigate(['order-details'], {queryParams: {}});
     }
 
 }

@@ -75,7 +75,7 @@ const routes: Routes = [];
                     {path: 'user-main-menu', component: UserMainMenuComponent},
                     {path: 'user-sub-menu', component: UserSubMenuComponent},
                     {path: 'orders', component: OrderComponent},
-                    {path: 'order-details', component: OrderDetailsComponent},
+                    {path: 'order-details', component: OrderDetailsComponent, canActivate: [AuthGuard]},
                 ]
             },
             {path: 'login', component: LoginComponent},

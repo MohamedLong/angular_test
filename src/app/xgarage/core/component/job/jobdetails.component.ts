@@ -97,7 +97,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     ngOnInit() {
         //console.log('init')
-        console.log(localStorage.getItem('jobId'));
+        //console.log(localStorage.getItem('jobId'));
         if (this.route.snapshot.queryParams['id']) {
             this.getJobObject(this.route.snapshot.queryParams['id']);
         } else if (localStorage.getItem('jobId')) {
@@ -272,7 +272,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         if(this.bidDtos.length > 0) {
             this.bidDetailsDialog = true;
         }else{
-            this.messageService.add({ severity: 'success', summary: 'No Bids for this Part.' }); 
+            this.messageService.add({ severity: 'success', summary: 'No Bids for this Part.' });
         }
 
         //console.log('bids:',this.bidDtos)

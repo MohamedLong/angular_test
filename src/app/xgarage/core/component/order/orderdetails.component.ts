@@ -13,6 +13,7 @@ import { OrderService } from '../../service/order.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { BidService } from '../../service/bidservice.service';
 @Component({
     selector: 'order-details',
     templateUrl: './orderdetails.component.html',
@@ -28,7 +29,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 export class OrderDetailsComponent extends GenericDetailsComponent implements OnInit {
 
     constructor(private orderService: OrderService, public authService: AuthService, public route: ActivatedRoute, private dialogService: DialogService, public router: Router, private dataService: DataService<any>, public messageService: MessageService, public confirmService: ConfirmationService,
-        public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe) {
+        public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe, private bidService: BidService) {
         super(route, router, null, datePipe, null, breadcrumbService);
     }
     dataCols: any[];
@@ -42,18 +43,12 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     @ViewChild('invoice') invoice!: ElementRef;
 
     ngOnInit() {
-        this.bidList = JSON.parse(localStorage.getItem('orderData'));
-
-        //masterDTO
-        this.masterDto = JSON.parse(localStorage.getItem('order'));
-
-        console.log('order:', this.masterDto)
-        this.bidList.forEach(order => {
-            order.taxAmount = (order.vat / 100) * (order.originalPrice * order.qty - order.discount);
-            this.totalVat = this.totalVat + order.taxAmount;
-        });
-
-        console.log('data:', this.bidList)
+        if (localStorage.getItem('order')) {
+            console.log('last condition')
+            //masterDTO
+            this.masterDto = JSON.parse(localStorage.getItem('order'));
+            this.getOrder(this.masterDto.id);
+        }
 
         this.dataCols = [
             { field: 'bidId', header: 'SL.NO' },
@@ -70,6 +65,21 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
 
         this.initActionMenu();
         this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['orders'] }, { 'label': 'Order Details', routerLink: ['order-details'] }]);
+    }
+
+    getOrder(id: number) {
+        this.bidService.getByOrder(id).subscribe(res => {
+            this.bidList = res;
+
+            this.bidList.forEach(order => {
+                order.taxAmount = (order.vat / 100) * (order.originalPrice * order.qty - order.discount);
+                this.totalVat = this.totalVat + order.taxAmount;
+            });
+
+            //console.log('data:', this.bidList)
+        }, err => {
+            this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.error.statusMsg, life: 3000 })
+        });
     }
 
     downloadPDF() {
@@ -184,40 +194,40 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
             }
             this.orderService.acceptOrder(orderRequest).subscribe({
                 next: (data) => {
-                    if(data == true) {
+                    if (data == true) {
                         this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: 'Order Accepted', life: 3000 });
-                    }else{
+                    } else {
                         this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: 'Order Acceptance Failed', life: 3000 });
                     }
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });
-        }else if(this.confirmType === 'cancel') {
-            if(this.role == 1) {
+        } else if (this.confirmType === 'cancel') {
+            if (this.role == 1) {
                 this.orderService.cancelOrder(this.masterDto.id).subscribe({
                     next: (data) => {
-                        if(data == true) {
+                        if (data == true) {
                             this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: 'Order Canceled', life: 3000 });
-                        }else{
+                        } else {
                             this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: 'Order Cancelation Failed', life: 3000 });
                         }
                     },
                     error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
                 });
-            }else{
+            } else {
                 this.orderService.cancelOrderBySupplier(this.masterDto.id).subscribe({
                     next: (data) => {
-                        if(data == true) {
+                        if (data == true) {
                             this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: 'Order Canceled', life: 3000 });
-                        }else{
+                        } else {
                             this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: 'Order Cancelation Failed', life: 3000 });
                         }
                     },
                     error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
                 });
             }
-           
-        }else if(this.confirmType === 'email') {
+
+        } else if (this.confirmType === 'email') {
             this.downloadPDF();
         }
         this.confirmActionDialog = false;

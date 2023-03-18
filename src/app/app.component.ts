@@ -1,14 +1,15 @@
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
+import { AuthService } from './auth/services/auth.service';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 
     topbarTheme = 'white';
 
@@ -29,12 +30,12 @@ export class AppComponent implements OnInit{
     previousUrl: any;
     currentUrl: any;
 
-    constructor(private route: ActivatedRoute, public translate: TranslateService, private primengConfig: PrimeNGConfig, private router: Router) {
+    constructor(private route: ActivatedRoute, public translate: TranslateService, private primengConfig: PrimeNGConfig, private router: Router, private authService: AuthService) {
         translate.addLangs(['en', 'ar']);
         translate.setDefaultLang('en');
 
         const browserLang = translate.getBrowserLang();
-        if(localStorage.getItem('lang')){
+        if (localStorage.getItem('lang')) {
             translate.use(localStorage.getItem('lang'));
         } else {
             var lang = browserLang.match(/en|ar/) ? browserLang : 'en';
@@ -54,15 +55,28 @@ export class AppComponent implements OnInit{
             this.previousUrl = this.currentUrl;
             this.currentUrl = event.url;
 
-            // /console.log(this.previousUrl)
             if ((this.previousUrl == undefined || this.previousUrl.includes('destination')) && this.route.snapshot.queryParams['id']) {
-                localStorage.setItem('jobId', this.route.snapshot.queryParams['id']);
-                this.router.navigate(
-                    ['job-details'],
-                    { relativeTo: this.route, queryParams: {  } }
-                  );
+                // console.log(this.previousUrl.includes('destination'))
+                if (this.currentUrl.includes('job-details')) {
+                    console.log('redirecting to job details..')
+                    localStorage.setItem('jobId', this.route.snapshot.queryParams['id']);
+                    this.router.navigate(
+                        ['job-details'],
+                        { relativeTo: this.route, queryParams: {} }
+                    );
+                } else if(this.currentUrl.includes('order-details')) {
+                    this.router.navigate(
+                        ['orders'],
+                        { relativeTo: this.route, queryParamsHandling: 'preserve' }
+                    );
+                }
+
             }
         });
+
+        // if(!this.authService.isLoggedIn) {
+        //     this.authService.logout();
+        // }
     }
 
 
