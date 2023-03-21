@@ -151,7 +151,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
         BlockUIModule,
         CommonModule,
         AuthModule,
-        BrowserModule,
+        BrowserModule.withServerTransition({ appId: 'serverApp' }),
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
