@@ -7,7 +7,6 @@ import { AuthService } from './auth/services/auth.service';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
@@ -64,7 +63,7 @@ export class AppComponent implements OnInit {
                         ['job-details'],
                         { relativeTo: this.route, queryParams: {} }
                     );
-                } else if(this.currentUrl.includes('order-details')) {
+                } else if (this.currentUrl.includes('order-details')) {
                     console.log('redirecting to order details..')
                     this.router.navigate(
                         ['orders'],
@@ -75,9 +74,14 @@ export class AppComponent implements OnInit {
             }
         });
 
-        // if(!this.authService.isLoggedIn) {
-        //     this.authService.logout();
-        // }
+
+        window.addEventListener('storage', () => {
+            let token = localStorage.getItem('JWT_TOKEN');
+            if (!token) {
+                this.authService.logout();
+                this.router.navigate(['/login'])
+            }
+        })
     }
 
 
