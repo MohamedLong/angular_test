@@ -142,6 +142,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                     }
                     this.confirmStatus = confirmStatus;
                     this.confirmActionDialog = true;
+                    console.log('confirmType: ', this.confirmType);
                 }
             },
             {
@@ -165,9 +166,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     confirm() {
+        console.log('approve job: confirm type:', this.confirmType);
         if (this.confirmType === 'confirm') {
             this.jobService.changeStatus(this.master.id, this.confirmStatus).subscribe({
                 next: (data) => {
+                    console.log('data: ', data);
                     this.updateCurrentObject(data);
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })

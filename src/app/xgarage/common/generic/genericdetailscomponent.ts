@@ -311,10 +311,11 @@ export class GenericDetailsComponent{
     }
 
     updateCurrentObject(data: any) {
+        console.log('new status:', this.confirmStatus.id);
+        this.master.status.id = this.confirmStatus.id;
         this.master.status.nameEn = this.confirmStatus.nameEn;
         this.master.status.nameAr = this.confirmStatus.nameAr;
         this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: data.statusMsg, life: 3000 });
-        this.master.status.id = this.confirmStatus.id;
     }
 
     goMaster() {

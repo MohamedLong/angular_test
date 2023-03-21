@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
@@ -14,6 +14,7 @@ import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { BidService } from '../../service/bidservice.service';
+import { OrderInfo} from '../../dto/orderinfo';
 @Component({
     selector: 'order-details',
     templateUrl: './orderdetails.component.html',
@@ -128,7 +129,19 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                     var blob = doc.output('blob');
                     var formData = new FormData();
 
-                    let req = { "orderId": this.masterDto.id, "lpo": blob };
+                    let orderInfo: OrderInfo = {
+                        orderId: this.masterDto.id,
+                        jobTitle: this.masterDto.jobTitle,
+                        jobNumber: this.masterDto.jobNumber,
+                        vinNumber: this.masterDto.chassisNumber,
+                        seller: this.bidList[0].supplierId,
+                        customerName: this.masterDto.customerName,
+                        netAmount: this.masterDto.totalAmount
+                    }
+
+                    let stringOrderInfo = JSON.stringify(orderInfo);
+
+                    let req = { "orderInfo": stringOrderInfo, "lpo": blob };
 
                     for (var key in req) {
                         formData.append(key, req[key]);

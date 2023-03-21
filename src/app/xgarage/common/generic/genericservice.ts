@@ -48,7 +48,7 @@ export abstract class GenericService<T> {
     }
 
     public changeStatus(parentId: number, status: Status) : Observable<any> {
-        return this.http.post<Status>(this.apiServerUrl + '/changeStatus/' + parentId, status);
+        return this.http.post<MessageResponse>(this.apiServerUrl + '/changeStatus/' + parentId, status);
     }
 
     public getByParent(parentId: number){
