@@ -96,8 +96,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     ngOnInit() {
-        //console.log('init')
-        //console.log(localStorage.getItem('jobId'));
         if (this.route.snapshot.queryParams['id']) {
             this.getJobObject(this.route.snapshot.queryParams['id']);
         } else if (localStorage.getItem('jobId')) {
@@ -137,7 +135,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 label: 'Approve', icon: 'pi pi-check', visible: (this.master.status.id == 1), command: () => {
                     const confirmStatus: Status = {
                         id: 6,
-                        nameEn: 'Approve',
+                        nameEn: 'Approved',
                         nameAr: 'مؤكد'
                     }
                     this.confirmStatus = confirmStatus;
@@ -166,12 +164,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     confirm() {
-        console.log('approve job: confirm type:', this.confirmType);
         if (this.confirmType === 'confirm') {
             this.jobService.changeStatus(this.master.id, this.confirmStatus).subscribe({
                 next: (data) => {
-                    //console.log('data: ', data);
-                    this.master.status.nameEn = 'Approve';
+                    this.master.status = this.confirmStatus;
                     this.updateCurrentObject(data);
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
@@ -223,10 +219,10 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     confirmCancel(id: number) {
-        console.log(id);
         this.requestService.cancelRequest(id).subscribe(res => {
             if (res.messageCode == 200) {
                 this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
+                this.fillteredDetails.find(r => r.id == id).status.nameEn = this.getStatusName(StatusConstants.CANCELED_STATUS);
             } else {
                 this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: res.message });
             }
@@ -261,7 +257,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         super.openNew();
     }
 
-    editAction(detail?: any) {
+    editRequest(detail?: any) {
         this.type = 'edit req';
         super.editAction(detail);
     }
@@ -610,13 +606,14 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.messageService.add({ severity: 'success', summary: 'Success', detail: event.message });
             let index = this.fillteredDetails.findIndex((el) => el.id === event.id);
             this.fillteredDetails[index] = event;
+            if(this.type == 'new req') {
+                this.getRequestsByJob();
+            }
         }
     }
 
 
     editJobNumber(dto: any) {
-        console.log('jobDto: ', dto);
-        console.log('this.editAuth: ', this.editAuth);
         this.jobDto.id = dto.id;
         this.jobDto.jobNumber = dto.jobNo;
         this.jobDto.status = dto.status.id;

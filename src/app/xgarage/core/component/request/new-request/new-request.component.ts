@@ -9,7 +9,6 @@ import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
-import { PartService } from '../../../service/part.service';
 import { PartTypeService } from '../../../service/parttype.service';
 import { RequestService } from '../../../service/request.service';
 
@@ -53,6 +52,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     @Input() type: string = 'new req';
     @Input() requestDetails: any = '';
     @Input() edit: boolean = false;
+    @Input() passedJob: any = {};
     @Output() request = new EventEmitter<null | any>();
     @ViewChild('partComponent') partComponent : ElementRef;
     blocked: boolean = false;
@@ -74,7 +74,6 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     getPartTypes() {
         this.partTypeService.getAll().subscribe(res => {
             this.partTypes = res;
-            //console.log(this.partTypes)
         }, err => {
             console.log(err)
         })
@@ -88,10 +87,11 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     sendRequest() {
         this.request.emit();
         this.submitted = true;
-
+        console.log('inside sendRequest');
         setTimeout(() => {
             this.dataService.name.subscribe({
                 next: (data) => {
+                    console.log('inside dataService.name');
                     if (data && JSON.stringify(data) !== '{}') {
                         console.log(data)
                         this.isSending = true;
@@ -114,10 +114,10 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                         this.responseBody.qty = this.qty;
 
                         this.getPart();
-
+                        console.log('before formatThenSaveRequest');
                         if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0 && this.responseBody.qty >= 1) {
                             this.partErrorMsg = '';
-                            //console.log(this.responseBody)
+                            console.log('inside formatThenSaveRequest', this.responseBody);
                             this.formatThenSaveRequest();
                         }
 
@@ -155,24 +155,17 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 this.responseBody.user = this.requestDetails.user;
                 this.responseBody.partTypes = this.selectedPartTypes;
                 this.responseBody.qty = this.qty;
-
-                //console.log('edit request', this.responseBody)
-            } else {
-
-                let job = JSON.parse(localStorage.getItem('job'));
-
-                this.responseBody.job = job.id;
+            } else { // new request case when this.type == 'new req'
+                this.responseBody.job = this.passedJob.id;
                 this.responseBody.description = this.description;
                 this.responseBody.qty = this.qty;
-                this.responseBody.car = { 'id': job.car.id };
+                this.responseBody.car = { 'id': this.passedJob.car.id };
                 this.responseBody.locationName = JSON.parse(this.authService.getStoredUser()).tenant.location;
-                this.responseBody.suppliers = job.suppliers;
-                this.responseBody.privacy = job.privacy;
-                this.responseBody.requestTitle = job.jobTitle;
+                this.responseBody.suppliers = this.passedJob.suppliers;
+                this.responseBody.privacy = this.passedJob.privacy;
+                this.responseBody.requestTitle = this.passedJob.jobTitle;
                 this.responseBody.user = this.user;
                 this.responseBody.partTypes = this.selectedPartTypes;
-
-                //console.log('new request', this.responseBody)
             }
 
             this.getPart();
@@ -219,12 +212,12 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         if (this.responseBody.hasOwnProperty('id')) {
             console.log('updating old request')
             this.requestService.update(reqFormData).subscribe((res: MessageResponse) => {
-                //console.log(res)
-                //this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+                console.log(res)
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
                 this.request.emit(res);
             }, err => {
-                //console.log(err.error)
-                //this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
+                console.log(err.error)
+                this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
                 this.request.emit(err);
             });
 
@@ -232,11 +225,8 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.submitted = false;
 
         } else {
-            console.log('intiating new request')
-            //console.log(this.responseBody);
-            //console.log(reqFormData);
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
-                //console.log(res)
+            console.log('inisde save requets block', res);
                 if (this.type == 'new req') {
                     //this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
                     this.request.emit(res);
@@ -251,7 +241,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 this.isSending = false;
                 this.submitted = false;
             }, err => {
-                console.log(err)
+                console.log('inside save request block', err);
                 if (this.type == 'new req') {
                     //this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
                     //super.hideDialog();

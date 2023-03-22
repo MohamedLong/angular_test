@@ -69,10 +69,6 @@ export class GenericDetailsComponent{
 
     constructor(public route: ActivatedRoute, public router: Router, public changeStatusService: GenericService<any>, public datePipe: DatePipe,
                 public statusService: StatusService, public breadcrumbService: AppBreadcrumbService) {
-                    this.breadcrumbService.setItems([
-                        { label: 'Pages' },
-                        { label: 'Crud', routerLink: ['/pages/crud'] }
-                    ]);
 
                     this.extractPermissions();
         }
