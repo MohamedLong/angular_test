@@ -3,7 +3,7 @@ export interface OrderInfo{
     jobTitle?: string;
     jobNumber?: string;
     vinNumber?: string;
-    seller?: number;
+    supplierEmail?: string;
     customerName?: string;
     netAmount?: number;
 }

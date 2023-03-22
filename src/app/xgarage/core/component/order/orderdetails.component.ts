@@ -134,7 +134,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                         jobTitle: this.masterDto.jobTitle,
                         jobNumber: this.masterDto.jobNumber,
                         vinNumber: this.masterDto.chassisNumber,
-                        seller: this.bidList[0].supplierId,
+                        supplierEmail: this.masterDto.supplierEmail,
                         customerName: this.masterDto.customerName,
                         netAmount: this.masterDto.totalAmount
                     }
