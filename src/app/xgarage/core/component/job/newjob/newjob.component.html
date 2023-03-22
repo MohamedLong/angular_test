@@ -12,7 +12,7 @@
                         </div>
                         <!-- (click)="clickToNavigate('request')"  -->
                         <div class="col-6 tab flex align-items-center justify-content-center request-tab"
-                            [ngClass]="{'selected-tab': activeTab === 'request'}">
+                            [ngClass]="{'selected-tab': activeTab === 'request'}" (click)="clickToNavigate('request')">
                             <div class="title">{{ 'job.form.createRequest' | translate }}</div>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'request'}">
                     <form [formGroup]="jobForm" (ngSubmit)="onJobFormSubmit()">
-                        <div class="grid">
+                        <div class="grid" #fromContainer>
                             <div class="col-12" *ngIf="jobForm.get('car').value">
                                 <p-messages class="car-info" severity="info">
                                     <ng-template pTemplate>
@@ -59,9 +59,9 @@
                                 <span class="p-input-icon-right width-100 my-2">
                                     <i class="pi pi-spin pi-spinner" *ngIf="isTypingClaim"></i>
                                     <!-- <i class="pi pi-check text-green-500 font-bold" *ngIf="!isTypingClaim"></i> -->
-                                    <input formControlName="claim" class="width-100" type="text" pInputText
+                                    <input formControlName="claim" class="width-100" [ngClass]="{'ng-invalid ng-dirty': submitted && !jobForm.get('claim').valid  && jobForm.get('claim').errors?.['required']}" type="text" pInputText
                                         (keyup)="onClaimNumberKeyUp()" (keydown)="onClaimNumberKeyDown()"
-                                        placeholder="{{ 'job.form.claimNo' | translate }}" required />
+                                        placeholder="{{ 'job.form.claimNoPlaceholder' | translate }}" required />
                                 </span>
                                 <small
                                     *ngIf="submitted && !jobForm.get('claim').valid  && jobForm.get('claim').errors?.['required']"
@@ -77,7 +77,8 @@
                                     class="p-error">{{ 'job.form.enterJob' | translate }}</small>
                                 <input *ngIf="!jobFound.multiple" formControlName="job" class="width-100 mb-2"
                                     type="text" pInputText placeholder="{{ 'job.form.enterJob' | translate }}" />
-                                <p style="cursor: pointer;" *ngIf="jobFound.found" class="text-green-500 text-right" (click)="onNewJob()"><i class="pi pi-plus"></i> or add a new job number</p>
+                                <p style="cursor: pointer;" *ngIf="jobFound.found" class="text-green-500 text-right"
+                                    (click)="onNewJob()"><i class="pi pi-plus"></i> or add a new job number</p>
                                 <small
                                     *ngIf="!jobFound.multiple && submitted && !jobForm.get('job').valid  && jobForm.get('job').errors?.['required']"
                                     class="p-error">{{ 'job.form.enterJob' | translate }}</small>
@@ -90,7 +91,7 @@
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
                                 <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom"
-                                    placeholder="OD/TP"></p-dropdown>
+                                    placeholder="OD/TP" [ngClass]="{'ng-invalid ng-dirty': submitted && !jobForm.get('insuranceFrom').valid  && jobForm.get('insuranceFrom').errors?.['required']}"></p-dropdown>
                                 <small
                                     *ngIf="submitted && !jobForm.get('insuranceFrom').valid  && jobForm.get('insuranceFrom').errors?.['required']"
                                     class="p-error">{{ 'job.form.selectInsurance' | translate }}</small>
@@ -101,9 +102,12 @@
                             </div>
                             <p-dialog header="Private Suppliers" [modal]="true" [style]="{width: '50vw'}"
                                 [(visible)]="displayPrivateSuppliers" (onHide)="resetPrivacy()">
-                                <p-listbox (onChange)="selectSupplier($event.value)" [checkbox]="true"
-                                    [options]="selectedPrivateSuppliers | async" formControlName="suppliers"
-                                    [multiple]="true" optionLabel="name"></p-listbox>
+                                <p-listbox
+                                    *ngIf="selectedPrivateSuppliers | async as selectedPrivateSuppliers; else loading"
+                                    (onChange)="selectSupplier($event.value)" [checkbox]="true"
+                                    [options]="selectedPrivateSuppliers" formControlName="suppliers" [multiple]="true"
+                                    optionLabel="name"></p-listbox>
+                                <ng-template #loading>loading suppliers..</ng-template>
                                 <ng-template pTemplate="footer">
                                     <p-button icon="pi pi-check" (click)="displayPrivateSuppliers=false" label="Ok"
                                         styleClass="p-button-text" [disabled]="!supplierSelected"></p-button>

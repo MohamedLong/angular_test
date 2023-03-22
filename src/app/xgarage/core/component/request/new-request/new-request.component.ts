@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, OnChanges, SimpleChanges, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
@@ -54,6 +54,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     @Input() requestDetails: any = '';
     @Input() edit: boolean = false;
     @Output() request = new EventEmitter<null | any>();
+    @ViewChild('partComponent') partComponent : ElementRef;
     blocked: boolean = false;
     isSending: boolean = false;
     buttonTxt = 'Send Request';
@@ -121,6 +122,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                         }
 
                         if (!this.responseBody.part) {
+                            this.getYPosition();
                             this.partErrorMsg = 'please select or enter a part';
                             this.isSending = false;
                         }
@@ -129,6 +131,10 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 }
             }).unsubscribe();
         }, 1000);
+    }
+
+    getYPosition() {
+        this.partComponent.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -170,8 +176,8 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             }
 
             this.getPart();
-            if(this.selectedPartTypes.length > 0) {
-               // console.log('save req')
+            if (this.selectedPartTypes.length > 0) {
+                // console.log('save req')
                 this.formatThenSaveRequest();
             }
 
@@ -211,6 +217,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             reqFormData.append('partImages', this.partImages[i]);
         }
         if (this.responseBody.hasOwnProperty('id')) {
+            console.log('updating old request')
             this.requestService.update(reqFormData).subscribe((res: MessageResponse) => {
                 //console.log(res)
                 //this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
@@ -225,7 +232,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.submitted = false;
 
         } else {
-
+            console.log('intiating new request')
             //console.log(this.responseBody);
             //console.log(reqFormData);
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
@@ -235,6 +242,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                     this.request.emit(res);
                     //super.hideDialog();
                 } else {
+                    this.requestService.part.next({});
                     this.blocked = true;
                     this.buttonTxt = 'Request Sent Successfully';
                 }
@@ -249,7 +257,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                     //super.hideDialog();
                     this.request.emit(err);
                 } else {
-                    this.messageService.add({severity:'error', summary: 'Error', detail: 'something went wrong, please try again.'});
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'something went wrong, please try again.' });
                 }
 
                 this.isSending = false;

@@ -315,7 +315,7 @@ export class GenericDetailsComponent{
         this.master.status.id = this.confirmStatus.id;
         this.master.status.nameEn = this.confirmStatus.nameEn;
         this.master.status.nameAr = this.confirmStatus.nameAr;
-        this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: data.statusMsg, life: 3000 });
+        this.messageService.add({ severity: 'success', summary: this.confirmStatus.nameEn, detail: data.statusMsg, life: 3000 });
     }
 
     goMaster() {

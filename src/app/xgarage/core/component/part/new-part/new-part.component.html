@@ -18,19 +18,21 @@
             <label for="">{{ 'part.tableColumn.partCategory' | translate }}</label>
             <p-dropdown [options]="categories" [(ngModel)]="selectedCategory" [disabled]="disableList"
                 optionLabel="name" (onChange)="onCategoryChange(selectedCategory.id)"
+                [ngClass]="{'ng-invalid ng-dirty': errMsg !== ''}"
                 placeholder="{{ 'part.partDialog.categoryPlaceHolder' | translate }}"></p-dropdown>
         </div>
         <div class="field col-12 md:col-6">
             <label for="">{{ 'part.tableColumn.partSubCategory' | translate}}</label>
             <p-dropdown [options]="subCategories" [(ngModel)]="selectedSubCategory" [disabled]="disableList"
                 optionLabel="name" (onChange)="onSubCategoryChange(selectedSubCategory.id)"
+                [ngClass]="{'ng-invalid ng-dirty': errMsg !== ''}"
                 placeholder="{{ 'part.partDialog.subCategoryPlaceHolder' | translate}}"></p-dropdown>
         </div>
         <div class="field col-12">
             <label>{{ 'part.tableColumn.partName' | translate}}</label>
             <p-dropdown [options]="parts" [(ngModel)]="selectedPart" optionLabel="name" [disabled]="disableList"
                 placeholder="{{ 'part.partDialog.partNamePlaceHolder' | translate}}"
-                (onChange)="onSelectPart()"></p-dropdown>
+                (onChange)="onSelectPart()" [ngClass]="{'ng-invalid ng-dirty': errMsg !== ''}"></p-dropdown>
         </div>
         <div class="field col-12 flex align-items-center" *ngIf="!selectedPart">
             <p-checkbox [(ngModel)]="checked" [binary]="true" (onChange)="createNewPart()"

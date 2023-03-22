@@ -561,6 +561,7 @@
         "form": {
             "insuranceFrom": "Insurance From",
             "claimNo": "Claim Number",
+            "claimNoPlaceholder": "Search For Claim Number",
             "jobCardNo": "Job Card Number",
             "jobNoRequired": "Job Number is required.",
             "addMoreDetails": "Add More Details",
