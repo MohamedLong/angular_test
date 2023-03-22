@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
@@ -57,7 +57,7 @@ import { SupplierService } from '../../../service/supplier.service';
 export class NewJobComponent implements OnInit {
 
     activeTab = 'car-info';
-
+    @ViewChild('fromContainer') fromContainer: ElementRef;
     isTypingClaim: boolean = false;
     notFound: boolean;
     found: boolean;
@@ -129,7 +129,6 @@ export class NewJobComponent implements OnInit {
     }
 
     onClaimNumberKeyUp() {
-
         this.isTypingClaim = true;
         clearTimeout(this.ClaimTypingTimer);
 
@@ -154,7 +153,8 @@ export class NewJobComponent implements OnInit {
                         }
                         else if (updatedJobs.length == 1) {
                             this.jobFound.found = true;
-                            this.jobForm.patchValue({ 'job': updatedJobs[0].jobNo, 'jobId': updatedJobs[0].id, location:  updatedJobs[0].location });
+                            this.jobFound.multiple = false;
+                            this.jobForm.patchValue({ 'job': updatedJobs[0].jobNo, 'jobId': updatedJobs[0].id, location: updatedJobs[0].location });
                             this.jobForm.get('job').disable();
                             this.jobForm.get('location').disable();
                         }
@@ -174,10 +174,10 @@ export class NewJobComponent implements OnInit {
                     }
                 }, (err) => {
                     this.jobFound.multiple = false;
-                    if(err.status == 0) {
-                        this.messageService.add({severity:'error', summary: 'Error', detail: 'something went wrong, please try again'});
+                    if (err.status == 0) {
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'something went wrong, please try again' });
                     } else {
-                        this.messageService.add({severity:'error', summary: 'Error', detail: 'Claim Not Found'});
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Claim Not Found' });
                     }
                 })
             }
@@ -185,6 +185,19 @@ export class NewJobComponent implements OnInit {
             this.isTypingClaim = false;
         }, 2000);
     }
+
+    // onClaimInput(e) {
+    //     console.log(e.target.value)
+    //     if(e.target.value == '') {
+    //         this.jobForm.get('job').disable();
+    //         this.jobForm.patchValue({
+    //             job: "",
+    //             jobId: ""
+    //         });
+    //     } else {
+    //         this.jobForm.get('job').enable();
+    //     }
+    // }
 
     addNewClaim() {
         let tenantId = null;
@@ -209,45 +222,61 @@ export class NewJobComponent implements OnInit {
 
     onJobFormSubmit() {
         //console.log(this.jobForm.value)
+        console.log('request emitted')
         this.submitted = true;
-        if (this.jobForm.get('jobId').value && this.jobForm.get('jobId').value !== 0) {
+        if (this.jobForm.get('jobId').value && (this.jobForm.get('jobId').value !== 0)) {
+            console.log('job is valid')
             this.sendRequest();
         } else {
+            console.log('job is not valid.. adding new job')
             this.addNewJob();
         }
     }
 
     onNewJob() {
-        this.jobFound.multiple = false;
-        this.jobForm.get('job').enable();
-        this.jobForm.get('location').enable();
-        this.jobForm.patchValue({
-            job: "",
-            jobId: ""
-        });
+        if(this.jobForm.get('claim').value !== '') {
+            this.jobFound.multiple = false;
+            this.jobForm.get('job').enable();
+            this.jobForm.get('location').enable();
+            this.jobForm.patchValue({
+                job: "",
+                jobId: ""
+            });
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'you must enter a claim number first' });
+        }
+
     }
 
     addNewJob() {
-        //prepare job body for request
-        let jobBody = {
-            jobNo: this.jobForm.get('job').value,
-            claim: this.claimId,
-            location: this.jobForm.get('location').value,
-            insuranceType: this.jobForm.get('insuranceFrom').value,
-            car: { 'id': this.jobForm.get('car').value.id },
-            privacy: this.jobForm.get('privacy').value,
-            suppliers: this.jobForm.get('suppliers').value,
-            jobTitle: `${this.jobForm.get('car').value.brandId.brandName} ${this.jobForm.get('car').value.carModelId.name} ${this.jobForm.get('car').value.carModelYearId.year},  ${this.jobForm.get('car').value.carModelTypeId.type}`
-        }
-        this.jobService.add(jobBody).subscribe(res => {
-            this.jobForm.patchValue({ 'jobId': res.id });
-            console.log(res)
-            if (this.jobForm.get('jobId').value !== '') {
-                this.sendRequest();
+        if (this.jobForm.get('claim').value !== '') {
+            //prepare job body for request
+            let jobBody = {
+                jobNo: this.jobForm.get('job').value,
+                claim: this.claimId,
+                location: this.jobForm.get('location').value,
+                insuranceType: this.jobForm.get('insuranceFrom').value,
+                car: { 'id': this.jobForm.get('car').value.id },
+                privacy: this.jobForm.get('privacy').value,
+                suppliers: this.jobForm.get('suppliers').value,
+                jobTitle: `${this.jobForm.get('car').value.brandId.brandName} ${this.jobForm.get('car').value.carModelId.name} ${this.jobForm.get('car').value.carModelYearId.year},  ${this.jobForm.get('car').value.carModelTypeId.type}`
             }
-        }, err => {
-            this.messageService.add({severity:'error', summary: 'Error', detail: err.erorr});
-        })
+
+            this.jobService.add(jobBody).subscribe(res => {
+                this.jobForm.patchValue({ 'jobId': res.id });
+                console.log(res)
+                if (this.jobForm.get('jobId').value !== '') {
+                    console.log('new job added. sending req')
+                    this.sendRequest();
+                }
+            }, err => {
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.erorr });
+            })
+        } else {
+            this.getYPosition();
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'some fileds are not valid' });
+        }
+
     }
 
     onJobSelection(event) {
@@ -255,28 +284,34 @@ export class NewJobComponent implements OnInit {
             return job.id == event.value
         });
 
-        if(job[0].location) {
-            this.jobForm.patchValue({ location:  job[0].location });
+        if (job[0].location) {
+            this.jobForm.patchValue({ location: job[0].location });
             this.jobForm.get('location').disable();
         } else {
-            this.jobForm.patchValue({ location:  JSON.parse(this.authService.getStoredUser()).tenant?.location ?
-                JSON.parse(this.authService.getStoredUser()).tenant.location
-                : '' });
+            this.jobForm.patchValue({
+                location: JSON.parse(this.authService.getStoredUser()).tenant?.location ?
+                    JSON.parse(this.authService.getStoredUser()).tenant.location
+                    : ''
+            });
         }
 
     }
 
     sendRequest() {
+        //console.log(this.jobForm.value)
         if (this.jobForm.valid) {
+            // console.log('form is valid');
             this.dataService.changeObject(this.jobForm.getRawValue());
             this.addOneMoreRequest = true;
             this.submitted = false;
         } else {
-            this.messageService.add({severity:'error', summary: 'Error', detail: 'some fields are not valid'});
-            console.log('form is not valid');
-            console.log(this.jobForm.errors);
-            console.log(this.jobForm.value);
+            this.getYPosition();
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'some fields are not valid' });
         }
+    }
+
+    getYPosition() {
+        this.fromContainer.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     onPrivacyChange(value) {

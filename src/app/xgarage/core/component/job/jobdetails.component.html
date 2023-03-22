@@ -30,8 +30,8 @@
                             <h6 class="mb-2">{{'job.form.status' | translate}}</h6>
                             <p *ngIf="master.status.nameEn === 'Open'" class="font-medium muted-text text-blue-500">
                                 {{master.status.nameEn}}</p>
-                            <p *ngIf="master.status.nameEn === 'Approved'"
-                                class="font-medium muted-text text-green-500">{{master.status.nameEn}}</p>
+                            <p *ngIf="master.status.nameEn === 'Approve' || master.status.nameEn === 'Approved'"
+                                class="font-medium muted-text text-green-500">Approved</p>
                             <p *ngIf="master.status.nameEn === 'Canceled'"
                                 class="font-medium muted-text text-orange-700">{{master.status.nameEn}}</p>
 

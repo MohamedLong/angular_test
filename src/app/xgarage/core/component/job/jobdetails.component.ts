@@ -89,7 +89,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     displayModal: boolean = false;
     displayNotInterestedSuppliers: boolean = false;
     notInterestedSuppliers: any[] = [];
-
+    JobStatusChanged: boolean = true;
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
@@ -170,7 +170,8 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         if (this.confirmType === 'confirm') {
             this.jobService.changeStatus(this.master.id, this.confirmStatus).subscribe({
                 next: (data) => {
-                    console.log('data: ', data);
+                    //console.log('data: ', data);
+                    this.master.status.nameEn = 'Approve';
                     this.updateCurrentObject(data);
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
@@ -266,16 +267,16 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     viewBidsByRequest(request: Request) {
-    //console.log('request:',this.bidDtos)
+        //console.log('request:',this.bidDtos)
         this.originalBidList = this.bidDtos;
         this.partName = request.part.name;
         this.selection = 'single';
         this.selectedEntries = [];
         this.bidDtos = this.bidDtos.filter(b => b.requestId == request.id);
-        if(this.bidDtos.length > 0) {
+        if (this.bidDtos.length > 0) {
             this.bidDetailsDialog = true;
-        }else{
-            this.messageService.add({ severity: 'success', summary: 'No Bids for this Part.' });
+        } else {
+            this.messageService.add({ severity: 'info', summary: 'No Bids for this Part.' });
         }
 
         //console.log('bids:',this.bidDtos)
@@ -292,7 +293,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
 
     viewNotInterestedSuppliers(id: number) {
         this.requestService.getNotInterestedSuppliers(id).subscribe(res => {
-            if(res.length > 0) {
+            if (res.length > 0) {
                 this.notInterestedSuppliers = res;
                 this.displayNotInterestedSuppliers = true;
             } else {
@@ -490,13 +491,13 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     downloadPdf() {
         let DATA: any = this.bidsTable.nativeElement;
         html2canvas(DATA).then((canvas) => {
-          let fileWidth = 208;
-          let fileHeight = (canvas.height * fileWidth) / canvas.width;
-          const FILEURI = canvas.toDataURL('image/png');
-          let PDF = new jsPDF('p', 'mm', 'a4');
-          let position = 0;
-          PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
-          PDF.save('bids.pdf');
+            let fileWidth = 208;
+            let fileHeight = (canvas.height * fileWidth) / canvas.width;
+            const FILEURI = canvas.toDataURL('image/png');
+            let PDF = new jsPDF('p', 'mm', 'a4');
+            let position = 0;
+            PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+            PDF.save('bids.pdf');
         });
     }
 
@@ -561,7 +562,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     getValueAfterVat(price: number, vat: number, discount: number) {
-        return price + ((price - discount) * vat)/100;
+        return price + ((price - discount) * vat) / 100;
     }
 
     rejectMultipleBids() {

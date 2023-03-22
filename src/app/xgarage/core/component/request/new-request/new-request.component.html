@@ -1,6 +1,6 @@
 <p-fieldset legend="{{type == 'new job'? part : type == 'edit req'? requestDetails.requestTitle : 'Part Details'}}" class="relative">
     <p-toast></p-toast>
-    <div class="field col-12">
+    <div class="field col-12"  #partComponent>
         <app-new-part [type]="type" [errMsg]="partErrorMsg" [partDetails]="requestDetails.part"></app-new-part>
     </div>
     <div class="col-12">
