@@ -14,7 +14,8 @@ import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { BidService } from '../../service/bidservice.service';
-import { OrderInfo} from '../../dto/orderinfo';
+import { OrderInfo } from '../../dto/orderinfo';
+
 @Component({
     selector: 'order-details',
     templateUrl: './orderdetails.component.html',
@@ -42,7 +43,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     taxAmount: number = 0;
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
     @ViewChild('invoice') invoice!: ElementRef;
-
+    isPdf: boolean = false;
     ngOnInit() {
         if (localStorage.getItem('order')) {
             console.log('last condition')
@@ -241,9 +242,77 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
             }
 
         } else if (this.confirmType === 'email') {
-            this.downloadPDF();
+            // this.downloadPDF();
+            this.getPdf();
         }
         this.confirmActionDialog = false;
     }
+
+    getPdf() {
+        this.sending = true;
+        this.isPdf = true;
+        const width = this.invoice.nativeElement.clientWidth;
+        const height = this.invoice.nativeElement.clientHeight + 40;
+
+        domtoimage
+            .toPng(this.invoice.nativeElement, {
+                width: width,
+                height: height
+            })
+            .then(result => {
+                let pdf;
+                if (width > height) {
+                    pdf = new jsPDF('l', 'pt', [width + 50, height + 220]);
+                } else {
+                    pdf = new jsPDF('p', 'pt', [width + 50, height + 220]);
+                }
+
+                pdf.setFontSize(48);
+                pdf.setTextColor('#2585fe');
+                pdf.text('', 25, 75);
+                pdf.setFontSize(24);
+                pdf.setTextColor('#131523');
+                // pdf.text('Report date: ' + moment().format('ll'), 25, 115);
+                pdf.addImage(result, 'PNG', 25, 185, width, height);
+                //pdf.save('lpo' + '.pdf');
+
+                //send pdf to the server
+                var blob = pdf.output('blob');
+                var formData = new FormData();
+
+                let orderInfo: OrderInfo = {
+                    orderId: this.masterDto.id,
+                    jobTitle: this.masterDto.jobTitle,
+                    jobNumber: this.masterDto.jobNumber,
+                    vinNumber: this.masterDto.chassisNumber,
+                    supplierEmail: this.masterDto.supplierEmail,
+                    customerName: this.masterDto.customerName,
+                    netAmount: this.masterDto.totalAmount
+                }
+
+                let stringOrderInfo = JSON.stringify(orderInfo);
+
+                let req = { "orderInfo": stringOrderInfo, "lpo": blob };
+
+                for (var key in req) {
+                    formData.append(key, req[key]);
+                }
+
+                console.log(formData)
+                this.orderService.notify(formData).subscribe((res: MessageResponse) => {
+                    console.log(res)
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
+                    this.sending = false;
+                    this.isPdf = false;
+                }, (err: MessageResponse) => {
+                    this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.message });
+                    this.sending = false;
+                    this.isPdf = false;
+                })
+            })
+            .catch(error => {
+            });
+    }
+
 }
 
