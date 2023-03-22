@@ -73,8 +73,8 @@
                     icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
                     (click)="menu.toggle($event)"></button>
             </div>
-            <div class="field" *ngIf="role == 1">
-                <button *ngIf="master && master.length > 0" pButton pRipple label="{{ 'part.addPart' | translate }}"
+            <div class="field" *ngIf="role ==1">
+                <button *ngIf="master" pButton pRipple label="{{ 'part.addPart' | translate }}"
                     icon="pi pi-plus" (click)="openNew()" class="p-button-success mr-2 mb-3"
                     [disabled]="!(master.status.id == 1 && editAuth===true)"></button>
             </div>
