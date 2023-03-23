@@ -598,7 +598,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     onReq(event) {
-        console.log(event)
         this.hideDialog();
         if (event.error) {
             this.messageService.add({ severity: 'erorr', summary: 'Error', detail: event.error.message });
@@ -607,7 +606,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             let index = this.fillteredDetails.findIndex((el) => el.id === event.id);
             this.fillteredDetails[index] = event;
             if(this.type == 'new req') {
-                this.getRequestsByJob();
+                this.fillteredDetails.push(event);
             }
         }
     }
