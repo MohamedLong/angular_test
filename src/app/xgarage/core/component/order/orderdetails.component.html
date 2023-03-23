@@ -110,7 +110,7 @@
                                 <tr>
                                     <th class="text-left capitalize font-medium"><span
                                             class="uppercase">{{'orders.orderDetails.lbo' | translate}}</span>
-                                        number: </th>
+                                            {{'orders.orderDetails.number' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.id}}</td>
                                 </tr>
                                 <tr>
@@ -184,18 +184,15 @@
                                 </p> -->
                             <table class="ml-auto">
                                 <tr>
-                                    <th class="text-left uppercase font-medium">{{'orders.orderDetails.grossTotal' |
-                                        translate}}: </th>
+                                    <th class="text-left uppercase font-medium">{{'orders.orderDetails.grossTotal' |translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.orderAmount | number}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left uppercase font-medium">{{'orders.orderDetails.vatAmount' |
-                                        translate}}: </th>
+                                    <th class="text-left uppercase font-medium">{{'orders.orderDetails.vatAmount' | translate}}: </th>
                                     <td class="uppercase font-medium">{{totalVat | number}}</td>
                                 </tr>
                                 <tr>
-                                    <th class="text-left uppercase font-medium">{{'orders.orderDetails.netTotal' |
-                                        translate}}: </th>
+                                    <th class="text-left uppercase font-medium">{{'orders.orderDetails.netTotal' | translate}}: </th>
                                     <td class="uppercase font-medium">{{masterDto.totalAmount | number}}</td>
                                 </tr>
 
@@ -213,9 +210,9 @@
             <span><b>{{ 'operations.confirmActionMessage' | translate }}</b></span>
         </div>
         <ng-template pTemplate="footer">
-            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="{{'USER.DIALOG.PROMPTNOOPTION' | translate}}"
                 (click)="confirmActionDialog = false"></button>
-            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirm()"></button>
+            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="{{'USER.DIALOG.PROMPTYESOPTION' | translate}}" (click)="confirm()"></button>
         </ng-template>
     </p-dialog>
 

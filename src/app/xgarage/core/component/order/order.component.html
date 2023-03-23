@@ -91,8 +91,8 @@
                 </ng-template>
                 <ng-template pTemplate="footer">
                     <tr>
-                        <td colspan="5" class="text-left">Total</td>
-                        <td>{{totalOrderAmount| number}}</td>
+                        <td colspan="5" class="text-left">{{'common.total' | translate}}</td>
+                        <td>{{totalOrderAmount | number}}</td>
                         <td colspan="2" >{{totalAmount | number}}</td>
                         <td>{{delivaryTotal | number}}</td>
                     </tr>
@@ -172,9 +172,9 @@
                     <b>{{masterDto.orderId}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="{{'USER.DIALOG.PROMPTNOOPTION' | translate}}"
                     (click)="deleteSingleDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="{{'USER.DIALOG.PROMPTYESOPTION' | translate}}"
                     (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
@@ -186,9 +186,9 @@
                 <span>{{ 'operations.deleteAllMessage' | translate }}</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="{{'USER.DIALOG.PROMPTNOOPTION' | translate}}"
                     (click)="deleteMultipleDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="{{'USER.DIALOG.PROMPTYESOPTION' | translate}}"
                     (click)="confirmDeleteSelected()"></button>
             </ng-template>
         </p-dialog>
