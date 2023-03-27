@@ -10,237 +10,237 @@ import { Router } from '@angular/router';
 })
 
 
-export class AppMainComponent implements AfterViewInit, OnInit, OnDestroy {
+export class AppMainComponent {
 
-    topbarMenuActive: boolean;
+    // topbarMenuActive: boolean;
 
-    menuActive: boolean;
+    // menuActive: boolean;
 
-    staticMenuDesktopInactive: boolean;
+    // staticMenuDesktopInactive: boolean;
 
-    mobileMenuActive: boolean;
+    // mobileMenuActive: boolean;
 
-    menuClick: boolean;
+    // menuClick: boolean;
 
-    mobileTopbarActive: boolean;
+    // mobileTopbarActive: boolean;
 
-    topbarRightClick: boolean;
+    // topbarRightClick: boolean;
 
-    topbarItemClick: boolean;
+    // topbarItemClick: boolean;
 
-    activeTopbarItem: string;
+    // activeTopbarItem: string;
 
-    documentClickListener: () => void;
+    // documentClickListener: () => void;
 
-    configActive: boolean;
+    // configActive: boolean;
 
-    configClick: boolean;
+    // configClick: boolean;
 
-    rightMenuActive: boolean;
+    // rightMenuActive: boolean;
 
-    menuHoverActive = false;
+    // menuHoverActive = false;
 
-    searchClick = false;
+    // searchClick = false;
 
-    search = false;
+    // search = false;
 
-    currentInlineMenuKey: string;
+    // currentInlineMenuKey: string;
 
-    inlineMenuActive: any[] = [];
+    // inlineMenuActive: any[] = [];
 
-    inlineMenuClick: boolean;
-    menuActiveMobile: boolean;
-    menuInactiveDesktop: boolean;
-    isDashboard: boolean = false;
-    constructor(public renderer: Renderer2, private menuService: MenuService, private primengConfig: PrimeNGConfig,
-                public app: AppComponent, private router: Router) { }
+    // inlineMenuClick: boolean;
+    // menuActiveMobile: boolean;
+    // menuInactiveDesktop: boolean;
+    // isDashboard: boolean = false;
+    // constructor(public renderer: Renderer2, private menuService: MenuService, private primengConfig: PrimeNGConfig,
+    //             public app: AppComponent, private router: Router) { }
 
-    ngOnInit() {
-        this.menuActive = this.isStatic() && !this.isMobile();
-        if(this.router.url == '/') {
-            this.isDashboard = true;
-        }
-    }
+    // ngOnInit() {
+    //     this.menuActive = this.isStatic() && !this.isMobile();
+    //     if(this.router.url == '/') {
+    //         this.isDashboard = true;
+    //     }
+    // }
 
-    ngAfterViewInit() {
-        // hides the horizontal submenus or top menu if outside is clicked
-        this.documentClickListener = this.renderer.listen('body', 'click', () => {
-            if (!this.topbarItemClick) {
-                this.activeTopbarItem = null;
-                this.topbarMenuActive = false;
-            }
+    // ngAfterViewInit() {
+    //     // hides the horizontal submenus or top menu if outside is clicked
+    //     this.documentClickListener = this.renderer.listen('body', 'click', () => {
+    //         if (!this.topbarItemClick) {
+    //             this.activeTopbarItem = null;
+    //             this.topbarMenuActive = false;
+    //         }
 
-            if (!this.menuClick && (this.isHorizontal() || this.isSlim())) {
-                this.menuService.reset();
-            }
+    //         if (!this.menuClick && (this.isHorizontal() || this.isSlim())) {
+    //             this.menuService.reset();
+    //         }
 
-            if (this.configActive && !this.configClick) {
-                this.configActive = false;
-            }
+    //         if (this.configActive && !this.configClick) {
+    //             this.configActive = false;
+    //         }
 
-            if (!this.menuClick) {
-                if (this.mobileMenuActive) {
-                    this.mobileMenuActive = false;
-                }
+    //         if (!this.menuClick) {
+    //             if (this.mobileMenuActive) {
+    //                 this.mobileMenuActive = false;
+    //             }
 
-                if (this.isOverlay()) {
-                    this.menuActive = false;
-                }
+    //             if (this.isOverlay()) {
+    //                 this.menuActive = false;
+    //             }
 
-                this.menuHoverActive = false;
-                this.unblockBodyScroll();
-            }
+    //             this.menuHoverActive = false;
+    //             this.unblockBodyScroll();
+    //         }
 
-            if (!this.searchClick) {
-                this.search = false;
-            }
+    //         if (!this.searchClick) {
+    //             this.search = false;
+    //         }
 
-            if (this.inlineMenuActive[this.currentInlineMenuKey] && !this.inlineMenuClick) {
-                this.inlineMenuActive[this.currentInlineMenuKey] = false;
-            }
+    //         if (this.inlineMenuActive[this.currentInlineMenuKey] && !this.inlineMenuClick) {
+    //             this.inlineMenuActive[this.currentInlineMenuKey] = false;
+    //         }
 
-            this.inlineMenuClick = false;
-            this.searchClick = false;
-            this.configClick = false;
-            this.topbarItemClick = false;
-            this.topbarRightClick = false;
-            this.menuClick = false;
-        });
-    }
+    //         this.inlineMenuClick = false;
+    //         this.searchClick = false;
+    //         this.configClick = false;
+    //         this.topbarItemClick = false;
+    //         this.topbarRightClick = false;
+    //         this.menuClick = false;
+    //     });
+    // }
 
-    onMenuButtonClick(event) {
-        this.menuActive = !this.menuActive;
-        this.topbarMenuActive = false;
-        this.topbarRightClick = true;
-        this.menuClick = true;
+    // onMenuButtonClick(event) {
+    //     this.menuActive = !this.menuActive;
+    //     this.topbarMenuActive = false;
+    //     this.topbarRightClick = true;
+    //     this.menuClick = true;
 
-        if (this.isDesktop()) {
-            this.staticMenuDesktopInactive = !this.staticMenuDesktopInactive;
-        } else {
-            this.mobileMenuActive = !this.mobileMenuActive;
-            if (this.mobileMenuActive) {
-                this.blockBodyScroll();
-            } else {
-                this.unblockBodyScroll();
-            }
-        }
+    //     if (this.isDesktop()) {
+    //         this.staticMenuDesktopInactive = !this.staticMenuDesktopInactive;
+    //     } else {
+    //         this.mobileMenuActive = !this.mobileMenuActive;
+    //         if (this.mobileMenuActive) {
+    //             this.blockBodyScroll();
+    //         } else {
+    //             this.unblockBodyScroll();
+    //         }
+    //     }
 
-        event.preventDefault();
-    }
+    //     event.preventDefault();
+    // }
 
-    onTopbarMobileButtonClick(event) {
-        this.mobileTopbarActive = !this.mobileTopbarActive;
-        event.preventDefault();
-    }
+    // onTopbarMobileButtonClick(event) {
+    //     this.mobileTopbarActive = !this.mobileTopbarActive;
+    //     event.preventDefault();
+    // }
 
-    onRightMenuButtonClick(event) {
-        this.rightMenuActive = !this.rightMenuActive;
-        event.preventDefault();
-    }
+    // onRightMenuButtonClick(event) {
+    //     this.rightMenuActive = !this.rightMenuActive;
+    //     event.preventDefault();
+    // }
 
-    onMenuClick($event) {
-        this.menuClick = true;
+    // onMenuClick($event) {
+    //     this.menuClick = true;
 
-        if (this.inlineMenuActive[this.currentInlineMenuKey] && !this.inlineMenuClick) {
-            this.inlineMenuActive[this.currentInlineMenuKey] = false;
-        }
-    }
+    //     if (this.inlineMenuActive[this.currentInlineMenuKey] && !this.inlineMenuClick) {
+    //         this.inlineMenuActive[this.currentInlineMenuKey] = false;
+    //     }
+    // }
 
-    onSearchKeydown(event) {
-        if (event.keyCode === 27) {
-            this.search = false;
-        }
-    }
+    // onSearchKeydown(event) {
+    //     if (event.keyCode === 27) {
+    //         this.search = false;
+    //     }
+    // }
 
-    onInlineMenuClick(event, key) {
-        if (key !== this.currentInlineMenuKey) {
-            this.inlineMenuActive[this.currentInlineMenuKey] = false;
-        }
+    // onInlineMenuClick(event, key) {
+    //     if (key !== this.currentInlineMenuKey) {
+    //         this.inlineMenuActive[this.currentInlineMenuKey] = false;
+    //     }
 
-        this.inlineMenuActive[key] = !this.inlineMenuActive[key];
-        this.currentInlineMenuKey = key;
-        this.inlineMenuClick = true;
-    }
+    //     this.inlineMenuActive[key] = !this.inlineMenuActive[key];
+    //     this.currentInlineMenuKey = key;
+    //     this.inlineMenuClick = true;
+    // }
 
-    onTopbarItemClick(event, item) {
-        this.topbarItemClick = true;
+    // onTopbarItemClick(event, item) {
+    //     this.topbarItemClick = true;
 
-        if (this.activeTopbarItem === item) {
-            this.activeTopbarItem = null;
-        }
-        else {
-            this.activeTopbarItem = item;
-        }
+    //     if (this.activeTopbarItem === item) {
+    //         this.activeTopbarItem = null;
+    //     }
+    //     else {
+    //         this.activeTopbarItem = item;
+    //     }
 
-        if (item === 'search') {
-            this.search = !this.search;
-            this.searchClick = !this.searchClick;
-        }
+    //     if (item === 'search') {
+    //         this.search = !this.search;
+    //         this.searchClick = !this.searchClick;
+    //     }
 
-        event.preventDefault();
-    }
+    //     event.preventDefault();
+    // }
 
-    onTopbarSubItemClick(event) {
-        event.preventDefault();
-    }
+    // onTopbarSubItemClick(event) {
+    //     event.preventDefault();
+    // }
 
-    onRTLChange(event) {
-        this.app.isRTL = event.checked;
-    }
+    // onRTLChange(event) {
+    //     this.app.isRTL = event.checked;
+    // }
 
-    onRippleChange(event) {
-        this.app.ripple = event.checked;
-        this.primengConfig.ripple = event.checked;
-    }
+    // onRippleChange(event) {
+    //     this.app.ripple = event.checked;
+    //     this.primengConfig.ripple = event.checked;
+    // }
 
-    onConfigClick(event) {
-        this.configClick = true;
-    }
+    // onConfigClick(event) {
+    //     this.configClick = true;
+    // }
 
-    isDesktop() {
-        return window.innerWidth > 991;
-    }
+    // isDesktop() {
+    //     return window.innerWidth > 991;
+    // }
 
-    isMobile() {
-        return window.innerWidth <= 991;
-    }
+    // isMobile() {
+    //     return window.innerWidth <= 991;
+    // }
 
-    isOverlay() {
-        return this.app.menuMode === 'overlay';
-    }
+    // isOverlay() {
+    //     return this.app.menuMode === 'overlay';
+    // }
 
-    isStatic() {
-        return this.app.menuMode === 'static';
-    }
+    // isStatic() {
+    //     return this.app.menuMode === 'static';
+    // }
 
-    isHorizontal() {
-        return this.app.menuMode === 'horizontal';
-    }
+    // isHorizontal() {
+    //     return this.app.menuMode === 'horizontal';
+    // }
 
-    isSlim() {
-        return this.app.menuMode === 'slim';
-    }
+    // isSlim() {
+    //     return this.app.menuMode === 'slim';
+    // }
 
-    blockBodyScroll(): void {
-        if (document.body.classList) {
-            document.body.classList.add('blocked-scroll');
-        } else {
-            document.body.className += ' blocked-scroll';
-        }
-    }
+    // blockBodyScroll(): void {
+    //     if (document.body.classList) {
+    //         document.body.classList.add('blocked-scroll');
+    //     } else {
+    //         document.body.className += ' blocked-scroll';
+    //     }
+    // }
 
-    unblockBodyScroll(): void {
-        if (document.body.classList) {
-            document.body.classList.remove('blocked-scroll');
-        } else {
-            document.body.className = document.body.className.replace(new RegExp('(^|\\b)' +
-                'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-        }
-    }
+    // unblockBodyScroll(): void {
+    //     if (document.body.classList) {
+    //         document.body.classList.remove('blocked-scroll');
+    //     } else {
+    //         document.body.className = document.body.className.replace(new RegExp('(^|\\b)' +
+    //             'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    //     }
+    // }
 
-    ngOnDestroy() {
-        if (this.documentClickListener) {
-            this.documentClickListener();
-        }
-    }
+    // ngOnDestroy() {
+    //     if (this.documentClickListener) {
+    //         this.documentClickListener();
+    //     }
+    // }
 }

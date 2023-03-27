@@ -8,15 +8,14 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
-import { RequestService } from '../../service/request.service';
+import { RequestService } from '../../../service/request.service';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
-import { InsuranceType } from '../../model/insurancetype';
-import { BidService } from '../../service/bidservice.service';
+import { BidService } from '../../../service/bidservice.service';
 
 @Component({
   selector: 'request-details',
   templateUrl: './requestdetails.component.html',
-  styleUrls: ['../../../../demo/view/tabledemo.scss'],
+  styleUrls: ['../../../../../demo/view/tabledemo.scss'],
     styles: [`
         :host ::ng-deep .p-dialog .product-image {
             width: 150px;

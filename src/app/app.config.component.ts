@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppMainComponent } from './app.main.component';
+import { XgarageComponent } from './xgarage/xgarage.component';
 
 @Component({
     selector: 'app-config',
@@ -165,7 +166,7 @@ export class AppConfigComponent implements OnInit {
 
     isInputBackgroundChanged = false;
 
-    constructor(public appMain: AppMainComponent, public app: AppComponent) {}
+    constructor(public appMain: XgarageComponent, public app: AppComponent) {}
 
     ngOnInit() {
         this.themes = [

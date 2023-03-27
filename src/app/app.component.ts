@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
         translate.setDefaultLang('en');
 
         const browserLang = translate.getBrowserLang();
+        translate.currentLang = "";
         if (localStorage.getItem('lang')) {
             translate.use(localStorage.getItem('lang'));
         } else {
