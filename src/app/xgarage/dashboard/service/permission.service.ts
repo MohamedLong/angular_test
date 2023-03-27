@@ -23,17 +23,15 @@ export class PermissionService {
   }
 
     savePermission(permission: Permission) {
-        return this.http.post<Permission>(`${config.apiUrl}/v1/permission/save`,permission)
+        return this.http.post<Permission>(`${config.apiUrl}/v1/permission/save`, permission);
     }
 
     updatePermission(permission: Permission) {
-        return this.http.put<Permission>(`${config.apiUrl}/v1/permission/update`,permission)
+        return this.http.put<Permission>(`${config.apiUrl}/v1/permission/update`, permission);
     }
 
     deletePermission(permissionId: number) {
-        return this.http.delete<{status: string}>(`${config.apiUrl}/v1/permission/delete/${permissionId}`)
+        return this.http.delete<{status: string}>(`${config.apiUrl}/v1/permission/delete/${permissionId}`);
     }
-
-
 
 }

@@ -86,7 +86,7 @@ const routes: Routes = [];
     exports: [RouterModule]
 })
 export class AppRoutingModule {
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private authService: AuthService) {
     if(this.authService.isLoggedIn()) {
         this.authService.getAuthorizedMenu();
     }

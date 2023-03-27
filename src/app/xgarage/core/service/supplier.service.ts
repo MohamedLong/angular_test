@@ -15,8 +15,7 @@ import { MessageResponse } from '../../common/dto/messageresponse';
     providedIn: 'root'
 })
 export class SupplierService extends GenericService<Supplier> {
-    constructor(protected http: HttpClient, private authService: AuthService, 
-        private tenantService: TenantService) {
+    constructor(protected http: HttpClient, private authService: AuthService) {
         super(http, config.coreApiUrl + '/supplier');
      }
 

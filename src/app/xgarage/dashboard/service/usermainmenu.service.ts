@@ -24,15 +24,15 @@ export class UserMainMenuService {
     }
 
     saveUserMainMenu(usermainmenu: any) {
-        return this.http.post<UserMainMenu>(`${config.dashboardUrl}/userMainMenu/save`, usermainmenu)
+        return this.http.post<UserMainMenu>(`${config.dashboardUrl}/userMainMenu/save`, usermainmenu);
     }
 
     updateUserMainMenu(usermainmenu: UserMainMenu) {
-        return this.http.put<UserMainMenu>(`${config.dashboardUrl}/userMainMenu/update`, usermainmenu)
+        return this.http.put<UserMainMenu>(`${config.dashboardUrl}/userMainMenu/update`, usermainmenu);
     }
 
     deleteUserMainMenu(usermainmenuId: number) {
-        return this.http.delete<MessageResponse>(`${config.dashboardUrl}/userMainMenu/delete/${usermainmenuId}`)
+        return this.http.delete<MessageResponse>(`${config.dashboardUrl}/userMainMenu/delete/${usermainmenuId}`);
     }
 
 }

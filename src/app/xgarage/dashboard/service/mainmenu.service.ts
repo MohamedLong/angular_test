@@ -10,7 +10,6 @@ export class MainMenuService {
 
     getMenues(id: number) {
         return this.http.get<MainMenu[]>(config.dashboardUrl + '/userMainMenu/role/' + id)
-        // return this.http.get<MainMenu[]>('assets/demo/data/response.json')
             .toPromise()
             .then(res => res as MainMenu[])
             .then(data => data);
@@ -18,7 +17,6 @@ export class MainMenuService {
 
     getAllMenues() {
       return this.http.get<MainMenu[]>(config.dashboardUrl + '/userMainMenu/all')
-      // return this.http.get<MainMenu[]>('assets/demo/data/response.json')
           .toPromise()
           .then(res => res as MainMenu[])
           .then(data => data);
