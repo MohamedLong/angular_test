@@ -21,7 +21,7 @@ import { CategoryService } from '../../service/category.service';
 })
 export class PartComponent  extends GenericComponent implements OnInit {
 
-  constructor(public route: ActivatedRoute, private authService: AuthService,
+  constructor(public route: ActivatedRoute, 
     public messageService: MessageService, public datePipe: DatePipe, private partService: PartService,
     private categoryService: CategoryService, private subCategoryService: SubCategoryService,
     breadcrumbService: AppBreadcrumbService) {

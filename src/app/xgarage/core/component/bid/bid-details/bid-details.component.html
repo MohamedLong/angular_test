@@ -19,12 +19,12 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th>Vehicle Info</th>
-                <th>Client</th>
-                <th>Parts</th>
-                <th>Status</th>
-                <th>Total Price</th>
-                <th>Action</th>
+                <th>{{ 'job.tableColumn.jobTitle' | translate }}</th>
+                <th>{{ 'job.tableColumn.client' | translate }}</th>
+                <th>{{ 'job.tableColumn.parts' | translate }}</th>
+                <th>{{' job.tableColumn.status' | translate }}</th>
+                <th>{{ ' bid.bidDetails.totalPrice' | translate }}</th>
+                <th>{{'operation.action' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-job>
@@ -51,7 +51,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
             <tr class="text-center">
-                <td class="text-center" colspan="5">No BIds found.</td>
+                <td class="text-center" colspan="5">{{'job.noBids' | translate}}</td>
             </tr>
         </ng-template>
     </p-table>
