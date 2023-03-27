@@ -630,7 +630,8 @@
             "sendReq": "{{text}}",
             "qtyRequired": "Quantity can't be less than 1",
             "uploadImages": "Upload Part Images",
-            "searchRequest": "Search request with brand name or parts name"
+            "searchRequest": "Search request with brand name or parts name",
+            "qty": "Quantity"
         },
         "requestDialog": {
             "newRequest": "Add Request",
@@ -812,6 +813,7 @@
            "jobCard": "job card",
            "pageNo": "page no",
            "lbo": "lbo",
+           "number": "number",
            "lboDate": "lbo date",
            "tableNote": "please supply the following and debit our account for the value",
            "grossTotal": "gross total",

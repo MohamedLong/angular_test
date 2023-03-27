@@ -102,7 +102,6 @@ import { AuthModule } from './auth/auth.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {BlockUIModule} from 'primeng/blockui';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { AddRowDirective } from './add-row.directive';
 import { UsersComponent } from './xgarage/dashboard/component/users/users.component';
 import { UserRolesComponent } from './xgarage/dashboard/component/user-roles/user-roles.component';
 import { UserMainMenuComponent } from './xgarage/dashboard/component/user-main-menu/user-main-menu.component';
@@ -249,7 +248,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     declarations: [
         OrderComponent,
         OrderDetailsComponent,
-        AddRowDirective,
         AppComponent,
         AppMainComponent,
         AppConfigComponent,
