@@ -5,14 +5,11 @@
         <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <!-- [disabled]="newAuth===false"-->
                     <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
                     (click)="carDialog()" [hidden]="false" [disabled]="newAuth===false"></button>                        
                 </ng-template>
                         
                 <ng-template pTemplate="right">
-                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
-                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload" class="p-button-help mb-2"
                         (click)="dt.exportCSV()" [disabled]="printAuth===false"></button>
                 </ng-template>
@@ -75,7 +72,6 @@
                             {{car.plateNumber}}
                         </td>
                         <td>
-                            <!-- [disabled]="!editAuth"  -->
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" 
                             (click)="edit(car)" [disabled]="editAuth===false"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2" 
@@ -144,7 +140,6 @@
              <button pButton pRipple label="{{ 'operations.cancel' | translate}} " icon="pi pi-times" class="p-button-text"
                  (click)="hideDialog()"></button>
 
-            <!-- [disabled]="(!editAuth && editable)" -->
              <button pButton pRipple label="{{ 'operations.save' | translate }}" icon="pi pi-check" class="p-button-text" 
                 (click)="save()" [disabled]="!(editable)" ></button>
          </ng-template>

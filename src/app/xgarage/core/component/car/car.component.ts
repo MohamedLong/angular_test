@@ -28,8 +28,7 @@ import { Brand } from 'src/app/xgarage/common/model/brand';
 export class CarComponent extends GenericComponent implements OnInit {
 
 
-    constructor(public route: ActivatedRoute, private authService: AuthService, private router: Router,
-      public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService,
+    constructor(public route: ActivatedRoute, public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService,
       private carService: CarService, private brandService: BrandService, private carModelService: CarModelService,
       private carModelYearService: CarModelYearService,  private carModelTypeService: CarModelTypeService) {
       super(route, datePipe, breadcrumbService);
