@@ -668,6 +668,9 @@
             "gearRequired": "Gear Type is required.",
             "gearTypeRequired": "Gear Type is required.",
             "chassisRequired": "Chassis Number is required.",
+            "lettersNotAllowed": "Only letters and numbers are allowed",
+            "onlyLetters": "Only letters and numbers are allowed.",
+            "chassisNoNotFound": "Car Chassis Number Not Found, Please Fill out the Form to Create a New One.",
             "specRequired": "Car Specification is Required."
         }
     },
