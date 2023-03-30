@@ -1,11 +1,11 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { LoginComponent } from './containers/login/login.component';
+import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { LoginComponent } from './containers/login/login.component';
+import { SignupComponent } from './containers/signup/signup.component';
 import { AccordionModule } from 'primeng/accordion';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AvatarModule } from 'primeng/avatar';
@@ -86,127 +86,117 @@ import { TreeModule } from 'primeng/tree';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeTableModule } from 'primeng/treetable';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
-import { SignupComponent } from './containers/signup/signup.component';
+import { AuthComponent } from './auth.component'
+import { AuthRoutingModule } from './auth-routing.module'
 import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './services/auth.service';
 import { RandomGuard } from './guards/random.guard';
 import { TokenInterceptor } from './token.interceptor';
-import { BrowserModule } from '@angular/platform-browser';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
-export function HttpLoaderFactory(httpClient: HttpClient) {
-    return new TranslateHttpLoader(httpClient);
-}
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent],
-  providers: [
-    AuthGuard,
-    AuthService,
-    RandomGuard,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    }
-  ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    ReactiveFormsModule,
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    AccordionModule,
-    AutoCompleteModule,
-    AvatarModule,
-    AvatarGroupModule,
-    BadgeModule,
-    BreadcrumbModule,
-    ButtonModule,
-    CalendarModule,
-    CardModule,
-    CarouselModule,
-    CascadeSelectModule,
-    ChartModule,
-    CheckboxModule,
-    ChipsModule,
-    ChipModule,
-    CodeHighlighterModule,
-    ConfirmDialogModule,
-    ConfirmPopupModule,
-    ColorPickerModule,
-    ContextMenuModule,
-    DataViewModule,
-    DialogModule,
-    DividerModule,
-    DropdownModule,
-    FieldsetModule,
-    FileUploadModule,
-    GalleriaModule,
-    HttpClientModule,
-    ImageModule,
-    InplaceModule,
-    InputNumberModule,
-    InputMaskModule,
-    InputSwitchModule,
-    InputTextModule,
-    InputTextareaModule,
-    KnobModule,
-    LightboxModule,
-    ListboxModule,
-    MegaMenuModule,
-    MenuModule,
-    MenubarModule,
-    MessageModule,
-    MessagesModule,
-    MultiSelectModule,
-    OrderListModule,
-    OrganizationChartModule,
-    OverlayPanelModule,
-    PaginatorModule,
-    PanelModule,
-    PanelMenuModule,
-    PasswordModule,
-    PickListModule,
-    ProgressBarModule,
-    RadioButtonModule,
-    RatingModule,
-    RippleModule,
-    ScrollPanelModule,
-    ScrollTopModule,
-    SelectButtonModule,
-    SidebarModule,
-    SkeletonModule,
-    SlideMenuModule,
-    SliderModule,
-    SplitButtonModule,
-    SplitterModule,
-    StepsModule,
-    TagModule,
-    TableModule,
-    TabMenuModule,
-    TabViewModule,
-    TerminalModule,
-    TieredMenuModule,
-    TimelineModule,
-    ToastModule,
-    ToggleButtonModule,
-    ToolbarModule,
-    TooltipModule,
-    TreeModule,
-    TreeSelectModule,
-    TreeTableModule,
-    VirtualScrollerModule,
-    TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-        }
-      })
-  ]
+    declarations: [
+        LoginComponent,
+        SignupComponent,
+        AuthComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        AuthRoutingModule,
+        TranslateModule,
+        HttpClientModule,
+        AccordionModule,
+        AutoCompleteModule,
+        AvatarModule,
+        AvatarGroupModule,
+        BadgeModule,
+        BreadcrumbModule,
+        ButtonModule,
+        CalendarModule,
+        CardModule,
+        CarouselModule,
+        CascadeSelectModule,
+        ChartModule,
+        CheckboxModule,
+        ChipsModule,
+        ChipModule,
+        CodeHighlighterModule,
+        ConfirmDialogModule,
+        ConfirmPopupModule,
+        ColorPickerModule,
+        ContextMenuModule,
+        DataViewModule,
+        DialogModule,
+        DividerModule,
+        DropdownModule,
+        FieldsetModule,
+        FileUploadModule,
+        GalleriaModule,
+        HttpClientModule,
+        ImageModule,
+        InplaceModule,
+        InputNumberModule,
+        InputMaskModule,
+        InputSwitchModule,
+        InputTextModule,
+        InputTextareaModule,
+        KnobModule,
+        LightboxModule,
+        ListboxModule,
+        MegaMenuModule,
+        MenuModule,
+        MenubarModule,
+        MessageModule,
+        MessagesModule,
+        MultiSelectModule,
+        OrderListModule,
+        OrganizationChartModule,
+        OverlayPanelModule,
+        PaginatorModule,
+        PanelModule,
+        PanelMenuModule,
+        PasswordModule,
+        PickListModule,
+        ProgressBarModule,
+        RadioButtonModule,
+        RatingModule,
+        RippleModule,
+        ScrollPanelModule,
+        ScrollTopModule,
+        SelectButtonModule,
+        SidebarModule,
+        SkeletonModule,
+        SlideMenuModule,
+        SliderModule,
+        SplitButtonModule,
+        SplitterModule,
+        StepsModule,
+        TagModule,
+        TableModule,
+        TabMenuModule,
+        TabViewModule,
+        TerminalModule,
+        TieredMenuModule,
+        TimelineModule,
+        ToastModule,
+        ToggleButtonModule,
+        ToolbarModule,
+        TooltipModule,
+        TreeModule,
+        TreeSelectModule,
+        TreeTableModule,
+        VirtualScrollerModule,
+    ],
+    providers: [
+        AuthGuard,
+        AuthService,
+        RandomGuard,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: TokenInterceptor,
+            multi: true
+        }]
 })
 export class AuthModule { }

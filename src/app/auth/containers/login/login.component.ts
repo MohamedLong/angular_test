@@ -65,7 +65,10 @@ export class LoginComponent implements OnInit {
         ).subscribe(
             {
                 next: (success) => {
+                    // console.log('success login')
                     if (this.authService.isLoggedIn()) {
+                        // console.log('user is' + this.authService.isLoggedIn() )
+                        // this.router.navigate(['']);
                         this.authService.doStoreUser(this.authService.getJwtToken(), this.router, this.destination);
                        //localStorage.setItem('jobIdFromRedirect', this.route.snapshot.queryParams['id']);
                     }

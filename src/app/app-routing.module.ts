@@ -9,10 +9,9 @@ const routes: Routes = [];
 @NgModule({
     imports: [
         RouterModule.forRoot([
-            { path: '', loadChildren: () => import('./xgarage/xgarage.module').then(m => m.XgarageModule) },
-            //{ path: 'login', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)},
-            {path: 'login', component: LoginComponent},
-            // {path: 'signup', component: SignupComponent},
+            { path: '', loadChildren: () => import('./xgarage/xgarage.module').then(m => m.XgarageModule)},
+            { path: 'login', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)},
+            //{path: 'login', component: LoginComponent},
             {path: '**', redirectTo: ''},
         ], {scrollPositionRestoration: 'enabled'})
     ],
