@@ -37,9 +37,8 @@ const routes: Routes = [
     {
         path: '',
         component: XgarageComponent,
-        canActivate: [RandomGuard],
         children: [
-            { path: '', component: SupplierDashbaordComponent },
+            { path: '', component: SupplierDashbaordComponent, canActivate: [RandomGuard]},
             { path: 'mainmenu', component: UserMainMenuComponent },
             { path: 'submenu', component: UserSubMenuComponent },
             { path: 'change-password', component: ResetPasswordComponent },

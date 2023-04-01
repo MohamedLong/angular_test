@@ -51,10 +51,9 @@ export class AppComponent implements OnInit {
         this.router.events.pipe(
             filter((event) => event instanceof NavigationEnd)
         ).subscribe((event: NavigationEnd) => {
-            console.log(event)
+            // console.log(event)
             this.previousUrl = this.currentUrl;
             this.currentUrl = event.url;
-            console.log(this.previousUrl, this.route.snapshot.queryParams['id'])
             if ((this.previousUrl == undefined || this.previousUrl.includes('destination')) && this.route.snapshot.queryParams['id']) {
                 // console.log(this.previousUrl.includes('destination'))
                 if (this.currentUrl.includes('job-details')) {
