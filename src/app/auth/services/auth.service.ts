@@ -191,6 +191,7 @@ getAuthorizedMenu() {
       return parent;
     })
     this.router.resetConfig(this.router.config);
+    console.log(this.router.config)
   });
   }
 }

@@ -83,6 +83,7 @@ export class UserMainMenuComponent implements OnInit {
     });
 
     this.usermainmenuService.getUserMainMenus().then(usermainmenus => {
+        console.log(this.route.routeConfig)
       this.editAuth = this.route.routeConfig.data.editAuth;
       this.newAuth = this.route.routeConfig.data.newAuth;
       this.printAuth = this.route.routeConfig.data.printAuth;
