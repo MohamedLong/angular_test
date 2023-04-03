@@ -52,7 +52,7 @@ export class SupplierDashbaordComponent implements OnInit {
                         this.requests = data;
                         this.requests = this.requests.filter(job => job.id != null);
 
-                        console.log(this.requests)
+                        //console.log(this.requests)
                         this.requests.forEach((req, i) => {
                             if (i <= 2) {
                                 if (req.partNames) {

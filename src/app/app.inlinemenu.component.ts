@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { AuthService } from './auth/services/auth.service';
 import { Router } from '@angular/router';
 import { TenantService } from './xgarage/common/service/tenant.service';
+import { XgarageComponent } from './xgarage/xgarage.component';
 
 @Component({
     selector: 'app-inline-menu',
@@ -46,7 +47,7 @@ export class AppInlineMenuComponent {
     active: boolean;
     userId: number;
 
-    constructor(public appMain: AppMainComponent, public app: AppComponent, 
+    constructor(public appMain: XgarageComponent, public app: AppComponent,
         private authService: AuthService, private router: Router, private tenantService: TenantService) { }
 
     onClick(event) {

@@ -9,17 +9,17 @@ import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { DatePipe } from '@angular/common';
 import domtoimage from 'dom-to-image';
 import jsPDF from 'jspdf';
-import { OrderService } from '../../service/order.service';
+import { OrderService } from '../../../service/order.service';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { BidService } from '../../service/bidservice.service';
-import { OrderInfo } from '../../dto/orderinfo';
+import { BidService } from '../../../service/bidservice.service';
+import { OrderInfo } from '../../../dto/orderinfo';
 
 @Component({
     selector: 'order-details',
     templateUrl: './orderdetails.component.html',
-    styleUrls: ['../../../../demo/view/tabledemo.scss'],
+    styleUrls: ['../../../../../demo/view/tabledemo.scss'],
     styles: [`
         .layout-invoice-page {
             width: auto;

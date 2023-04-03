@@ -1,4 +1,4 @@
-<!-- <div class="layout-wrapper" [ngClass]="{'p-input-filled': app.inputStyle === 'filled', 'p-ripple-disabled': !app.ripple,
+<div class="layout-wrapper" [ngClass]="{'p-input-filled': app.inputStyle === 'filled', 'p-ripple-disabled': !app.ripple,
         'layout-menu-static': isStatic(),
         'layout-menu-overlay': isOverlay(),
         'layout-menu-horizontal': isHorizontal(),
@@ -17,6 +17,7 @@
         <div class="layout-menu-container">
             <app-inline-menu *ngIf="app.inlineMenuPosition=='top' || app.inlineMenuPosition=='both'" key="top"></app-inline-menu>
             <app-menu></app-menu>
+            <!-- <app-inline-menu *ngIf="app.inlineMenuPosition=='bottom' || app.inlineMenuPosition=='both'" key="bottom"></app-inline-menu> -->
         </div>
     </div>
 
@@ -30,8 +31,9 @@
         <app-footer></app-footer>
     </div>
 
+    <!-- <app-config></app-config> -->
+
     <div *ngIf="mobileMenuActive" class="layout-mask modal-in"></div>
 
-</div> -->
+</div>
 
-<!-- <router-outlet></router-outlet> -->

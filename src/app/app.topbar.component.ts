@@ -7,6 +7,7 @@ import { AppMainComponent } from './app.main.component';
 import { AuthService } from './auth/services/auth.service';
 import { Router } from '@angular/router';
 import { Tenant } from "src/app/xgarage/common/model/tenant";
+import { XgarageComponent } from './xgarage/xgarage.component';
 @Component({
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html',
@@ -24,7 +25,7 @@ import { Tenant } from "src/app/xgarage/common/model/tenant";
 })
 export class AppTopBarComponent {
 
-    constructor(public appMain: AppMainComponent, public app: AppComponent,
+    constructor(public appMain: XgarageComponent, public app: AppComponent,
         private authService: AuthService, private router: Router, private tenantService: TenantService) {
     }
 

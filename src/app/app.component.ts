@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
         translate.setDefaultLang('en');
 
         const browserLang = translate.getBrowserLang();
+        translate.currentLang = "";
         if (localStorage.getItem('lang')) {
             translate.use(localStorage.getItem('lang'));
         } else {
@@ -50,23 +51,22 @@ export class AppComponent implements OnInit {
         this.router.events.pipe(
             filter((event) => event instanceof NavigationEnd)
         ).subscribe((event: NavigationEnd) => {
-            //console.log(event)
+            // console.log(event)
             this.previousUrl = this.currentUrl;
             this.currentUrl = event.url;
-
             if ((this.previousUrl == undefined || this.previousUrl.includes('destination')) && this.route.snapshot.queryParams['id']) {
                 // console.log(this.previousUrl.includes('destination'))
                 if (this.currentUrl.includes('job-details')) {
                     console.log('redirecting to job details..')
                     localStorage.setItem('jobId', this.route.snapshot.queryParams['id']);
                     this.router.navigate(
-                        ['job-details'],
+                        ['/job-details'],
                         { relativeTo: this.route, queryParams: {} }
                     );
                 } else if (this.currentUrl.includes('order-details')) {
                     console.log('redirecting to order details..')
                     this.router.navigate(
-                        ['orders'],
+                        ['/orders'],
                         { relativeTo: this.route, queryParamsHandling: 'preserve' }
                     );
                 }

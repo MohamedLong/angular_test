@@ -7,27 +7,27 @@ import { DatePipe } from '@angular/common';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { GenericDetailsComponent } from 'src/app/xgarage/common/generic/genericdetailscomponent';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
-import { RequestService } from '../../service/request.service';
-import { JobService } from '../../service/job.service';
+import { RequestService } from '../../../service/request.service';
+import { JobService } from '../../../service/job.service';
 import { PartType } from 'src/app/xgarage/common/model/parttype';
-import { InsuranceType } from '../../model/insurancetype';
-import { BidService } from '../../service/bidservice.service';
-import { BidDto } from '../../dto/biddto';
-import { Request } from '../../model/request';
+import { InsuranceType } from '../../../model/insurancetype';
+import { BidService } from '../../../service/bidservice.service';
+import { BidDto } from '../../../dto/biddto';
+import { Request } from '../../../model/request';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Status } from 'src/app/xgarage/common/model/status';
 import jsPDF from 'jspdf';
-import { MultipleBids } from '../../dto/multiplebids';
-import { BidOrderDto } from '../../dto/bidorderdto';
-import { OrderType } from '../../dto/ordertype';
-import { StatusConstants } from '../../model/statusconstatnts';
-import { UpdateJobDto } from '../../dto/updatedjobdto';
+import { MultipleBids } from '../../../dto/multiplebids';
+import { BidOrderDto } from '../../../dto/bidorderdto';
+import { OrderType } from '../../../dto/ordertype';
+import { StatusConstants } from '../../../model/statusconstatnts';
+import { UpdateJobDto } from '../../../dto/updatedjobdto';
 import html2canvas from 'html2canvas';
 
 @Component({
     selector: 'job-details',
     templateUrl: './jobdetails.component.html',
-    styleUrls: ['../../../../demo/view/tabledemo.scss'],
+    styleUrls: ['../../../../../demo/view/tabledemo.scss'],
     styles: [`
         :host ::ng-deep .p-dialog .product-image {
             width: 150px;
