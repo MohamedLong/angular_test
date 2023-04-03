@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GenericService } from '../../common/generic/genericservice';
 import { config } from 'src/app/config';
+import { MessageResponse } from '../../common/dto/messageresponse';
+import { Observable } from 'rxjs';
+
 
 @Injectable({
     providedIn: 'root'
@@ -13,18 +16,35 @@ export class OrderService extends GenericService<any> {
     }
 
     notify(order) {
-        return this.http.post(this.apiServerUrl + '/notify', order);
+        return this.http.post<MessageResponse>(this.apiServerUrl + '/notify', order);
     }
 
-    cancelOrder(orderId: number) {
-        return this.http.post(this.apiServerUrl + '/cancel' + orderId, null);
+    changeOrderStatus(orderRequest: any, status: string){
+        if(status == 'cancel') {
+            return this.cancelOrderBySupplier(orderRequest);
+        }
+        if(status == 'accept') {
+            return this.acceptOrder(orderRequest);
+        }
+        if(status == 'complete') {
+            return this.completeOrder(orderRequest);
+        }
+        return null;
     }
 
-    cancelOrderBySupplier(orderId: number) {
-        return this.http.post(this.apiServerUrl + '/seller/cancel' + orderId, null);
+    cancelOrder(orderRequest: any) {
+        return this.http.post<MessageResponse>(this.apiServerUrl + '/cancel', orderRequest);
+    }
+
+    cancelOrderBySupplier(orderRequest: any) {
+        return this.http.post<MessageResponse>(this.apiServerUrl + '/seller/cancel', orderRequest);
     }
 
     acceptOrder(orderRequest: any) {
-        return this.http.post(this.apiServerUrl + '/accept', orderRequest);
+        return this.http.post<MessageResponse>(this.apiServerUrl + '/accept', orderRequest);
+    }
+
+    completeOrder(orderRequest: any) {
+        return this.http.post<MessageResponse>(this.apiServerUrl + '/readyShipping', orderRequest);
     }
 }

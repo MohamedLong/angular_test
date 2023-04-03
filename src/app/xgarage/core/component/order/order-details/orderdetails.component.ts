@@ -197,53 +197,41 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                     this.confirmActionDialog = true;
                 }
             },
+            {
+                label: 'Complete Order', icon: 'pi pi-times', visible: (this.masterDto.orderStatus == 'Accepted'), command: () => {
+                    const cancelStatus: Status = {
+                        id: 7,
+                        nameEn: 'Completed',
+                        nameAr: 'مكتمل'
+                    }
+                    this.confirmType = 'complete';
+                    this.confirmStatus = cancelStatus;
+                    this.confirmActionDialog = true;
+                }
+            }
         ];
     }
 
     confirm() {
-        if (this.confirmType === 'accept') {
+        if (this.confirmType === 'email') {
+            // this.downloadPDF();
+            this.getPdf();
+        }else{
             let orderRequest: any = {
                 sellerId: JSON.parse(this.authService.getStoredUser()).id,
-                orderId: this.masterDto.id
+                orderId: this.masterDto.id,
+                multipleBid: true
             }
-            this.orderService.acceptOrder(orderRequest).subscribe({
+            this.orderService.changeOrderStatus(orderRequest, this.confirmType).subscribe({
                 next: (data) => {
-                    if (data == true) {
-                        this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: 'Order Accepted', life: 3000 });
+                    if (data.messageCode == 200) {
+                        this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: data.message, life: 3000 });
                     } else {
-                        this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: 'Order Acceptance Failed', life: 3000 });
+                        this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: data.message, life: 3000 });
                     }
                 },
                 error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
             });
-        } else if (this.confirmType === 'cancel') {
-            if (this.role == 1) {
-                this.orderService.cancelOrder(this.masterDto.id).subscribe({
-                    next: (data) => {
-                        if (data == true) {
-                            this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: 'Order Canceled', life: 3000 });
-                        } else {
-                            this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: 'Order Cancelation Failed', life: 3000 });
-                        }
-                    },
-                    error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-                });
-            } else {
-                this.orderService.cancelOrderBySupplier(this.masterDto.id).subscribe({
-                    next: (data) => {
-                        if (data == true) {
-                            this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: 'Order Canceled', life: 3000 });
-                        } else {
-                            this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: 'Order Cancelation Failed', life: 3000 });
-                        }
-                    },
-                    error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-                });
-            }
-
-        } else if (this.confirmType === 'email') {
-            // this.downloadPDF();
-            this.getPdf();
         }
         this.confirmActionDialog = false;
     }
