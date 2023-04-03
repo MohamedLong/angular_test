@@ -51,6 +51,7 @@
         "delete": "Delete",
         "cancel": "Cancel",
         "actions": "Actions",
+        "action": "Action",
         "save": "Save",
         "print": "Print",
         "saveAll": "Save All",
@@ -552,6 +553,7 @@
         "title": "Requests",
         "table_footer": "In total there are {{length}} Requests",
         "jobNumber": "Job#",
+        "noBids": "No Bids Found.",
         "operations": {
             "approveBid": "Approve Bids",
             "approveMultipleBids": "Please confirm that the selected Bids will be approved, LPO will be generated and sent via emails to the selected suppliers? ",
@@ -584,6 +586,9 @@
             "jobNo": "Job Number",
             "claimNo": "Claim Number",
             "claimId": "Claim ID",
+            "client": "Client",
+            "parts": "Parts",
+            "status": "Status",
             "insuranceType": "Insurance Type",
             "carChassisNumber": "Chassis Number",
             "carPlateNumber": "Plate Number",
@@ -668,6 +673,9 @@
             "gearRequired": "Gear Type is required.",
             "gearTypeRequired": "Gear Type is required.",
             "chassisRequired": "Chassis Number is required.",
+            "lettersNotAllowed": "Only letters and numbers are allowed",
+            "onlyLetters": "Only letters and numbers are allowed.",
+            "chassisNoNotFound": "Car Chassis Number Not Found, Please Fill out the Form to Create a New One.",
             "specRequired": "Car Specification is Required."
         }
     },

@@ -24,15 +24,15 @@ export class UserSubMenuService {
   }
 
     saveUserSubMenu(usersubmenu: UserSubMenu) {
-        return this.http.post<UserSubMenu>(`${config.dashboardUrl}/userSubMenu/save`,usersubmenu)
+        return this.http.post<UserSubMenu>(`${config.dashboardUrl}/userSubMenu/save`,usersubmenu);
     }
 
     updateUserSubMenu(usersubmenu: UserSubMenu) {
-        return this.http.put<UserSubMenu>(`${config.dashboardUrl}/userSubMenu/update`,usersubmenu)
+        return this.http.put<UserSubMenu>(`${config.dashboardUrl}/userSubMenu/update`,usersubmenu);
     }
 
     deleteUserSubMenu(usersubmenuId: number) {
-        return this.http.delete<MessageResponse>(`${config.dashboardUrl}/userSubMenu/delete/${usersubmenuId}`)
+        return this.http.delete<MessageResponse>(`${config.dashboardUrl}/userSubMenu/delete/${usersubmenuId}`);
     }
 
 }

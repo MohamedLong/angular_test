@@ -17,15 +17,15 @@ export class RoleService {
     }
 
     saveRole(role: Role) {
-        return this.http.post<Role>(`${config.apiUrl}/v1/role/save`,role)
+        return this.http.post<Role>(`${config.apiUrl}/v1/role/save`, role);
     }
 
     updateRole(role: Role) {
-        return this.http.put<Role>(`${config.apiUrl}/v1/role/update`,role)
+        return this.http.put<Role>(`${config.apiUrl}/v1/role/update`, role);
     }
 
     deleteRole(roleId: number) {
-        return this.http.delete<MessageResponse>(`${config.apiUrl}/v1/role/delete/${roleId}`)
+        return this.http.delete<MessageResponse>(`${config.apiUrl}/v1/role/delete/${roleId}`);
     }
 
 }

@@ -22,11 +22,9 @@
                             class="p-error">{{ 'car.form.minChassieErorr' | translate }}</small>
                         <small
                             *ngIf="!carForm.get('chassisNumber').valid  && carForm.get('chassisNumber').errors?.['pattern']"
-                            class="block p-error">only letters and numbers are allowed</small>
+                            class="block p-error">{{ 'car.form.onlyLetters' | translate }}</small>
                     </div>
-                    <small class="block muted-text" *ngIf="notFound && !isTyping">Car Chassis Number Not Found, Please
-                        Fill out
-                        the Form to Create a New One.</small>
+                    <small class="block muted-text" *ngIf="notFound && !isTyping">{{ 'car.form.chassisNoNotFound' | translate }}</small>
                 </div>
             </div>
             <div class="col-12 md:col-6">
@@ -67,14 +65,14 @@
                 <p-dropdown [options]="gearType" formControlName="gearType"></p-dropdown>
                 <small
                     *ngIf="submitted && !carForm.get('gearType').valid  && carForm.get('gearType').errors?.['required']"
-                    class="block p-error mr-auto">Gear Box Type is Required</small>
+                    class="block p-error mr-auto">{{ 'car.form.gearRequired' | translate }}</small>
             </div>
             <div class="col-12 md:col-6">
                 <label class="block">{{ 'car.form.licencePlate' | translate }}</label>
                 <input formControlName="plateNumber" class="width-100 my-2" type="text" pInputText
                     placeholder="EX: YA59811" required />
                 <small *ngIf="!carForm.get('plateNumber').valid  && carForm.get('plateNumber').errors?.['pattern']"
-                    class="p-error">only letters and numbers are allowed</small>
+                    class="p-error">{{ 'car.form.lettersNotAllowed' | translate }}</small>
                 <small
                     *ngIf="submitted && !carForm.get('plateNumber').valid &&  carForm.get('plateNumber').errors?.['required']"
                     class="p-error">{{ 'car.form.plateRequired' | translate }}</small>

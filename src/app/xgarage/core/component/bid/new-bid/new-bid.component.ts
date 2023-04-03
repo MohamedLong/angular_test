@@ -54,16 +54,10 @@ export class NewBidComponent implements OnInit, OnChanges {
     discountType = ['OMR', '%'];
     ngOnInit(): void {
         if (this.type == 'new bid') {
-            this.requests = this.requests.filter(req => {
-                return req.status.id !== 7 && req.status.id !== 4;
-            });
-
-
-            this.requests.forEach((req, index) => {
+            this.requests = this.requests.filter(req => req.status.id !== StatusConstants.CANCELED_STATUS && req.status.id !== StatusConstants.COMPLETED_STATUS);
+            this.requests.forEach((req) => {
                 req.images = [];
                 this.resetBid(req);
-
-                //console.log(req.notInterestedSuppliers, JSON.parse(this.authService.getStoredUser()).id)
                 req.notInterestedSuppliers.forEach(supplier => {
                     if (supplier.user == JSON.parse(this.authService.getStoredUser()).id) {
                         req.saved = true;
