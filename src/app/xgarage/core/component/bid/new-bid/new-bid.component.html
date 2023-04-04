@@ -123,7 +123,7 @@
                             [options]="discountType" [(ngModel)]="part.discountType"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.discountType == null ? 'OMR' : part.discountType}}
+                        {{part.discountType == null ? 'OMR' : part.discountType == 'flat'? '%' : 'OMR'}}
                     </ng-template>
                 </p-cellEditor>
             </td>
