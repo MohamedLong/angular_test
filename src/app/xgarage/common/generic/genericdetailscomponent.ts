@@ -85,9 +85,9 @@ export class GenericDetailsComponent {
 
             const filtered = subs.filter(sub => this.route.routeConfig.path === sub.subMenu.routerLink);
             if (filtered && filtered.length > 0) {
-                this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth }
+                this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completionAuth: filtered[0].completionAuth}
             } else {
-                this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false }
+                this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completionAuth: false}
             }
 
             this.editAuth = this.route.routeConfig.data && this.route.routeConfig.data.editAuth ? !this.route.routeConfig.data.editAuth : true;
