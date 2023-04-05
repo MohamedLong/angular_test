@@ -80,10 +80,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class XgarageRoutingModule {
-    constructor(private router: Router, private authService: AuthService) {
-        if(this.authService.isLoggedIn()) {
-            this.authService.getAuthorizedMenu();
-        }
-      }
-}
+export class XgarageRoutingModule {}
