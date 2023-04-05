@@ -81,7 +81,11 @@ export class AppComponent implements OnInit {
                 this.authService.logout();
                 this.router.navigate(['/login'])
             }
-        })
+        });
+
+        if(this.authService.isLoggedIn()) {
+            this.authService.getAuth();
+        }
     }
 
 

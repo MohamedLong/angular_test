@@ -293,7 +293,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 this.notInterestedSuppliers = res;
                 this.displayNotInterestedSuppliers = true;
             } else {
-                this.messageService.add({ severity: 'info', summary: 'There is no not-interested suppliers.' });
+                this.messageService.add({ severity: 'info', summary: 'There are no not-interested suppliers.' });
             }
         }, err => console.log(err))
     }

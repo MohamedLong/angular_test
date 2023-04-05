@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { of, Observable, throwError } from 'rxjs';
+import { of, Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, map, mapTo, tap } from 'rxjs/operators';
 import { Tokens } from '../models/tokens';
 import jwt_decode from "jwt-decode";
@@ -9,6 +9,7 @@ import { config } from 'src/app/config';
 import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenu.service';
 import { User } from 'src/app/xgarage/common/model/user';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
+import { UserSubMenu } from 'src/app/xgarage/dashboard/model/usersubmenu';
 
 
 @Injectable({
@@ -20,7 +21,7 @@ export class AuthService {
     private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
     private loggedUser: string;
     private apiUrl = config.apiUrl;
-
+    subs = new BehaviorSubject<any>('');
 
 
     constructor(private http: HttpClient, private usersubmenuservice: UserSubMenuService, private router: Router) { }
@@ -191,6 +192,13 @@ export class AuthService {
                 return parent;
             })
             this.router.resetConfig(this.router.config);
+        });
+    }
+
+    getAuth() {
+        let userRole = JSON.parse(localStorage.getItem('user')).roles[0].id;
+        this.usersubmenuservice.getUserSubMenusByRoleId(userRole).then(subs => {
+            localStorage.setItem('subs', JSON.stringify(subs));
         });
     }
 }

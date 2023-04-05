@@ -14,10 +14,4 @@ const routes: Routes = [];
     ],
     exports: [RouterModule]
 })
-export class AppRoutingModule {
-//   constructor(private router: Router, private authService: AuthService) {
-//     if(this.authService.isLoggedIn()) {
-//         this.authService.getAuthorizedMenu();
-//     }
-//   }
-}
+export class AppRoutingModule {}

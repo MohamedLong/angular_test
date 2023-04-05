@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef} from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Table } from 'primeng/table';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { DatePipe } from '@angular/common';
@@ -9,11 +9,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Tenant } from '../model/tenant';
 import { TenantService } from '../service/tenant.service';
 import { StatusConstants } from '../../core/model/statusconstatnts';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
     template: ''
 })
-export class GenericComponent{
+export class GenericComponent {
 
     master: any;
 
@@ -72,33 +73,46 @@ export class GenericComponent{
     completeAuth: boolean
 
     constructor(public route: ActivatedRoute, public datePipe: DatePipe, public breadcrumbService: AppBreadcrumbService) {
-                    this.extractPermissions();
+        this.extractPermissions();
     }
 
 
     extractPermissions() {
-        this.editAuth = this.route.routeConfig.data && this.route.routeConfig.data.editAuth ? this.route.routeConfig.data.editAuth : false;
-        this.newAuth = this.route.routeConfig.data && this.route.routeConfig.data.newAuth ? this.route.routeConfig.data.newAuth : false;
-        this.printAuth = this.route.routeConfig.data && this.route.routeConfig.data.printAuth ? this.route.routeConfig.data.printAuth : false;
-        this.deleteAuth = this.route.routeConfig.data && this.route.routeConfig.data.deleteAuth ? this.route.routeConfig.data.deleteAuth : false;
-        this.approveAuth = this.route.routeConfig.data && this.route.routeConfig.data.approveAuth ? this.route.routeConfig.data.approveAuth : false;
-        this.cancelAuth = this.route.routeConfig.data && this.route.routeConfig.data.cancelAuth ? this.route.routeConfig.data.cancelAuth : false;
-        this.acceptAuth = this.route.routeConfig.data && this.route.routeConfig.data.acceptAuth ? this.route.routeConfig.data.acceptAuth : false;
-        this.completeAuth = this.route.routeConfig.data && this.route.routeConfig.data.completeAuth ? this.route.routeConfig.data.completeAuth : false;
+        if (localStorage.getItem('subs')) {
+            let subs = JSON.parse(localStorage.getItem('subs'));
+            // console.log(JSON.parse(localStorage.getItem('subs')))
+            // console.log(this.route.routeConfig)
+
+            const filtered = subs.filter(sub => this.route.routeConfig.path === sub.subMenu.routerLink);
+            if (filtered && filtered.length > 0) {
+                this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completeAuth: filtered[0].completeAuth}
+            } else {
+                this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completeAuth: false}
+            }
+            this.editAuth = this.route.routeConfig.data && this.route.routeConfig.data.editAuth ? this.route.routeConfig.data.editAuth : false;
+            this.newAuth = this.route.routeConfig.data && this.route.routeConfig.data.newAuth ? this.route.routeConfig.data.newAuth : false;
+            this.printAuth = this.route.routeConfig.data && this.route.routeConfig.data.printAuth ? this.route.routeConfig.data.printAuth : false;
+            this.deleteAuth = this.route.routeConfig.data && this.route.routeConfig.data.deleteAuth ? this.route.routeConfig.data.deleteAuth : false;
+            this.approveAuth = this.route.routeConfig.data && this.route.routeConfig.data.approveAuth ? this.route.routeConfig.data.approveAuth : false;
+            this.cancelAuth = this.route.routeConfig.data && this.route.routeConfig.data.cancelAuth ? this.route.routeConfig.data.cancelAuth : false;
+            this.acceptAuth = this.route.routeConfig.data && this.route.routeConfig.data.acceptAuth ? this.route.routeConfig.data.acceptAuth : false;
+            this.completeAuth = this.route.routeConfig.data && this.route.routeConfig.data.completeAuth ? this.route.routeConfig.data.completeAuth : false;
+        }
+
     }
 
     callInsideOnInit(): void {
         this.editable = false;
     }
 
-    getMinDate(){
+    getMinDate() {
         var dtToday = new Date();
-        var month:any = dtToday.getMonth() + 1;
-        var day:any = dtToday.getDate();
+        var month: any = dtToday.getMonth() + 1;
+        var day: any = dtToday.getDate();
         var year = dtToday.getFullYear();
-        if(month < 10)
+        if (month < 10)
             month = '0' + month.toString();
-        if(day < 10)
+        if (day < 10)
             day = '0' + day.toString();
         this.minDate = year + '-' + month + '-' + day;
     }
@@ -118,7 +132,7 @@ export class GenericComponent{
         this.editable = true;
         this.submitted = false;
         this.masterDialog = true;
-      }
+    }
 
 
     deleteSelectedEntries() {
@@ -169,7 +183,7 @@ export class GenericComponent{
 
     onFilter(event, dt) {
         this.filteredValues = event.filteredValue;
-      }
+    }
 
     filterByMonth(event, dt, list: any) {
         const filtered: any[] = [];
@@ -179,7 +193,7 @@ export class GenericComponent{
                 filtered.push(dto);
             }
         }
-        if(filtered.length > 0) {
+        if (filtered.length > 0) {
             list = filtered;
             this.filteredValues = event.filteredValue;
         }
@@ -187,30 +201,30 @@ export class GenericComponent{
 
     getStatusName(statusId: number) {
         switch (statusId) {
-          case StatusConstants.OPEN_STATUS:
-            return 'Open';
-          case StatusConstants.INPROGRESS_STATUS:
-            return 'Initial Approval';
-          case StatusConstants.ONHOLD_STATUS:
-            return 'On Hold';
-          case StatusConstants.COMPLETED_STATUS:
-            return 'Completed';
-          case StatusConstants.REJECTED_STATUS:
-            return 'Rejected';
-          case StatusConstants.APPROVED_STATUS:
-            return 'Approved';
-          case StatusConstants.CANCELED_STATUS:
-            return 'Canceled';
-          case StatusConstants.REVISION_STATUS:
-            return 'Revision';
-          case StatusConstants.LOST_STATUS:
-            return 'Lost';
-          case StatusConstants.REVISED_STATUS:
-            return 'Revised';
-          default:
-            return 'Unknown';
+            case StatusConstants.OPEN_STATUS:
+                return 'Open';
+            case StatusConstants.INPROGRESS_STATUS:
+                return 'Initial Approval';
+            case StatusConstants.ONHOLD_STATUS:
+                return 'On Hold';
+            case StatusConstants.COMPLETED_STATUS:
+                return 'Completed';
+            case StatusConstants.REJECTED_STATUS:
+                return 'Rejected';
+            case StatusConstants.APPROVED_STATUS:
+                return 'Approved';
+            case StatusConstants.CANCELED_STATUS:
+                return 'Canceled';
+            case StatusConstants.REVISION_STATUS:
+                return 'Revision';
+            case StatusConstants.LOST_STATUS:
+                return 'Lost';
+            case StatusConstants.REVISED_STATUS:
+                return 'Revised';
+            default:
+                return 'Unknown';
         }
-      }
+    }
 
 
 }

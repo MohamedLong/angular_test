@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
-import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 import { BidDto } from '../../../dto/biddto';
 import { BidService } from '../../../service/bidservice.service';
 import { JobService } from '../../../service/job.service';

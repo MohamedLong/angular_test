@@ -22,9 +22,9 @@
                 <th>{{ 'job.tableColumn.jobTitle' | translate }}</th>
                 <th>{{ 'job.tableColumn.client' | translate }}</th>
                 <th>{{ 'job.tableColumn.parts' | translate }}</th>
-                <th>{{' job.tableColumn.status' | translate }}</th>
-                <th>{{ ' bid.bidDetails.totalPrice' | translate }}</th>
-                <th>{{'operation.action' | translate }}</th>
+                <th>{{ 'job.tableColumn.status' | translate }}</th>
+                <th>{{ 'bid.bidDetails.totalPrice' | translate }}</th>
+                <th>{{ 'operations.action' | translate }}</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-job>
@@ -42,7 +42,7 @@
                     {{job.jobStatus}}
                 </td>
                 <td>
-                    {{job.totalPrice?  job.totalPrice : 0 | number}}
+                    {{!job.totalPrice?  0 : job.totalPrice | number }}
                 </td>
                 <td>
                     <button (click)="onBidView(job)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
