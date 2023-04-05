@@ -160,7 +160,7 @@ export class UserSubMenuComponent implements OnInit {
 
         if (this.selectedRole && this.selectedUserMainMenu && this.selectedPage) {
             console.log('selected role is valid')
-            if (this.usersubmenu.newAuth || this.usersubmenu.editAuth || this.usersubmenu.deleteAuth || this.usersubmenu.printAuth || this.usersubmenu.confirmAuth || this.usersubmenu.cancelConfirmAuth) {
+            if (this.usersubmenu.newAuth || this.usersubmenu.editAuth || this.usersubmenu.deleteAuth || this.usersubmenu.printAuth || this.usersubmenu.approveAuth || this.usersubmenu.cancelAuth || this.usersubmenu.acceptAuth || this.usersubmenu.completeAuth) {
                 this.auth = false;
                 console.log('selected auth is valid')
                 this.auth = true
@@ -175,9 +175,11 @@ export class UserSubMenuComponent implements OnInit {
                     newAuth: this.usersubmenu.newAuth? 1 : null,
                     deleteAuth: this.usersubmenu.deleteAuth? 1 : null,
                     printAuth: this.usersubmenu.printAuth? 1 : null,
-                    confirmAuth: this.usersubmenu.confirmAuth? 1 : null,
-                    cancelConfirmAuth: this.usersubmenu.cancelConfirmAuth? 1 : null,
+                    approveAuth: this.usersubmenu.approveAuth? 1 : null,
+                    cancelAuth: this.usersubmenu.cancelAuth? 1 : null,
                     editAuth: this.usersubmenu.editAuth? 1 : null,
+                    acceptAuth: this.usersubmenu.acceptAuth? 1 : null,
+                    completeAuth: this.usersubmenu.completeAuth? 1 : null
                 }
 
                 if (this.usersubmenu.id) {

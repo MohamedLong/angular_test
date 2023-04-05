@@ -66,6 +66,10 @@ export class GenericDetailsComponent{
     deleteAuth: boolean;
 
     printAuth: boolean;
+    approveAuth: boolean;
+    cancelAuth: boolean;
+    acceptAuth: boolean;
+    completeAuth: boolean;
 
     constructor(public route: ActivatedRoute, public router: Router, public changeStatusService: GenericService<any>, public datePipe: DatePipe,
                 public statusService: StatusService, public breadcrumbService: AppBreadcrumbService) {
@@ -78,6 +82,10 @@ export class GenericDetailsComponent{
             this.newAuth = this.route.routeConfig.data && this.route.routeConfig.data.newAuth ? !this.route.routeConfig.data.newAuth : true;
             this.printAuth = this.route.routeConfig.data && this.route.routeConfig.data.printAuth ? !this.route.routeConfig.data.printAuth : true;
             this.deleteAuth = this.route.routeConfig.data && this.route.routeConfig.data.deleteAuth ? !this.route.routeConfig.data.deleteAuth : true;
+            this.approveAuth = this.route.routeConfig.data && this.route.routeConfig.data.approveAuth ? !this.route.routeConfig.data.approveAuth : true;
+            this.cancelAuth = this.route.routeConfig.data && this.route.routeConfig.data.cancelAuth ? !this.route.routeConfig.data.cancelAuth : true;
+            this.acceptAuth = this.route.routeConfig.data && this.route.routeConfig.data.acceptAuth ? !this.route.routeConfig.data.acceptAuth : true;
+            this.completeAuth = this.route.routeConfig.data && this.route.routeConfig.data.completeAuth ? !this.route.routeConfig.data.completeAuth : true;
         }
 
     callInsideOnInit(): void {

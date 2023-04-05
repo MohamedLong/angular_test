@@ -168,13 +168,13 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     initActionMenu() {
         this.menuItems = [
             {
-                label: 'Send Order', icon: 'pi pi-envelope', visible: (this.masterDto.orderStatus == 'ACTIVE' && this.role == 1), command: () => {
+                label: 'Send Order', icon: 'pi pi-envelope', visible: (this.masterDto.orderStatus == 'ACTIVE' && this.printAuth == true), command: () => {
                     this.confirmType = 'email';
                     this.confirmActionDialog = true;
                 }
             },
             {
-                label: 'Accept Order', icon: 'pi pi-check', visible: (this.masterDto.orderStatus == 'ACTIVE' && this.role != 1), command: () => {
+                label: 'Accept Order', icon: 'pi pi-check', visible: (this.masterDto.orderStatus == 'ACTIVE' && this.acceptAuth == true), command: () => {
                     const confirmStatus: Status = {
                         id: 6,
                         nameEn: 'Accept',
@@ -186,7 +186,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                 }
             },
             {
-                label: 'Cancel Order', icon: 'pi pi-times', visible: (this.masterDto.orderStatus == 'ACTIVE'), command: () => {
+                label: 'Cancel Order', icon: 'pi pi-times', visible: (this.masterDto.orderStatus == 'ACTIVE' && this.cancelAuth == true), command: () => {
                     const cancelStatus: Status = {
                         id: 7,
                         nameEn: 'Canceled',
@@ -198,7 +198,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                 }
             },
             {
-                label: 'Complete Order', icon: 'pi pi-times', visible: (this.masterDto.orderStatus == 'Accepted'), command: () => {
+                label: 'Complete Order', icon: 'pi pi-check-circle', visible: (this.masterDto.orderStatus == 'Accepted' && this.completeAuth == true), command: () => {
                     const cancelStatus: Status = {
                         id: 7,
                         nameEn: 'Completed',
@@ -230,7 +230,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                         this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: data.message, life: 3000 });
                     }
                 },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.message.errorMsg, life: 3000 })
             });
         }
         this.confirmActionDialog = false;

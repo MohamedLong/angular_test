@@ -181,9 +181,9 @@ export class AuthService {
                     parent.children.map(r => {
                         const filtered = subs.filter(sub => r.path === sub.subMenu.routerLink);
                         if (filtered && filtered.length > 0) {
-                            r.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth }
+                            r.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completeAuth: filtered[0].completeAuth}
                         } else {
-                            r.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false }
+                            r.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completeAuth: false}
                         }
                         return;
                     });

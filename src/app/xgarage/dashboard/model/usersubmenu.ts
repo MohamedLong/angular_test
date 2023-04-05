@@ -10,6 +10,8 @@ export interface UserSubMenu {
     editAuth?: boolean;
     deleteAuth?: boolean;
     printAuth?: boolean;
-    confirmAuth?: boolean;
-    cancelConfirmAuth?: boolean;
+    approveAuth?: boolean;
+    cancelAuth?: boolean;
+    acceptAuth?: boolean;
+    completeAuth?: boolean;
 }

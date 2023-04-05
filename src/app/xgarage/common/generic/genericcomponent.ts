@@ -66,6 +66,10 @@ export class GenericComponent{
     deleteAuth: boolean;
 
     printAuth: boolean;
+    approveAuth: boolean;
+    cancelAuth: boolean;
+    acceptAuth: boolean;
+    completeAuth: boolean
 
     constructor(public route: ActivatedRoute, public datePipe: DatePipe, public breadcrumbService: AppBreadcrumbService) {
                     this.extractPermissions();
@@ -77,6 +81,10 @@ export class GenericComponent{
         this.newAuth = this.route.routeConfig.data && this.route.routeConfig.data.newAuth ? this.route.routeConfig.data.newAuth : false;
         this.printAuth = this.route.routeConfig.data && this.route.routeConfig.data.printAuth ? this.route.routeConfig.data.printAuth : false;
         this.deleteAuth = this.route.routeConfig.data && this.route.routeConfig.data.deleteAuth ? this.route.routeConfig.data.deleteAuth : false;
+        this.approveAuth = this.route.routeConfig.data && this.route.routeConfig.data.approveAuth ? this.route.routeConfig.data.approveAuth : false;
+        this.cancelAuth = this.route.routeConfig.data && this.route.routeConfig.data.cancelAuth ? this.route.routeConfig.data.cancelAuth : false;
+        this.acceptAuth = this.route.routeConfig.data && this.route.routeConfig.data.acceptAuth ? this.route.routeConfig.data.acceptAuth : false;
+        this.completeAuth = this.route.routeConfig.data && this.route.routeConfig.data.completeAuth ? this.route.routeConfig.data.completeAuth : false;
     }
 
     callInsideOnInit(): void {
