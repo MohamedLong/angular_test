@@ -27,7 +27,7 @@ export class UserMainMenuService {
         return this.http.post<UserMainMenu>(`${config.dashboardUrl}/userMainMenu/save`, usermainmenu);
     }
 
-    updateUserMainMenu(usermainmenu: UserMainMenu) {
+    updateUserMainMenu(usermainmenu: any) {
         return this.http.put<UserMainMenu>(`${config.dashboardUrl}/userMainMenu/update`, usermainmenu);
     }
 

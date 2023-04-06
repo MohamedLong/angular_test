@@ -1,4 +1,5 @@
 <div class="grid">
+    <p-toast></p-toast>
 	<div class="col-12">
 		<div class="card">
 			<p class="text-lg font-bold">{{'USERSUBMENU.TITLE' | translate}}</p>
@@ -49,7 +50,7 @@
 							{{usersubmenu.id}}
 						</td>
                         <td style="min-width: 12rem;">
-							{{usersubmenu.role?.roleName}}
+							{{usersubmenu.role == 1? 'ROLE_USER' : 'ROLE_SUPPLIER'}}
 						</td>
                         <td style="min-width: 12rem;">
 							{{usersubmenu.subMenu?.pageName}}
@@ -112,12 +113,20 @@
                         <label for="binary">{{'USERSUBMENU.DIALOG.PRINTAUTH' | translate}}</label>
                     </div>
                     <div class="field-checkbox">
-                        <p-checkbox [(ngModel)]="usersubmenu.confirmAuth" binary="true" inputId="binary"></p-checkbox>
-                        <label for="binary">{{'USERSUBMENU.DIALOG.CONFIRMAUTH' | translate}}</label>
+                        <p-checkbox [(ngModel)]="usersubmenu.acceptAuth" binary="true" inputId="binary"></p-checkbox>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.ACCEPTAUTH' | translate}}</label>
                     </div>
                     <div class="field-checkbox">
-                        <p-checkbox [(ngModel)]="usersubmenu.cancelConfirmAuth" binary="true" inputId="binary"></p-checkbox>
-                        <label for="binary">{{'USERSUBMENU.DIALOG.CONFIRMCANCELAUTH' | translate}}</label>
+                        <p-checkbox [(ngModel)]="usersubmenu.approveAuth" binary="true" inputId="binary"></p-checkbox>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.APPROVEAUTH' | translate}}</label>
+                    </div>
+                    <div class="field-checkbox">
+                        <p-checkbox [(ngModel)]="usersubmenu.cancelAuth" binary="true" inputId="binary"></p-checkbox>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.CANCELAUTH' | translate}}</label>
+                    </div>
+                    <div class="field-checkbox">
+                        <p-checkbox [(ngModel)]="usersubmenu.completeAuth" binary="true" inputId="binary"></p-checkbox>
+                        <label for="binary">{{'USERSUBMENU.DIALOG.COMPAUTH' | translate}}</label>
                     </div>
                     <small class="p-error block" *ngIf="submitted && auth">{{'USERSUBMENU.DIALOG.PERMISSIONSELECTOR' | translate}}</small>
                 </div>

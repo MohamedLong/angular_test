@@ -80,8 +80,10 @@ export class UserSubMenuComponent implements OnInit {
         this.roleService.getRoles().then(roles => {
             this.roles = roles;
         });
+
         this.usersubmenuService.getUserSubMenus().then(usersubmenus => {
             this.usersubmenus = usersubmenus;
+            console.log(this.usersubmenus)
             this.loading = false;
 
             this.cols = [
@@ -92,13 +94,14 @@ export class UserSubMenuComponent implements OnInit {
     }
 
     fetchUserMainMenus() {
+        console.log(this.selectedRole.id)
         this.userMainMenuService.getUserMainMenusByRoleId(this.selectedRole.id).then(umm => {
             this.userMainMenus = umm;
+            console.log(umm)
         });
     }
 
     fetchSubMenus() {
-
         this.subMenuService.getSubMenusByRoleId(this.selectedUserMainMenu.mainMenu.id).then(sm => {
             this.pages = sm;
         });
@@ -115,7 +118,12 @@ export class UserSubMenuComponent implements OnInit {
     }
 
     editUserSubMenu(usersubmenu: UserSubMenu) {
+        console.log(usersubmenu)
         this.usersubmenu = { ...usersubmenu };
+        this.selectedRole = this.roles.find(role => role.id == usersubmenu.role);
+        // this.fetchUserMainMenus();
+        // this.fetchSubMenus();
+        //    this.selectedPage = this.pages.find(page => page.pageName == usersubmenu.subMenu.pageName);
         this.usersubmenuDialog = true;
     }
 
@@ -138,13 +146,19 @@ export class UserSubMenuComponent implements OnInit {
                 next: (data) => {
                     if (data.message === 'Success') {
                         this.usersubmenus = this.usersubmenus.filter(val => val.id !== this.usersubmenu.id);
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserSubMenu Deleted', life: 3000 });
+                        this.messageService.add({
+                            severity: 'success', summary: 'Successful',
+                            detail: 'UserSubMenu Deleted'
+                        });
                         this.usersubmenu = {};
                     }
                 },
                 error: (e) => {
                     console.error(e.message);
-                    alert(e.message);
+                    this.messageService.add({
+                        severity: 'erorr', summary: 'Erorr',
+                        detail: e.message
+                    });
                 }
             }
         );
@@ -169,50 +183,47 @@ export class UserSubMenuComponent implements OnInit {
                 this.usersubmenu.subMenu = this.selectedPage;
 
                 let reqBody = {
-                    role: {id: this.usersubmenu.role.id},
-                    userMainMenu: {id: this.usersubmenu.userMainMenu.id},
-                    subMenu: {id: this.usersubmenu.subMenu.id},
-                    newAuth: this.usersubmenu.newAuth? 1 : null,
-                    deleteAuth: this.usersubmenu.deleteAuth? 1 : null,
-                    printAuth: this.usersubmenu.printAuth? 1 : null,
-                    approveAuth: this.usersubmenu.approveAuth? 1 : null,
-                    cancelAuth: this.usersubmenu.cancelAuth? 1 : null,
-                    editAuth: this.usersubmenu.editAuth? 1 : null,
-                    acceptAuth: this.usersubmenu.acceptAuth? 1 : null,
-                    completeAuth: this.usersubmenu.completeAuth? 1 : null
+                    role: this.usersubmenu.role.id,
+                    userMainMenu: { id: this.usersubmenu.userMainMenu.id },
+                    subMenu: { id: this.usersubmenu.subMenu.id },
+                    newAuth: this.usersubmenu.newAuth ? 1 : null,
+                    deleteAuth: this.usersubmenu.deleteAuth ? 1 : null,
+                    printAuth: this.usersubmenu.printAuth ? 1 : null,
+                    approveAuth: this.usersubmenu.approveAuth ? 1 : null,
+                    cancelAuth: this.usersubmenu.cancelAuth ? 1 : null,
+                    editAuth: this.usersubmenu.editAuth ? 1 : null,
+                    acceptAuth: this.usersubmenu.acceptAuth ? 1 : null,
+                    completeAuth: this.usersubmenu.completeAuth ? 1 : null
                 }
 
                 if (this.usersubmenu.id) {
+                    reqBody['id'] = this.usersubmenu.id;
                     // @ts-ignore
-                    this.usersubmenuService.updateUserSubMenu(reqBody).subscribe(
-                        {
-                            next: (data) => {
-                                this.usersubmenu = data;
-                                this.usersubmenus[this.findIndexById(this.usersubmenu.id)] = this.usersubmenu;
-                                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserSubMenu Updated', life: 3000 });
-                            },
-                            error: (e) => {
-                                console.error(e.message);
-                                alert(e.message);
-                            }
-                        }
+                    this.usersubmenuService.updateUserSubMenu(reqBody).subscribe(data => {
+                        this.usersubmenu = data;
+                        this.usersubmenus[this.findIndexById(this.usersubmenu.id)] = this.usersubmenu;
+                        this.messageService.add({
+                            severity: 'success', summary: 'Successful',
+                            detail: 'UserSubMenu Updated'
+                        });
+
+                    }, err => {
+                        console.error(err.message);
+                        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.message, life: 3000 });
+                    }
                     );
                 } else {
                     // this.usersubmenu.id = this.createId();
                     // @ts-ignore
-                    this.usersubmenuService.saveUserSubMenu(reqBody).subscribe(
-                        {
-                            next: (data) => {
-                                this.usersubmenu = data;
-                                this.usersubmenus.push(this.usersubmenu);
-                                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserSubMenu Created', life: 3000 });
-                            },
-                            error: (e) => {
-                                console.error(e.message);
-                                this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: e.message, life: 3000 });
-                            }
-                        }
-                    );
+                    this.usersubmenuService.saveUserSubMenu(reqBody).subscribe(data => {
+                        this.usersubmenu = data;
+                        this.usersubmenus.push(this.usersubmenu);
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserSubMenu Created', life: 3000 });
+                    }, err => {
+                        console.error(err.message);
+                        this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: err.message, life: 3000 });
+                    });
+
                 }
 
                 this.usersubmenus = [...this.usersubmenus];

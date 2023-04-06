@@ -78,15 +78,17 @@ export class UserMainMenuComponent implements OnInit {
     ngOnInit() {
         this.roleService.getRoles().then(roles => {
             this.roles = roles;
+            // console.log(roles)
         });
 
         this.mainMenuService.getAllMenues().then(umm => {
             this.modules = umm;
+            // console.log(umm)
         });
 
         this.usermainmenuService.getUserMainMenus().then(usermainmenus => {
-            let userRole = JSON.parse(localStorage.getItem('user')).roles[0].id;
-            this.usersubmenuservice.getUserSubMenusByRoleId(userRole).then(subs => {
+            if (localStorage.getItem('subs')) {
+                let subs = JSON.parse(localStorage.getItem('subs'));
                 const filtered = subs.filter(sub => this.route.routeConfig.path === sub.subMenu.routerLink);
                 if (filtered && filtered.length > 0) {
                     this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth }
@@ -106,9 +108,7 @@ export class UserMainMenuComponent implements OnInit {
                     { field: 'id', header: 'Id' },
                     { field: 'role.roleName', header: 'Role' },
                 ];
-            })
-
-
+            }
         });
     }
 
@@ -130,9 +130,10 @@ export class UserMainMenuComponent implements OnInit {
     }
 
     editUserMainMenu(usermainmenu: UserMainMenu) {
+        // console.log(usermainmenu)
         this.usermainmenu = { ...usermainmenu };
-        this.selectedRole = usermainmenu.role;
-        this.selectedModule = usermainmenu.mainMenu;
+        this.selectedRole = this.roles.find(role => role.id == usermainmenu.role);
+        this.selectedModule = this.modules.find(module => module.mainMenu.id == usermainmenu.mainMenu.id);
         this.usermainmenuDialog = true;
     }
 
@@ -161,7 +162,7 @@ export class UserMainMenuComponent implements OnInit {
                 },
                 error: (e) => {
                     console.error(e.message);
-                    alert(e.message);
+                    this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: 'Erorr Deleteing UserMainMenu', life: 3000 });
                 }
             }
         );
@@ -182,7 +183,13 @@ export class UserMainMenuComponent implements OnInit {
 
             if (this.usermainmenu.id) {
                 // @ts-ignore
-                this.usermainmenuService.updateUserMainMenu(this.usermainmenu).subscribe(
+                let updateReqBody = {
+                    id: this.usermainmenu.id,
+                    role: this.usermainmenu.role.id,
+                    userRootMenu: { id: this.usermainmenu.mainMenu.mainMenu.rootMenu.id },
+                    mainMenu: { id: this.usermainmenu.mainMenu.id }
+                }
+                this.usermainmenuService.updateUserMainMenu(updateReqBody).subscribe(
                     {
                         next: (data) => {
                             this.usermainmenu = data;
@@ -200,7 +207,7 @@ export class UserMainMenuComponent implements OnInit {
                 // @ts-ignore
                 console.log(this.usermainmenu)
                 let reqBody = {
-                    role: { id: this.usermainmenu.role.id },
+                    role: this.usermainmenu.role.id,
                     userRootMenu: { id: this.usermainmenu.mainMenu.mainMenu.rootMenu.id },
                     mainMenu: { id: this.usermainmenu.mainMenu.id }
                 }
