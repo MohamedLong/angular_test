@@ -76,7 +76,12 @@ export class LoginComponent implements OnInit {
                 error: (e) => {
                     console.log(e)
                     this.isLoading = false;
-                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'something went wrong, please try again later.' });
+                    if(e.type) {
+                        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Something Went Wrong, PLease Try Again Later.' });
+                    } else {
+                        this.messageService.add({ severity: 'error', summary: 'Erorr', detail: e });
+                    }
+
                 }
             }
         );

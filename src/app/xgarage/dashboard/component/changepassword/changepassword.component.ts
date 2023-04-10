@@ -27,11 +27,19 @@ export class ResetPasswordComponent implements OnInit {
         this.resetPasswordFormData.append('password', this.resetPasswordForm.get('password').value);
         this.resetPasswordFormData.append('newPass', this.resetPasswordForm.get('newPass').value);
 
-        console.log(this.resetPasswordFormData)
+        // console.log(this.resetPasswordFormData)
         this.authService.changePassword(this.resetPasswordFormData).subscribe(res => {
-            console.log(res)
+            // console.log(res)
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'your password was reset successfully' });
             this.resetPasswordForm.reset('');
+        }, err => {
+            console.log(err)
+            if (err.status == 200) {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'your password was reset successfully' });
+            } else {
+                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Failed to change password' });
+            }
+
         })
     }
 }
