@@ -83,14 +83,14 @@
                 </div>
                 <div class="field">
                     <label for="roleId">{{'USERSUBMENU.DIALOG.MODULE' | translate}}</label>
-                    <p-dropdown [options]="userMainMenus" [(ngModel)]="selectedUserMainMenu" (onChange)="fetchSubMenus()" optionLabel="mainMenu.pageName" [showClear]="true" placeholder="{{'USERSUBMENU.DIALOG.MODULESELECTOR' | translate}}">
+                    <p-dropdown [disabled]="isEdit" [options]="userMainMenus" [(ngModel)]="selectedUserMainMenu" (onChange)="fetchSubMenus()" optionLabel="mainMenu.pageName" [showClear]="true" placeholder="{{'USERSUBMENU.DIALOG.MODULESELECTOR' | translate}}">
                     </p-dropdown>
                     <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
                     <small class="p-error block" *ngIf="submitted && !selectedUserMainMenu">{{'USERSUBMENU.DIALOG.MODULEREQUIRED' | translate}}</small>
                 </div>
                 <div class="field">
                     <label for="roleId">{{'USERSUBMENU.TABLECOLUMN.PAGE' | translate}}</label>
-                    <p-dropdown [options]="pages" [(ngModel)]="selectedPage" optionLabel="pageName" [showClear]="true" placeholder="{{'USERSUBMENU.DIALOG.PAGESELECTOR' | translate}}">
+                    <p-dropdown [disabled]="isEdit" [options]="pages" [(ngModel)]="selectedPage" optionLabel="pageName" [showClear]="true" placeholder="{{'USERSUBMENU.DIALOG.PAGESELECTOR' | translate}}">
                     </p-dropdown>
                     <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
                     <small class="p-error block" *ngIf="submitted && !selectedPage">{{'USERSUBMENU.DIALOG.PAGEREQUIRED' | translate}}</small>

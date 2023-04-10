@@ -83,7 +83,7 @@ export class UserMainMenuComponent implements OnInit {
 
         this.mainMenuService.getAllMenues().then(umm => {
             this.modules = umm;
-            // console.log(umm)
+            console.log(this.modules)
         });
 
         this.usermainmenuService.getUserMainMenus().then(usermainmenus => {
@@ -154,15 +154,20 @@ export class UserMainMenuComponent implements OnInit {
         this.usermainmenuService.deleteUserMainMenu(this.usermainmenu.id).subscribe(
             {
                 next: (data) => {
-                    if (data.message === 'Success') {
+                    if (data.message === 'operation.ok') {
                         this.usermainmenus = this.usermainmenus.filter(val => val.id !== this.usermainmenu.id);
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserMainMenu Deleted', life: 3000 });
+
+                        this.messageService.add({
+                            severity: 'success', summary: 'Successful',
+                            detail: 'UserMainMenu Deleted'
+                        });
+
                         this.usermainmenu = {};
                     }
                 },
                 error: (e) => {
                     console.error(e.message);
-                    this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: 'Erorr Deleteing UserMainMenu', life: 3000 });
+                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Erorr Deleteing UserMainMenu', life: 3000 });
                 }
             }
         );

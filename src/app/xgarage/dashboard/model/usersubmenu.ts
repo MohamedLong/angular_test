@@ -1,4 +1,5 @@
 import { Role } from '../../common/model/role';
+import { MainMenu } from './mainmenu';
 import { SubMenu } from './submenu';
 import { UserMainMenu } from './usermainmenu';
 export interface UserSubMenu {
@@ -6,6 +7,7 @@ export interface UserSubMenu {
     role?: Role;
     userMainMenu?: UserMainMenu;
     subMenu?: SubMenu;
+    mainMenu?: MainMenu;
     newAuth?: boolean;
     editAuth?: boolean;
     deleteAuth?: boolean;

@@ -9,6 +9,7 @@ import { UserSubMenu } from '../../model/usersubmenu';
 import { Role } from 'src/app/xgarage/common/model/role';
 import { SubMenu } from '../../model/submenu';
 import { UserMainMenu } from '../../model/usermainmenu';
+import { MainMenu } from '../../model/mainmenu';
 
 @Component({
     selector: 'app-user-sub-menu',
@@ -39,11 +40,11 @@ export class UserSubMenuComponent implements OnInit {
 
     selectedRole: Role;
 
-    pages: SubMenu[];
+    pages: SubMenu[] = [];
 
     selectedPage: SubMenu;
 
-    userMainMenus: UserMainMenu[];
+    userMainMenus: UserMainMenu[] = [];
 
     selectedUserMainMenu: UserMainMenu;
 
@@ -72,6 +73,7 @@ export class UserSubMenuComponent implements OnInit {
     disableDeleteButton: boolean = false;
 
     auth: boolean = true;
+    isEdit: boolean = false;
 
     constructor(private subMenuService: SubMenuService, private userMainMenuService: UserMainMenuService, private roleService: RoleService, private usersubmenuService: UserSubMenuService, private messageService: MessageService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef) { }
 
@@ -94,21 +96,29 @@ export class UserSubMenuComponent implements OnInit {
     }
 
     fetchUserMainMenus() {
-        console.log(this.selectedRole.id)
-        this.userMainMenuService.getUserMainMenusByRoleId(this.selectedRole.id).then(umm => {
-            this.userMainMenus = umm;
-            console.log(umm)
-        });
+        if(!this.isEdit) {
+            this.userMainMenuService.getUserMainMenusByRoleId(this.selectedRole.id).then(umm => {
+                this.userMainMenus = umm;
+            });
+        }
     }
 
     fetchSubMenus() {
-        this.subMenuService.getSubMenusByRoleId(this.selectedUserMainMenu.mainMenu.id).then(sm => {
-            this.pages = sm;
-        });
+        if(!this.isEdit) {
+            this.subMenuService.getSubMenusByRoleId(this.selectedUserMainMenu.mainMenu.id).then(sm => {
+                this.pages = sm;
+            });
+        }
+
     }
 
     openNew() {
+        this.isEdit = false;
         this.usersubmenu = {};
+        this.selectedRole = {};
+        // this.selectedPage!.subMenus = [];
+        this.userMainMenus = [];
+        this.pages = [];
         this.submitted = false;
         this.usersubmenuDialog = true;
     }
@@ -118,12 +128,16 @@ export class UserSubMenuComponent implements OnInit {
     }
 
     editUserSubMenu(usersubmenu: UserSubMenu) {
-        console.log(usersubmenu)
+        //console.log(usersubmenu)
+        this.isEdit = true;
+        this.userMainMenus = [];
+        this.pages = [];
         this.usersubmenu = { ...usersubmenu };
         this.selectedRole = this.roles.find(role => role.id == usersubmenu.role);
-        // this.fetchUserMainMenus();
-        // this.fetchSubMenus();
-        //    this.selectedPage = this.pages.find(page => page.pageName == usersubmenu.subMenu.pageName);
+        this.userMainMenus.push(usersubmenu.userMainMenu);
+        this.selectedUserMainMenu = this.userMainMenus[0];
+        this.pages.push(usersubmenu.subMenu);
+        this.selectedPage = this.pages[0];
         this.usersubmenuDialog = true;
     }
 
@@ -144,7 +158,7 @@ export class UserSubMenuComponent implements OnInit {
         this.usersubmenuService.deleteUserSubMenu(this.usersubmenu.id).subscribe(
             {
                 next: (data) => {
-                    if (data.message === 'Success') {
+                    if (data.message === 'operation.ok') {
                         this.usersubmenus = this.usersubmenus.filter(val => val.id !== this.usersubmenu.id);
                         this.messageService.add({
                             severity: 'success', summary: 'Successful',
@@ -155,9 +169,10 @@ export class UserSubMenuComponent implements OnInit {
                 },
                 error: (e) => {
                     console.error(e.message);
+                    this.auth = true;
                     this.messageService.add({
-                        severity: 'erorr', summary: 'Erorr',
-                        detail: e.message
+                        severity: 'error', summary: 'Error',
+                        detail: 'e.message'
                     });
                 }
             }
@@ -202,6 +217,9 @@ export class UserSubMenuComponent implements OnInit {
                     this.usersubmenuService.updateUserSubMenu(reqBody).subscribe(data => {
                         this.usersubmenu = data;
                         this.usersubmenus[this.findIndexById(this.usersubmenu.id)] = this.usersubmenu;
+
+                        console.log(data)
+
                         this.messageService.add({
                             severity: 'success', summary: 'Successful',
                             detail: 'UserSubMenu Updated'
@@ -232,7 +250,10 @@ export class UserSubMenuComponent implements OnInit {
 
             } else {
                 this.auth = true;
-                console.log('selected auth is not valid')
+                this.messageService.add({
+                    severity: 'error', summary: 'Error',
+                    detail: 'select at least one permission.'
+                });
             }
 
         }
