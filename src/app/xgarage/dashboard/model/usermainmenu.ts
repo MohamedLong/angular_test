@@ -1,9 +1,8 @@
-import { UserSubMenu } from './usersubmenu';
 import { MainMenu } from './mainmenu';
-import { Role } from '../../common/model/role';
+import { UserRootMenu } from './userrootmenu';
 export interface UserMainMenu {
     id?: number;
-    role?: Role;
+    role?: number;
     mainMenu?: MainMenu;
-    subMenus?: UserSubMenu[];
+    userRootMenu?: UserRootMenu;
 }

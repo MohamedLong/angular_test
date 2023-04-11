@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { config } from 'src/app/config';
 import { MessageResponse } from '../../common/dto/messageresponse';
 import { UserMainMenu } from '../model/usermainmenu';
+import { UserMainMenuDto } from '../dto/usermainmenudto';
 
 @Injectable({providedIn: 'root'})
 export class UserMainMenuService {
@@ -17,9 +18,9 @@ export class UserMainMenuService {
     }
 
     getUserMainMenusByRoleId(id:number) {
-        return this.http.get<UserMainMenu[]>(`${config.dashboardUrl}/userMainMenu/role/id/${id}`)
+        return this.http.get<UserMainMenuDto[]>(`${config.dashboardUrl}/userMainMenu/role/${id}`)
             .toPromise()
-            .then(res => res as UserMainMenu[])
+            .then(res => res as UserMainMenuDto[])
             .then(data => data);
     }
 

@@ -8,8 +8,8 @@ export class SubMenuService {
 
     constructor(private http: HttpClient) { }
 
-    getSubMenusByRoleId(id: number) {
-        return this.http.get<SubMenu[]>(`${config.dashboardUrl}/subMenu/main/${id}`)
+    getSubMenusByModule(id: number) {
+        return this.http.get<SubMenu[]>(config.dashboardUrl + '/subMenu/main/' + id)
             .toPromise()
             .then(res => res as SubMenu[])
             .then(data => data);

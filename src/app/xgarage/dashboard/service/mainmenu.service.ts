@@ -8,15 +8,8 @@ export class MainMenuService {
 
     constructor(private http: HttpClient) { }
 
-    getMenues(id: number) {
-        return this.http.get<MainMenu[]>(config.dashboardUrl + '/userMainMenu/role/' + id)
-            .toPromise()
-            .then(res => res as MainMenu[])
-            .then(data => data);
-    }
-
     getAllMenues() {
-      return this.http.get<MainMenu[]>(config.dashboardUrl + '/userMainMenu/all')
+      return this.http.get<MainMenu[]>(config.dashboardUrl + '/mainMenu/all')
           .toPromise()
           .then(res => res as MainMenu[])
           .then(data => data);

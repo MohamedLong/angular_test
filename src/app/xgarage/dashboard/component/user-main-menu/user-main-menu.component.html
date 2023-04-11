@@ -20,7 +20,7 @@
       </p-toolbar>
       <p-table #dt [value]="usermainmenus" [columns]="cols" dataKey="id" [rows]="10" [loading]="loading"
         [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true"
-        [globalFilterFields]="['id','role.roleName']" responsiveLayout="scroll">
+        [globalFilterFields]="['id','role.roleName', 'mainMenu.pageName']" responsiveLayout="scroll">
         <ng-template pTemplate="caption">
           <div class="flex justify-content-between flex-column sm:flex-row">
             <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash"
@@ -34,22 +34,20 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="id">{{"common.id" | translate}}<p-sortIcon field="id"></p-sortIcon>
+            <th>{{"common.id" | translate}}
             </th>
-            <th>
+            <th pSortableColumn="role">
               <div class="flex justify-content-between align-items-center">
-                {{"USERMAINMENU.TABLECOLUMN.ROLE" | translate}}
-                <!-- <p-columnFilter type="text" field="usermainmenusName" display="menu" placeholder="Search by usermainmenu name"></p-columnFilter> -->
+                {{"USERMAINMENU.TABLECOLUMN.ROLE" | translate}}<p-sortIcon field="role"></p-sortIcon>
               </div>
-            </th>
+              </th>
             <th>
               <div class="flex justify-content-between align-items-center">
                 {{"USERMAINMENU.TABLECOLUMN.PAGE" | translate}}
-                <p-columnFilter type="text" field="mainMenu.pageName" display="menu" placeholder="Search by page">
-                </p-columnFilter>
               </div>
             </th>
-            <th></th>
+            <th pColumn="actions">{{'common.actions' | translate }}
+            </th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-usermainmenu>
@@ -58,7 +56,7 @@
               {{usermainmenu.id}}
             </td>
             <td style="min-width: 12rem;">
-              {{usermainmenu.role == 1? 'ROLE_USER' : 'ROLE_SUPPLIER'}}
+              {{getRoleNameFromId(usermainmenu.role)}}
             </td>
             <td style="min-width: 12rem;">
               {{usermainmenu.mainMenu? usermainmenu.mainMenu.pageName : '-'}}
@@ -83,24 +81,32 @@
         </ng-template>
       </p-table>
     </div>
-    <p-dialog [(visible)]="usermainmenuDialog" [style]="{width: '450px'}" header="User Main Menu Details" [modal]="true"
+    <p-dialog [(visible)]="usermainmenuDialog" [style]="{width: '450px'}" header="{{ 'USERMAINMENU.DIALOG.TITLE' | translate}}" [modal]="true"
       class="p-fluid">
       <ng-template pTemplate="content">
         <div class="field">
           <label for="roleId">{{'USERMAINMENU.DIALOG.ROLE' | translate}}</label>
-          <p-dropdown [options]="roles" [(ngModel)]="selectedRole"  placeholder="{{'USERMAINMENU.DIALOG.ROLESELECTOR' | translate}}" optionLabel="roleName" [showClear]="true">
+          <p-dropdown [options]="roles" [(ngModel)]="selectedRole"  placeholder="{{'USERMAINMENU.DIALOG.ROLESELECTOR' | translate}}" optionLabel="roleName" [showClear]="true" (onChange)="fetchUserRootMenusByRole(selectedRole)">
           </p-dropdown>
-
           <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
           <small class="p-error block" *ngIf="submitted && !selectedRole">{{"USERMAINMENU.DIALOG.ROLEREQUIRED" | translate}}</small>
         </div>
         <div class="field">
-          <label for="roleId">{{"USERMAINMENU.DIALOG.MODULE" | translate}}</label>
-          <p-dropdown appendTo="body" [options]="modules" [(ngModel)]="selectedModule" placeholder="{{'USERMAINMENU.DIALOG.MODULESELECTOR' | translate}}" optionLabel="mainMenu.pageName" [showClear]="true"></p-dropdown>
+          <label for="module">{{"USERMAINMENU.DIALOG.rootModule" | translate}}</label>
+          <p-dropdown appendTo="body" [options]="userRootMenus" [(ngModel)]="selectedRootModule" placeholder="{{'USERMAINMENU.DIALOG.rootModuleSelector' | translate}}" optionLabel="moduleName" [showClear]="true" (onChange)="filterModules(selectedRootModule)"></p-dropdown>
+
+          <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
+          <small class="p-error block" *ngIf="submitted && !selectedRootMenu">{{"USERMAINMENU.DIALOG.rootModuleRequired" | translate}}</small>
+        </div>
+
+        <div class="field">
+          <label for="module">{{"USERMAINMENU.DIALOG.MODULE" | translate}}</label>
+          <p-dropdown appendTo="body" [options]="modules" [(ngModel)]="selectedModule" placeholder="{{'USERMAINMENU.DIALOG.MODULESELECTOR' | translate}}" optionLabel="pageName" [showClear]="true"></p-dropdown>
 
           <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
           <small class="p-error block" *ngIf="submitted && !selectedModule">{{"USERMAINMENU.DIALOG.MODULEREQUIRED" | translate}}</small>
         </div>
+
       </ng-template>
 
       <ng-template pTemplate="footer">

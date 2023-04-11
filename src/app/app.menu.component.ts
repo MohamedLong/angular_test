@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AppComponent} from './app.component';
 import { MainMenu } from './xgarage/dashboard/model/mainmenu';
-import { MainMenuService } from './xgarage/dashboard/service/mainmenu.service';
+import { UserMainMenuService } from './xgarage/dashboard/service/usermainmenu.service';
 
 @Component({
     selector: 'app-menu',
@@ -31,11 +31,11 @@ export class AppMenuComponent implements OnInit {
 
     model: MainMenu[];
 
-    constructor(public app: AppComponent, private menuService: MainMenuService) {
+    constructor(public app: AppComponent, private userMainMenuService: UserMainMenuService) {
     }
 
     ngOnInit() {
-        this.menuService.getMenues(JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).roles[0].id : null).then(menues => {
+        this.userMainMenuService.getUserMainMenusByRoleId(JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).roles[0].id : null).then(menues => {
             this.model = menues;
         });
         // this.model = [

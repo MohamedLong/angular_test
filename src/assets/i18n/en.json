@@ -456,7 +456,7 @@
         "deleteRole": "Are you sure you want to delete selected user role?"
     },
     "USERMAINMENU": {
-        "TITLE": "User Main Menues",
+        "TITLE": "Module Permission",
         "NEW": "New",
         "EXPORT": "Export",
         "TABLEFILTER": {
@@ -466,29 +466,32 @@
         "TABLECOLUMN": {
             "ID": "ID",
             "ROLE": "Role",
-            "PAGE": "Page",
-            "PAGEFILTER": "Search by page name",
-            "EMPTYMESSAGE": "No user main menues found.",
-            "LOADING": "Loading user main menues data. Please wait."
+            "PAGE": "Module",
+            "PAGEFILTER": "Search by module name",
+            "EMPTYMESSAGE": "No user modules found.",
+            "LOADING": "Loading user modules data. Please wait."
         },
         "DIALOG": {
-            "TITLE": "User Main Menu Details",
+            "TITLE": "User Modules Details",
             "ROLE": "Role",
             "ROLESELECTOR": "select a role",
             "ROLEREQUIRED": "Role is Required",
+            "rootModule": "Root Module",
+            "rootModuleSelector": "select a root module",
+            "rootModuleRequired": "Root Module is Required.",
             "MODULE": "Module",
             "MODULESELECTOR": "select a module",
             "MODULEREQUIRED": "Module is Required",
             "CANCEL": "Cancel",
             "SAVE": "Save",
             "DELETEPROMPT": "Are you sure you want to delete ",
-            "MENUDELETEPROMPT": "Are you sure you want to delete selected usermainmenus?",
+            "MENUDELETEPROMPT": "Are you sure you want to delete selected modules?",
             "PROMPTNOOPTION": "No",
             "PROMPTYESOPTION": "Yes"
         }
     },
     "USERSUBMENU": {
-        "TITLE": "User Sub Menues",
+        "TITLE": "User Page Permission",
         "NEW": "New",
         "EXPORT": "Export",
         "TABLEFILTER": {
@@ -500,11 +503,11 @@
             "ROLE": "Role",
             "PAGE": "Page",
             "PAGEFILTER": "Search by page name",
-            "EMPTYMESSAGE": "No user sub menues found.",
-            "LOADING": "Loading user sub menues data. Please wait."
+            "EMPTYMESSAGE": "No user pages found.",
+            "LOADING": "Loading user pages data. Please wait."
         },
         "DIALOG": {
-            "TITLE": "User Sub Menu Details",
+            "TITLE": "User Page Details",
             "ROLE": "Role",
             "ROLESELECTOR": "select a role",
             "ROLEREQUIRED": "Role is Required",
@@ -527,7 +530,7 @@
             "CANCEL": "Cancel",
             "SAVE": "Save",
             "DELETEPROMPT": "Are you sure you want to delete ",
-            "DELETESELECTEDPROMPT": "Are you sure you want to delete selected users?",
+            "DELETESELECTEDPROMPT": "Are you sure you want to delete selected pages?",
             "PROMPTNOOPTION": "No",
             "PROMPTYESOPTION": "Yes",
             "PERMISSIONSELECTOR": "select at least one permission."

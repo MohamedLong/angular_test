@@ -1,11 +1,10 @@
-import { SubMenu } from './submenu';
+import { RootMenu } from './rootmenu';
 export interface MainMenu{
-    id: number;
-    pageName: string;
-    uiComponent: string;
-    routerLink: string;
-    icon: string;
-    subMenus: Array<SubMenu>;
-    mainMenu: any;
-    rootMenu: {id: number, icon: string, moduleName: string, pageOrder: number}
+    id?: number;
+    pageName?: string;
+    uiComponent?: string;
+    routerLink?: string;
+    icon?: string;
+    pageOrder?: number;
+    rootMenu?: RootMenu;
 }

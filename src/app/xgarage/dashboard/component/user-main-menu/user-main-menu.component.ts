@@ -3,13 +3,13 @@ import { MainMenuService } from '../../service/mainmenu.service';
 import { RoleService } from '../../service/role.service';
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { UserMainMenuService } from '../../service/usermainmenu.service';
-import { Table, TableModule } from 'primeng/table';
+import { Table} from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api'
 import { Role } from 'src/app/xgarage/common/model/role';
 import { UserMainMenu } from '../../model/usermainmenu';
 import { MainMenu } from '../../model/mainmenu';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { UserSubMenuService } from '../../service/usersubmenu.service';
+import { UserRootMenuService } from '../../service/userrootmenuservice';
+import { UserRootMenuDto } from '../../dto/userrootmenudto';
 
 @Component({
     selector: 'app-user-main-menu',
@@ -30,7 +30,7 @@ import { UserSubMenuService } from '../../service/usersubmenu.service';
         }
     `]
 })
-export class UserMainMenuComponent implements OnInit {
+export class UserMainMenuComponent implements OnInit{
 
     usermainmenus: UserMainMenu[];
 
@@ -40,11 +40,15 @@ export class UserMainMenuComponent implements OnInit {
 
     selectedRole: Role;
 
-    modules: MainMenu[];
+    modules: MainMenu[] = [];
 
     selectedModule: MainMenu;
 
-    selectedUserMainMenus: UserMainMenu[];
+    selectedUserMainMenus: UserMainMenu[] = [];
+
+    userRootMenus: UserRootMenuDto[] = [];
+
+    selectedRootModule: UserRootMenuDto;
 
     usermainmenuDialog: boolean;
 
@@ -70,57 +74,74 @@ export class UserMainMenuComponent implements OnInit {
 
     deleteAuth: boolean;
 
-    printAuth: boolean;
-
-    constructor(private usersubmenuservice: UserSubMenuService, private route: ActivatedRoute, private router: Router, private mainMenuService: MainMenuService, private roleService: RoleService, private usermainmenuService: UserMainMenuService, private messageService: MessageService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef) { }
+    constructor(private route: ActivatedRoute, private userRootMenuService: UserRootMenuService, private mainMenuService: MainMenuService, private roleService: RoleService, private usermainmenuService: UserMainMenuService, private messageService: MessageService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef) { }
 
 
     ngOnInit() {
+       this.getAllRoles();
+       this.getAllMainMenus();
+       this.fetchUserMainMenus();
+        if(localStorage.getItem('subs')) {
+            let subs = JSON.parse(localStorage.getItem('subs'));
+            const filtered = subs.filter(sub => this.route.routeConfig.path === sub.subMenu.routerLink);
+            if (filtered && filtered.length > 0) {
+                this.route.routeConfig.data = { newAuth: filtered[0].newAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth}
+            } else {
+                this.route.routeConfig.data = { newAuth: false, editAuth: false, deleteAuth: false}
+            }
+            this.editAuth = this.route.routeConfig.data && this.route.routeConfig.data.editAuth ? this.route.routeConfig.data.editAuth : false;
+            this.newAuth = this.route.routeConfig.data && this.route.routeConfig.data.newAuth ? this.route.routeConfig.data.newAuth : false;
+            this.deleteAuth = this.route.routeConfig.data && this.route.routeConfig.data.deleteAuth ? this.route.routeConfig.data.deleteAuth : false;
+
+            this.loading = false;
+
+            this.cols = [
+                { field: 'id', header: 'Id' },
+                { field: 'role.roleName', header: 'Role' },
+                { field: 'usermainmenu.mainMenu.pageName', header: 'Module Name' }
+            ];
+        }
+    }
+
+    getAllRoles() {
         this.roleService.getRoles().then(roles => {
             this.roles = roles;
             // console.log(roles)
         });
+    }
 
-        this.mainMenuService.getAllMenues().then(umm => {
-            this.modules = umm;
-            // console.log(umm)
-        });
-
-        this.usermainmenuService.getUserMainMenus().then(usermainmenus => {
-            if (localStorage.getItem('subs')) {
-                let subs = JSON.parse(localStorage.getItem('subs'));
-                const filtered = subs.filter(sub => this.route.routeConfig.path === sub.subMenu.routerLink);
-                if (filtered && filtered.length > 0) {
-                    this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth }
-                } else {
-                    this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false }
-                }
-
-                this.editAuth = this.route.routeConfig.data.editAuth;
-                this.newAuth = this.route.routeConfig.data.newAuth;
-                this.printAuth = this.route.routeConfig.data.printAuth;
-                this.deleteAuth = this.route.routeConfig.data.deleteAuth;
-                this.usermainmenus = usermainmenus;
-                //console.log(this.usermainmenus)
-                this.loading = false;
-
-                this.cols = [
-                    { field: 'id', header: 'Id' },
-                    { field: 'role.roleName', header: 'Role' },
-                ];
-            }
+    fetchUserMainMenus() {
+        this.usermainmenuService.getUserMainMenus().then(umm => {
+            this.usermainmenus = umm;
+            console.log(this.modules);
         });
     }
 
-    fetchMainMenus() {
+    fetchUserRootMenusByRole(role: Role) {
+        this.userRootMenuService.getUserRootMenusByRoleId(role.id).then(umm => {
+            this.userRootMenus = umm;
+        });
+    }
+
+    filterModules(selectedRootModule: UserRootMenuDto){
+        this.modules.filter(m => m.rootMenu.id = selectedRootModule.moduleId);
+    }
+
+    getRoleNameFromId(id: number) {
+        return this.roles.find(r => r.id == id).roleName;
+    }
+
+    getAllMainMenus() {
         this.mainMenuService.getAllMenues().then(umm => {
             this.modules = umm;
-            console.log(this.modules);
         });
     }
 
     openNew() {
         this.usermainmenu = {};
+        this.selectedRole = {};
+        this.selectedRootModule = {};
+        this.selectedModule = {};
         this.submitted = false;
         this.usermainmenuDialog = true;
     }
@@ -132,8 +153,17 @@ export class UserMainMenuComponent implements OnInit {
     editUserMainMenu(usermainmenu: UserMainMenu) {
         // console.log(usermainmenu)
         this.usermainmenu = { ...usermainmenu };
+        console.log('this.usermainmenu: ', this.usermainmenu);
         this.selectedRole = this.roles.find(role => role.id == usermainmenu.role);
-        this.selectedModule = this.modules.find(module => module.mainMenu.id == usermainmenu.mainMenu.id);
+        if(this.userRootMenus.length == 0) {
+            this.userRootMenuService.getUserRootMenusByRoleId(this.selectedRole.id).then(umm => {
+                this.userRootMenus = umm;
+                  this.selectedRootModule = this.userRootMenus[0];
+            });
+        }else{
+            this.selectedRootModule = this.userRootMenus[0];
+        }
+        this.selectedModule = this.modules.find(module => module.id == usermainmenu.mainMenu.id);
         this.usermainmenuDialog = true;
     }
 
@@ -154,7 +184,7 @@ export class UserMainMenuComponent implements OnInit {
         this.usermainmenuService.deleteUserMainMenu(this.usermainmenu.id).subscribe(
             {
                 next: (data) => {
-                    if (data.message === 'Success') {
+                    if (data.messageCode === 200) {
                         this.usermainmenus = this.usermainmenus.filter(val => val.id !== this.usermainmenu.id);
                         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserMainMenu Deleted', life: 3000 });
                         this.usermainmenu = {};
@@ -176,25 +206,19 @@ export class UserMainMenuComponent implements OnInit {
     saveUserMainMenu() {
         this.submitted = true;
         // console.log(this.selectedModule, this.selectedRole)
-        if (this.selectedRole && this.selectedModule) {
+        if (this.selectedRole && this.selectedModule && this.selectedRootModule) {
             this.submitted = false;
-            this.usermainmenu.role = this.selectedRole;
+            this.usermainmenu.role = this.selectedRole.id;
             this.usermainmenu.mainMenu = this.selectedModule;
+            this.usermainmenu.userRootMenu = {id: this.selectedRootModule.moduleId};
 
             if (this.usermainmenu.id) {
-                // @ts-ignore
-                let updateReqBody = {
-                    id: this.usermainmenu.id,
-                    role: this.usermainmenu.role.id,
-                    userRootMenu: { id: this.usermainmenu.mainMenu.mainMenu.rootMenu.id },
-                    mainMenu: { id: this.usermainmenu.mainMenu.id }
-                }
-                this.usermainmenuService.updateUserMainMenu(updateReqBody).subscribe(
+                this.usermainmenuService.updateUserMainMenu(this.usermainmenu).subscribe(
                     {
                         next: (data) => {
                             this.usermainmenu = data;
-                            this.usermainmenus[this.findIndexById(this.usermainmenu.id)] = this.usermainmenu;
-                            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserMainMenu Updated', life: 3000 });
+                            this.usermainmenus[this.findIndexById(this.usermainmenu.id, this.usermainmenus)] = this.usermainmenu;
+                            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Module Permission Updated', life: 3000 });
                         },
                         error: (e) => {
                             console.error(e.message);
@@ -202,24 +226,14 @@ export class UserMainMenuComponent implements OnInit {
                         }
                     }
                 );
-            } else {
-                // this.usermainmenu.id = this.createId();
-                // @ts-ignore
-                console.log(this.usermainmenu)
-                let reqBody = {
-                    role: this.usermainmenu.role.id,
-                    userRootMenu: { id: this.usermainmenu.mainMenu.mainMenu.rootMenu.id },
-                    mainMenu: { id: this.usermainmenu.mainMenu.id }
-                }
-
-                this.usermainmenuService.saveUserMainMenu(reqBody).subscribe(
+            } else{
+                this.usermainmenuService.saveUserMainMenu(this.usermainmenu).subscribe(
                     {
                         next: (data) => {
                             this.usermainmenu = data;
                             console.log(data);
                             this.usermainmenus.push(this.usermainmenu);
-                            this.usermainmenus[this.findIndexById(this.usermainmenu.id)] = this.usermainmenu;
-                            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserMainMenu Created', life: 3000 });
+                            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Module Permission Created', life: 3000 });
                         },
                         error: (e) => {
                             console.error(e.message);
@@ -234,15 +248,14 @@ export class UserMainMenuComponent implements OnInit {
         }
     }
 
-    findIndexById(id: Number): number {
+    findIndexById(id: Number, myList: any[]): number {
         let index = -1;
-        for (let i = 0; i < this.usermainmenus.length; i++) {
-            if (this.usermainmenus[i].id === id) {
+        for (let i = 0; i < myList.length; i++) {
+            if (myList[i].id === id) {
                 index = i;
                 break;
             }
         }
-
         return index;
     }
 

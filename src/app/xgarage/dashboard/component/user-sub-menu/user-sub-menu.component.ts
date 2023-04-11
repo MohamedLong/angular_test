@@ -3,12 +3,12 @@ import { UserMainMenuService } from '../../service/usermainmenu.service';
 import { RoleService } from '../../service/role.service';
 import { Component, OnInit, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { UserSubMenuService } from '../../service/usersubmenu.service';
-import { Table, TableModule } from 'primeng/table';
+import { Table} from 'primeng/table';
 import { MessageService, ConfirmationService } from 'primeng/api'
 import { UserSubMenu } from '../../model/usersubmenu';
 import { Role } from 'src/app/xgarage/common/model/role';
 import { SubMenu } from '../../model/submenu';
-import { UserMainMenu } from '../../model/usermainmenu';
+import { UserMainMenuDto } from '../../dto/usermainmenudto';
 
 @Component({
     selector: 'app-user-sub-menu',
@@ -43,9 +43,9 @@ export class UserSubMenuComponent implements OnInit {
 
     selectedPage: SubMenu;
 
-    userMainMenus: UserMainMenu[];
+    userMainMenus: UserMainMenuDto[];
 
-    selectedUserMainMenu: UserMainMenu;
+    selectedUserMainMenu: UserMainMenuDto;
 
     usersubmenuDialog: boolean;
 
@@ -77,38 +77,48 @@ export class UserSubMenuComponent implements OnInit {
 
 
     ngOnInit() {
+        this.getAllRoles();
+        this.getUserSubMenus();
+        this.cols = [
+            { field: 'id', header: 'Id' },
+            { field: 'role.roleName', header: 'Role' },
+        ];
+  
+    }
+
+    getAllRoles(){
         this.roleService.getRoles().then(roles => {
             this.roles = roles;
         });
+    }
 
+    getUserSubMenus() {
         this.usersubmenuService.getUserSubMenus().then(usersubmenus => {
             this.usersubmenus = usersubmenus;
-            console.log(this.usersubmenus)
             this.loading = false;
-
-            this.cols = [
-                { field: 'id', header: 'Id' },
-                { field: 'role.roleName', header: 'Role' },
-            ];
         });
     }
 
-    fetchUserMainMenus() {
+    fetchUserMainMenus(role: Role) {
         console.log(this.selectedRole.id)
-        this.userMainMenuService.getUserMainMenusByRoleId(this.selectedRole.id).then(umm => {
+        this.userMainMenuService.getUserMainMenusByRoleId(role.id).then(umm => {
             this.userMainMenus = umm;
-            console.log(umm)
         });
     }
 
-    fetchSubMenus() {
-        this.subMenuService.getSubMenusByRoleId(this.selectedUserMainMenu.mainMenu.id).then(sm => {
+    fetchSubMenus(module: UserMainMenuDto) {
+        console.log('selected module: ', module);
+        this.pages = [];
+        this.subMenuService.getSubMenusByModule(module.pageId).then(sm => {
             this.pages = sm;
         });
     }
 
     openNew() {
         this.usersubmenu = {};
+        this.selectedRole = {};
+        this.selectedPage = {};
+        this.selectedUserMainMenu = {};
         this.submitted = false;
         this.usersubmenuDialog = true;
     }
@@ -118,12 +128,12 @@ export class UserSubMenuComponent implements OnInit {
     }
 
     editUserSubMenu(usersubmenu: UserSubMenu) {
-        console.log(usersubmenu)
+        console.log('usersubmenu: ', usersubmenu);
         this.usersubmenu = { ...usersubmenu };
         this.selectedRole = this.roles.find(role => role.id == usersubmenu.role);
-        // this.fetchUserMainMenus();
-        // this.fetchSubMenus();
-        //    this.selectedPage = this.pages.find(page => page.pageName == usersubmenu.subMenu.pageName);
+        // this.selectedUserMainMenu = usersubmenu.userMainMenu;
+        this.selectedPage = usersubmenu.subMenu;
+        console.log('this.selectedPage: ', this.selectedPage);
         this.usersubmenuDialog = true;
     }
 
@@ -144,11 +154,11 @@ export class UserSubMenuComponent implements OnInit {
         this.usersubmenuService.deleteUserSubMenu(this.usersubmenu.id).subscribe(
             {
                 next: (data) => {
-                    if (data.message === 'Success') {
+                    if (data.messageCode === 200) {
                         this.usersubmenus = this.usersubmenus.filter(val => val.id !== this.usersubmenu.id);
                         this.messageService.add({
                             severity: 'success', summary: 'Successful',
-                            detail: 'UserSubMenu Deleted'
+                            detail: 'Page Permission Deleted'
                         });
                         this.usersubmenu = {};
                     }
@@ -176,35 +186,18 @@ export class UserSubMenuComponent implements OnInit {
             console.log('selected role is valid')
             if (this.usersubmenu.newAuth || this.usersubmenu.editAuth || this.usersubmenu.deleteAuth || this.usersubmenu.printAuth || this.usersubmenu.approveAuth || this.usersubmenu.cancelAuth || this.usersubmenu.acceptAuth || this.usersubmenu.completeAuth) {
                 this.auth = false;
-                console.log('selected auth is valid')
+                console.log('selected permission is valid')
                 this.auth = true
-                this.usersubmenu.role = this.selectedRole;
-                this.usersubmenu.userMainMenu = this.selectedUserMainMenu;
+                this.usersubmenu.role = this.selectedRole.id;
+                this.usersubmenu.userMainMenu = {id: this.selectedUserMainMenu.id};
                 this.usersubmenu.subMenu = this.selectedPage;
-
-                let reqBody = {
-                    role: this.usersubmenu.role.id,
-                    userMainMenu: { id: this.usersubmenu.userMainMenu.id },
-                    subMenu: { id: this.usersubmenu.subMenu.id },
-                    newAuth: this.usersubmenu.newAuth ? 1 : null,
-                    deleteAuth: this.usersubmenu.deleteAuth ? 1 : null,
-                    printAuth: this.usersubmenu.printAuth ? 1 : null,
-                    approveAuth: this.usersubmenu.approveAuth ? 1 : null,
-                    cancelAuth: this.usersubmenu.cancelAuth ? 1 : null,
-                    editAuth: this.usersubmenu.editAuth ? 1 : null,
-                    acceptAuth: this.usersubmenu.acceptAuth ? 1 : null,
-                    completeAuth: this.usersubmenu.completeAuth ? 1 : null
-                }
-
                 if (this.usersubmenu.id) {
-                    reqBody['id'] = this.usersubmenu.id;
-                    // @ts-ignore
-                    this.usersubmenuService.updateUserSubMenu(reqBody).subscribe(data => {
+                    this.usersubmenuService.updateUserSubMenu(this.usersubmenu).subscribe(data => {
                         this.usersubmenu = data;
                         this.usersubmenus[this.findIndexById(this.usersubmenu.id)] = this.usersubmenu;
                         this.messageService.add({
                             severity: 'success', summary: 'Successful',
-                            detail: 'UserSubMenu Updated'
+                            detail: 'Page Permission  Updated'
                         });
 
                     }, err => {
@@ -213,12 +206,10 @@ export class UserSubMenuComponent implements OnInit {
                     }
                     );
                 } else {
-                    // this.usersubmenu.id = this.createId();
-                    // @ts-ignore
-                    this.usersubmenuService.saveUserSubMenu(reqBody).subscribe(data => {
+                    this.usersubmenuService.saveUserSubMenu(this.usersubmenu).subscribe(data => {
                         this.usersubmenu = data;
                         this.usersubmenus.push(this.usersubmenu);
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserSubMenu Created', life: 3000 });
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Page Permission Created', life: 3000 });
                     }, err => {
                         console.error(err.message);
                         this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: err.message, life: 3000 });
@@ -232,7 +223,7 @@ export class UserSubMenuComponent implements OnInit {
 
             } else {
                 this.auth = true;
-                console.log('selected auth is not valid')
+                console.log('selected permission is not valid')
             }
 
         }
@@ -258,6 +249,10 @@ export class UserSubMenuComponent implements OnInit {
     clear(table: Table) {
         table.clear();
         this.filter.nativeElement.value = '';
+    }
+
+    getRoleNameFromId(id: number) {
+        return this.roles.find(r => r.id == id).roleName;
     }
 
 }

@@ -3,7 +3,7 @@ import { SubMenu } from './submenu';
 import { UserMainMenu } from './usermainmenu';
 export interface UserSubMenu {
     id?: number;
-    role?: Role;
+    role?: number;
     userMainMenu?: UserMainMenu;
     subMenu?: SubMenu;
     newAuth?: boolean;

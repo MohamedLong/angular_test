@@ -1,5 +1,5 @@
-export interface RootMenu {
-    id?: number;
+export interface UserRootMenuDto{
+    moduleId?: number;
     moduleName?: string;
     icon?: string;
     pageOrder?: number;
