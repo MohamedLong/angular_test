@@ -98,7 +98,7 @@
                 </div>
                 <div class="field">
                     <label for="roleId">{{'USERSUBMENU.TABLECOLUMN.PAGE' | translate}}</label>
-                    <p-dropdown [disabled]="isEdit" [options]="pages" [(ngModel)]="selectedPage" optionLabel="pageName" [showClear]="true" placeholder="{{'USERSUBMENU.DIALOG.PAGESELECTOR' | translate}}">
+                    <p-dropdown [options]="pages" [(ngModel)]="selectedPage" optionLabel="pageName" [showClear]="true" placeholder="{{'USERSUBMENU.DIALOG.PAGESELECTOR' | translate}}">
                     </p-dropdown>
                     <!-- <input type="text" pInputText id="subjectCategoryId" [(ngModel)]="subject.subjectCategoryId" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !subject.subjectCategoryId}"/> -->
                     <small class="p-error block" *ngIf="submitted && !selectedPage">{{'USERSUBMENU.DIALOG.PAGEREQUIRED' | translate}}</small>
@@ -160,7 +160,7 @@
         <p-dialog [(visible)]="deleteUserSubMenusDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Are you sure you want to delete selected usersubmenus?</span>
+                <span>Are you sure you want to delete selected page permission?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteUserSubMenusDialog = false"></button>

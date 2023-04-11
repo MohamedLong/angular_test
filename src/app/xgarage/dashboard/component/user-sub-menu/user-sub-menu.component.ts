@@ -41,7 +41,7 @@ export class UserSubMenuComponent implements OnInit {
 
     pages: SubMenu[] = [];
 
-    selectedPage: SubMenu;
+    selectedPage: SubMenu; 
 
     userMainMenus: UserMainMenuDto[];
 
@@ -130,12 +130,19 @@ export class UserSubMenuComponent implements OnInit {
     }
 
     editUserSubMenu(usersubmenu: UserSubMenu) {
-        console.log('usersubmenu: ', usersubmenu);
         this.usersubmenu = { ...usersubmenu };
         this.selectedRole = this.roles.find(role => role.id == usersubmenu.role);
-        // this.selectedUserMainMenu = usersubmenu.userMainMenu;
-        this.selectedPage = usersubmenu.subMenu;
-        console.log('this.selectedPage: ', this.selectedPage);
+        this.userMainMenus = [];
+        console.log('this.usersubmenu: ', this.usersubmenu);
+        this.selectedUserMainMenu = {
+            id: this.usersubmenu.userMainMenu.id,
+            pageId: this.usersubmenu.userMainMenu.mainMenu.id,
+            pageName: this.usersubmenu.userMainMenu.mainMenu.pageName
+        }
+        this.userMainMenus.push(this.selectedUserMainMenu);
+        this.selectedPage = this.usersubmenu.subMenu;
+        this.pages = [];
+        this.pages.push(this.selectedPage);
         this.usersubmenuDialog = true;
     }
 
@@ -178,6 +185,10 @@ export class UserSubMenuComponent implements OnInit {
     }
 
     hideDialog() {
+        this.usersubmenu = {};
+        this.selectedRole = {};
+        this.selectedPage = {};
+        this.selectedUserMainMenu = {};
         this.usersubmenuDialog = false;
         this.submitted = false;
     }
