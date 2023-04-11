@@ -186,13 +186,18 @@ export class UserMainMenuComponent implements OnInit{
                 next: (data) => {
                     if (data.messageCode === 200) {
                         this.usermainmenus = this.usermainmenus.filter(val => val.id !== this.usermainmenu.id);
-                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'UserMainMenu Deleted', life: 3000 });
+
+                        this.messageService.add({
+                            severity: 'success', summary: 'Successful',
+                            detail: 'UserMainMenu Deleted'
+                        });
+
                         this.usermainmenu = {};
                     }
                 },
                 error: (e) => {
                     console.error(e.message);
-                    this.messageService.add({ severity: 'erorr', summary: 'Erorr', detail: 'Erorr Deleteing UserMainMenu', life: 3000 });
+                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Erorr Deleteing UserMainMenu', life: 3000 });
                 }
             }
         );

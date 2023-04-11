@@ -162,16 +162,7 @@ export class AuthService {
     changePassword(body: any) {
         let user = this.getStoredUser();
         let userEmail = JSON.parse(user).email;
-        return this.http.post(this.apiUrl + '/recoverPassword/' + userEmail, body).pipe(
-            tap(res => {
-                return res;
-            }),
-            mapTo(true),
-            catchError(error => {
-                console.log('error:', error)
-                return of(false);
-            })
-        )
+        return this.http.post(this.apiUrl + '/recoverPassword/' + userEmail, body);
     };
 
     getAuthorizedMenu() {

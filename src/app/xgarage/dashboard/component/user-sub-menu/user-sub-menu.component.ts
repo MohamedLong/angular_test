@@ -39,7 +39,7 @@ export class UserSubMenuComponent implements OnInit {
 
     selectedRole: Role;
 
-    pages: SubMenu[];
+    pages: SubMenu[] = [];
 
     selectedPage: SubMenu;
 
@@ -72,6 +72,7 @@ export class UserSubMenuComponent implements OnInit {
     disableDeleteButton: boolean = false;
 
     auth: boolean = true;
+    isEdit: boolean = false;
 
     constructor(private subMenuService: SubMenuService, private userMainMenuService: UserMainMenuService, private roleService: RoleService, private usersubmenuService: UserSubMenuService, private messageService: MessageService, private confirmService: ConfirmationService, private cd: ChangeDetectorRef) { }
 
@@ -115,6 +116,7 @@ export class UserSubMenuComponent implements OnInit {
     }
 
     openNew() {
+        this.isEdit = false;
         this.usersubmenu = {};
         this.selectedRole = {};
         this.selectedPage = {};
@@ -165,9 +167,10 @@ export class UserSubMenuComponent implements OnInit {
                 },
                 error: (e) => {
                     console.error(e.message);
+                    this.auth = true;
                     this.messageService.add({
-                        severity: 'erorr', summary: 'Erorr',
-                        detail: e.message
+                        severity: 'error', summary: 'Error',
+                        detail: 'e.message'
                     });
                 }
             }
@@ -195,6 +198,9 @@ export class UserSubMenuComponent implements OnInit {
                     this.usersubmenuService.updateUserSubMenu(this.usersubmenu).subscribe(data => {
                         this.usersubmenu = data;
                         this.usersubmenus[this.findIndexById(this.usersubmenu.id)] = this.usersubmenu;
+
+                        console.log(data)
+
                         this.messageService.add({
                             severity: 'success', summary: 'Successful',
                             detail: 'Page Permission  Updated'
