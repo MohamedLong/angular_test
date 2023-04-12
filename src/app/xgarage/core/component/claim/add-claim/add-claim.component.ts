@@ -32,6 +32,23 @@ export class AddClaimComponent implements OnInit {
 
   activeTab = 'create-claim';
   car: any;
+  items: {id: number,name: string}[] = [
+    {id: 1, name: 'Key'},
+    {id: 2, name: 'Spare Wheel'},
+    {id: 3, name: 'Jack'},
+    {id: 4, name: 'Tools'},
+    {id: 5, name: 'Wheek Spanner'},
+    {id: 6, name: 'Wipers'},
+    {id: 7, name: 'C/Lighter'},
+    {id: 8, name: 'Radio/CD PLayer'},
+    {id: 9, name: 'Antenna'},
+    {id: 10, name: 'A/C'},
+    {id: 11, name: 'Wind Screen'},
+    {id: 12, name: 'Wheel Caps NO.'},
+    {id: 13, name: 'Fuel'},
+  ];
+
+  selectedItems;
   ngOnInit(): void {
     this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Add Claim', routerLink: ['add-claim'] }]);
   }
