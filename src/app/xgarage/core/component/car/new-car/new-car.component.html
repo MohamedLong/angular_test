@@ -77,22 +77,22 @@
                     *ngIf="submitted && !carForm.get('plateNumber').valid &&  carForm.get('plateNumber').errors?.['required']"
                     class="p-error">{{ 'car.form.plateRequired' | translate }}</small>
             </div>
-            <div class="col-12 md:col-6">
+            <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
                 <label class="block">Customer Name</label>
                 <input [(ngModel)]="customerName" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text" pInputText
                     placeholder="" required />
             </div>
-            <div class="col-12 md:col-6">
+            <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
                 <label class="block">Contact No</label>
                 <input [(ngModel)]="contactNO" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text" pInputText
                     placeholder="" required />
             </div>
-            <div class="col-12 md:col-6">
+            <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
                 <label class="block">Excess R.O</label>
                 <input [(ngModel)]="excess" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text" pInputText
                     placeholder="" required />
             </div>
-            <div class="col-12 md:col-6">
+            <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
                 <label class="block">Prepared By</label>
                 <input [(ngModel)]="preparedBy" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text" pInputText
                     placeholder="" required />
