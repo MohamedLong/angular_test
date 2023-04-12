@@ -1,7 +1,6 @@
 <div class="grid">
     <div class="col-12">
         <p-toast></p-toast>
-
         <!-- //Claim Components  -->
         <div class="card">
             <p-toolbar styleClass="mb-4">
@@ -9,6 +8,9 @@
                     <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
                         class="p-button-success mr-2 mb-2" (click)="new()" [disabled]="newAuth===false"
                         [hidden]="false"></button>
+                    <!-- <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
+                        class="p-button-success mr-2 mb-2" [routerLink]="['/add-claim']" [disabled]="newAuth===false"
+                        [hidden]="false"></button> -->
                 </ng-template>
 
                 <ng-template pTemplate="right">

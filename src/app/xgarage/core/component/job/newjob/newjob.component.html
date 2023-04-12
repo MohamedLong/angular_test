@@ -25,7 +25,7 @@
                     <form [formGroup]="jobForm" (ngSubmit)="onJobFormSubmit()">
                         <div class="grid" #fromContainer>
                             <div class="col-12" *ngIf="jobForm.get('car').value">
-                                <p-messages class="car-info" severity="info">
+                                <p-messages [styleClass]="'car-info'" severity="info">
                                     <ng-template pTemplate>
                                         <p>
                                             {{jobForm.get('car').value.brandId.brandName}}

@@ -100,6 +100,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     }
 
     new(): void {
+        //check id the role is user or an insurnce here
         this.openNew();
         var currentDate = new Date();
         this.master.claimDate = this.datePipe.transform(currentDate, 'yyyy-MM-dd');

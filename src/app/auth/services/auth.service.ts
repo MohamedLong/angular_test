@@ -90,7 +90,7 @@ export class AuthService {
 
     doStoreUser(token: string, router: Router, destination?: string) {
         this.decoded = jwt_decode(token);
-        this.http.get<any>(this.apiUrl + '/user')
+        this.http.get<any>(this.apiUrl + '/user/info')
             .subscribe(
                 {
                     next: (data) => {

@@ -51,6 +51,11 @@ export class NewCarComponent implements OnInit {
         gearType: ['Automatic', Validators.required],
     });
 
+    customerName: string = '';
+    contactNO: number = null;
+    excess: string = '';
+    preparedBy: string = '';
+
     @Input() type: string = 'new car';
     @Output() carEvent = new EventEmitter<{ car: Car }>();
     @Output() close = new EventEmitter<void>();
@@ -64,9 +69,17 @@ export class NewCarComponent implements OnInit {
 
     onCarFormSubmit() {
         // console.log(this.carForm.getRawValue())
+        let claimData = {
+            customerName: this.customerName,
+            contactNO: this.contactNO,
+            excess: this.excess,
+            preparedBy: this.preparedBy
+        }
+
         this.submitted = true;
         if (this.carForm.valid) {
-            if (this.found && this.type == 'new job') {
+            if (this.found && (this.type == 'new job' || this.type == 'new claim')) {
+                this.type == 'new claim'?  this.carForm.addControl('claimData', new FormControl(claimData)) : null;
                 this.carEvent.emit(this.carForm.getRawValue());
             } else {
                 //add new/update car
@@ -89,10 +102,12 @@ export class NewCarComponent implements OnInit {
 
                 //console.log('carDocument: ', carFormData.get('carDocument'));
                 this.carService.add(carFormData).subscribe(res => {
-                    if(this.type == "new job") {
+                    if (this.type == "new job"  || this.type == 'new claim') {
                         this.setSelectedCar(res);
+                        this.type == 'new claim'?  this.carForm.addControl('claimData', new FormControl(claimData)) : null;
                         this.carEvent.emit(this.carForm.getRawValue());
                     }
+
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
                     this.resetCarForm();
                     this.saving = false;
@@ -111,14 +126,14 @@ export class NewCarComponent implements OnInit {
             if (!this.carForm.get('chassisNumber').errors) {
                 this.carService.getCarByChn(this.carForm.get('chassisNumber').value).subscribe(res => {
                     //console.log('res:', res.document.name)
-                    this.image = res.document? config.apiUrl + '/v1/document/' + res.document.name : '';
+                    this.image = res.document ? config.apiUrl + '/v1/document/' + res.document.name : '';
                     this.found = true;
                     this.notFound = !this.found;
                     this.setSelectedCar(res);
                 }, err => {
                     this.found = false;
                     this.notFound = !this.found;
-                    // this.resetCarForm();
+                    this.resetCarForm();
                     //console.log('err:', err.error)
                 })
             };
@@ -249,7 +264,7 @@ export class NewCarComponent implements OnInit {
         this.carForm.removeControl('id');
 
         this.carForm.patchValue({
-            chassisNumber: this.type == 'new car'? "" : this.carForm.get('chassisNumber').value,
+            chassisNumber: this.type == 'new car' ? "" : this.carForm.get('chassisNumber').value,
             brandId: '',
             carModelId: '',
             carModelYearId: '',
