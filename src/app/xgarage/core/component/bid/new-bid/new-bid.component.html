@@ -5,12 +5,16 @@
     <ng-template pTemplate="header">
         <tr>
             <th>{{'bid.bidDetails.partName' | translate}}</th>
+            <th *ngIf="user == 'insurance'">Type</th>
+            <th *ngIf="user == 'insurance'">Request For</th>
+            <th *ngIf="user == 'insurance'">Action</th>
             <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.qty' | translate}}</th>
             <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.Proposed' | translate}}</th>
             <th>{{'bid.bidDetails.warranty' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.deliverDays' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.originalPrice' | translate}}</th>
             <th>{{'bid.bidDetails.price' | translate}}</th>
+            <th *ngIf="user == 'insurance'">Service Charge</th>
             <th *ngIf="user !== 'insurance'">
                 {{'bid.bidDetails.discountType' | translate}}
             </th>
@@ -20,13 +24,14 @@
             <th *ngIf="type == 'new bid' && user !== 'insurance'">{{'bid.bidDetails.partImgs' | translate}}</th>
             <th *ngIf="type == 'edit bid' && user !== 'insurance'">{{'common.status' | translate}}</th>
             <th *ngIf="user !== 'insurance'">{{'common.notes' | translate}}</th>
-            <th>{{'bid.bidDetails.modifyBid' | translate}}</th>
+            <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.modifyBid' | translate}}</th>
         </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-part let-editing="editing" let-ri="rowIndex">
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved}">
-            <td (click)="showModal(part)" style="cursor: pointer; border-right: 1px solid #dee2e6;"><span>{{type == 'new bid'?
+            <td (click)="showModal(part)" style="cursor: pointer; border-right: 1px solid #dee2e6;"><span>{{type == 'new
+                    bid'?
                     part.part.name : part.partName}}</span>
                 <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
             </td>
@@ -59,6 +64,9 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
+            <td *ngIf="user == 'insurance'">USED</td>
+            <td *ngIf="user == 'insurance'">Replace</td>
+            <td *ngIf="user == 'insurance'">Replace</td>
             <td class="text-center">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -104,6 +112,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
+            <td *ngIf="user == 'insurance'">5.5</td>
             <td *ngIf="user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -137,7 +146,8 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td *ngIf="user !== 'insurance'">{{type == 'new bid'? (part.totalPrice | number ): (part.price | number)}}</td>
+            <td *ngIf="user !== 'insurance'">{{type == 'new bid'? (part.totalPrice | number ): (part.price | number)}}
+            </td>
             <td *ngIf="type == 'new bid' && user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -163,7 +173,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td *ngIf="type == 'new bid'">
+            <td *ngIf="type == 'new bid' && user !== 'insurance'">
                 <div class="flex align-items-center justify-content-center gap-2">
                     <button *ngIf="!editing && !part.isSending" pButton pRipple type="button" pInitEditableRow
                         icon="pi pi-pencil" class="p-button-rounded p-button-text" [disabled]="part.saved"></button>
@@ -212,6 +222,10 @@
 <div class="p-3" *ngIf="type == 'new bid' && user == 'insurance'">
     <label class="block mb-2 fw-700">Note</label>
     <textarea rows="5" class="width-100" pInputTextarea></textarea>
+    <div class="text-center mt-5">
+        <button class="width-100 md:w-20rem" pButton pRipple type="submit" label="Submit Bid">
+        </button>
+    </div>
 </div>
 
 <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{'max-width': '90vw', 'width': 'auto'}">
