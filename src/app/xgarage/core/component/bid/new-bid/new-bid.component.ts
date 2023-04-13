@@ -52,6 +52,8 @@ export class NewBidComponent implements OnInit, OnChanges {
     bidTotalDiscount: number = 0;
     isSavingBid: boolean = false;
     discountType = ['OMR', '%'];
+    user: string = '';
+
     ngOnInit(): void {
         if (this.type == 'new bid') {
             this.requests = this.requests.filter(req => req.status.id !== StatusConstants.CANCELED_STATUS && req.status.id !== StatusConstants.COMPLETED_STATUS);

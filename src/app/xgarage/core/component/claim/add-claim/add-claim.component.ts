@@ -30,7 +30,7 @@ export class AddClaimComponent implements OnInit {
 
   constructor(private breadcrumbService: AppBreadcrumbService) { }
 
-  activeTab = 'create-claim';
+  activeTab = 'car-info';
   car: any;
   items: {id: number,name: string}[] = [
     {id: 1, name: 'Key'},
