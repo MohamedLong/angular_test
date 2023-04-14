@@ -33,6 +33,7 @@ import { UserMainMenuComponent } from './dashboard/component/user-main-menu/user
 import { UserSubMenuComponent } from './dashboard/component/user-sub-menu/user-sub-menu.component';
 import { UsersComponent } from './dashboard/component/users/users.component';
 import { XgarageComponent } from './xgarage.component';
+import { AddClaimComponent } from './core/component/claim/add-claim/add-claim.component';
 
 const routes: Routes = [
     {
@@ -50,6 +51,7 @@ const routes: Routes = [
             { path: 'tenanttype', component: TenantTypeComponent },
             { path: 'tenant', component: TenantComponent },
             { path: 'claims', component: ClaimComponent },
+            { path: 'add-claim', component: AddClaimComponent },
             { path: 'brands', component: BrandComponent },
             { path: 'category', component: CategoryComponent },
             { path: 'subcategory', component: SubCategoryComponent },

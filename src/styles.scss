@@ -133,3 +133,15 @@ input[type=number] {
     border-top-left-radius: 0 !important;
 }
 
+
+.car-info.p-component {
+    width: 100%;
+    justify-content: space-between;
+}
+.car-info .p-message-wrapper {
+    justify-content: space-between;
+}
+
+.d-none {
+    display: none;
+}

@@ -113,8 +113,6 @@ export class AuthService {
     }
 
 
-
-
     public doLogoutUser() {
         this.loggedUser = null;
         this.removeTokens();
@@ -157,6 +155,7 @@ export class AuthService {
         localStorage.removeItem('order');
         localStorage.removeItem('orderData');
         localStorage.removeItem('jobId');
+        localStorage.removeItem('subs');
     }
 
     changePassword(body: any) {

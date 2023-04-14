@@ -5,25 +5,26 @@
     <ng-template pTemplate="header">
         <tr>
             <th>{{'bid.bidDetails.partName' | translate}}</th>
-            <th>{{'bid.bidDetails.qty' | translate}}</th>
-            <!-- <th>{{'bid.bidDetails.Preferred' | translate}}</th> -->
-            <th>{{'bid.bidDetails.Proposed' | translate}}</th>
+            <th *ngIf="user == 'insurance'">Type</th>
+            <th *ngIf="user == 'insurance'">Request For</th>
+            <th *ngIf="user == 'insurance'">Action</th>
+            <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.qty' | translate}}</th>
+            <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.Proposed' | translate}}</th>
             <th>{{'bid.bidDetails.warranty' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.deliverDays' | translate}} {{'bid.bidDetails.days' | translate}}</th>
-            <th>{{'bid.bidDetails.originalPrice' | translate}}</th>
+            <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.originalPrice' | translate}}</th>
             <th>{{'bid.bidDetails.price' | translate}}</th>
-            <th>
+            <th *ngIf="user == 'insurance'">Service Charge</th>
+            <th *ngIf="user !== 'insurance'">
                 {{'bid.bidDetails.discountType' | translate}}
             </th>
-            <th>
-                {{'bid.bidDetails.discount' | translate}}
-            </th>
-            <th>{{'bid.bidDetails.vat' | translate}}</th>
-            <th>{{'bid.bidDetails.totalPrice' | translate}}</th>
-            <th *ngIf="type == 'new bid'">{{'bid.bidDetails.partImgs' | translate}}</th>
-            <th *ngIf="type == 'edit bid'">{{'common.status' | translate}}</th>
-            <th>{{'common.notes' | translate}}</th>
-            <th>{{'bid.bidDetails.modifyBid' | translate}}</th>
+            <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.discount' | translate}}</th>
+            <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.vat' | translate}}</th>
+            <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.totalPrice' | translate}}</th>
+            <th *ngIf="type == 'new bid' && user !== 'insurance'">{{'bid.bidDetails.partImgs' | translate}}</th>
+            <th *ngIf="type == 'edit bid' && user !== 'insurance'">{{'common.status' | translate}}</th>
+            <th *ngIf="user !== 'insurance'">{{'common.notes' | translate}}</th>
+            <th *ngIf="user !== 'insurance'">{{'bid.bidDetails.modifyBid' | translate}}</th>
         </tr>
     </ng-template>
 
@@ -34,7 +35,7 @@
                     part.part.name : part.partName}}</span>
                 <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
             </td>
-            <td>
+            <td *ngIf="user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="1" max="{{part.qty}}" (input)="onQty(part)" pInputText type="number"
@@ -45,15 +46,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <!-- <td *ngIf="type == 'new bid'">
-                <ng-container *ngFor="let type of part.partTypes">
-                    {{type.partType + ' '}}
-                </ng-container>
-            </td>
-            <td *ngIf="type == 'edit bid'">
-                {{part.partType}}
-            </td> -->
-            <td>
+            <td *ngIf="user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <p-dropdown [style]="{'width':'100%'}" optionLabel="partType" [options]="part.statuses"
@@ -71,6 +64,9 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
+            <td *ngIf="user == 'insurance'">USED</td>
+            <td *ngIf="user == 'insurance'">Replace</td>
+            <td *ngIf="user == 'insurance'">Replace</td>
             <td class="text-center">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
@@ -93,7 +89,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>
+            <td *ngIf="user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="1" pInputText type="number" (input)="onOriginalPrice(part)"
@@ -116,7 +112,8 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>
+            <td *ngIf="user == 'insurance'">5.5</td>
+            <td *ngIf="user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <p-dropdown [disabled]="part.isNotInterested" (onChange)="onDiscountTypeChange(part)"
@@ -127,7 +124,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>
+            <td *ngIf="user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="0" max="{{part.originalPrice}}" (input)="onDiscount(part)" pInputText type="number"
@@ -138,7 +135,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>
+            <td *ngIf="user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="0" pInputText type="number" (input)="onVat(part)" [style]="{'width':'100%'}"
@@ -149,12 +146,14 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>{{type == 'new bid'? (part.totalPrice | number ): (part.price | number)}}</td>
-            <td *ngIf="type == 'new bid'">
+            <td *ngIf="user !== 'insurance'">{{type == 'new bid'? (part.totalPrice | number ): (part.price | number)}}
+            </td>
+            <td *ngIf="type == 'new bid' && user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-fileUpload styleClass="choose-btn" chooseStyleClass="choose-btn" chooseLabel="{{part.images.length > 0? part.images.length + ' files selected': ''}}" chooseIcon=""
-                            auto="true" accept="image/*" multiple="multiple"
+                        <p-fileUpload styleClass="choose-btn" chooseStyleClass="choose-btn"
+                            chooseLabel="{{part.images.length > 0? part.images.length + ' files selected': ''}}"
+                            chooseIcon="" auto="true" accept="image/*" multiple="multiple"
                             (onSelect)="part.images = $event.currentFiles"
                             [disabled]="part.isNotInterested"></p-fileUpload>
                     </ng-template>
@@ -163,17 +162,18 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td *ngIf="type == 'new bid'">
+            <td *ngIf="type == 'new bid' && user !== 'insurance'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <button (click)="showNotes(part.notes)" pButton pRipple type="button" icon="pi pi-file" class="p-button-rounded p-button-success p-button-text"></button>
+                        <button (click)="showNotes(part.notes)" pButton pRipple type="button" icon="pi pi-file"
+                            class="p-button-rounded p-button-success p-button-text"></button>
                     </ng-template>
                     <ng-template pTemplate="output">
                         <i class="pi pi-file"></i>
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td *ngIf="type == 'new bid'">
+            <td *ngIf="type == 'new bid' && user !== 'insurance'">
                 <div class="flex align-items-center justify-content-center gap-2">
                     <button *ngIf="!editing && !part.isSending" pButton pRipple type="button" pInitEditableRow
                         icon="pi pi-pencil" class="p-button-rounded p-button-text" [disabled]="part.saved"></button>
@@ -190,7 +190,7 @@
                 {{getStatusName(part.statusId)}}
             </td>
             <td *ngIf="type == 'edit bid'">
-                {{part.comments}}
+                {{part.comments == ''? '-' : part.comments}}
             </td>
             <td *ngIf="type == 'edit bid'">
                 <button (click)="confirmCancel(part.bidId)" pButton pRipple type="button"
@@ -207,6 +207,7 @@
             <td>{{bidTotalDiscount}}</td>
             <td></td>
             <td>{{bidTotalPrice | number}}</td>
+            <td colspan="3"></td>
         </tr>
     </ng-template>
 
@@ -217,6 +218,14 @@
 </p-table>
 <div *ngIf="requests.length <= 0">
     <p>this request has no parts for bid</p>
+</div>
+<div class="p-3" *ngIf="type == 'new bid' && user == 'insurance'">
+    <label class="block mb-2 fw-700">Note</label>
+    <textarea rows="5" class="width-100" pInputTextarea></textarea>
+    <div class="text-center mt-5">
+        <button class="width-100 md:w-20rem" pButton pRipple type="submit" label="Submit Bid">
+        </button>
+    </div>
 </div>
 
 <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{'max-width': '90vw', 'width': 'auto'}">
@@ -253,7 +262,8 @@
         <label for="float-input">Notes</label>
     </span>
     <ng-template pTemplate="footer">
-        <p-button icon="pi pi-check" (click)="displayNotesModal = false" label="Ok" styleClass="p-button-text"></p-button>
+        <p-button icon="pi pi-check" (click)="displayNotesModal = false" label="Ok"
+            styleClass="p-button-text"></p-button>
     </ng-template>
 </p-dialog>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

@@ -137,6 +137,7 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { AuthService } from '../auth/services/auth.service';
 import { RandomGuard } from '../auth/guards/random.guard';
 import { TokenInterceptor } from '../auth/token.interceptor';
+import { AddClaimComponent } from './core/component/claim/add-claim/add-claim.component';
 
 @NgModule({
     declarations: [
@@ -183,7 +184,8 @@ import { TokenInterceptor } from '../auth/token.interceptor';
         BidDetailsComponent,
         SupplierDashbaordComponent,
         SupplierprofileComponent,
-        NumToWordsPipe
+        NumToWordsPipe,
+        AddClaimComponent
     ],
     imports: [
         CommonModule,
