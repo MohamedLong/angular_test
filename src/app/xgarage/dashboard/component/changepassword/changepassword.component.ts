@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../../../../auth/services/auth.service';
+import { UserService } from '../../service/user.service';
 
 @Component({
     selector: 'app-changepassword',
@@ -10,36 +10,35 @@ import { AuthService } from '../../../../auth/services/auth.service';
 })
 export class ResetPasswordComponent implements OnInit {
 
-    constructor(private fb: FormBuilder, private authService: AuthService, private messageService: MessageService) { }
+    constructor(private fb: FormBuilder, private userService : UserService, private messageService: MessageService) { }
 
     resetPasswordForm: FormGroup = this.fb.group({
-        password: ['', Validators.required],
+        oldPass: ['', Validators.required],
         newPass: ['', Validators.required],
     });
-
-    resetPasswordFormData: any = new FormData();
 
     ngOnInit(): void {
     }
 
     onSubmit() {
-        //console.log(this.resetPasswordForm.value)
-        this.resetPasswordFormData.append('password', this.resetPasswordForm.get('password').value);
-        this.resetPasswordFormData.append('newPass', this.resetPasswordForm.get('newPass').value);
-
-        // console.log(this.resetPasswordFormData)
-        this.authService.changePassword(this.resetPasswordFormData).subscribe(res => {
+        console.log('oldPass: ', this.resetPasswordForm.controls.oldPass.value);
+        console.log('newPass: ', this.resetPasswordForm.controls.newPass.value);
+        let resetPasswordFormData =  {
+            oldPass: this.resetPasswordForm.controls.oldPass.value,
+            newPass: this.resetPasswordForm.controls.newPass.value
+        }
+        
+        console.log(resetPasswordFormData);
+        this.userService.changePassword(resetPasswordFormData).subscribe(res => {
+            if(res.messageCode == 200) {
             // console.log(res)
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'your password was reset successfully' });
-            this.resetPasswordForm.reset('');
-        }, err => {
-            console.log(err)
-            if (err.status == 200) {
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'your password was reset successfully' });
-            } else {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Your password was reset successfully' });
+                this.resetPasswordForm.reset('');
+            }else{
                 this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Failed to change password' });
             }
-
+        }, err => {
+            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Failed to change password' });
         })
     }
 }

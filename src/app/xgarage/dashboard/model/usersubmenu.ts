@@ -16,4 +16,5 @@ export interface UserSubMenu {
     cancelAuth?: boolean;
     acceptAuth?: boolean;
     completeAuth?: boolean;
+    viewAuth?: boolean;
 }

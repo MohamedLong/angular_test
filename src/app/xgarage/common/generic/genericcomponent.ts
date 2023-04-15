@@ -70,7 +70,8 @@ export class GenericComponent {
     approveAuth: boolean;
     cancelAuth: boolean;
     acceptAuth: boolean;
-    completeAuth: boolean
+    completeAuth: boolean;
+    viewAuth: boolean;
 
     constructor(public route: ActivatedRoute, public datePipe: DatePipe, public breadcrumbService: AppBreadcrumbService) {
         this.extractPermissions();
@@ -85,9 +86,9 @@ export class GenericComponent {
 
             const filtered = subs.filter(sub => this.route.routeConfig.path === sub.subMenu.routerLink);
             if (filtered && filtered.length > 0) {
-                this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completeAuth: filtered[0].completeAuth}
+                this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completeAuth: filtered[0].completeAuth, viewAuth: filtered[0].viewAuth}
             } else {
-                this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completeAuth: false}
+                this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completeAuth: false, viewAuth: false };
             }
             this.editAuth = this.route.routeConfig.data && this.route.routeConfig.data.editAuth ? this.route.routeConfig.data.editAuth : false;
             this.newAuth = this.route.routeConfig.data && this.route.routeConfig.data.newAuth ? this.route.routeConfig.data.newAuth : false;
@@ -97,6 +98,7 @@ export class GenericComponent {
             this.cancelAuth = this.route.routeConfig.data && this.route.routeConfig.data.cancelAuth ? this.route.routeConfig.data.cancelAuth : false;
             this.acceptAuth = this.route.routeConfig.data && this.route.routeConfig.data.acceptAuth ? this.route.routeConfig.data.acceptAuth : false;
             this.completeAuth = this.route.routeConfig.data && this.route.routeConfig.data.completeAuth ? this.route.routeConfig.data.completeAuth : false;
+            this.viewAuth = this.route.routeConfig.data && this.route.routeConfig.data.viewAuth ? !this.route.routeConfig.data.viewAuth : true;
         }
 
     }

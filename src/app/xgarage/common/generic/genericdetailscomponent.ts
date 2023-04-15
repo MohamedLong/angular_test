@@ -70,6 +70,7 @@ export class GenericDetailsComponent {
     cancelAuth: boolean;
     acceptAuth: boolean;
     completeAuth: boolean;
+    viewAuth: boolean;
 
     constructor(public route: ActivatedRoute, public router: Router, public changeStatusService: GenericService<any>, public datePipe: DatePipe,
         public statusService: StatusService, public breadcrumbService: AppBreadcrumbService) {
@@ -85,9 +86,9 @@ export class GenericDetailsComponent {
 
             const filtered = subs.filter(sub => this.route.routeConfig.path === sub.subMenu.routerLink);
             if (filtered && filtered.length > 0) {
-                this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completionAuth: filtered[0].completionAuth}
+                this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completionAuth: filtered[0].completionAuth, viewAuth: filtered[0].viewAuth}
             } else {
-                this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completionAuth: false}
+                this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completionAuth: false, viewAuth: false}
             }
 
             this.editAuth = this.route.routeConfig.data && this.route.routeConfig.data.editAuth ? !this.route.routeConfig.data.editAuth : true;
@@ -98,6 +99,7 @@ export class GenericDetailsComponent {
             this.cancelAuth = this.route.routeConfig.data && this.route.routeConfig.data.cancelAuth ? !this.route.routeConfig.data.cancelAuth : true;
             this.acceptAuth = this.route.routeConfig.data && this.route.routeConfig.data.acceptAuth ? !this.route.routeConfig.data.acceptAuth : true;
             this.completeAuth = this.route.routeConfig.data && this.route.routeConfig.data.completeAuth ? !this.route.routeConfig.data.completeAuth : true;
+            this.viewAuth = this.route.routeConfig.data && this.route.routeConfig.data.viewAuth ? !this.route.routeConfig.data.viewAuth : true;
         }
     }
 
