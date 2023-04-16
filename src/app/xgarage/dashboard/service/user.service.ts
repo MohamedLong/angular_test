@@ -1,9 +1,7 @@
-import { catchError, mapTo, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { config } from 'src/app/config';
 import { User } from '../../common/model/user';
-import { of } from 'rxjs';
 import { UserDto } from '../../common/dto/userdto';
 import { MessageResponse } from '../../common/dto/messageresponse';
 
@@ -60,21 +58,26 @@ export class UserService {
     return this.http.post<MessageResponse>(config.apiUrl + '/changeUserRole/' + userId + '/' + roleName, null);
   }
 
-  changePassword(user : {userId: string, oldPass: string, newPass: string}) {
-    this.params = new HttpParams()
-      .set("oldPass", user.oldPass)
-      .set("newPass", user.newPass);
-      this.headers = new HttpHeaders()
-      .set("Content-Type", "application/x-www-form-urlencoded");
-      return this.http.post<any>(config.apiUrl + '/user/resetPassword/' + user.userId, null,
-      { headers: this.headers, params: this.params })
-      .pipe(
-        tap(),
-        mapTo(true),
-        catchError(error => {
-          alert(error.error);
-          return of(false);
-        }));
+  // changePassword(user : {userId: string, oldPass: string, newPass: string}) {
+  //   this.params = new HttpParams()
+  //     .set("oldPass", user.oldPass)
+  //     .set("newPass", user.newPass);
+  //     this.headers = new HttpHeaders()
+  //     .set("Content-Type", "application/x-www-form-urlencoded");
+  //     return this.http.post<any>(config.apiUrl + '/user/resetPassword/' + user.userId, null,
+  //     { headers: this.headers, params: this.params })
+  //     .pipe(
+  //       tap(),
+  //       mapTo(true),
+  //       catchError(error => {
+  //         alert(error.error);
+  //         return of(false);
+  //       }));
+  // }
 
-  }
+  changePassword(body: any) {
+    console.log('inside userService: ', body);
+    return this.http.post<MessageResponse>(config.apiUrl + '/changePassword/', body);
+  };
+
 }

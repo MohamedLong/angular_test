@@ -169,7 +169,6 @@ export class TenantComponent extends GenericComponent implements OnInit {
         this.selectedSupplier.tenant = this.selectedTenant.id;
         this.selectedSupplier.enabled = true;
         this.supplierService.createSupplier(this.selectedSupplier).subscribe((res)  => {
-
             if (res.messageCode == 200){
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'New Supplier Profile Created!' });
             } else {

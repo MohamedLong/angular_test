@@ -9,7 +9,6 @@ import { config } from 'src/app/config';
 import { UserSubMenuService } from 'src/app/xgarage/dashboard/service/usersubmenu.service';
 import { User } from 'src/app/xgarage/common/model/user';
 import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
-import { UserSubMenu } from 'src/app/xgarage/dashboard/model/usersubmenu';
 
 
 @Injectable({
@@ -159,9 +158,7 @@ export class AuthService {
     }
 
     changePassword(body: any) {
-        let user = this.getStoredUser();
-        let userEmail = JSON.parse(user).email;
-        return this.http.post(this.apiUrl + '/recoverPassword/' + userEmail, body);
+        return this.http.post<MessageResponse>(this.apiUrl + '/changePassword/', body);
     };
 
     getAuthorizedMenu() {
@@ -172,9 +169,9 @@ export class AuthService {
                     parent.children.map(r => {
                         const filtered = subs.filter(sub => r.path === sub.subMenu.routerLink);
                         if (filtered && filtered.length > 0) {
-                            r.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completeAuth: filtered[0].completeAuth}
+                            r.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completeAuth: filtered[0].completeAuth, viewAuth: filtered[0].viewAuth}
                         } else {
-                            r.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completeAuth: false}
+                            r.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completeAuth: false, viewAuth: false}
                         }
                         return;
                     });

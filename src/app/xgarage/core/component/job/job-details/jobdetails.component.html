@@ -179,7 +179,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="role != 2" header="{{ 'job.tableColumn.receivedBids' | translate }}">
+                    <p-tabPanel *ngIf="viewAuth == true" header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
                             <button (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
                                 class="p-button-rounded bg-indigo-100 text-indigo-600 border-0 font-light px-5"></button>
@@ -229,7 +229,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="role == 2" header="{{ 'job.tableColumn.addBids' | translate }}">
+                    <p-tabPanel *ngIf="newAuth == true" header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                     </p-tabPanel>
                 </p-tabView>

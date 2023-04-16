@@ -209,8 +209,8 @@ export class UserSubMenuComponent implements OnInit {
                     this.usersubmenuService.updateUserSubMenu(this.usersubmenu).subscribe(data => {
                         this.usersubmenu = data;
                         this.usersubmenus[this.findIndexById(this.usersubmenu.id)] = this.usersubmenu;
-
-                        console.log(data)
+                        this.usersubmenu.userMainMenu = this.usersubmenus.find(m => m.id == this.usersubmenu.userMainMenu.id).userMainMenu;
+                        console.log('this.usersubmenu after update: ', this.usersubmenu.userMainMenu);
 
                         this.messageService.add({
                             severity: 'success', summary: 'Successful',
