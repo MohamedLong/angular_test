@@ -77,7 +77,7 @@ export class UserService {
 
   changePassword(body: any) {
     console.log('inside userService: ', body);
-    return this.http.post<MessageResponse>(config.apiUrl + '/changePassword/', body);
+    return this.http.post<MessageResponse>(config.apiUrl + '/changePassword', body);
   };
 
 }
