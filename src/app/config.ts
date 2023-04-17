@@ -5,3 +5,6 @@ export const config = {
     purchaseApiUrl: 'http://letsgo-oman.com:3030',
     dashboardUrl: 'http://letsgo-oman.com:6060/api/v1/dashboard',
   };
+
+
+  //https://xgarage.om:6060
