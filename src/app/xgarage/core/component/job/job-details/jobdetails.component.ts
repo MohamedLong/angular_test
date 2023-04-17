@@ -612,7 +612,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
 
-    editJobNumber(dto: any) {
+    onEditJobNumber(dto: any) {
         this.jobDto.id = dto.id;
         this.jobDto.jobNumber = dto.jobNo;
         this.jobDto.status = dto.status.id;

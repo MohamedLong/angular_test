@@ -28,7 +28,7 @@
                 <p *ngIf="master.status.nameEn === 'Approved'"
                     class="font-medium muted-text text-green-500">{{master.status.nameEn}}</p>
                 <p *ngIf="master.status.nameEn === 'Canceled'"
-                    class="font-medium muted-text text-orange-700">{{master.status.nameEn}}</p>
+                    class="font-medium muted-text text-orange-500">{{master.status.nameEn}}</p>
 
             </div>
             <div class="mr-8">
@@ -43,7 +43,7 @@
                 <div *ngIf="role == 1" class="mr-2 flex align-items-center">
                     <p class="font-medium muted-text"
                         style="display: flex; align-items: flex-start; cursor: pointer;"
-                        title="Edit Job Number" (click)="editJobNumber(master)"><span
+                        title="Edit Job Number" (click)="editJob()"><span
                             style="color: blue">{{master.jobNo}}</span>
                         <span style="margin-left: 5px;"><i class="pi pi-pencil"></i></span>
                     </p>
