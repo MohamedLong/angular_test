@@ -6,7 +6,8 @@
         <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <a *ngIf="role && role == 1 && role !== 2" pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"  [disabled]="newAuth===false"
+                    <a *ngIf="role && role == 1 && role !== 2" pButton pRipple
+                        label="{{ 'operations.new' | translate }}" icon="pi pi-plus" [disabled]="newAuth===false"
                         class="p-button-success mr-2 mb-2" [routerLink]="['/jobs/new-job']" [hidden]="false"></a>
                 </ng-template>
 
@@ -16,12 +17,12 @@
                         chooseLabel="{{ 'operations.import' | translate }}"
                         class="mr-2 mb-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload"
-                        class="p-button-help mb-2" (click)="dt.exportCSV()" [disabled]="printAuth===true" ></button>
+                        class="p-button-help mb-2" (click)="dt.exportCSV()" [disabled]="printAuth===true"></button>
                 </ng-template>
             </p-toolbar>
 
-            <p-table #dt [value]="fillteredDto" (onPage)="loadRequests($event)" [columns]="cols" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['id','jobNo','claimNo','partNames','jobStatus','jobTitle']"
+            <p-table #dt [value]="fillteredDto" (onPage)="loadRequests($event)" [columns]="cols" [rows]="10"
+                [paginator]="true" [globalFilterFields]="['id','jobNo','claimNo','partNames','jobStatus','jobTitle']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)" [showCurrentPageReport]="true">
@@ -70,9 +71,12 @@
                             {{job.id}}
                         </td>
                         <td>
-                            <span><a (click)="goDetails(job)" style="cursor: pointer;"><mark
-                                        class="text-blue-400 hover:text-pink-500">{{job.jobNo}}</mark></a>
-                                    </span>
+                            <span>
+                                <a (click)="goDetails(job)" style="cursor: pointer;"><mark
+                                        class="text-blue-400 hover:text-pink-500">{{job.jobNo}}</mark>
+                                </a>
+                            </span>
+                        </td>
                         <td>
                             {{job.jobTitle}}
                         </td>
@@ -131,7 +135,7 @@
             [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span >{{ 'operations.cancelMessage' | translate }}</span>
+                <span>{{ 'operations.cancelMessage' | translate }}</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"

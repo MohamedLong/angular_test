@@ -63,7 +63,11 @@
                             {{claim.id}}
                         </td>
                         <td>
-                            {{claim.claimNo}}
+                            <span>
+                                <a (click)="goDetails(claim)" style="cursor: pointer;"><mark
+                                        class="text-blue-400 hover:text-pink-500">{{claim.claimNo}}</mark>
+                                </a>
+                            </span>
                         </td>
                         <td>
                             {{claim.claimDate | date:'longDate'}}
