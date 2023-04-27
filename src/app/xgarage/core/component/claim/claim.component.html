@@ -5,12 +5,12 @@
         <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
-                        class="p-button-success mr-2 mb-2" (click)="new()" [disabled]="newAuth===false"
-                        [hidden]="false"></button>
                     <!-- <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
-                        class="p-button-success mr-2 mb-2" [routerLink]="['/add-claim']" [disabled]="newAuth===false"
+                        class="p-button-success mr-2 mb-2" (click)="new()" [disabled]="newAuth===false"
                         [hidden]="false"></button> -->
+                    <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
+                        class="p-button-success mr-2 mb-2" [routerLink]="['/add-claim']" [disabled]="newAuth===false"
+                        [hidden]="false"></button>
                 </ng-template>
 
                 <ng-template pTemplate="right">

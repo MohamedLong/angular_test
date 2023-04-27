@@ -1,120 +1,108 @@
+<p-toast></p-toast>
 <div class="wizard-body">
     <div class="wizard-wrapper">
         <div class="wizard-content">
             <div class="wizard-card">
-                <!-- <div class="wizard-card-header">
+                <div class="wizard-card-header">
                     <div class="grid col py-3">
                         <div class="col-6 tab flex align-items-center justify-content-center car-info-tab"
-                            [ngClass]="{'selected-tab': activeTab == 'car-info'}" (click)="clickToNavigate('car-info')">
+                            [ngClass]="{'selected-tab': activeTab == 'car-info'}" (click)="activeTab = 'car-info'">
                             <div class="title">{{ 'car.title' | translate }}</div>
                         </div>
                         <div class="col-6 tab flex align-items-center justify-content-center request-tab"
-                            [ngClass]="{'selected-tab': activeTab === 'request'}">
+                            [ngClass]="{'selected-tab': activeTab === 'create-claim'}"
+                            (click)="activeTab = 'create-claim'">
                             <div class="title">{{ 'job.form.createRequest' | translate }}</div>
                         </div>
                     </div>
-                </div> -->
+                </div>
                 <div class="wizard-card-content car-info" [ngClass]="{'active-content': activeTab === 'car-info'}">
                     <app-new-car [type]="'new claim'" (carEvent)="onCarFormEvent($event)"></app-new-car>
                 </div>
                 <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'create-claim'}">
-                    <div class="grid">
-                        <div class="col-12" *ngIf="car">
-                            <p-messages [styleClass]="'car-info'" severity="info">
-                                <ng-template pTemplate>
-                                    <p class="mb-0">
-                                        {{car.brandId.brandName}} {{car.carModelId.name}} {{car.carModelYearId.year}}
-                                        {{car.carModelTypeId.type}},
-                                        {{ 'car.form.chassisNo' | translate }}: {{car.chassisNumber}},
-                                        {{ 'car.form.licencePlate' | translate }}: {{car.plateNumber}}
-                                    </p>
-                                    <p-button label="Change" styleClass="p-button-sm"
-                                        (click)="activeTab = 'car-info'"></p-button>
-                                </ng-template>
-                            </p-messages>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
-                            <p-dropdown [options]="" placeholder="OD/TP"></p-dropdown>
-                        </div>
-                        <div class="col-12  md:col-6">
-                            <label class="block">{{ 'job.form.claimNo' | translate }}</label>
-                            <span class="p-input-icon-right width-100 my-2">
-                                <!-- <i class="pi pi-spin pi-spinner" *ngIf="isTypingClaim"></i> -->
-                                <input class="width-100" type="text" pInputText
-                                    placeholder="{{ 'job.form.claimNoPlaceholder' | translate }}" required />
-                            </span>
-                            <!-- <small
-                                *ngIf="submitted && !jobForm.get('claim').valid  && jobForm.get('claim').errors?.['required']"
-                                class="p-error">{{ 'job.form.enterclaimNo' | translate }}</small> -->
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <label class="block mb-2">{{ 'job.form.jobCardNo' | translate }}</label>
-                            <!-- <p-dropdown class="mb-2" *ngIf="jobFound.multiple" [options]="jobs"
-                                formControlName="jobId" optionLabel="jobNo" optionValue="id"
-                                placeholder="select a job" (onChange)="onJobSelection($event)"></p-dropdown>
-                            <small
-                                *ngIf="jobFound.multiple && submitted && !jobForm.get('jobId').valid  && jobForm.get('jobId').errors?.['required']"
-                                class="p-error">{{ 'job.form.enterJob' | translate }}</small> -->
-                            <input class="width-100 mb-2" type="text" pInputText
-                                placeholder="{{ 'job.form.enterJob' | translate }}" />
-                            <!-- <p style="cursor: pointer;" *ngIf="jobFound.found" class="text-green-500 text-right"
-                                (click)="onNewJob()"><i class="pi pi-plus"></i> or add a new job number</p>
-                            <small
-                                *ngIf="!jobFound.multiple && submitted && !jobForm.get('job').valid  && jobForm.get('job').errors?.['required']"
-                                class="p-error">{{ 'job.form.enterJob' | translate }}</small> -->
-                        </div>
-                        <div class="col-12">
-                            <p-divider align="left">
-                                <b class="bg-bluegray-50">Add More Details</b>
-                            </p-divider>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <label class="block mb-2">Received Date</label>
-                            <input class="width-100 mb-2" type="date" pInputText />
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <label class="block mb-2">Received Time</label>
-                            <input class="width-100 mb-2" type="time" pInputText />
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <label class="block mb-2">Received By</label>
-                            <input class="width-100 mb-2" type="text" pInputText />
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <label class="block mb-2">Exc. Delivery Date</label>
-                            <input class="width-100 mb-2" type="text" pInputText />
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <label class="block mb-2">Breakdown</label>
-                            <input class="width-100 mb-2" type="text" pInputText />
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <label class="block mb-2">Type of Job</label>
-                            <input class="width-100 mb-2" type="text" pInputText />
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <label class="block mb-2">K.M</label>
-                            <input class="width-100 mb-2" type="text" pInputText />
-                        </div>
-                        <div class="col-12">
-                            <p-divider align="left">
-                                <b class="bg-bluegray-50">What You Received</b>
-                            </p-divider>
-                        </div>
-                        <div class="col-12">
-                            <div *ngFor="let item of items; let i = index;" class="field-checkbox">
-                                <p-checkbox name="group" [value]="item" [(ngModel)]="selectedItems"
-                                    [inputId]="item.id"></p-checkbox>
-                                <label [for]="item.id">{{ item.name }}</label>
+                    <form [formGroup]="claimForm">
+                        <div class="grid">
+                            <div class="col-12" *ngIf="car">
+                                <p-messages [styleClass]="'car-info'" severity="info">
+                                    <ng-template pTemplate>
+                                        <p class="mb-0">
+                                            {{car.brandId.brandName}} {{car.carModelId.name}}
+                                            {{car.carModelYearId.year}}
+                                            {{car.carModelTypeId.type}},
+                                            {{ 'car.form.chassisNo' | translate }}: {{car.chassisNumber}},
+                                            {{ 'car.form.licencePlate' | translate }}: {{car.plateNumber}}
+                                        </p>
+                                        <p-button label="Change" styleClass="p-button-sm"
+                                            (click)="activeTab = 'car-info'"></p-button>
+                                    </ng-template>
+                                </p-messages>
+                            </div>
+
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
+                                <p-dropdown formControlName="insuranceType" [options]="insuranceType"
+                                    placeholder="OD/TP"></p-dropdown>
+                            </div>
+                            <div class="col-12  md:col-6">
+                                <label class="block">{{ 'job.form.claimNo' | translate }}</label>
+                                <span class="p-input-icon-right width-100 my-2">
+                                    <!-- <i class="pi pi-spin pi-spinner" *ngIf="isTypingClaim"></i> -->
+                                    <input class="width-100" type="text" pInputText formControlName="claimNo"
+                                        placeholder="{{ 'job.form.claimNoPlaceholder' | translate }}" required />
+                                </span>
+                                <!-- <small
+                                    *ngIf="submitted && !jobForm.get('claim').valid  && jobForm.get('claim').errors?.['required']"
+                                    class="p-error">{{ 'job.form.enterclaimNo' | translate }}</small> -->
+                            </div>
+                            <div class="col-12">
+                                <p-divider align="left">
+                                    <b class="bg-bluegray-50">Add More Details</b>
+                                </p-divider>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">Received Date & Time</label>
+                                <!-- [showTime]="true" -->
+                                <p-calendar dataType="string" formControlName="claimDate" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">Received By</label>
+                                <input class="width-100 mb-2" type="text" pInputText />
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">Exc. Delivery Date</label>
+                                <p-calendar dataType="string" formControlName="excDeliveryDate" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">Breakdown</label>
+                                <p-calendar dataType="string" formControlName="breakDown" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">Type of Job</label>
+                                <input class="width-100 mb-2" type="text" pInputText />
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <label class="block mb-2">K.M</label>
+                                <p-calendar dataType="string" formControlName="km" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
+                            </div>
+                            <div class="col-12">
+                                <p-divider align="left">
+                                    <b class="bg-bluegray-50">What You Received</b>
+                                </p-divider>
+                            </div>
+                            <div class="col-12">
+                                <div *ngFor="let tick of ticks; let i = index;" class="field-checkbox">
+                                    <p-checkbox name="group" [binary]="true" [value]="tick" (onChange)="onTicksChange(tick, $event)" [inputId]="tick.id"></p-checkbox>
+                                    <label [for]="tick.id">{{ tick.name }}</label>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <button class="width-100 md:w-20rem" pButton pRipple type="submit" label="Create Claim"
+                                    (click)="onCreateCalim()" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}"
+                                    iconPos="right">
+                                </button>
                             </div>
                         </div>
-                        <div class="col-12 text-center">
-                            <button class="width-100 md:w-20rem"  pButton pRipple
-                                type="submit" label="Create Claim">
-                            </button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>

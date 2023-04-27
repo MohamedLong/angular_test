@@ -195,7 +195,8 @@ import { ClaimDetailsComponent } from './core/component/claim/claim-details/clai
         CommonModule,
         XgarageRoutingModule,
         AgmCoreModule.forRoot({
-            apiKey: 'AIzaSyADzH9TYbj2-CbcBpqMC73t8_hetC9CvAs'
+            apiKey: 'AIzaSyADzH9TYbj2-CbcBpqMC73t8_hetC9CvAs',
+            libraries: ['places']
         }),
         ProgressSpinnerModule,
         BlockUIModule,

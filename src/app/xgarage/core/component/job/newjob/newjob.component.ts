@@ -8,7 +8,7 @@ import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { InsuranceType } from '../../../model/insurancetype';
 import { Supplier } from '../../../model/supplier';
-import { ClaimService } from '../../../service/claimservice';
+import { ClaimService } from '../../../service/claim.service';
 import { JobService } from '../../../service/job.service';
 import { SupplierService } from '../../../service/supplier.service';
 
@@ -56,6 +56,14 @@ import { SupplierService } from '../../../service/supplier.service';
 })
 export class NewJobComponent implements OnInit {
 
+    constructor(private formBuilder: FormBuilder,
+        private jobService: JobService,
+        private authService: AuthService,
+        private calimService: ClaimService,
+        private supplierService: SupplierService,
+        private dataService: DataService<any>,
+        private messageService: MessageService) { }
+
     activeTab = 'car-info';
     @ViewChild('fromContainer') fromContainer: ElementRef;
     isTypingClaim: boolean = false;
@@ -79,7 +87,6 @@ export class NewJobComponent implements OnInit {
     });
 
     ClaimTypingTimer;  //timer identifier
-    InsuranceType = Object.keys(InsuranceType);
     jobFound: { found: boolean, multiple: boolean } = {
         found: false,
         multiple: false
@@ -93,14 +100,6 @@ export class NewJobComponent implements OnInit {
     numberOfrequests: number = 1;
     newJob: boolean = false;
     @Input() type: string = 'new job';
-
-    constructor(private formBuilder: FormBuilder,
-        private jobService: JobService,
-        private authService: AuthService,
-        private calimService: ClaimService,
-        private supplierService: SupplierService,
-        private dataService: DataService<any>,
-        private messageService: MessageService) { }
 
     ngOnInit(): void {
         //set location
@@ -231,7 +230,7 @@ export class NewJobComponent implements OnInit {
     }
 
     onNewJob() {
-        if(this.jobForm.get('claim').value !== '') {
+        if (this.jobForm.get('claim').value !== '') {
             this.jobFound.multiple = false;
             this.jobForm.get('job').enable();
             this.jobForm.get('location').enable();

@@ -5,10 +5,10 @@
             <!-- <app-details-card [master]="" [role]=""></app-details-card> -->
         </div>
     </div>
-    <div class="col-12 mb-4">
-        <h5>Body Parts</h5>
+    <div class="col-12  mb-4" *ngFor="let part of partsList">
+        <h5>{{part.categoryName}}</h5>
         <div class="card">
-            <p-table [value]="parts">
+            <p-table [value]="part.list">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>
@@ -22,66 +22,10 @@
                 <ng-template pTemplate="body" let-part>
                     <tr>
                         <td>
-                            {{part.name}}
+                            {{part.partName}}
                         </td>
                         <td>
-                            <p-dropdown [options]="actions" (onChange)="onAction($event.value, part)"></p-dropdown>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-    </div>
-    <div class="col-12 mb-4">
-        <h5>Electrical+Electronics</h5>
-        <div class="card">
-            <p-table [value]="parts">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            Parts Name
-                        </th>
-                        <th>
-                            Action
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-part>
-                    <tr>
-                        <td>
-                            {{part.name}}
-                        </td>
-                        <td>
-
-                            <p-dropdown [options]="actions"></p-dropdown>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-    </div>
-    <div class="col-12 mb-4">
-        <h5>Mechanical</h5>
-        <div class="card">
-            <p-table [value]="parts">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            Parts Name
-                        </th>
-                        <th>
-                            Action
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-part>
-                    <tr>
-                        <td>
-                            {{part.name}}
-                        </td>
-                        <td>
-
-                            <p-dropdown [options]="actions"></p-dropdown>
+                            <p-dropdown [options]="actions" (onChange)="onAction($event.value, {partId: part.partId})"></p-dropdown>
                         </td>
                     </tr>
                 </ng-template>
@@ -89,11 +33,11 @@
         </div>
     </div>
     <div class="col-12">
-        <form [formGroup]="updateJobForm">
+        <form [formGroup]="updateClaimForm">
             <div class="grid card">
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Inspection By</label>
-                    <input formControlName="inspectionBy" class="width-100 mb-2" type="text" pInputText />
+                    <input formControlName="inspectedBy" class="width-100 mb-2" type="text" pInputText />
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Surveyed By</label>
@@ -101,15 +45,22 @@
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Repair Cost</label>
-                    <input formControlName="repaierCost" class="width-100 mb-2" type="number" pInputText />
+                    <p-inputNumber class="width-100 mb-2" formControlName="repairCost" mode="currency" currency="OMR" locale="en-US"></p-inputNumber>                </div>
+                <div class="col-12 md:col-6">
+                    <label class="block mb-2">Repair Hrs.</label>
+                    <p-inputNumber formControlName="repairHrs" class="width-100 mb-2" suffix=" Hrs"> </p-inputNumber>
+                </div>
+                <div class="col-12 md:col-6">
+                    <label class="block mb-2">Office Location</label>
+                    <input formControlName="officeLocation" class="width-100 mb-2" type="text" pInputText />
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Workshop Grade</label>
-                    <input formControlName="garde" class="width-100 mb-2" type="text" pInputText />
+                    <input formControlName="workshopGrade" class="width-100 mb-2" type="text" pInputText />
                 </div>
                 <div class="col-12 md:col-4">
                     <label class="block mb-2">Bid Closing Date</label>
-                    <input formControlName="bidClosingDate" class="width-100 mb-2" type="date" pInputText />
+                    <p-calendar dataType="string" formControlName="bidClosingDate" class="width-100 mb-2" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
                 </div>
                 <div class="col-12 md:col-4">
                     <label class="block mb-2">Assign Type</label>
@@ -121,7 +72,7 @@
                 </div>
                 <div class="col-12">
                     <label class="block mb-2 fw-700">Note</label>
-                    <textarea formControlName="note" rows="3" class="width-100" pInputTextarea></textarea>
+                    <textarea formControlName="notes" rows="3" class="width-100" pInputTextarea></textarea>
                 </div>
                 <div class="col-12 text-center">
                     <button (click)="sendRequest()" class="width-100 md:w-20rem" pButton pRipple type="submit" label="Create Request">

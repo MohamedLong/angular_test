@@ -3,11 +3,10 @@ import { Injectable } from '@angular/core';
 import { config } from 'src/app/config';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { GenericService } from '../../common/generic/genericservice';
 import { Job } from '../model/job';
 import { MessageResponse } from '../../common/dto/messageresponse';
-import { BidDto } from '../dto/biddto';
 
 @Injectable({
     providedIn: 'root'
@@ -55,4 +54,5 @@ export class JobService extends GenericService<Job> {
         let endpoint = page? `/job/tenantSupplier?pageNo=${page}&pageSize=100` : '/job/tenantSupplier';
         return this.http.get<any[]>(config.coreApiUrl + endpoint);
     }
+
 }

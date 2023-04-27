@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
-import { ClaimService } from '../../service/claimservice';
+import { ClaimService } from '../../service/claim.service';
 import { Tenant } from 'src/app/xgarage/common/model/tenant';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { TenantService } from 'src/app/xgarage/common/service/tenant.service';

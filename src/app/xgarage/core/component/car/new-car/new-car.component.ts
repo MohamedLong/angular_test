@@ -71,9 +71,9 @@ export class NewCarComponent implements OnInit {
         // console.log(this.carForm.getRawValue())
         let claimData = {
             customerName: this.customerName,
-            contactNO: this.contactNO,
-            excess: this.excess,
-            preparedBy: this.preparedBy
+            contactNo: this.contactNO,
+            excessRo: this.excess,
+            // preparedBy: this.preparedBy
         }
 
         this.submitted = true;
