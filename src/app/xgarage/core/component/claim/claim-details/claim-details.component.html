@@ -8,7 +8,7 @@
     <div class="col-12  mb-4" *ngFor="let part of partsList">
         <h5>{{part.categoryName}}</h5>
         <div class="card">
-            <p-table [value]="part.list">
+            <p-table [value]="part.list" [loading]="loading">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>
@@ -17,16 +17,30 @@
                         <th>
                             Action
                         </th>
+                        <!-- <th>
+                            Parts Name
+                        </th>
+                        <th>
+                            Action
+                        </th> -->
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-part>
+                <ng-template pTemplate="body" let-parts let-rowIndex="rowIndex">
                     <tr>
                         <td>
-                            {{part.partName}}
+                            {{parts.partName}}
                         </td>
                         <td>
-                            <p-dropdown [options]="actions" (onChange)="onAction($event.value, {partId: part.partId})"></p-dropdown>
+                            <p-dropdown [options]="actions"
+                                (onChange)="onAction($event.value, {partId: parts.partId})"></p-dropdown>
                         </td>
+                        <!-- <td *ngIf="rowIndex >= calcHalf(part.list)">
+                            {{rowIndex}} {{calcHalf(part.list)}} {{parts.partName}}
+                        </td>
+                        <td *ngIf="rowIndex >= calcHalf(part.list)">
+                            <p-dropdown [options]="actions"
+                                (onChange)="onAction($event.value, {partId: parts.partId})"></p-dropdown>
+                        </td> -->
                     </tr>
                 </ng-template>
             </p-table>
@@ -45,10 +59,13 @@
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Repair Cost</label>
-                    <p-inputNumber class="width-100 mb-2" formControlName="repairCost" mode="currency" currency="OMR" locale="en-US"></p-inputNumber>                </div>
+                    <p-inputNumber styleClass="width-100 mb-2" formControlName="repairCost" mode="currency"
+                        currency="OMR" locale="en-US"></p-inputNumber>
+                </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Repair Hrs.</label>
-                    <p-inputNumber formControlName="repairHrs" class="width-100 mb-2" suffix=" Hrs"> </p-inputNumber>
+                    <p-inputNumber formControlName="repairHrs" styleClass="width-100 mb-2" suffix=" Hrs">
+                    </p-inputNumber>
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Office Location</label>
@@ -60,14 +77,16 @@
                 </div>
                 <div class="col-12 md:col-4">
                     <label class="block mb-2">Bid Closing Date</label>
-                    <p-calendar dataType="string" formControlName="bidClosingDate" class="width-100 mb-2" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
+                    <p-calendar dataType="string" formControlName="bidClosingDate" class="width-100 mb-2"
+                        appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
                 </div>
                 <div class="col-12 md:col-4">
                     <label class="block mb-2">Assign Type</label>
-                    <input formControlName="assignType" class="width-100 mb-2" type="text" pInputText />
+                    <p-dropdown [options]="assignTypes" optionValue="type" optionLabel="type" formControlName="assignType"
+                        (onChange)="onAssignTypeChange($event)"></p-dropdown>
                 </div>
                 <div class="col-12 md:col-4">
-                    <label class="block mb-2">Privacy</label>
+                    <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
                     <input formControlName="privacy" class="width-100 mb-2" type="text" pInputText />
                 </div>
                 <div class="col-12">
@@ -75,7 +94,8 @@
                     <textarea formControlName="notes" rows="3" class="width-100" pInputTextarea></textarea>
                 </div>
                 <div class="col-12 text-center">
-                    <button (click)="sendRequest()" class="width-100 md:w-20rem" pButton pRipple type="submit" label="Create Request">
+                    <button (click)="sendRequest()" class="width-100 md:w-20rem" pButton pRipple type="submit"
+                        label="Create Request">
                     </button>
                 </div>
             </div>
@@ -83,3 +103,4 @@
 
     </div>
 </div>
+

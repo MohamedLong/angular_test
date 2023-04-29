@@ -30,7 +30,6 @@ export class ClaimService extends GenericService<Claim>{
     }
 
     saveClaimParts(parts) {
-        return this.http.post<any[]>(config.coreApiUrl + '/claimParts/saveAll', parts);
+        return this.http.post<MessageResponse>(config.coreApiUrl + '/claimParts/saveAll', parts);
     }
-
 }

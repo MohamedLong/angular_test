@@ -1,6 +1,6 @@
 import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
 import { ServiceType } from './../../model/servicetype';
-import { BrandService } from './../../../core/service/brandservice';
+import { BrandService } from '../../../core/service/brand.service';
 import { Supplier } from './../../../core/model/supplier';
 import { SupplierService } from './../../../core/service/supplier.service';
 import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';

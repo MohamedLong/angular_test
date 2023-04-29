@@ -140,6 +140,7 @@ import { TokenInterceptor } from '../auth/token.interceptor';
 import { AddClaimComponent } from './core/component/claim/add-claim/add-claim.component';
 import { DetailsCardComponent } from './common/component/details-card/details-card.component';
 import { ClaimDetailsComponent } from './core/component/claim/claim-details/claim-details.component';
+import { PrivacyComponent } from './common/component/privacy/privacy.component';
 
 @NgModule({
     declarations: [
@@ -189,7 +190,8 @@ import { ClaimDetailsComponent } from './core/component/claim/claim-details/clai
         NumToWordsPipe,
         AddClaimComponent,
         DetailsCardComponent,
-        ClaimDetailsComponent
+        ClaimDetailsComponent,
+        PrivacyComponent
     ],
     imports: [
         CommonModule,
