@@ -35,6 +35,7 @@ import { UsersComponent } from './dashboard/component/users/users.component';
 import { XgarageComponent } from './xgarage.component';
 import { AddClaimComponent } from './core/component/claim/add-claim/add-claim.component';
 import { ClaimDetailsComponent } from './core/component/claim/claim-details/claim-details.component';
+import { EditClaimComponent } from './core/component/claim/edit-claim/edit-claim.component';
 
 const routes: Routes = [
     {
@@ -54,6 +55,7 @@ const routes: Routes = [
             { path: 'claims', component: ClaimComponent },
             { path: 'claim-details', component: ClaimDetailsComponent },
             { path: 'add-claim', component: AddClaimComponent },
+            { path: 'edit-claim', component: EditClaimComponent },
             { path: 'brands', component: BrandComponent },
             { path: 'category', component: CategoryComponent },
             { path: 'subcategory', component: SubCategoryComponent },

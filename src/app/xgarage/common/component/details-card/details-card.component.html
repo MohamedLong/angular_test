@@ -21,7 +21,7 @@
                 {{master.car.chassisNumber}}</p>
         </div>
         <div class="flex mb-3">
-            <div class="mr-8">
+            <div class="mr-8"  *ngIf="user !== 'insurance'">
                 <h6 class="mb-2">{{'job.form.status' | translate}}</h6>
                 <p *ngIf="master.status.nameEn === 'Open'" class="font-medium muted-text text-blue-500">
                     {{master.status.nameEn}}</p>
@@ -36,7 +36,7 @@
                 <p class="font-medium muted-text">{{master.claimNo}}</p>
             </div>
 
-            <div class="mr-8">
+            <div class="mr-8" *ngIf="user !== 'insurance'">
                 <div class="mr-3 flex align-items-center">
                     <h6 class="mb-2">{{'job.tableColumn.jobNo' | translate}} </h6>
                 </div>
@@ -50,9 +50,14 @@
                 </div>
                 <p *ngIf="role !== 1" class="font-medium muted-text">{{master.jobNo}}</p>
             </div>
-            <div>
+            <div class="mr-8">
                 <h6 class="mb-2">{{'job.form.garageLocation' | translate}}</h6>
-                <p class="font-medium muted-text">{{master.location? master.location : '-'}}
+                <p class="font-medium muted-text">{{master.location? master.location : master.officeLocation? master.officeLocation : '-'}}
+                </p>
+            </div>
+            <div>
+                <h6 class="mb-2">Bid Closing Date</h6>
+                <p class="font-medium text-orange-500">{{master.bidClosingDate? master.bidClosingDate : '-'}}
                 </p>
             </div>
         </div>

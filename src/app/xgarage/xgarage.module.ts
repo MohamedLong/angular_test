@@ -141,6 +141,7 @@ import { AddClaimComponent } from './core/component/claim/add-claim/add-claim.co
 import { DetailsCardComponent } from './common/component/details-card/details-card.component';
 import { ClaimDetailsComponent } from './core/component/claim/claim-details/claim-details.component';
 import { PrivacyComponent } from './common/component/privacy/privacy.component';
+import { EditClaimComponent } from './core/component/claim/edit-claim/edit-claim.component';
 
 @NgModule({
     declarations: [
@@ -191,7 +192,8 @@ import { PrivacyComponent } from './common/component/privacy/privacy.component';
         AddClaimComponent,
         DetailsCardComponent,
         ClaimDetailsComponent,
-        PrivacyComponent
+        PrivacyComponent,
+        EditClaimComponent
     ],
     imports: [
         CommonModule,

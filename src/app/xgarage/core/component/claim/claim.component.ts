@@ -39,8 +39,8 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         this.getAllTenants();
         super.callInsideOnInit();
 
-        if(localStorage.getItem('claim')) {
-            localStorage.removeItem('claim');
+        if(localStorage.getItem('claimId')) {
+            localStorage.removeItem('claimId');
         }
 
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }]);
@@ -176,9 +176,8 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         })
     }
 
-    goDetails(dto: any) {
-        console.log(dto)
-        localStorage.setItem('claim', JSON.stringify(dto));
+    goDetails(id: number) {
+        localStorage.setItem('claimId', JSON.stringify(id));
         this.router.navigate(['claim-details']);
     }
 
