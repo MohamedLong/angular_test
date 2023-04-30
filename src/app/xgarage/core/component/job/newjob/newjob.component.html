@@ -12,7 +12,7 @@
                         </div>
                         <!-- (click)="clickToNavigate('request')"  -->
                         <div class="col-6 tab flex align-items-center justify-content-center request-tab"
-                            [ngClass]="{'selected-tab': activeTab === 'request'}">
+                            [ngClass]="{'selected-tab': activeTab === 'request'}" (click)="clickToNavigate('request')">
                             <div class="title">{{ 'job.form.createRequest' | translate }}</div>
                         </div>
                     </div>
@@ -41,18 +41,7 @@
                                 </p-messages>
                             </div>
                             <div class="col-12 md:col-6">
-                                <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
-                                <p-dropdown appendTo="body" formControlName="privacy" [options]="privacyList"
-                                    (onChange)="onPrivacyChange($event.value)"></p-dropdown>
-
-                                <div class="mt-3" *ngIf="privateSuppliersList.length > 0">
-                                    <ng-container *ngFor="let supplier of privateSuppliersList">
-                                        <p-chip class="mr-2" [removable]="true"
-                                            (onRemove)="removePrivateSupplier(supplier)">
-                                            {{supplier.name}}
-                                        </p-chip>
-                                    </ng-container>
-                                </div>
+                                <app-privacy type="job" [suppliersControl]="jobForm.controls['suppliers']" [privacyControl]="jobForm.controls['privacy']" [id]="this.jobForm.get('car').value? jobForm.get('car').value.brandId.id : null"></app-privacy>
                             </div>
                             <div class="col-12  md:col-6">
                                 <label class="block">{{ 'job.form.claimNo' | translate }}</label>
@@ -100,20 +89,6 @@
                                 <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>
                                 <input formControlName="location" class="width-100" type="text" pInputText required />
                             </div>
-                            <p-dialog header="Private Suppliers" [modal]="true" [style]="{width: '50vw'}"
-                                [(visible)]="displayPrivateSuppliers" (onHide)="resetPrivacy()">
-                                <p-listbox
-                                    *ngIf="selectedPrivateSuppliers | async as selectedPrivateSuppliers; else loading"
-                                    (onChange)="selectSupplier($event.value)" [checkbox]="true"
-                                    [options]="selectedPrivateSuppliers" formControlName="suppliers" [multiple]="true"
-                                    optionLabel="name"></p-listbox>
-                                <ng-template #loading>loading suppliers..</ng-template>
-                                <ng-template pTemplate="footer">
-                                    <p-button icon="pi pi-check" (click)="displayPrivateSuppliers=false" label="Ok"
-                                        styleClass="p-button-text" [disabled]="!supplierSelected"></p-button>
-                                </ng-template>
-                            </p-dialog>
-                            <!-- request content -->
                             <div class="my-5 relative">
                                 <ng-container *ngFor="let _ of [].constructor(numberOfrequests); let requestNo = index">
                                     <app-new-request [type]="'new job'" [numberOfReq]="numberOfrequests"

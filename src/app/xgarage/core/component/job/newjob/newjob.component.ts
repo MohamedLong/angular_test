@@ -60,7 +60,6 @@ export class NewJobComponent implements OnInit {
         private jobService: JobService,
         private authService: AuthService,
         private calimService: ClaimService,
-        private supplierService: SupplierService,
         private dataService: DataService<any>,
         private messageService: MessageService) { }
 
@@ -306,77 +305,13 @@ export class NewJobComponent implements OnInit {
         }
     }
 
-    getYPosition() {
-        this.fromContainer.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    onPrivacyChange(value) {
-        // console.log(value)
-        if (value == 'Private') {
-            this.getSupplierByBrandId();
-            this.displayPrivateSuppliers = true;
-        } else {
-            this.privateSuppliersList = [];
-            this.jobForm.patchValue({
-                'suppliers': []
-            });
-            this.displayPrivateSuppliers = false;
-        }
-    }
-
-    getSupplierByBrandId() {
-        if (this.jobForm.get('car')) {
-            this.selectedPrivateSuppliers = this.supplierService.getSupplierByBrandId(this.jobForm.get('car').value.brandId.id);
-        }
-    }
-
     addRequest() {
         this.numberOfrequests++;
         this.addOneMoreRequest = false;
     }
 
-    selectSupplier(value: Supplier[]) {
-        //check if at least 1 supplier is slected
-        console.log(value)
-        if (value.length > 0) {
-            this.supplierSelected = true;
-
-        } else {
-            this.supplierSelected = false;
-        }
-
-        this.privateSuppliersList = value;
-    }
-
-    removePrivateSupplier(value) {
-        // console.log(value)
-        let updatedPrivateSuplliers = this.jobForm.get('suppliers').value.filter(supplier => {
-            return supplier.id !== value.id;
-        });
-
-        this.jobForm.patchValue({
-            'suppliers': updatedPrivateSuplliers
-        });
-
-        this.privateSuppliersList = updatedPrivateSuplliers
-
-        if (this.jobForm.get('suppliers').value.length == 0) {
-            this.jobForm.patchValue({
-                'privacy': 'Public'
-            });
-
-            this.supplierSelected = false;
-        }
-    }
-
-    resetPrivacy() {
-        //console.log(this.privateSuppliersList)
-        if (this.privateSuppliersList.length == 0) {
-            this.jobForm.patchValue({
-                'suppliers': this.privateSuppliersList,
-                'privacy': 'Public'
-            });
-        }
+    getYPosition() {
+        this.fromContainer.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
 }
