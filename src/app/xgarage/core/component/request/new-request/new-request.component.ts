@@ -95,37 +95,37 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                     if (data && JSON.stringify(data) !== '{}') {
                         console.log(data)
                         this.isSending = true;
-                        // let updatedSuppliers = [];
-                        // if (data.suppliers && data.suppliers.length > 0) {
-                        //     data.suppliers.forEach(element => {
-                        //         updatedSuppliers.push({ 'id': element.id })
-                        //     });
-                        // }
+                        let updatedSuppliers = [];
+                        if (data.suppliers && data.suppliers.length > 0) {
+                            data.suppliers.forEach(element => {
+                                updatedSuppliers.push({ 'id': element.id })
+                            });
+                        }
 
-                        // this.responseBody.job = data.jobId;
-                        // this.responseBody.description = this.description;
-                        // this.responseBody.car = { 'id': data.car.id };
-                        // this.responseBody.locationName = data.location;
-                        // this.responseBody.suppliers = updatedSuppliers;
-                        // this.responseBody.privacy = data.privacy;
-                        // this.responseBody.requestTitle = data.requestTitle;
-                        // this.responseBody.user = this.user;
-                        // this.responseBody.partTypes = this.selectedPartTypes;
-                        // this.responseBody.qty = this.qty;
+                        this.responseBody.job = data.jobId;
+                        this.responseBody.description = this.description;
+                        this.responseBody.car = { 'id': data.car.id };
+                        this.responseBody.locationName = data.location;
+                        this.responseBody.suppliers = updatedSuppliers;
+                        this.responseBody.privacy = data.privacy;
+                        this.responseBody.requestTitle = data.requestTitle;
+                        this.responseBody.user = this.user;
+                        this.responseBody.partTypes = this.selectedPartTypes;
+                        this.responseBody.qty = this.qty;
 
-                        // this.getPart();
-                        // console.log('before formatThenSaveRequest');
-                        // if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0 && this.responseBody.qty >= 1) {
-                        //     this.partErrorMsg = '';
-                        //     console.log('inside formatThenSaveRequest', this.responseBody);
-                        //     this.formatThenSaveRequest();
-                        // }
+                        this.getPart();
+                        console.log('before formatThenSaveRequest');
+                        if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0 && this.responseBody.qty >= 1) {
+                            this.partErrorMsg = '';
+                            console.log('inside formatThenSaveRequest', this.responseBody);
+                            this.formatThenSaveRequest();
+                        }
 
-                        // if (!this.responseBody.part) {
-                        //     this.getYPosition();
-                        //     this.partErrorMsg = 'please select or enter a part';
-                        //     this.isSending = false;
-                        // }
+                        if (!this.responseBody.part) {
+                            this.getYPosition();
+                            this.partErrorMsg = 'please select or enter a part';
+                            this.isSending = false;
+                        }
 
                     }
                 }

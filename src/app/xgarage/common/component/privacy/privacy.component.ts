@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Privacy } from '../../model/privacy';
 import { SupplierService } from 'src/app/xgarage/core/service/supplier.service';
 import { Observable } from 'rxjs';
 import { TenantService } from '../../service/tenant.service';
@@ -16,29 +15,37 @@ export class PrivacyComponent implements OnInit {
 
     privateSuppliersList: any[] = [];
     selectedPrivateSuppliers: Observable<any>;
-    privacyList = Object.keys(Privacy);
     displayPrivateSuppliers: boolean = false;
     supplierSelected: boolean = false;
     @Input() id: number;
     @Input() type: string;
     @Input() privacyControl: FormControl;
     @Input() suppliersControl: FormControl;
+    @Input() label: string;
+    @Input() selectionList: any;
+    @Output() enableBidding: EventEmitter<boolean> = new EventEmitter();
+
+
     ngOnInit(): void {
-       // console.log(this.id, this.type, this.privacyControl)
+        //console.log(this.id, this.type, this.privacyControl)
     }
 
-    onPrivacyChange(value) {
-        // console.log(value)
-        if (value == 'Private') {
+    onSelectChange(value: string) {
+        console.log(value)
+        this.privateSuppliersList = [];
+        this.suppliersControl.setValue([]);
+
+        if (value == 'Private' || value == 'Direct') {
             this.getSuppliers();
             this.displayPrivateSuppliers = true;
+            this.enableBidding.emit(false);
         } else {
-            this.privateSuppliersList = [];
-            //----->
-            this.suppliersControl.setValue([]);
-            //----->
+            this.enableBidding.emit(true);
+
             this.displayPrivateSuppliers = false;
         }
+
+        console.log(this.privateSuppliersList)
     }
 
     getSuppliers() {
@@ -46,11 +53,7 @@ export class PrivacyComponent implements OnInit {
             this.type == 'job' ?
                 this.selectedPrivateSuppliers = this.supplierService.getSupplierByBrandId(this.id)
                 :
-                this.tenantService.getTenantsByType(this.id).subscribe(res => {
-                    console.log(res)
-                }, err => {
-                    console.log(err)
-                })
+                this.selectedPrivateSuppliers = this.tenantService.getTenantsByType(this.id)
         }
     }
 
@@ -67,7 +70,7 @@ export class PrivacyComponent implements OnInit {
         this.privateSuppliersList = value;
     }
 
-    removePrivateSupplier(value) {
+    removePrivateSupplier(value: { id: any; }) {
         // console.log(value)
         let updatedPrivateSuppliers = this.suppliersControl.value.filter(supplier => {
             return supplier.id !== value.id;

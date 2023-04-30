@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { ClaimService } from '../../../service/claim.service';
-import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { Privacy } from '../../../../common/model/privacy';
+import { AssignType } from '../../../../common/model/assigntype';
 
 @Component({
     selector: 'app-claim-details',
@@ -10,14 +12,15 @@ import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 })
 export class ClaimDetailsComponent implements OnInit {
 
-    constructor(private breadcrumbService: AppBreadcrumbService, private formBuilder: FormBuilder, private claimServie: ClaimService) { }
+    constructor(private authService: AuthService, private breadcrumbService: AppBreadcrumbService, private formBuilder: FormBuilder, private claimServie: ClaimService) { }
     partsList: any[] = [];
     parts: any[] = [];
     selectedParts = [];
     actions: string[] = ['No Action', 'Replace', 'Repair'];
-    assignTypes: {type:string}[] = [{type: 'Direct'}, {type: 'Bidding'}];
+    assignTypes = Object.keys(AssignType);
     claim: any  = '';
     loading: boolean = true;
+    tenantId: number = JSON.parse(this.authService.getStoredUser()).tenant.id;
     updateClaimForm: FormGroup = this.formBuilder.group({
         id: [''],
         inspectedBy: [''],
@@ -27,10 +30,12 @@ export class ClaimDetailsComponent implements OnInit {
         officeLocation: [''],
         workshopGrade: [''],
         bidClosingDate: [''],
-        assignType: [''],
-        privacy: [{ value: 'Public', disabled: true }],
+        assignType: ['Bidding'],
+        privacy: ['Public'],
+        suppliers: [],
         notes: [''],
     });
+    privacyList = Object.keys(Privacy);
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }]);
@@ -102,9 +107,21 @@ export class ClaimDetailsComponent implements OnInit {
         )
     }
 
-    onAssignTypeChange(e) {
-        //console.log(e.value, this.assignTypes[1].type)
-        e.value == this.assignTypes[1].type ? this.updateClaimForm.get('privacy').enable() : this.updateClaimForm.get('privacy').disable();
+    // onAssignTypeChange(e) {
+    //     //console.log(e.value, this.assignTypes[1].type)
+    //     e.value == this.assignTypes[1].type ? this.updateClaimForm.get('privacy').enable() : this.updateClaimForm.get('privacy').disable();
+    // }
+
+    onEnabelBidding(e: boolean) {
+        if(e) {
+            this.updateClaimForm.get('privacy').enable()
+        } else {
+            this.updateClaimForm.get('privacy').disable();
+            this.updateClaimForm.get('suppliers').setValue([]);
+            this.updateClaimForm.get('privacy').setValue(['Public']);
+        }
+
+        // e? this.updateClaimForm.get('privacy').enable() : this.updateClaimForm.get('privacy').disable();
     }
 
     sendRequest() {
@@ -118,7 +135,7 @@ export class ClaimDetailsComponent implements OnInit {
             claimPartsDtoList: this.selectedParts
         }
 
-        console.log(claimParts);
+        //console.log(claimParts);
 
         // this.claimServie.saveClaimParts(claimParts).subscribe((res: MessageResponse) => {
         //     //console.log(res)
@@ -133,11 +150,11 @@ export class ClaimDetailsComponent implements OnInit {
         //     console.log(err)
         // });
 
-        this.claimServie.update(this.updateClaimForm.value).subscribe(res => {
-            console.log(res)
-        }, err => {
-            console.log(err)
-        });
+        // this.claimServie.update(this.updateClaimForm.value).subscribe(res => {
+        //     console.log(res)
+        // }, err => {
+        //     console.log(err)
+        // });
     }
 
     calcHalf(arr) {

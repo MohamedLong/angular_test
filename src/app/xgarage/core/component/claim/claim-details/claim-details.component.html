@@ -81,13 +81,17 @@
                         appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
                 </div>
                 <div class="col-12 md:col-4">
-                    <label class="block mb-2">Assign Type</label>
-                    <p-dropdown [options]="assignTypes" optionValue="type" optionLabel="type" formControlName="assignType"
-                        (onChange)="onAssignTypeChange($event)"></p-dropdown>
+                    <!-- <label class="block mb-2">Assign Type</label> -->
+                    <!-- <p-dropdown [options]="assignTypes" optionValue="type" optionLabel="type"
+                        formControlName="assignType" (onChange)="onAssignTypeChange($event)"></p-dropdown> -->
+                    <app-privacy [selectionList]="assignTypes" label="Assign Type" type="claim"
+                        [id]="tenantId" [privacyControl]="updateClaimForm.controls['assignType']"
+                        [suppliersControl]="updateClaimForm.controls['suppliers']" (enableBidding)="onEnabelBidding($event)"></app-privacy>
                 </div>
                 <div class="col-12 md:col-4">
-                    <label class="block mb-2">{{ 'job.form.privacy' | translate }}</label>
-                    <input formControlName="privacy" class="width-100 mb-2" type="text" pInputText />
+                    <app-privacy [selectionList]="privacyList" label="{{ 'job.form.privacy' | translate }}" type="claim"
+                        [id]="tenantId" [privacyControl]="updateClaimForm.controls['privacy']"
+                        [suppliersControl]="updateClaimForm.controls['suppliers']"></app-privacy>
                 </div>
                 <div class="col-12">
                     <label class="block mb-2 fw-700">Note</label>
@@ -103,4 +107,3 @@
 
     </div>
 </div>
-

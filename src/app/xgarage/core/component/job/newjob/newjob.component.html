@@ -12,7 +12,7 @@
                         </div>
                         <!-- (click)="clickToNavigate('request')"  -->
                         <div class="col-6 tab flex align-items-center justify-content-center request-tab"
-                            [ngClass]="{'selected-tab': activeTab === 'request'}" (click)="clickToNavigate('request')">
+                            [ngClass]="{'selected-tab': activeTab === 'request'}">
                             <div class="title">{{ 'job.form.createRequest' | translate }}</div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                                 </p-messages>
                             </div>
                             <div class="col-12 md:col-6">
-                                <app-privacy type="job" [suppliersControl]="jobForm.controls['suppliers']" [privacyControl]="jobForm.controls['privacy']" [id]="this.jobForm.get('car').value? jobForm.get('car').value.brandId.id : null"></app-privacy>
+                                <app-privacy type="job" label="{{ 'job.form.privacy' | translate }}" [selectionList]="privacyList" [suppliersControl]="jobForm.controls['suppliers']" [privacyControl]="jobForm.controls['privacy']" [id]="this.jobForm.get('car').value? jobForm.get('car').value.brandId.id : null"></app-privacy>
                             </div>
                             <div class="col-12  md:col-6">
                                 <label class="block">{{ 'job.form.claimNo' | translate }}</label>
