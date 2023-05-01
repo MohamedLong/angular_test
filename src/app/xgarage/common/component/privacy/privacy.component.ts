@@ -24,14 +24,14 @@ export class PrivacyComponent implements OnInit {
     @Input() label: string;
     @Input() selectionList: any;
     @Output() enableBidding: EventEmitter<boolean> = new EventEmitter();
-
+    multipleSelect: boolean;
 
     ngOnInit(): void {
         //console.log(this.id, this.type, this.privacyControl)
     }
 
     onSelectChange(value: string) {
-        console.log(value)
+        //console.log(value)
         this.privateSuppliersList = [];
         this.suppliersControl.setValue([]);
 
@@ -39,9 +39,10 @@ export class PrivacyComponent implements OnInit {
             this.getSuppliers();
             this.displayPrivateSuppliers = true;
             this.enableBidding.emit(false);
+
+            value == 'Direct'? this.multipleSelect = false : this.multipleSelect = true;
         } else {
             this.enableBidding.emit(true);
-
             this.displayPrivateSuppliers = false;
         }
 
@@ -59,7 +60,7 @@ export class PrivacyComponent implements OnInit {
 
     selectSupplier(value: Supplier[]) {
         //check if at least 1 supplier is slected
-        //console.log(value)
+        // console.log(value)
         if (value.length > 0) {
             this.supplierSelected = true;
 

@@ -13,8 +13,8 @@
 <p-dialog header="Private Suppliers" [modal]="true" [style]="{width: '50vw'}" [(visible)]="displayPrivateSuppliers"
     (onHide)="resetPrivacy()">
     <p-listbox *ngIf="selectedPrivateSuppliers | async as selectedPrivateSuppliers; else loading"
-        (onChange)="selectSupplier($event.value)" [checkbox]="true" [options]="selectedPrivateSuppliers"
-        [formControl]="suppliersControl" [multiple]="true" optionLabel="name"></p-listbox>
+        (onChange)="selectSupplier(multipleSelect? $event.value : [$event.value])" [checkbox]="true" [options]="selectedPrivateSuppliers"
+        [formControl]="suppliersControl" [multiple]="multipleSelect" optionLabel="name"></p-listbox>
     <ng-template #loading>loading suppliers..</ng-template>
     <ng-template pTemplate="footer">
         <p-button icon="pi pi-check" (click)="displayPrivateSuppliers=false" label="Ok" styleClass="p-button-text"
