@@ -1,8 +1,9 @@
+<p-toast></p-toast>
 <div class="grid">
     <div class="col-12">
         <div class="card">
             <!-- add job info here -->
-            <app-details-card *ngIf="claim" [master]="claim" [role]=""></app-details-card>
+            <app-details-card type="claim" *ngIf="claim" [master]="claim" [role]=""></app-details-card>
         </div>
     </div>
     <div class="col-12  mb-4" *ngFor="let part of partsList">
@@ -30,9 +31,9 @@
                         <td>
                             {{parts.partName}}
                         </td>
+                        <!-- <td>{{parts.partOption}}</td> -->
                         <td>
-                            <p-dropdown [options]="actions"
-                                (onChange)="onAction($event.value, {partId: parts.partId})"></p-dropdown>
+                            <p-dropdown [options]="actions" (onChange)="onAction($event.value, {partId: parts.partId})"></p-dropdown>
                         </td>
                         <!-- <td *ngIf="rowIndex >= calcHalf(part.list)">
                             {{rowIndex}} {{calcHalf(part.list)}} {{parts.partName}}
@@ -84,9 +85,10 @@
                     <!-- <label class="block mb-2">Assign Type</label> -->
                     <!-- <p-dropdown [options]="assignTypes" optionValue="type" optionLabel="type"
                         formControlName="assignType" (onChange)="onAssignTypeChange($event)"></p-dropdown> -->
-                    <app-privacy [selectionList]="assignTypes" label="Assign Type" type="claim"
-                        [id]="tenantId" [privacyControl]="updateClaimForm.controls['assignType']"
-                        [suppliersControl]="updateClaimForm.controls['suppliers']" (enableBidding)="onEnabelBidding($event)"></app-privacy>
+                    <app-privacy [selectionList]="assignTypes" label="Assign Type" type="claim" [id]="tenantId"
+                        [privacyControl]="updateClaimForm.controls['assignType']"
+                        [suppliersControl]="updateClaimForm.controls['suppliers']"
+                        (enableBidding)="onEnabelBidding($event)"></app-privacy>
                 </div>
                 <div class="col-12 md:col-4">
                     <app-privacy [selectionList]="privacyList" label="{{ 'job.form.privacy' | translate }}" type="claim"
@@ -98,8 +100,8 @@
                     <textarea formControlName="notes" rows="3" class="width-100" pInputTextarea></textarea>
                 </div>
                 <div class="col-12 text-center">
-                    <button (click)="sendRequest()" class="width-100 md:w-20rem" pButton pRipple type="submit"
-                        label="Create Request">
+                    <button (click)="onUpdateClaim()" class="width-100 md:w-20rem" pButton pRipple type="submit"
+                        label="Create Request" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
                     </button>
                 </div>
             </div>
@@ -107,4 +109,3 @@
 
     </div>
 </div>
-

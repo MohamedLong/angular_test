@@ -8,14 +8,15 @@ export class DetailsCardComponent implements OnInit {
 
     @Input() master;
     @Input() role;
+    @Input()type: string = '';
     @Output() editJobNumber: EventEmitter<null> = new EventEmitter();
     imageLoaded:  boolean = false;
-    user: string = 'insurance';
+
 
     constructor() { }
 
     ngOnInit(): void {
-        console.log(this.master)
+        //console.log(this.master)
     }
 
     editJob() {

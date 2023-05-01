@@ -52,7 +52,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     bidTotalDiscount: number = 0;
     isSavingBid: boolean = false;
     discountType = ['OMR', '%'];
-    user: string = 'insurance';
+    user: string = '';
 
     ngOnInit(): void {
         if (this.type == 'new bid') {

@@ -8,5 +8,6 @@ export const StatusConstants = {
     CANCELED_STATUS : 7,
     REVISION_STATUS : 8,
     LOST_STATUS : 9,
-    REVISED_STATUS : 10
+    REVISED_STATUS : 10,
+    CONFIRMED_STATUS: 11
 }

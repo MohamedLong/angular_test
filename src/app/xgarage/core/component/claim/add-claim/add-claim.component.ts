@@ -111,9 +111,9 @@ export class AddClaimComponent implements OnInit {
             console.log(res)
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Created Succefully' });
             this.saving = false;
-
-            localStorage.setItem('claim', JSON.stringify(res));
-            this.router.navigate(['claim-details']);
+            this.claimForm.reset('');
+            // localStorage.setItem('claim', JSON.stringify(res));
+            // this.router.navigate(['claim-details']);
         }, err => {
             console.log(err)
             this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.error });
