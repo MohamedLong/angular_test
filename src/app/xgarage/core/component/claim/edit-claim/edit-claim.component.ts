@@ -36,7 +36,7 @@ export class EditClaimComponent implements OnInit {
         bidClosingDate: [''],
         assignType: ['Bidding'],
         privacy: ['Public'],
-        suppliers: [],
+        suppliers: [[]],
         notes: [''],
     });
     saving: boolean = false;
@@ -55,7 +55,7 @@ export class EditClaimComponent implements OnInit {
             repairHrs: this.claim.repairHrs,
             officeLocation: this.claim.officeLocation,
             workshopGrade: this.claim.workshopGrade,
-            bidClosingDate: this.claim.bidClosingDate.substr(0,9),
+            bidClosingDate: this.claim.bidClosingDate.substr(0,10),
             assignType: this.claim.assignType,
             privacy: this.claim.privacy,
             // suppliers: this.claim.suppliers,
@@ -122,18 +122,18 @@ export class EditClaimComponent implements OnInit {
 
                 this.loading = false;
 
-                this.partsList.forEach(partList => {
-                    partList.list.forEach(part => {
-                        this.claim.parts.forEach(claimPart => {
-                            if(part.partId == claimPart.part.id) {
-                                // console.log(part.partId, claimPart.part.id)
-                                part.partOption = claimPart.partOption;
-                            } else {
-                                part.partOption = 'No Action'
-                            }
-                        })
-                    })
-                });
+                // this.partsList.forEach(partList => {
+                //     partList.list.forEach(part => {
+                //         this.claim.parts.forEach(claimPart => {
+                //             if(part.partId == claimPart.part.id) {
+                //                 // console.log(part.partId, claimPart.part.id)
+                //                 part.partOption = claimPart.partOption;
+                //             } else {
+                //                 part.partOption = 'No Action'
+                //             }
+                //         })
+                //     })
+                // });
 
                 console.log(this.partsList)
 
@@ -187,7 +187,7 @@ export class EditClaimComponent implements OnInit {
             //console.log(res);
             this.saving = false;
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully' });
-            this.updateClaimForm.reset();
+            //this.updateClaimForm.reset();
         }, err => {
             //console.log(err);
             this.saving = false;
@@ -200,4 +200,19 @@ export class EditClaimComponent implements OnInit {
         return Math.ceil(arr.length / 2);
     }
 
+    resetForm() {
+        this.updateClaimForm.patchValue({
+            inspectedBy: '',
+            surveyedBy: '',
+            repairCost: 0,
+            repairHrs: 0,
+            officeLocation: '',
+            workshopGrade: '',
+            bidClosingDate: '',
+            assignType: 'Bidding',
+            privacy: 'Public',
+            suppliers: [],
+            notes: '',
+        });
+    }
 }

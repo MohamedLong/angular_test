@@ -36,7 +36,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.claimServie.getById(this.claimId).subscribe(res => {
             this.master = res;
             localStorage.setItem('claim', JSON.stringify(this.master));
-            //console.log(this.master)
+            console.log(this.master)
             this.initActionMenu();
             this.isFetching = false;
         }, err => console.log(err))
@@ -46,7 +46,12 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.claimServie.getClaimParts(this.claimId).subscribe(res => {
             //console.log(res);
             this.details = res;
-            this.master.parts = res;
+            if(this.master) {
+                this.details.forEach(detail => {
+                    detail.status = this.master.status;
+                })
+            }
+            // this.master.parts = res;
             localStorage.setItem('claim', JSON.stringify(this.master));
         }, err => console.log(err))
     }

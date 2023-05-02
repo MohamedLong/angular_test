@@ -1,0 +1,144 @@
+<p-toast></p-toast>
+<p-table [value]="requests" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem', 'width':'100%'}" #partTable
+    *ngIf="requests.length > 0" styleClass="p-datatable-sm p-datatable-striped">
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th>{{'bid.bidDetails.partName' | translate}}</th>
+            <th>Type</th>
+            <th>Request For</th>
+            <th>Action</th>
+            <th>{{'bid.bidDetails.warranty' | translate}} {{'bid.bidDetails.days' | translate}}</th>
+            <th>{{'bid.bidDetails.deliverDays' | translate}} {{'bid.bidDetails.days' | translate}}</th>
+            <th>{{'bid.bidDetails.price' | translate}}</th>
+            <th>Service Charge</th>
+            <th>edit</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-part let-editing="editing" let-ri="rowIndex">
+        <tr [pEditableRow]="part">
+            <td>
+                <span>{{type == 'new bid'?part.part.name : part.partName}}</span>
+                <!-- <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i> -->
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-dropdown [options]="partTypes" optionLabel="partType" [(ngModel)]="part.partType" appendTo="body"
+                            [style]="{'width':'100%'}"></p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.partType.partType}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="part.partOption" [style]="{'width':'100%'}" disabled>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.partOption}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="part.partOption" [style]="{'width':'100%'}" disabled>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.partOption}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-inputNumber [(ngModel)]="part.warranty" suffix=" days"></p-inputNumber>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.warranty}} days
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-inputNumber [(ngModel)]="part.availability" suffix=" days"></p-inputNumber>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.availability}} days
+                    </ng-template>
+                </p-cellEditor>
+
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-inputNumber [(ngModel)]="part.price" suffix=" OMR" [style]="{'width':'100%'}"></p-inputNumber>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.price}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-inputNumber [(ngModel)]="part.servicePrice" suffix=" OMR" [style]="{'width':'100%'}"></p-inputNumber>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.servicePrice}}
+                    </ng-template>
+                </p-cellEditor>
+
+            </td>
+            <td>
+                <div class="flex align-items-center justify-content-center gap-2">
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        class="p-button-rounded p-button-text"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                        (click)="onRowEditSave(part)"
+                        class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                        class="p-button-rounded p-button-text p-button-danger"></button>
+                </div>
+            </td>
+        </tr>
+        <tr class="prices font-bold">
+            <td colspan="6"></td>
+            <td><input pInputText type="text" value="{{totalPrice | number}}" [style]="{'width':'100%'}" disabled></td>
+            <td><input pInputText type="text" value="{{totalServicePrice | number}}" [style]="{'width':'100%'}" disabled></td>
+            <td></td>
+        </tr>
+        <!-- <tr class="font-bold prices" *ngIf="type == 'edit bid'">
+            <td colspan="4"></td>
+            <td>Total</td>
+            <td>{{bidTotalOriginalPrice | number}}</td>
+            <td>{{bidTotalPrice | number}}</td>
+            <td></td>
+            <td>{{bidTotalDiscount}}</td>
+            <td></td>
+            <td>{{bidTotalPrice | number}}</td>
+            <td colspan="3"></td>
+        </tr> -->
+    </ng-template>
+
+    <ng-template pTemplate="summary" *ngIf="type == 'new bid'">
+
+    </ng-template>
+
+</p-table>
+<div *ngIf="requests.length <= 0">
+    <p>this request has no parts for bid</p>
+</div>
+<div class="p-3">
+    <label class="block mb-2 fw-700">Note</label>
+    <textarea rows="5" class="width-100" pInputTextarea></textarea>
+    <div class="text-center mt-5">
+        <button (click)="onSubmitBid()" class="width-100 md:w-20rem" pButton pRipple type="submit" label="Submit Bid">
+        </button>
+    </div>
+</div>

@@ -23,7 +23,7 @@
     <div class="grid layout-invoice-content">
         <div class="col-12">
             <div class="mt-5">
-                <p-tabView (onChange)="handleChange($event)" [(activeIndex)]="activeTab">
+                <p-tabView [(activeIndex)]="activeTab">
                     <p-tabPanel header="Claim Information">
                         <div class="pt-5 text-center" *ngIf="isFetching">
                             <p-progressSpinner [style]="{width: '50px', height: '50px', textAlign: 'center'}"
@@ -121,7 +121,10 @@
                         </p-table>
                     </p-tabPanel> -->
                     <p-tabPanel *ngIf="newAuth == true" header="{{ 'job.tableColumn.addBids' | translate }}">
-                        <!-- <app-new-bid *ngIf="details.length > 0" [requests]="details"></app-new-bid> -->
+                        <app-new-claim-bid *ngIf="details.length > 0" [requests]="details"></app-new-claim-bid>
+                        <div class="py-5 text-center" *ngIf="!isFetching && details.length == 0">
+                            this claim has no requests
+                        </div>
                     </p-tabPanel>
                 </p-tabView>
             </div>
