@@ -155,6 +155,8 @@ export class AuthService {
         localStorage.removeItem('orderData');
         localStorage.removeItem('jobId');
         localStorage.removeItem('subs');
+        localStorage.removeItem('claim');
+        localStorage.removeItem('claimId');
     }
 
     changePassword(body: any) {

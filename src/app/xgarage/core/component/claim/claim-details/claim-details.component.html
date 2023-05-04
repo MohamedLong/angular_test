@@ -9,13 +9,13 @@
             <div class="field col">
                 <p-confirmPopup></p-confirmPopup>
                 <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
-                <button pButton pRipple [disabled]="editAuth===false" class="mb-3 p-button-warning" type="button"
+                <button pButton pRipple [disabled]="editAuth==false" class="mb-3 p-button-warning" type="button"
                     icon="pi pi-fw pi-cog" label="{{ 'operations.actions' | translate }}"
                     (click)="menu.toggle($event)"></button>
             </div>
             <div class="field">
                 <button pButton pRipple label="Edit Claim" class="p-button-success mr-2 mb-3"
-                    [disabled]="!(master.status.id == 1 && editAuth===true)" [routerLink]="['/edit-claim']"></button>
+                    [disabled]="!(master.status.id == 1 && editAuth==true)" [routerLink]="['/edit-claim']"></button>
             </div>
         </ng-template>
     </p-toolbar>
@@ -121,7 +121,7 @@
                         </p-table>
                     </p-tabPanel> -->
                     <p-tabPanel *ngIf="newAuth == true" header="{{ 'job.tableColumn.addBids' | translate }}">
-                        <app-new-claim-bid *ngIf="details.length > 0" [requests]="details"></app-new-claim-bid>
+                        <app-new-bid type="new claimBid" *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                         <div class="py-5 text-center" *ngIf="!isFetching && details.length == 0">
                             this claim has no requests
                         </div>

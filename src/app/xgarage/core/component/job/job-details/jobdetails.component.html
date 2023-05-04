@@ -95,11 +95,11 @@
                                         <td [hidden]="(printingMode || role == 2)" style="text-align:center">
                                             <button pButton pRipple type="button" icon="pi pi-pencil"
                                                 (click)="editRequest(request)"
-                                                [disabled]="!(master.status.id == 1 && editAuth===true) || disabledRequest(request)"
+                                                [disabled]="!(master.status.id == 1 && editAuth==true) || disabledRequest(request)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                             <button pButton pRipple type="button" icon="pi pi-times"
                                                 (click)="deleteAction(request || role == 2)"
-                                                [disabled]="!(master.status.id == 1 && editAuth===true) || disabledRequest(request)"
+                                                [disabled]="!(master.status.id == 1 && editAuth==true) || disabledRequest(request)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                         </td>
                                     </ng-container>

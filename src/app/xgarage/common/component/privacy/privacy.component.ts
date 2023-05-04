@@ -26,27 +26,25 @@ export class PrivacyComponent implements OnInit {
     @Output() enableBidding: EventEmitter<boolean> = new EventEmitter();
     multipleSelect: boolean;
 
-    ngOnInit(): void {
-        //console.log(this.id, this.type, this.privacyControl)
-    }
+    ngOnInit(): void { }
 
     onSelectChange(value: string) {
         //console.log(value)
         this.privateSuppliersList = [];
-        this.suppliersControl.setValue([]);
+        this.suppliersControl.reset(this.suppliersControl.value);
 
         if (value == 'Private' || value == 'Direct') {
             this.getSuppliers();
             this.displayPrivateSuppliers = true;
             this.enableBidding.emit(false);
 
-            value == 'Direct'? this.multipleSelect = false : this.multipleSelect = true;
+            value == 'Direct' ? this.multipleSelect = false : this.multipleSelect = true;
         } else {
             this.enableBidding.emit(true);
             this.displayPrivateSuppliers = false;
         }
 
-        console.log(this.privateSuppliersList)
+        // console.log(this.privateSuppliersList)
     }
 
     getSuppliers() {
@@ -60,11 +58,16 @@ export class PrivacyComponent implements OnInit {
 
     selectSupplier(value: Supplier[]) {
         //check if at least 1 supplier is slected
-        // console.log(value)
-        if (value.length > 0) {
+        console.log(value)
+        if (value.length > 0 && this.multipleSelect) {
             this.supplierSelected = true;
 
-        } else {
+        } else if (value.length > 0 && !this.multipleSelect) {
+            this.suppliersControl.setValue(value[0].id);
+            //console.log(this.suppliersControl)
+            this.supplierSelected = true;
+        }
+        else {
             this.supplierSelected = false;
         }
 
@@ -72,21 +75,24 @@ export class PrivacyComponent implements OnInit {
     }
 
     removePrivateSupplier(value: { id: any; }) {
-        // console.log(value)
-        let updatedPrivateSuppliers = this.suppliersControl.value.filter(supplier => {
-            return supplier.id !== value.id;
-        });
-        //----->
-        this.suppliersControl.setValue(updatedPrivateSuppliers);
-        //----->
-        this.privateSuppliersList = updatedPrivateSuppliers;
+        // console.log(this.suppliersControl.value)
+        if (this.multipleSelect) {
+            let updatedPrivateSuppliers = this.suppliersControl.value.filter(supplier => {
+                return supplier.id !== value.id;
+            });
+            this.suppliersControl.setValue(updatedPrivateSuppliers);
+            this.privateSuppliersList = updatedPrivateSuppliers;
 
-        if (this.suppliersControl.value.length == 0) {
-            //----->
-            this.privacyControl.setValue('Public');
-            //----->
-            this.supplierSelected = false;
+            if (this.suppliersControl.value.length == 0) {
+                this.privacyControl.setValue('Public');
+                this.supplierSelected = false;
+            }
+        } else {
+            this.enableBidding.emit(true);
+            this.privacyControl.setValue('Bidding');
+            this.privateSuppliersList = [];
         }
+
     }
 
     resetPrivacy() {

@@ -5,33 +5,37 @@
     <ng-template pTemplate="header">
         <tr>
             <th>{{'bid.bidDetails.partName' | translate}}</th>
-            <th>{{'bid.bidDetails.qty' | translate}}</th>
-            <th>{{'bid.bidDetails.Proposed' | translate}}</th>
+            <th *ngIf="type !== 'new claimBid'">{{'bid.bidDetails.qty' | translate}}</th>
+            <th *ngIf="type !== 'new claimBid'">{{'bid.bidDetails.Proposed' | translate}}</th>
+            <th *ngIf="type == 'new claimBid'">Type</th>
+            <th *ngIf="type == 'new claimBid'">Request For</th>
             <th>{{'bid.bidDetails.warranty' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.deliverDays' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.originalPrice' | translate}}</th>
-            <th>{{'bid.bidDetails.price' | translate}}</th>
+            <th  *ngIf="type !== 'new claimBid'">{{'bid.bidDetails.price' | translate}}</th>
             <th>
                 {{'bid.bidDetails.discountType' | translate}}
             </th>
             <th>{{'bid.bidDetails.discount' | translate}}</th>
             <th>{{'bid.bidDetails.vat' | translate}}</th>
             <th>{{'bid.bidDetails.totalPrice' | translate}}</th>
+            <th>Service Charge</th>
             <th *ngIf="type == 'new bid'">{{'bid.bidDetails.partImgs' | translate}}</th>
             <th *ngIf="type == 'edit bid'">{{'common.status' | translate}}</th>
-            <th>{{'common.notes' | translate}}</th>
+            <th  *ngIf="type !== 'new claimBid'">{{'common.notes' | translate}}</th>
             <th>{{'bid.bidDetails.modifyBid' | translate}}</th>
         </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-part let-editing="editing" let-ri="rowIndex">
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved}">
-            <td (click)="showModal(part)" style="cursor: pointer; border-right: 1px solid #dee2e6;"><span>{{type == 'new
-                    bid'?
-                    part.part.name : part.partName}}</span>
+            <td (click)="showModal(part)" style="cursor: pointer; border-right: 1px solid #dee2e6;">
+                <span>
+                    {{type == 'new bid' || 'new claimBid'? part.part.name : part.partName}}
+                </span>
                 <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
             </td>
-            <td>
+            <td  *ngIf="type !== 'new claimBid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="1" max="{{part.qty}}" (input)="onQty(part)" pInputText type="number"
@@ -42,7 +46,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>
+            <td  *ngIf="type !== 'new claimBid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <p-dropdown [style]="{'width':'100%'}" optionLabel="partType" [options]="part.statuses"
@@ -57,6 +61,27 @@
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{type == 'new bid'? part.preferred.partType : part.partType}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td *ngIf="type == 'new claimBid'">
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-dropdown [options]="partTypes" optionLabel="partType" [(ngModel)]="part.partType" appendTo="body"
+                            [style]="{'width':'100%'}"></p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.partType.partType}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td *ngIf="type == 'new claimBid'">
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="part.partOption" [style]="{'width':'100%'}" disabled>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.partOption}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -78,7 +103,7 @@
                             [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{type == 'new bid'? part.availability : part.deliverDays}}
+                        {{type == 'new bid' || type == 'new claimBid'? part.availability : part.deliverDays}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -94,7 +119,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>
+            <td  *ngIf="type !== 'new claimBid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="0" pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.price"
@@ -138,7 +163,8 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>{{type == 'new bid'? (part.totalPrice | number ): (part.price | number)}}
+            <td>
+                {{type == 'new bid'  || 'new claimBid'? (part.totalPrice | number) : (part.price | number)}}
             </td>
             <td *ngIf="type == 'new bid'">
                 <p-cellEditor>
@@ -165,7 +191,18 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td *ngIf="type == 'new bid'">
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-inputNumber [(ngModel)]="part.servicePrice" suffix=" OMR" [style]="{'width':'100%'}"></p-inputNumber>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{part.servicePrice}}
+                    </ng-template>
+                </p-cellEditor>
+
+            </td>
+            <td *ngIf="type == 'new bid' || 'new claimBid'">
                 <div class="flex align-items-center justify-content-center gap-2">
                     <button *ngIf="!editing && !part.isSending" pButton pRipple type="button" pInitEditableRow
                         icon="pi pi-pencil" class="p-button-rounded p-button-text" [disabled]="part.saved"></button>
@@ -201,6 +238,12 @@
             <td>{{bidTotalPrice | number}}</td>
             <td colspan="3"></td>
         </tr>
+        <tr class="prices font-bold"  *ngIf="type == 'new claimBid'">
+            <td colspan="9"></td>
+            <td><input pInputText type="text" value="{{totalBidsPrices | number}}" [style]="{'width':'100%'}" disabled></td>
+            <td><input pInputText type="text" value="{{totalServicePrice | number}}" [style]="{'width':'100%'}" disabled></td>
+            <td></td>
+        </tr>
     </ng-template>
 
     <ng-template pTemplate="summary" *ngIf="type == 'new bid'">
@@ -210,6 +253,15 @@
 </p-table>
 <div *ngIf="requests.length <= 0">
     <p>this request has no parts for bid</p>
+</div>
+<div class="p-3" *ngIf="type == 'new claimBid'">
+    <label class="block mb-2 fw-700">Note</label>
+    <textarea rows="5" class="width-100" pInputTextarea></textarea>
+    <div class="text-center mt-5">
+        <button icon="{{isSubmittingBids? 'pi pi-spin pi-spinner' : ''}}"
+        iconPos="right" (click)="onSubmitBid()" class="width-100 md:w-20rem" pButton pRipple type="submit" label="Submit Bid">
+        </button>
+    </div>
 </div>
 
 <p-dialog [(visible)]="displayModal" [modal]="true" [style]="{'max-width': '90vw', 'width': 'auto'}">

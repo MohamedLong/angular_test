@@ -87,7 +87,7 @@
                         formControlName="assignType" (onChange)="onAssignTypeChange($event)"></p-dropdown> -->
                     <app-privacy [selectionList]="assignTypes" label="Assign Type" type="claim" [id]="tenantId"
                         [privacyControl]="updateClaimForm.controls['assignType']"
-                        [suppliersControl]="updateClaimForm.controls['suppliers']"
+                        [suppliersControl]="updateClaimForm.controls['assignedGarage']"
                         (enableBidding)="onEnabelBidding($event)"></app-privacy>
                 </div>
                 <div class="col-12 md:col-4">
