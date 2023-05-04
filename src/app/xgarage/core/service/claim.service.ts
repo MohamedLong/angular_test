@@ -44,4 +44,8 @@ export class ClaimService extends GenericService<Claim>{
     saveClaimBid(bid: any) {
         return this.http.post<any>(config.coreApiUrl + '/claimBid/saveAll', bid);
     }
+
+    getClaimBids() {
+        return this.http.get<any>(config.coreApiUrl + '/claimBid/all');
+    }
 }

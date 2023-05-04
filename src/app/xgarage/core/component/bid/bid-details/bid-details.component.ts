@@ -4,6 +4,7 @@ import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { BidDto } from '../../../dto/biddto';
 import { BidService } from '../../../service/bidservice.service';
 import { JobService } from '../../../service/job.service';
+import { ClaimService } from '../../../service/claim.service';
 
 @Component({
     selector: 'app-bid-details',
@@ -20,10 +21,16 @@ export class BidDetailsComponent implements OnInit {
     status: any[] = ["All"];
     selectedState = 'All';
     pageNo: number = 0;
-    constructor(private breadcrumbService: AppBreadcrumbService, private bidService: BidService, private jobService: JobService, private msgService: MessageService) { }
+    user: string = '';
+    constructor(private breadcrumbService: AppBreadcrumbService, private bidService: BidService, private jobService: JobService, private msgService: MessageService, private claimService: ClaimService) { }
 
     ngOnInit(): void {
-        this.getBids(this.pageNo);
+        if(this.user == 'ins') {
+            this.getClaimBids();
+        } else {
+            this.getBids(this.pageNo);
+        }
+
         this.breadcrumbService.setItems([{'label': 'My Bids', 'routerLink': ['bids']}]);
     }
 
@@ -36,6 +43,23 @@ export class BidDetailsComponent implements OnInit {
                 this.fillteredBids = res;
                 this.loading = false;
                 this.setStatusNames(this.bids);
+            },
+            error: (e) => {
+                this.msgService.add({ severity: 'error', summary: 'Server Information', detail: e.error.message, life: 3000 });
+                this.loading = false;
+            }
+        });
+    }
+
+    getClaimBids() {
+        this.loading = true;
+        this.claimService.getClaimBids().subscribe({
+            next: (res) => {
+                console.log(res)
+                // this.bids = res;
+                // this.fillteredBids = res;
+                // this.loading = false;
+                // this.setStatusNames(this.bids);
             },
             error: (e) => {
                 this.msgService.add({ severity: 'error', summary: 'Server Information', detail: e.error.message, life: 3000 });
