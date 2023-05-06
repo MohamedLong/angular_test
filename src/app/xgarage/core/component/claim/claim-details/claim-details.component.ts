@@ -11,7 +11,7 @@ import { Status } from 'src/app/xgarage/common/model/status';
 @Component({
     selector: 'app-claim-details',
     templateUrl: './claim-details.component.html',
-    providers: [MessageService,  ConfirmationService, DatePipe]
+    providers: [MessageService, ConfirmationService, DatePipe]
 })
 export class ClaimDetailsComponent extends GenericDetailsComponent implements OnInit {
 
@@ -29,7 +29,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.claimId = JSON.parse(localStorage.getItem('claimId'));
         this.onGetClaimByClaimId();
         this.onGetClaimParts();
-
+        this.getClaimBids();
     }
 
     onGetClaimByClaimId() {
@@ -97,6 +97,26 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
             });
             this.confirmActionDialog = false;
         }
+    }
+
+    getStatus(id: number) {
+        if (id == 1) {
+            return 'Open';
+        } else if (id == 2) {
+            return 'Initial Approval';
+        } else if (id == 3) {
+            return 'OnHold';
+        } else if (id == 4) {
+            return 'Completed';
+        } else {
+            return 'Rejected';
+        }
+    }
+
+    getClaimBids() {
+        this.claimServie.getClaimBids().subscribe(res => {
+            console.log(res)
+        }, err => console.log(err))
     }
 
 }

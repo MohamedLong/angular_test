@@ -21,6 +21,10 @@ export class ClaimService extends GenericService<Claim>{
         return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant/' + tenantId);
     }
 
+    getClaimsByTenant() {
+        return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant');
+    }
+
     getClaimTicks() {
         return this.http.get<any[]>(config.coreApiUrl + '/claimTicks/all');
     }
@@ -46,6 +50,8 @@ export class ClaimService extends GenericService<Claim>{
     }
 
     getClaimBids() {
-        return this.http.get<any>(config.coreApiUrl + '/claimBid/all');
+        return this.http.get<any>(config.coreApiUrl + '/claim/tenantSupplier');
     }
+
+
 }

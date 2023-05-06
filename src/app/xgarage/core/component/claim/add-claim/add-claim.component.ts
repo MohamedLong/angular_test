@@ -102,18 +102,18 @@ export class AddClaimComponent implements OnInit {
 
     onCreateCalim() {
         this.saving = true;
-        // let datetime = new Date(this.claimForm.get('claimDate').value);
-        // let formattedDateTime = datetime.toISOString()
 
-        // this.claimForm.get('claimDate').setValue(formattedDateTime);
-        console.log(this.claimForm.value)
-        this.claimService.add(this.claimForm.value).subscribe(res => {
+        let datetime = new Date(this.claimForm.get('claimDate').value).toISOString();
+        let updatedClaimForm = this.claimForm.value;
+        updatedClaimForm.claimDate = datetime;
+
+        //console.log(updatedClaimForm)
+
+        this.claimService.add(updatedClaimForm).subscribe(res => {
             console.log(res)
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Created Succefully' });
             this.saving = false;
             this.claimForm.reset('');
-            // localStorage.setItem('claim', JSON.stringify(res));
-            // this.router.navigate(['claim-details']);
         }, err => {
             console.log(err)
             this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.error });

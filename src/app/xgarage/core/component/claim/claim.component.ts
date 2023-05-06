@@ -35,7 +35,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this.getAll();
+        this.onGetClaimsByTenant();
         this.getAllTenants();
         super.callInsideOnInit();
 
@@ -55,37 +55,44 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         })
     }
 
-    getAll() {
-        let user = this.authService.getStoredUser();
-        if (JSON.parse(user).tenant !== null) {
-            let tenant = JSON.parse(user).tenant.id;
-            this.claimService.getByTenant(tenant).subscribe({
-                next: (masters) => {
-                    this.masterDtos = masters;
-                    this.cols = [
-                        { field: 'id', header: 'ID' },
-                        { field: 'claimNo', header: 'Claim Number' },
-                        { field: 'claimDate', header: 'Claim Date' },
-                        { field: 'tenantName', header: 'Tenant Name' },
-                        { field: 'createdUser', header: 'Created By' },
-                        { field: 'statusDate', header: 'Status Date' },
-                        { field: 'status', header: 'Status' }
-                    ];
-                    this.loading = false;
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Error', detail: e.error.message, life: 3000 })
-            });
-        }
-        else {
-            this.claimService.getAll().subscribe({
-                next: (masters) => {
-                    this.masterDtos = masters;
-                    this.loading = false;
-                    this.masterDtos.forEach(val => val.cancellable = (val.status != null && val.status == StatusConstants.OPEN_STATUS));
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
-            });
-        }
+    onGetClaimsByTenant() {
+        // let user = this.authService.getStoredUser();
+        // if (JSON.parse(user).tenant !== null) {
+        //     let tenant = JSON.parse(user).tenant.id;
+        //     this.claimService.getByTenant(tenant).subscribe({
+        //         next: (masters) => {
+        //             this.masterDtos = masters;
+        //             this.cols = [
+        //                 { field: 'id', header: 'ID' },
+        //                 { field: 'claimNo', header: 'Claim Number' },
+        //                 { field: 'claimDate', header: 'Claim Date' },
+        //                 { field: 'tenantName', header: 'Tenant Name' },
+        //                 { field: 'createdUser', header: 'Created By' },
+        //                 { field: 'statusDate', header: 'Status Date' },
+        //                 { field: 'status', header: 'Status' }
+        //             ];
+        //             this.loading = false;
+        //         },
+        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Error', detail: e.error.message, life: 3000 })
+        //     });
+        // }
+        // else {
+        //     this.claimService.getAll().subscribe({
+        //         next: (masters) => {
+        //             this.masterDtos = masters;
+        //             this.loading = false;
+        //             this.masterDtos.forEach(val => val.cancellable = (val.status != null && val.status == StatusConstants.OPEN_STATUS));
+        //         },
+        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
+        //     });
+        // }
+
+        this.claimService.getClaimsByTenant().subscribe(res => {
+            console.log(res)
+            this.masterDtos = res;
+            this.loading = false;
+        }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 }))
+
     }
 
     edit(claimDto: any) {
@@ -122,7 +129,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
                 this.claimService.update(this.master).subscribe({
                     next: (data) => {
                         this.master = data;
-                        this.getAll();
+                        this.onGetClaimsByTenant();
                         this.messageService.add({
                             severity: 'success', summary: 'Successful',
                             detail: 'Claim Updated'
@@ -139,7 +146,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
                 this.claimService.add(this.master).subscribe({
                     next: (data) => {
                         this.master = data;
-                        this.getAll();
+                        this.onGetClaimsByTenant();
                         this.messageService.add({
                             severity: 'success', summary: 'Successful',
                             detail: 'Claim created successfully'
@@ -166,7 +173,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
             if (res.messageCode == 200) {
                 this.messageService.add({ severity: 'success', summary: 'Claim cancelled successfully' });
                 this.deleteSingleDialog = false;
-                this.getAll();
+                this.onGetClaimsByTenant();
             }
             else {
                 this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Claim', life: 3000 });

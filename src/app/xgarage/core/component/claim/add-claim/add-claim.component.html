@@ -9,9 +9,9 @@
                             [ngClass]="{'selected-tab': activeTab == 'car-info'}" (click)="activeTab = 'car-info'">
                             <div class="title">{{ 'car.title' | translate }}</div>
                         </div>
+                        <!-- (click)="activeTab = 'create-claim'" -->
                         <div class="col-6 tab flex align-items-center justify-content-center request-tab"
-                            [ngClass]="{'selected-tab': activeTab === 'create-claim'}"
-                            (click)="activeTab = 'create-claim'">
+                            [ngClass]="{'selected-tab': activeTab === 'create-claim'}">
                             <div class="title">{{ 'job.form.createRequest' | translate }}</div>
                         </div>
                     </div>
@@ -62,12 +62,12 @@
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">Received Date & Time</label>
                                 <!-- [showTime]="true" -->
-                                <p-calendar dataType="string" formControlName="claimDate" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
+                                <p-calendar dataType="string" formControlName="claimDate" appendTo="body" dateFormat="yy-mm-dd" [showTime]="true"></p-calendar>
                             </div>
-                            <div class="col-12 md:col-6">
+                            <!-- <div class="col-12 md:col-6">
                                 <label class="block mb-2">Received By</label>
                                 <input class="width-100 mb-2" type="text" pInputText />
-                            </div>
+                            </div> -->
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">Exc. Delivery Date</label>
                                 <p-calendar dataType="string" formControlName="excDeliveryDate" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
@@ -76,10 +76,10 @@
                                 <label class="block mb-2">Breakdown</label>
                                 <p-calendar dataType="string" formControlName="breakDown" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
                             </div>
-                            <div class="col-12 md:col-6">
+                            <!-- <div class="col-12 md:col-6">
                                 <label class="block mb-2">Type of Job</label>
                                 <input class="width-100 mb-2" type="text" pInputText />
-                            </div>
+                            </div> -->
                             <div class="col-12 md:col-6">
                                 <label class="block mb-2">K.M</label>
                                 <p-calendar dataType="string" formControlName="km" appendTo="body" dateFormat="yy-mm-dd"></p-calendar>

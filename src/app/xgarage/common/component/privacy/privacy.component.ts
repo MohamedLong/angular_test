@@ -26,7 +26,9 @@ export class PrivacyComponent implements OnInit {
     @Output() enableBidding: EventEmitter<boolean> = new EventEmitter();
     multipleSelect: boolean;
 
-    ngOnInit(): void { }
+    ngOnInit(): void {
+       // console.log(this.type)
+     }
 
     onSelectChange(value: string) {
         //console.log(value)
