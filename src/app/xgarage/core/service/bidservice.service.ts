@@ -37,4 +37,12 @@ export class BidService extends GenericService<any> {
     rejectMutltipleBids(bidList: MultipleBids) {
         return this.http.post(this.apiServerUrl + '/rejectBid/multiple/', bidList);
     }
+
+    getBidsByClaim(id: number) {
+        return this.http.get<BidDto[]>(this.apiServerUrl + '/claim/' + id);
+    }
+
+    getBidByBidId(id:  number) {
+        return this.http.get<BidDto[]>(this.apiServerUrl + '/id/' + id);
+    }
 }

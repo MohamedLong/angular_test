@@ -180,7 +180,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.isFetching = true;
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
-                // console.log(requests)
+                console.log('requests:',requests)
                 this.details = requests;
                 this.fillteredDetails = requests;
                 this.setStatusNames(this.details)
@@ -194,6 +194,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     getBidsByJob() {
         this.bidService.getByJob(this.master.id).subscribe({
             next: (bids) => {
+                console.log(bids)
                 this.bidDtos = bids;
                 this.loading = false;
             },
@@ -279,7 +280,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     viewBidsBySupplier(bid: any) {
-        //console.log(bid)
+        console.log(bid)
         this.originalBidList = this.bidDtos;
         this.selection = 'multiple';
         this.bidDetailsDialog = true;
@@ -311,6 +312,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
     switchToViewBySupplier() {
         this.supplierBids = this.bidDtos.filter((a, i) => this.bidDtos.findIndex((s) => a.supplierId === s.supplierId) === i);
+        console.log(this.supplierBids)
     }
 
     cancelViewBids() {
@@ -605,7 +607,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
             this.messageService.add({ severity: 'success', summary: 'Success', detail: event.message });
             let index = this.fillteredDetails.findIndex((el) => el.id === event.id);
             this.fillteredDetails[index] = event;
-            if(this.type == 'new req') {
+            if (this.type == 'new req') {
                 this.fillteredDetails.push(event);
             }
         }

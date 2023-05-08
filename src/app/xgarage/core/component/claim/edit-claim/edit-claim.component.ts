@@ -22,9 +22,6 @@ export class EditClaimComponent implements OnInit {
     actions: string[] = ['No Action', 'Replace', 'Repair'];
     assignTypes = Object.keys(AssignType);
     privacyList = Object.keys(Privacy);
-    // privacyControls = [
-    //     {selectionList: this.assignTypes, label: '', type: '', }
-    // ]
     claimId: any  = '';
     claim: any;
     loading: boolean = true;

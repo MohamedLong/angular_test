@@ -7,6 +7,8 @@ import { DatePipe } from '@angular/common';
 import { StatusService } from 'src/app/xgarage/common/service/status.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Status } from 'src/app/xgarage/common/model/status';
+import { BidService } from '../../../service/bidservice.service';
+import { BidDto } from '../../../dto/biddto';
 
 @Component({
     selector: 'app-claim-details',
@@ -14,14 +16,24 @@ import { Status } from 'src/app/xgarage/common/model/status';
     providers: [MessageService, ConfirmationService, DatePipe]
 })
 export class ClaimDetailsComponent extends GenericDetailsComponent implements OnInit {
+    supplierName: any;
+    originalBidList: BidDto[];
 
-    constructor(public messageService: MessageService, public route: ActivatedRoute, public router: Router, public datePipe: DatePipe, public statusService: StatusService, private claimServie: ClaimService, public breadcrumbService: AppBreadcrumbService) {
+    constructor(private bidService: BidService, public messageService: MessageService, public route: ActivatedRoute, public router: Router, public datePipe: DatePipe, public statusService: StatusService, private claimServie: ClaimService, public breadcrumbService: AppBreadcrumbService) {
         super(route, router, claimServie, datePipe, statusService, breadcrumbService);
     }
 
     claimId: number;
     isFetching: boolean = false;
     updateClaim: boolean = true;
+    bidDetailsDialog: boolean = false;
+    bidDto: BidDto[] = [];
+    bidsByPart: any = [];
+    selection: string = 'single';
+    supplierBids: BidDto[] = []
+    rejectMultipleBidDialog: boolean = false;
+    approveMultipleBidDialog: boolean = false;
+    currentBid: any[] = [];
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }]);
@@ -37,7 +49,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.claimServie.getById(this.claimId).subscribe(res => {
             this.master = res;
             localStorage.setItem('claim', JSON.stringify(this.master));
-            //console.log(this.master)
+            // console.log(this.master)
             this.initActionMenu();
             this.isFetching = false;
         }, err => console.log(err))
@@ -45,9 +57,17 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
 
     onGetClaimParts() {
         this.claimServie.getClaimParts(this.claimId).subscribe(res => {
-            //console.log(res);
+            console.log('parts', res);
             this.details = res;
 
+        }, err => console.log(err))
+    }
+
+    getClaimBids() {
+        this.bidService.getBidsByClaim(this.claimId).subscribe(res => {
+            this.bidDto = res;
+            console.log('claim bids',this.bidDto)
+            this.getBidsBySuppliers()
         }, err => console.log(err))
     }
 
@@ -108,14 +128,51 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
             return 'OnHold';
         } else if (id == 4) {
             return 'Completed';
-        } else {
+        } else if (id == 5) {
             return 'Rejected';
+        } else {
+            return '-';
         }
     }
 
-    getClaimBids() {
-        this.claimServie.getClaimBids().subscribe(res => {
+    closeBidDialog() {
+        this.bidDetailsDialog = false;
+    }
+
+
+    getBidsBySuppliers() {
+        this.supplierBids = this.bidDto.filter((a, i) => this.bidDto.findIndex((s) => a.supplierId === s.supplierId) === i);
+        console.log(this.supplierBids)
+    }
+
+
+    getTotalPriceForSupplier(id: number) {
+        let bidList = this.bidDto.filter(s => s.supplierId == id);
+        return this.calculateDetailsSum(bidList);
+    }
+
+    getTotalSubmittedBidsForSupplier(id: number) {
+        let bidList = this.bidDto.filter(s => s.supplierId == id);
+        return bidList.length;
+    }
+
+    viewBidsBySupplier(bid: any) {
+        console.log(bid)
+        this.originalBidList = this.bidDto;
+        this.selection = 'multiple';
+        this.bidDetailsDialog = true;
+        this.bidDto = this.bidDto.filter(b => b.supplierId == bid.supplierId);
+        this.supplierName = bid.supplierName? bid.supplierName : bid.userFirstName;
+    }
+
+
+    viewBid(bid: any) {
+        console.log(bid)
+        this.currentBid = [];
+        this.bidService.getBidByBidId(bid.bidId).subscribe(res => {
             console.log(res)
+            this.currentBid.push(res);
+            this.bidDetailsDialog = true;
         }, err => console.log(err))
     }
 

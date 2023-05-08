@@ -75,6 +75,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             // console.log(this.requests)
             this.requests.forEach(req => {
                 this.setClaimBid(req)
+                //console.log(req)
             });
         }
 
@@ -362,7 +363,6 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     setClaimBid(part) {
-        //part.bid = 0,
         part.partType = { id: 1, partType: 'Genuine-OEM' },
             part.requestFor = part.partOption,
             part.partOption = part.partOption,
@@ -379,7 +379,6 @@ export class NewBidComponent implements OnInit, OnChanges {
             part.qty2 = part.qty,
             part.totalPrice = 0,
             part.req = JSON.parse(localStorage.getItem('claim')).request
-        //part.status =  JSON.parse(localStorage.getItem('claim')).status,
     }
 
     addBid(part: any, _res: MessageResponse) {
@@ -417,7 +416,6 @@ export class NewBidComponent implements OnInit, OnChanges {
         }
 
         this.bids.forEach(bid => {
-            // this.totalBidsPrices = this.totalBidsPrices + bid.totalPrice;
             this.totalServicePrice = this.totalServicePrice + bid.servicePrice;
         })
 
