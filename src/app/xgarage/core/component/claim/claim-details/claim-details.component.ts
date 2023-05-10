@@ -9,6 +9,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { BidService } from '../../../service/bidservice.service';
 import { BidDto } from '../../../dto/biddto';
+import { BidOrderDto } from '../../../dto/bidorderdto';
+import { OrderType } from '../../../dto/ordertype';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
     selector: 'app-claim-details',
@@ -19,7 +22,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     supplierName: any;
     originalBidList: BidDto[];
 
-    constructor(private bidService: BidService, public messageService: MessageService, public route: ActivatedRoute, public router: Router, public datePipe: DatePipe, public statusService: StatusService, private claimServie: ClaimService, public breadcrumbService: AppBreadcrumbService) {
+    constructor(private authService: AuthService, private bidService: BidService, public messageService: MessageService, public route: ActivatedRoute, public router: Router, public datePipe: DatePipe, public statusService: StatusService, private claimServie: ClaimService, public breadcrumbService: AppBreadcrumbService) {
         super(route, router, claimServie, datePipe, statusService, breadcrumbService);
     }
 
@@ -169,11 +172,41 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     viewBid(bid: any) {
         console.log(bid)
         this.currentBid = [];
-        this.bidService.getBidByBidId(bid.bidId).subscribe(res => {
-            console.log(res)
-            this.currentBid.push(res);
+        this.claimServie.getClaimBidByBidId(bid.bidId).subscribe(res => {
+            //console.log(res)
+            this.currentBid = res;
             this.bidDetailsDialog = true;
         }, err => console.log(err))
+    }
+
+    approveBid() {
+        let bidOrder: BidOrderDto = {
+            bids: [this.currentBid[0].id],
+            shippingAddress: 1,
+            shippingMethod: 1,
+            paymentMethod: 1,
+            orderType: OrderType.Bid,
+            customer: JSON.parse(this.authService.getStoredUser()).id,
+            phone: JSON.parse(this.authService.getStoredUser()).phone,
+            supplier: this.currentBid[0].supplierId,
+            deliveryFees: 0,
+            orderDate: new Date(),
+            orderAmount: this.currentBid[0].price,
+            vat: this.currentBid[0].vat? this.currentBid[0].vat : 0,
+            discount: this.currentBid[0].discount? this.currentBid[0].discount: 0,
+            totalAmount: this.currentBid[0].price
+        };
+
+        this.bidService.approveBid(bidOrder).subscribe(res => {
+            console.log(res)
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bid Approved Successfully', life: 3000 });
+        }, err => {
+            console.log(err)
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
+        });
+
+
+        this.approveMultipleBidDialog = false;
     }
 
 }

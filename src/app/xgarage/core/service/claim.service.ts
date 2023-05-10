@@ -5,6 +5,7 @@ import { Injectable } from "@angular/core";
 import { config } from "src/app/config";
 import { GenericService } from '../../common/generic/genericservice';
 import { ClaimDto } from '../dto/claimdto';
+import { BidDto } from '../dto/biddto';
 
 
 @Injectable({
@@ -53,5 +54,8 @@ export class ClaimService extends GenericService<Claim>{
         return this.http.get<any>(config.coreApiUrl + '/claim/tenantSupplier');
     }
 
+    getClaimBidByBidId(id:  number) {
+        return this.http.get<BidDto[]>(config.coreApiUrl + '/claimBid/bid/' + id);
+    }
 
 }

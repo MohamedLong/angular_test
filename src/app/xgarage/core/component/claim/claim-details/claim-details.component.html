@@ -54,8 +54,8 @@
                                     <th>Status</th>
                                     <th [hidden]="role == 2">
                                         {{'operations.actions' | translate }}</th>
-                                        <th [hidden]="role == 2">
-                                            Bids</th>
+                                    <!-- <th [hidden]="role == 2">
+                                        Bids</th> -->
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-part>
@@ -75,12 +75,12 @@
                                     <td>
                                         {{getStatus(part.part.status)}}
                                     </td>
-                                   <td>action</td>
-                                   <td [hidden]="role > 1">
-                                    <button pButton pRipple icon="pi pi-eye" [disabled]=""
-                                        class="p-button-rounded p-button-success mr-2"
-                                        (click)="viewBidsByRequest(part)"></button>
-                                </td>
+                                    <td>action</td>
+                                    <!-- <td [hidden]="role > 1">
+                                        <button pButton pRipple icon="pi pi-eye" [disabled]=""
+                                            class="p-button-rounded p-button-success mr-2"
+                                            (click)="viewBidsByRequest(part)"></button>
+                                    </td> -->
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -92,16 +92,13 @@
                         </div>
 
                         <p-table [columns]="cols" [rows]="10" [value]="bidDto"
-                            styleClass="p-invoice-datatable-responsive pb-3"  [paginator]="true">
+                            styleClass="p-invoice-datatable-responsive pb-3" [paginator]="true">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th pColumn="supplierName">{{ 'bid.tableColumn.supplierName' | translate }}</th>
                                     <th pColumn="status">{{ 'bid.tableColumn.status' | translate }}</th>
                                     <th pColumn="bidDate">{{ 'bid.tableColumn.bidDate' | translate }}</th>
                                     <th pColumn="bidValue">{{ 'bid.tableColumn.bidValue' | translate }}</th>
-                                    <!-- <th pColumn="submittedBids">{{ 'bid.tableColumn.submittedBids' | translate }}
-                                    </th> -->
-
                                     <th [hidden]="printingMode===true">{{
                                         'bid.title' | translate }}</th>
                                 </tr>
@@ -157,27 +154,25 @@
     </ng-template>
 </p-dialog>
 
-
 <!-- bids by request dialog -->
 <p-dialog [(visible)]="bidDetailsDialog" [modal]="true" styleClass="" (onHide)="closeBidDialog()">
     <p-toolbar styleClass="mb-2 width-100">
         <ng-template pTemplate="left">
-            <p class="font-medium muted-text text-xl">{{'bid.bidDialog.titleBySupplier' | translate }} {{supplierName? supplierName : '-'}}</p>
+            <p class="font-medium muted-text text-xl">{{'bid.bidDialog.titleBySupplier' | translate }} {{supplierName?
+                supplierName : '-'}}</p>
         </ng-template>
 
         <ng-template pTemplate="right">
             <div class="grid p-fluid">
                 <div class="col-12 md:col-5">
                     <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
-                        icon="pi pi-check" (click)="approveMultipleBidDialog = true"
-                        [disabled]="editAuth == false"
+                        icon="pi pi-check" (click)="approveMultipleBidDialog = true" [disabled]="editAuth == false"
                         class="p-button-success mr-2 mb-3"></button>
                 </div>
 
                 <div class="col-12 md:col-5">
                     <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
-                        icon="pi pi-times" (click)="rejectMultipleBidDialog = true"
-                        [disabled]="editAuth ==false"
+                        icon="pi pi-times" (click)="rejectMultipleBidDialog = true" [disabled]="editAuth ==false"
                         class="p-button-danger mr-2 mb-3"></button>
                 </div>
 
@@ -206,77 +201,84 @@
                     </th>
                     <th pColumn="vat">{{ 'bid.bidDetails.vat' | translate }}
                     </th>
+                    <th>
+                        Service Price
+                    </th>
                     <th pColumn="totalPrice">{{ 'bid.bidDetails.totalPrice' | translate }}
                     </th>
-                    <th pColumn="status">{{ 'common.status' | translate }}
-                    </th>
+                    <!-- <th pColumn="status">{{ 'common.status' | translate }}
+                    </th> -->
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-bid>
                 <tr>
-                    <td>{{bid.partName}}</td>
+                    <td>{{bid.part}}</td>
                     <td>
                         {{bid.supplierName? bid.supplierName : bid.userFirstName }}
                         <!-- <i (click)="showModal(bid)" style="cursor: pointer; border-right: 1px solid #dee2e6;"
                             class="pi pi-images fs-large m-2 ml-3 text-blue-500"></i> -->
                     </td>
                     <td>
-                        {{bid.Warranty ? 0 : bid.warranty}} Days
+                        {{bid.warranty ? bid.warranty : 0}} Days
                     </td>
                     <td>
-                        {{bid.deliverDays ? 0 : bid.deliverDays}} Days
+                        {{bid.availability? bid.availability : 0}} Days
                     </td>
                     <td>
                         {{bid.originalPrice}}
                     </td>
                     <td>
-                        {{bid.discount ? 0 : bid.discount}}
+                        {{bid.discount? bid.discount + (bid.discountType == 'flat'? ' OMR' : '%') : 0}}
                     </td>
                     <td>
                         {{bid.vat}}
                     </td>
                     <td>
-                        {{bid.price | number}}
+                        {{bid.servicePrice + ' OMR'}}
                     </td>
                     <td>
-                        {{getStatusName(bid.statusId)}}
+                        {{bid.price | number}}
                     </td>
+                    <!-- <td>
+                        {{getStatusName(bid.statusId)}}
+                    </td> -->
                 </tr>
             </ng-template>
         </p-table>
 
     </ng-template>
+    {{currentBid | json}}
 </p-dialog>
 
 
-<p-dialog [(visible)]="approveMultipleBidDialog" header="{{ 'job.operations.approveBid' | translate }}"
-            [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-check-circle mr-3" style="font-size: 2rem"></i>
-                <span [ngStyle]="{color:'var(--green-700)'}">
-                    <h6>{{ 'job.operations.approveMultipleBids' | translate }}</h6>
-                </span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
-                    (click)="approveMultipleBidDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Confirm"
-                    (click)="approveMultipleBids()"></button>
-            </ng-template>
-        </p-dialog>
+<p-dialog [(visible)]="approveMultipleBidDialog" header="{{ 'job.operations.approveBid' | translate }}" [modal]="true"
+    [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-check-circle mr-3" style="font-size: 2rem"></i>
+        <span [ngStyle]="{color:'var(--green-700)'}">
+            <h6>{{ 'job.operations.approveMultipleBids' | translate }}</h6>
+        </span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
+            (click)="approveMultipleBidDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Confirm"
+            (click)="approveBid()"></button>
+    </ng-template>
+</p-dialog>
 
-        <p-dialog [(visible)]="rejectMultipleBidDialog" header="{{ 'job.operations.rejectBid' | translate }}"
-            [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-times-circle mr-3" style="font-size: 2rem"></i>
-                <span [ngStyle]="{color:'var(--orange-700)'}">
-                    <h6>{{ 'job.operations.rejectMultipleBids' | translate }}</h6>
-                </span>
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
-                    (click)="rejectMultipleBidDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Confirm"
-                    (click)="rejectMultipleBids()"></button>
-            </ng-template>
-        </p-dialog>
+<p-dialog [(visible)]="rejectMultipleBidDialog" header="{{ 'job.operations.rejectBid' | translate }}" [modal]="true"
+    [style]="{width:'450px'}">
+    <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-times-circle mr-3" style="font-size: 2rem"></i>
+        <span [ngStyle]="{color:'var(--orange-700)'}">
+            <h6>{{ 'job.operations.rejectMultipleBids' | translate }}</h6>
+        </span>
+    </div>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
+            (click)="rejectMultipleBidDialog = false"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Confirm"
+            (click)="rejectMultipleBids()"></button>
+    </ng-template>
+</p-dialog>

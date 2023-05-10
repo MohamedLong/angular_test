@@ -42,7 +42,7 @@ export class EditClaimComponent implements OnInit {
         notes: [''],
     });
     saving: boolean = false;
-
+    addPartDialog: boolean = false;
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }, { 'label': 'Edit Claim', routerLink: ['edit-claim'] }]);
@@ -147,16 +147,16 @@ export class EditClaimComponent implements OnInit {
 
         console.log(claimBody);
 
-        this.claimServie.updateClaim(claimBody).subscribe(res => {
-            //console.log(res);
-            this.saving = false;
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully' });
-            this.selectedParts = [];
-        }, err => {
-            //console.log(err);
-            this.saving = false;
-            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'failed to update claim, please try again.' });
-        });
+        // this.claimServie.updateClaim(claimBody).subscribe(res => {
+        //     //console.log(res);
+        //     this.saving = false;
+        //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully' });
+        //     this.selectedParts = [];
+        // }, err => {
+        //     //console.log(err);
+        //     this.saving = false;
+        //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'failed to update claim, please try again.' });
+        // });
     }
 
     calcHalf(arr) {

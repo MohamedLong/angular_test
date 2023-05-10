@@ -6,7 +6,7 @@
             <app-details-card type="claim" *ngIf="claim" [master]="claim" [role]=""></app-details-card>
         </div>
     </div>
-    <div class="col-12  mb-4" *ngFor="let part of partsList">
+    <div class="col-12" *ngFor="let part of partsList">
         <h5>{{part.categoryName}}</h5>
         <div class="card">
             <p-table [value]="part.list" [loading]="loading">
@@ -33,7 +33,8 @@
                         </td>
                         <!-- <td>{{parts.partOption}}</td> -->
                         <td>
-                            <p-dropdown [options]="actions" (onChange)="onAction($event.value, {partId: parts.partId})"></p-dropdown>
+                            <p-dropdown [options]="actions"
+                                (onChange)="onAction($event.value, {partId: parts.partId})"></p-dropdown>
                         </td>
                         <!-- <td *ngIf="rowIndex >= calcHalf(part.list)">
                             {{rowIndex}} {{calcHalf(part.list)}} {{parts.partName}}
@@ -46,6 +47,11 @@
                 </ng-template>
             </p-table>
         </div>
+    </div>
+    <div class="col-12 text-right  mb-4">
+        <button (click)="addPartDialog = true" class="width-100 md:w-20rem" pButton pRipple type="button"
+            label="Add New Part" icon="pi pi-plus" iconPos="left">
+        </button>
     </div>
     <div class="col-12">
         <form [formGroup]="updateClaimForm">
@@ -60,8 +66,8 @@
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Repair Cost</label>
-                    <p-inputNumber currencyDisplay="code" styleClass="width-100 mb-2" formControlName="repairCost" mode="currency"
-                        currency="OMR" locale="en-US"></p-inputNumber>
+                    <p-inputNumber currencyDisplay="code" styleClass="width-100 mb-2" formControlName="repairCost"
+                        mode="currency" currency="OMR" locale="en-US"></p-inputNumber>
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Repair Hrs.</label>
@@ -108,4 +114,13 @@
         </form>
 
     </div>
+
+    <!-- Add New Part Dialog -->
+    <p-dialog header="Header" [(visible)]="addPartDialog" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false"
+        [resizable]="false">
+        <app-new-part type="claim"></app-new-part>
+        <div class="text-center my-2">
+            <button class="width-100 md:w-20rem p-button-success" pButton pRipple type="button" label="Add Part"></button>
+        </div>
+    </p-dialog>
 </div>
