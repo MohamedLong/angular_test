@@ -87,11 +87,13 @@
                     </p-tabPanel>
                     <p-tabPanel *ngIf="viewAuth == true" header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
-                            <button (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
+                            <button [disabled]="bidDto.length == 0" (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
                                 class="p-button-rounded bg-indigo-100 text-indigo-600 border-0 font-light px-5"></button>
                         </div>
-
-                        <p-table [columns]="cols" [rows]="10" [value]="bidDto"
+                        <div class="py-5 text-center" *ngIf="!isFetching && bidDto.length == 0">
+                            this claim has no bids yet.
+                        </div>
+                        <p-table *ngIf="bidDto.length > 0" [columns]="cols" [rows]="10" [value]="bidDto"
                             styleClass="p-invoice-datatable-responsive pb-3" [paginator]="true">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
@@ -126,7 +128,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="newAuth !== true" header="{{ 'job.tableColumn.addBids' | translate }}">
+                    <p-tabPanel *ngIf="newAuth == true" header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid type="new claimBid" *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                         <div class="py-5 text-center" *ngIf="!isFetching && details.length == 0">
                             this claim has no requests
@@ -166,13 +168,13 @@
             <div class="grid p-fluid">
                 <div class="col-12 md:col-5">
                     <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
-                        icon="pi pi-check" (click)="approveMultipleBidDialog = true" [disabled]="editAuth == false"
+                        icon="pi pi-check" (click)="approveBidDialog = true" [disabled]="editAuth == false"
                         class="p-button-success mr-2 mb-3"></button>
                 </div>
 
                 <div class="col-12 md:col-5">
                     <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
-                        icon="pi pi-times" (click)="rejectMultipleBidDialog = true" [disabled]="editAuth ==false"
+                        icon="pi pi-times" (click)="rejectBidDialog = true" [disabled]="editAuth ==false"
                         class="p-button-danger mr-2 mb-3"></button>
                 </div>
 
@@ -189,8 +191,8 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th pColumn="id">Part Name</th>
-                    <th pColumn="supplierName">{{ 'bid.bidDetails.supplierName' | translate}}
-                    </th>
+                    <!-- <th pColumn="supplierName">{{ 'bid.bidDetails.supplierName' | translate}}
+                    </th> -->
                     <th pColumn="warranty">{{ 'bid.bidDetails.warranty' | translate }}
                     </th>
                     <th pColumn="deliverDays">{{ 'bid.bidDetails.deliverDays' | translate }}
@@ -213,11 +215,11 @@
             <ng-template pTemplate="body" let-bid>
                 <tr>
                     <td>{{bid.part}}</td>
-                    <td>
-                        {{bid.supplierName? bid.supplierName : bid.userFirstName }}
-                        <!-- <i (click)="showModal(bid)" style="cursor: pointer; border-right: 1px solid #dee2e6;"
-                            class="pi pi-images fs-large m-2 ml-3 text-blue-500"></i> -->
-                    </td>
+                    <!-- <td>
+                        {{supplierName}}
+                        <i (click)="showModal(bid)" style="cursor: pointer; border-right: 1px solid #dee2e6;"
+                            class="pi pi-images fs-large m-2 ml-3 text-blue-500"></i>
+                    </td> -->
                     <td>
                         {{bid.warranty ? bid.warranty : 0}} Days
                     </td>
@@ -237,7 +239,7 @@
                         {{bid.servicePrice + ' OMR'}}
                     </td>
                     <td>
-                        {{bid.price | number}}
+                        {{bid.price + bid.servicePrice  | number}}
                     </td>
                     <!-- <td>
                         {{getStatusName(bid.statusId)}}
@@ -247,38 +249,38 @@
         </p-table>
 
     </ng-template>
-    {{currentBid | json}}
+    <!-- {{currentBid | json}} -->
 </p-dialog>
 
 
-<p-dialog [(visible)]="approveMultipleBidDialog" header="{{ 'job.operations.approveBid' | translate }}" [modal]="true"
+<p-dialog [(visible)]="approveBidDialog" header="{{ 'job.operations.approveBid' | translate }}" [modal]="true"
     [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">
         <i class="pi pi-check-circle mr-3" style="font-size: 2rem"></i>
         <span [ngStyle]="{color:'var(--green-700)'}">
-            <h6>{{ 'job.operations.approveMultipleBids' | translate }}</h6>
+            <h6>{{ 'job.operations.approveBids' | translate }}</h6>
         </span>
     </div>
     <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
-            (click)="approveMultipleBidDialog = false"></button>
+            (click)="approveBidDialog = false"></button>
         <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Confirm"
             (click)="approveBid()"></button>
     </ng-template>
 </p-dialog>
 
-<p-dialog [(visible)]="rejectMultipleBidDialog" header="{{ 'job.operations.rejectBid' | translate }}" [modal]="true"
+<p-dialog [(visible)]="rejectBidDialog" header="{{ 'job.operations.rejectBid' | translate }}" [modal]="true"
     [style]="{width:'450px'}">
     <div class="flex align-items-center justify-content-center">
         <i class="pi pi-times-circle mr-3" style="font-size: 2rem"></i>
         <span [ngStyle]="{color:'var(--orange-700)'}">
-            <h6>{{ 'job.operations.rejectMultipleBids' | translate }}</h6>
+            <h6>{{ 'job.operations.rejectBids' | translate }}</h6>
         </span>
     </div>
     <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Cancel"
-            (click)="rejectMultipleBidDialog = false"></button>
+            (click)="rejectBidDialog = false"></button>
         <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Confirm"
-            (click)="rejectMultipleBids()"></button>
+            (click)="rejectBid()"></button>
     </ng-template>
 </p-dialog>

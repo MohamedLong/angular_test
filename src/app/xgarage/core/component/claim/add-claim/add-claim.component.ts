@@ -52,7 +52,7 @@ export class AddClaimComponent implements OnInit {
         breakDown: [''],
         km: [''],
         claimTicks: [[]],
-        car: ['']
+        car: [''],
     });
     saving: boolean = false;
 
@@ -71,6 +71,7 @@ export class AddClaimComponent implements OnInit {
         };
 
         this.claimForm.get('car').setValue({ id: event.id });
+        this.claimForm.addControl('claimTitle', new FormControl(`${event.brandId.brandName} ${event.carModelId.name} ${event.carModelYearId.year},  ${event.carModelTypeId.type}`));
 
         this.activeTab = 'create-claim';
     }

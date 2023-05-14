@@ -187,6 +187,7 @@ export class AuthService {
     getAuth() {
         let userRole = JSON.parse(localStorage.getItem('user')).roles[0].id;
         this.usersubmenuservice.getUserSubMenusByRoleId(userRole).then(subs => {
+            console.log('saving subs in local storage>>>')
             localStorage.setItem('subs', JSON.stringify(subs));
         });
     }

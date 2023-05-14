@@ -12,6 +12,7 @@ import { BidDto } from '../../../dto/biddto';
 import { BidOrderDto } from '../../../dto/bidorderdto';
 import { OrderType } from '../../../dto/ordertype';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 
 @Component({
     selector: 'app-claim-details',
@@ -34,9 +35,10 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     bidsByPart: any = [];
     selection: string = 'single';
     supplierBids: BidDto[] = []
-    rejectMultipleBidDialog: boolean = false;
-    approveMultipleBidDialog: boolean = false;
+    rejectBidDialog: boolean = false;
+    approveBidDialog: boolean = false;
     currentBid: any[] = [];
+    reqId: number;
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }]);
@@ -52,6 +54,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.claimServie.getById(this.claimId).subscribe(res => {
             this.master = res;
             localStorage.setItem('claim', JSON.stringify(this.master));
+            this.reqId = JSON.parse(localStorage.getItem('claim')).request;
             // console.log(this.master)
             this.initActionMenu();
             this.isFetching = false;
@@ -69,8 +72,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     getClaimBids() {
         this.bidService.getBidsByClaim(this.claimId).subscribe(res => {
             this.bidDto = res;
-            console.log('claim bids',this.bidDto)
-            this.getBidsBySuppliers()
+            console.log('claim bids',this.bidDto);
         }, err => console.log(err))
     }
 
@@ -142,71 +144,42 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.bidDetailsDialog = false;
     }
 
-
-    getBidsBySuppliers() {
-        this.supplierBids = this.bidDto.filter((a, i) => this.bidDto.findIndex((s) => a.supplierId === s.supplierId) === i);
-        console.log(this.supplierBids)
-    }
-
-
-    getTotalPriceForSupplier(id: number) {
-        let bidList = this.bidDto.filter(s => s.supplierId == id);
-        return this.calculateDetailsSum(bidList);
-    }
-
-    getTotalSubmittedBidsForSupplier(id: number) {
-        let bidList = this.bidDto.filter(s => s.supplierId == id);
-        return bidList.length;
-    }
-
-    viewBidsBySupplier(bid: any) {
-        console.log(bid)
-        this.originalBidList = this.bidDto;
-        this.selection = 'multiple';
-        this.bidDetailsDialog = true;
-        this.bidDto = this.bidDto.filter(b => b.supplierId == bid.supplierId);
-        this.supplierName = bid.supplierName? bid.supplierName : bid.userFirstName;
-    }
-
-
     viewBid(bid: any) {
         console.log(bid)
         this.currentBid = [];
         this.claimServie.getClaimBidByBidId(bid.bidId).subscribe(res => {
-            //console.log(res)
+            console.log(res)
             this.currentBid = res;
+            this.supplierName = this.bidDto[0].supplierName? bid.supplierName : bid.userFirstName;
             this.bidDetailsDialog = true;
+
         }, err => console.log(err))
     }
 
     approveBid() {
-        let bidOrder: BidOrderDto = {
-            bids: [this.currentBid[0].id],
-            shippingAddress: 1,
-            shippingMethod: 1,
-            paymentMethod: 1,
-            orderType: OrderType.Bid,
-            customer: JSON.parse(this.authService.getStoredUser()).id,
-            phone: JSON.parse(this.authService.getStoredUser()).phone,
-            supplier: this.currentBid[0].supplierId,
-            deliveryFees: 0,
-            orderDate: new Date(),
-            orderAmount: this.currentBid[0].price,
-            vat: this.currentBid[0].vat? this.currentBid[0].vat : 0,
-            discount: this.currentBid[0].discount? this.currentBid[0].discount: 0,
-            totalAmount: this.currentBid[0].price
-        };
-
-        this.bidService.approveBid(bidOrder).subscribe(res => {
+        this.bidService.approveBidByBidId(this.reqId, this.currentBid[0].bid).subscribe((res: MessageResponse) => {
             console.log(res)
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Bid Approved Successfully', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
+            this.bidDetailsDialog = false;
         }, err => {
             console.log(err)
             this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
         });
 
+        this.approveBidDialog = false;
+    }
 
-        this.approveMultipleBidDialog = false;
+    rejectBid() {
+        this.bidService.rejectBidByBidId(this.reqId, this.currentBid[0].bid).subscribe((res: MessageResponse) => {
+            console.log(res)
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
+            this.bidDetailsDialog = false;
+        }, err => {
+            console.log(err)
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
+        });
+
+        this.rejectBidDialog = false;
     }
 
 }

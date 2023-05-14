@@ -565,7 +565,9 @@
             "approveBid": "Approve Bids",
             "approveMultipleBids": "Please confirm that the selected Bids will be approved, LPO will be generated and sent via emails to the selected suppliers? ",
             "rejectBid": "Reject Bids",
-            "rejectMultipleBids": "Please confirm that the selected Bids will be rejected and notifications of rejection will be sent to the selected suppliers?"
+            "approveBids": "Please confirm that the Bids will be approved, LPO will be generated and sent via emails to the selected suppliers?",
+            "rejectMultipleBids": "Please confirm that the selected Bids will be rejected and notifications of rejection will be sent to the selected suppliers?",
+            "rejectBids": "Please confirm that the Bids will be rejected and notifications of rejection will be sent to the selected suppliers?"
         },
         "form": {
             "insuranceFrom": "Insurance From",

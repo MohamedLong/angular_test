@@ -21,20 +21,20 @@ export class BidDetailsComponent implements OnInit {
     status: any[] = ["All"];
     selectedState = 'All';
     pageNo: number = 0;
-    user: string = '';
-    constructor(private breadcrumbService: AppBreadcrumbService, private bidService: BidService, private jobService: JobService, private msgService: MessageService, private claimService: ClaimService) { }
+    user: string = 'ins';
+    constructor( private breadcrumbService: AppBreadcrumbService, private bidService: BidService, private jobService: JobService, private msgService: MessageService, private claimService: ClaimService) { }
 
     ngOnInit(): void {
-        if(this.user == 'ins') {
+        if (this.user == 'ins') {
             this.getClaimBids();
         } else {
-            this.getBids(this.pageNo);
+            this.getJobBids(this.pageNo);
         }
 
-        this.breadcrumbService.setItems([{'label': 'My Bids', 'routerLink': ['bids']}]);
+        this.breadcrumbService.setItems([{ 'label': 'My Bids', 'routerLink': ['bids'] }]);
     }
 
-    getBids(page: number) {
+    getJobBids(page: number) {
         this.loading = true;
         this.jobService.getBidsByJob(page).subscribe({
             next: (res) => {
@@ -56,10 +56,10 @@ export class BidDetailsComponent implements OnInit {
         this.claimService.getClaimBids().subscribe({
             next: (res) => {
                 console.log(res)
-                // this.bids = res;
-                // this.fillteredBids = res;
-                // this.loading = false;
-                // this.setStatusNames(this.bids);
+                this.bids = res;
+                this.fillteredBids = res;
+                this.loading = false;
+                this.setStatusNames(this.bids);
             },
             error: (e) => {
                 this.msgService.add({ severity: 'error', summary: 'Server Information', detail: e.error.message, life: 3000 });
@@ -68,19 +68,33 @@ export class BidDetailsComponent implements OnInit {
         });
     }
 
-    onBidView(job: any) {
+    onBidView(id: any) {
         // console.log(event)
-        this.bidService.getByJob(job.id).subscribe(res => {
-            if(res.length > 0) {
-                this.jobBids = res;
-                this.displayModal = true;
-            } else {
-                this.msgService.add({ severity: 'info', summary: 'This job has no bids', life: 3000 });
-            }
+        if (this.user == 'ins') {
+            this.claimService.getClaimBidByBidId(id).subscribe(res => {
+                if (res.length > 0) {
+                    this.jobBids = res;
+                    this.displayModal = true;
+                } else {
+                    this.msgService.add({ severity: 'info', summary: 'This job has no bids', life: 3000 });
+                }
 
-        }, err => {
-            console.log(err)
-        })
+            }, err => {
+                console.log(err)
+            })
+        } else {
+            this.bidService.getByJob(id).subscribe(res => {
+                if (res.length > 0) {
+                    this.jobBids = res;
+                    this.displayModal = true;
+                } else {
+                    this.msgService.add({ severity: 'info', summary: 'This job has no bids', life: 3000 });
+                }
+
+            }, err => {
+                console.log(err)
+            })
+        }
     }
 
     setStatusNames(arr) {
@@ -114,7 +128,7 @@ export class BidDetailsComponent implements OnInit {
         if (this.fillteredBids.length == 100) {
             if ((this.fillteredBids.length - e.first) <= 10) {
                 this.pageNo++;
-                this.getBids(this.pageNo);
+                this.getJobBids(this.pageNo);
             }
         }
     }

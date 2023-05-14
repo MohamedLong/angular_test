@@ -33,7 +33,7 @@
                 <span>
                     {{type == 'new bid' || 'new claimBid'? part.part.name : part.partName}}
                 </span>
-                <i class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
+                <i *ngIf="type == 'new bid' || type == 'edit bid'" class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
             </td>
             <td  *ngIf="type !== 'new claimBid'">
                 <p-cellEditor>
@@ -256,7 +256,7 @@
 </div>
 <div class="p-3" *ngIf="type == 'new claimBid'">
     <label class="block mb-2 fw-700">Note</label>
-    <textarea rows="5" class="width-100" pInputTextarea></textarea>
+    <textarea rows="5" class="width-100" pInputTextarea [(ngModel)]="note"></textarea>
     <div class="text-center mt-5">
         <button icon="{{isSubmittingBids? 'pi pi-spin pi-spinner' : ''}}"
         iconPos="right" (click)="onSubmitBid()" class="width-100 md:w-20rem" pButton pRipple type="submit" label="Submit Bid">

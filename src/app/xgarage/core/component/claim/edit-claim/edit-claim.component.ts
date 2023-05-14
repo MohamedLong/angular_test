@@ -128,7 +128,7 @@ export class EditClaimComponent implements OnInit {
     onUpdateClaim() {
         this.saving = true;
 
-        console.log(this.updateClaimForm.value);
+        //console.log(this.updateClaimForm.value);
         this.updateClaimForm.get('id').setValue(this.claim.id);
         for(const claimKey in this.claim) {
             for(const updatedClaimkey in  this.updateClaimForm.value) {
@@ -145,18 +145,18 @@ export class EditClaimComponent implements OnInit {
             claimPartsDtoList: this.selectedParts
         }
 
-        console.log(claimBody);
+        //console.log(claimBody);
 
-        // this.claimServie.updateClaim(claimBody).subscribe(res => {
-        //     //console.log(res);
-        //     this.saving = false;
-        //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully' });
-        //     this.selectedParts = [];
-        // }, err => {
-        //     //console.log(err);
-        //     this.saving = false;
-        //     this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'failed to update claim, please try again.' });
-        // });
+        this.claimServie.updateClaim(claimBody).subscribe(res => {
+            //console.log(res);
+            this.saving = false;
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully' });
+            this.selectedParts = [];
+        }, err => {
+            //console.log(err);
+            this.saving = false;
+            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'failed to update claim, please try again.' });
+        });
     }
 
     calcHalf(arr) {

@@ -23,7 +23,7 @@ export class ClaimService extends GenericService<Claim>{
     }
 
     getClaimsByTenant() {
-        return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant');
+        return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant?pageSize=60');
     }
 
     getClaimTicks() {

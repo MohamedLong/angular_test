@@ -10,8 +10,12 @@
     </ng-container>
 </div>
 
-<p-dialog header="Private Suppliers" [modal]="true" [style]="{width: '50vw'}" [(visible)]="displayPrivateSuppliers"
-    (onHide)="resetPrivacy()">
+<p-dialog [modal]="true" [style]="{width: '50vw'}" [(visible)]="displayPrivateSuppliers"
+    (onHide)="resetPrivacy()" header="Header">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold">Private Suppliers</span>
+        <!-- <i class="pi pi-times"></i> -->
+    </ng-template>
     <p-listbox *ngIf="selectedPrivateSuppliers | async as selectedPrivateSuppliers; else loading"
         (onChange)="selectSupplier(multipleSelect? $event.value : [$event.value])" [checkbox]="true" [options]="selectedPrivateSuppliers"
         [formControl]="suppliersControl" [multiple]="multipleSelect" optionLabel="name"></p-listbox>
