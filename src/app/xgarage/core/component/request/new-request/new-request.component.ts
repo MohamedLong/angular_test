@@ -143,7 +143,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.submitted = true;
 
             if (this.type == 'edit req') {
-                console.log(this.requestDetails)
+                //console.log(this.requestDetails)
                 this.responseBody.id = this.requestDetails.id;
                 this.responseBody.job = this.requestDetails.job;
                 this.responseBody.description = this.description;
@@ -200,6 +200,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     }
 
     formatThenSaveRequest() {
+       // console.log(this.responseBody)
         let stringRequestBody = JSON.stringify(this.responseBody);
         let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId }
         let reqFormData = new FormData();
@@ -209,6 +210,8 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         for (let i = 0; i < this.partImages.length; i++) {
             reqFormData.append('partImages', this.partImages[i]);
         }
+
+        //console.log(reqFormData)
         if (this.responseBody.hasOwnProperty('id')) {
             console.log('updating old request')
             this.requestService.update(reqFormData).subscribe((res: MessageResponse) => {
@@ -217,7 +220,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 this.request.emit(res);
             }, err => {
                 console.log(err.error)
-                this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
                 this.request.emit(err);
             });
 

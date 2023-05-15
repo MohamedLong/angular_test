@@ -120,7 +120,7 @@
                     </p-tabPanel>
                     <p-tabPanel *ngIf="viewAuth == true" header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
-                            <button (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
+                            <button *ngIf="supplierBids.length > 0" (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
                                 class="p-button-rounded bg-indigo-100 text-indigo-600 border-0 font-light px-5"></button>
                         </div>
 

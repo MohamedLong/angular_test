@@ -214,7 +214,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-bid>
                 <tr>
-                    <td>{{bid.part}}</td>
+                    <td>{{bid.part.name}}</td>
                     <!-- <td>
                         {{supplierName}}
                         <i (click)="showModal(bid)" style="cursor: pointer; border-right: 1px solid #dee2e6;"
@@ -249,7 +249,7 @@
         </p-table>
 
     </ng-template>
-    <!-- {{currentBid | json}} -->
+    {{currentBid | json}}
 </p-dialog>
 
 

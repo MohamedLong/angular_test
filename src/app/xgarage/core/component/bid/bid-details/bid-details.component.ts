@@ -16,7 +16,7 @@ export class BidDetailsComponent implements OnInit {
     bids: any[] = [];
     fillteredBids: any[] = [];
     displayModal: boolean = false;
-    jobBids: BidDto[] = [];
+    bidDetails: BidDto[] = [];
     loading: boolean = false;
     status: any[] = ["All"];
     selectedState = 'All';
@@ -73,7 +73,8 @@ export class BidDetailsComponent implements OnInit {
         if (this.user == 'ins') {
             this.claimService.getClaimBidByBidId(id).subscribe(res => {
                 if (res.length > 0) {
-                    this.jobBids = res;
+                    this.bidDetails = res;
+                    console.log(this.bidDetails)
                     this.displayModal = true;
                 } else {
                     this.msgService.add({ severity: 'info', summary: 'This job has no bids', life: 3000 });
@@ -85,7 +86,7 @@ export class BidDetailsComponent implements OnInit {
         } else {
             this.bidService.getByJob(id).subscribe(res => {
                 if (res.length > 0) {
-                    this.jobBids = res;
+                    this.bidDetails = res;
                     this.displayModal = true;
                 } else {
                     this.msgService.add({ severity: 'info', summary: 'This job has no bids', life: 3000 });

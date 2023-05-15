@@ -39,11 +39,11 @@ export class BidService extends GenericService<any> {
     }
 
     rejectBidByBidId(reqId: number, bidId: number) {
-        return this.http.post(this.apiServerUrl + '/rejectBid/' + reqId + '/' + bidId, '');
+        return this.http.post(this.apiServerUrl + '/rejectBid/' + reqId + '/' + bidId, null);
     }
 
     rejectMutltipleBids(bidList: MultipleBids) {
-        return this.http.post(this.apiServerUrl + '/rejectBid/multiple/', bidList);
+        return this.http.post(this.apiServerUrl + '/rejectBid/multiple', bidList);
     }
 
     getBidsByClaim(id: number) {

@@ -75,14 +75,12 @@ export class NewBidComponent implements OnInit, OnChanges {
                 });
             });
 
-        } else if (this.type = 'new claimBid') {
-            // console.log(this.requests)
+        } else if (this.type == 'new claimBid') {
+            console.log(this.type)
             this.requests.forEach(req => {
-                this.setClaimBid(req)
-                //console.log(req)
+                this.setClaimBid(req);
             });
         }
-
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -91,7 +89,8 @@ export class NewBidComponent implements OnInit, OnChanges {
         this.bidTotalOriginalPrice = 0;
         this.bidTotalDiscount = 0;
         //console.log(changes)
-        if (this.type == 'edit bid') {
+        if (this.type == 'job bid' || this.type == 'claim bid') {
+            console.log('value changed')
             this.requests.forEach(req => {
                 // console.log(req.discountType)
                 req.qty2 = req.qty
@@ -101,6 +100,7 @@ export class NewBidComponent implements OnInit, OnChanges {
 
 
                 if (req.discountType == 'fixed' || req.discountType == null) {
+                    console.log('dis is fixed')
                     this.bidTotalDiscount = this.bidTotalDiscount + req.discount;
                 } else if (req.discountType == 'flat') {
                     this.bidTotalDiscount = this.bidTotalDiscount + (req.discount * (req.originalPrice * req.qty)) / 100;
@@ -114,7 +114,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onRowEditSave(part) {
-        //console.log(part)
+        console.log(part)
         let date = new Date();
         let getYear = date.toLocaleString("default", { year: "numeric" });
         let getMonth = date.toLocaleString("default", { month: "2-digit" });
@@ -125,6 +125,7 @@ export class NewBidComponent implements OnInit, OnChanges {
         //prepare bid request body
         let bidBody = {
             partName: part.part.name,
+            part: part.part,
             voiceNote: null,
             images: [],
             order: this.type == 'new bid' ? null : part.id,
@@ -160,12 +161,14 @@ export class NewBidComponent implements OnInit, OnChanges {
 
             } else {
                 part.isSending = true;
+                delete bidBody.part;
                 this.saveBid(part, bidBody);
             }
 
         } else if (this.type == 'new claimBid') {
             this.totalBidsPrices = 0;
             this.totalServicePrice = 0;
+            delete bidBody.partName;
 
             var isFound = this.bidDto.find(bid => {
                 return bid.order == part.id;
@@ -179,8 +182,10 @@ export class NewBidComponent implements OnInit, OnChanges {
                 this.bidDto.push(bidBody);
             }
 
-            //calc total price for bids
-            //calc total service price for bids
+            console.log(part, this.bidDto)
+
+            //calc total price for claim bids
+            //calc total service price for claim bids
             this.bidDto.forEach(bid => {
                 this.totalBidsPrices = this.totalBidsPrices + bid.price;
                 this.totalServicePrice = this.totalServicePrice + bid.servicePrice;
@@ -380,15 +385,15 @@ export class NewBidComponent implements OnInit, OnChanges {
 
         if ((part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
             this.bidService.add(bidFormData).subscribe((res: any) => {
-                console.log(res)
-                part.saved = true;
-                part.isSending = false;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
+                console.log('success saving single bid>>>')
                 if (this.type == 'new claimBid') {
-                    // this.addBid(part, res);
                     this.claimBidId = res;
                     this.addBid();
                     this.isSubmittingBids = false;
+                } else {
+                    part.saved = true;
+                    part.isSending = false;
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
                 }
             }, err => {
                 part.isSending = false;
@@ -409,8 +414,8 @@ export class NewBidComponent implements OnInit, OnChanges {
             part.price = 0,
             part.servicePrice = 0,
             part.discount = 0,
-            part.discountType = '',
-            part.vat = 0,
+            part.discountType = 'OMR',
+            part.vat = 5,
             part.originalPrice = 0,
             part.warranty = 0,
             part.availability = 0,
@@ -424,7 +429,7 @@ export class NewBidComponent implements OnInit, OnChanges {
         this.bidDto.forEach(bid => {
             let part = {
                 bid: this.claimBidId,
-                part: bid.order,
+                part: bid.part,
                 partType: bid.partType.id,
                 requestFor: 'Replace',
                 partOption: 'Replace',
@@ -459,7 +464,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onSubmitBid() {
-        if(this.requests.length !== this.bidDto.length) {
+        if (this.requests.length !== this.bidDto.length) {
             this.messageService.add({ severity: 'info', summary: 'error', detail: 'you must submit a bid for all parts.' });
         } else {
             this.isSubmittingBids = true;

@@ -202,10 +202,6 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         });
     }
 
-    designCompareBids(bids: any[]) {
-
-    }
-
     editParentAction() {
         this.originalMaster = { ...this.master };
         this.selectedInsuranceType = this.master.insuranceType;
@@ -564,6 +560,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
     rejectMultipleBids() {
+        console.log(this.selectedEntries)
         if (this.selectedEntries.length > 0) {
             let rejectMultipleBids: MultipleBids = {
                 processOrder: true
