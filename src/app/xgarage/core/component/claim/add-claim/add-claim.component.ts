@@ -46,16 +46,16 @@ export class AddClaimComponent implements OnInit {
     claimForm: FormGroup = this.formBuilder.group({
         tenant: [JSON.parse(this.authService.getStoredUser()).tenant.id],
         insuranceType: ['', Validators.required],
-        claimNo: [''],
-        claimDate: [''],
-        excDeliveryDate: [''],
-        breakDown: [''],
-        km: [''],
+        claimNo: ['', Validators.required],
+        claimDate: ['', Validators.required],
+        excDeliveryDate: ['', Validators.required],
+        breakDown: ['', Validators.required],
+        km: ['', Validators.required],
         claimTicks: [[]],
         car: [''],
     });
     saving: boolean = false;
-
+    submitted: boolean = false;
 
     ngOnInit(): void {
         this.onGetJobTicks();
@@ -87,8 +87,12 @@ export class AddClaimComponent implements OnInit {
     onTicksChange(tick: any, event: any) {
         //console.log(tick, event)
         if (!event.checked) {
-            if (this.claimForm.get('claimTicks').value.includes(tick)) {
 
+            let isTickFound = this.claimForm.get('claimTicks').value.filter(claimTick => {
+                return claimTick.id == tick.id;
+            });
+
+            if (isTickFound) {
                 this.claimForm.get('claimTicks').setValue(
                     this.claimForm.get('claimTicks').value.filter(val => {
                         return val.id !== tick.id;
@@ -102,24 +106,37 @@ export class AddClaimComponent implements OnInit {
     }
 
     onCreateCalim() {
-        this.saving = true;
 
-        let datetime = new Date(this.claimForm.get('claimDate').value).toISOString();
-        let updatedClaimForm = this.claimForm.value;
-        updatedClaimForm.claimDate = datetime;
+        this.submitted = true;
 
-        //console.log(updatedClaimForm)
+        if (this.claimForm.valid) {
+            // if (this.claimForm.get('claimTicks').value.length > 0) {
+            // }
+            // else {
+            //     this.claimForm.get('claimTicks').setErrors({required: true});
+            // }
 
-        this.claimService.add(updatedClaimForm).subscribe(res => {
-            console.log(res)
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Created Succefully' });
-            this.saving = false;
-            this.claimForm.reset('');
-        }, err => {
-            console.log(err)
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.error });
-            this.saving = false;
-        })
+            this.saving = true;
+
+            let datetime = new Date(this.claimForm.get('claimDate').value).toISOString();
+            let updatedClaimForm = this.claimForm.value;
+            updatedClaimForm.claimDate = datetime;
+
+            //console.log(updatedClaimForm)
+
+            this.claimService.add(updatedClaimForm).subscribe(res => {
+                //console.log(res)
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Created Succefully' });
+                this.saving = false;
+                //this.claimForm.reset('');
+            }, err => {
+                //console.log(err)
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.error });
+                this.saving = false;
+            });
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Some Fields Are Not Valid, Please Try Again.' });
+        }
     }
 
 }
