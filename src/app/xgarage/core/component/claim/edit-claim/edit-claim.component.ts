@@ -115,6 +115,7 @@ export class EditClaimComponent implements OnInit {
     }
 
     onEnabelBidding(e: boolean) {
+        console.log(e)
         if(e) {
             this.updateClaimForm.get('privacy').enable();
             this.updateClaimForm.get('assignedGarage').reset();

@@ -27,8 +27,8 @@ export class PrivacyComponent implements OnInit {
     multipleSelect: boolean;
 
     ngOnInit(): void {
-       // console.log(this.type)
-     }
+        // console.log(this.type)
+    }
 
     onSelectChange(value: string) {
         //console.log(value)
@@ -40,7 +40,12 @@ export class PrivacyComponent implements OnInit {
             this.displayPrivateSuppliers = true;
             this.enableBidding.emit(false);
 
-            value == 'Direct' ? this.multipleSelect = false : this.multipleSelect = true;
+            if (value == 'Private') {
+                this.privacyControl.setValue('Private');
+                this.multipleSelect = true;
+            } else {
+                this.multipleSelect = false
+            };
         } else {
             this.enableBidding.emit(true);
             this.displayPrivateSuppliers = false;
@@ -98,19 +103,15 @@ export class PrivacyComponent implements OnInit {
     }
 
     resetPrivacy() {
-        //console.log('privacy is resetted')
-        // if (this.privateSuppliersList.length == 0) {
-        //     //----->
-        //     this.suppliersControl.setValue([]);
-        //     this.privacyControl.setValue('Public');
-        //     //----->
-        // } else {
-        //     this.suppliersControl.setValue([]);
-        // }
+        // console.log('privacy is resetted')
+        if (this.privateSuppliersList.length == 0) {
+            //----->
+            this.suppliersControl.setValue([]);
+            this.privacyControl.setValue('Public');
 
-        // this.privateSuppliersList = [];
-        // this.suppliersControl.setValue([]);
-        // this.privacyControl.setValue('Public');
+            this.enableBidding.emit(true);
+            //----->
+        }
     }
 
 }

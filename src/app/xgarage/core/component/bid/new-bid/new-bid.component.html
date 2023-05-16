@@ -28,7 +28,7 @@
             <th>{{'bid.bidDetails.discount' | translate}}</th>
             <th>{{'bid.bidDetails.vat' | translate}}</th>
             <th>{{'bid.bidDetails.totalPrice' | translate}}</th>
-            <th *ngIf="type == 'new claimBid' || 'claim bid'">Service Charge</th>
+            <th *ngIf="type == 'new claimBid' || type == 'claim bid'">Service Charge</th>
             <th *ngIf="type == 'new bid'">{{'bid.bidDetails.partImgs' | translate}}</th>
             <th *ngIf="type == 'job bid'">{{'common.status' | translate}}</th>
             <th *ngIf="type == 'new bid' || type == 'job bid'">{{'common.notes' | translate}}</th>
@@ -112,7 +112,7 @@
                             [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.availability || part.deliverDays}}
+                        {{part.availability}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -158,7 +158,8 @@
                             [style]="{'width':'100%'}" [(ngModel)]="part.discount" [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.discount}} {{part.discountType == 'flat'? '%' : 'OMR'}}
+                        {{part.discount}} {{part.discountType}}
+                        <!-- {{part.discountType == 'flat'? '%' : 'OMR'}} -->
                     </ng-template>
                 </p-cellEditor>
             </td>

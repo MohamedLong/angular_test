@@ -80,7 +80,7 @@ export class NewJobComponent implements OnInit {
         jobId: ['', Validators.required],
         location: [''],
         privacy: ['Public', Validators.required],
-        suppliers: [],
+        suppliers: [[]],
         car: [''],
         carDocument: [''],
     });
@@ -216,7 +216,7 @@ export class NewJobComponent implements OnInit {
     }
 
     onJobFormSubmit() {
-        //console.log(this.jobForm.value)
+        console.log(this.jobForm.value)
         console.log('request emitted')
         this.submitted = true;
         if (this.jobForm.get('jobId').value && (this.jobForm.get('jobId').value !== 0)) {
