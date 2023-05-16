@@ -54,7 +54,7 @@ export class NewCarComponent implements OnInit {
     customerName: string = '';
     contactNO: number = null;
     excess: string = '';
-    preparedBy: string = '';
+    //preparedBy: string = '';
 
     @Input() type: string = 'new car';
     @Output() carEvent = new EventEmitter<{ car: Car }>();
@@ -65,21 +65,27 @@ export class NewCarComponent implements OnInit {
         this.getCarBrands();
         this.getCarModelYear();
         this.getCarModelType();
+
+        if (this.type == 'new claim') {
+            this.carForm.addControl('claimData', new FormControl(null, Validators.required));
+        };
     }
 
     onCarFormSubmit() {
-        // console.log(this.carForm.getRawValue())
-        let claimData = {
-            customerName: this.customerName,
-            contactNo: this.contactNO,
-            excessRo: this.excess,
-            // preparedBy: this.preparedBy
-        }
+
+        if (this.type == 'new claim' && this.customerName && this.contactNO && this.excess) {
+            this.carForm.patchValue({
+                'claimData': {
+                    customerName: this.customerName,
+                    contactNo: this.contactNO,
+                    excessRo: this.excess,
+                }
+            })
+        };
 
         this.submitted = true;
         if (this.carForm.valid) {
             if (this.found && (this.type == 'new job' || this.type == 'new claim')) {
-                this.type == 'new claim'?  this.carForm.addControl('claimData', new FormControl(claimData)) : null;
                 this.carEvent.emit(this.carForm.getRawValue());
             } else {
                 //add new/update car
@@ -102,9 +108,8 @@ export class NewCarComponent implements OnInit {
 
                 //console.log('carDocument: ', carFormData.get('carDocument'));
                 this.carService.add(carFormData).subscribe(res => {
-                    if (this.type == "new job"  || this.type == 'new claim') {
+                    if (this.type == "new job" || this.type == 'new claim') {
                         this.setSelectedCar(res);
-                        this.type == 'new claim'?  this.carForm.addControl('claimData', new FormControl(claimData)) : null;
                         this.carEvent.emit(this.carForm.getRawValue());
                     }
 
