@@ -93,10 +93,11 @@
                         <div class="py-5 text-center" *ngIf="!isFetching && bidDto.length == 0">
                             this claim has no bids yet.
                         </div>
-                        <p-table *ngIf="bidDto.length > 0" [columns]="cols" [rows]="10" [value]="bidDto"
+                        <p-table *ngIf="bidDto.length > 0 && visible" [columns]="cols" [rows]="10" [value]="bidDto"
                             styleClass="p-invoice-datatable-responsive pb-3" [paginator]="true">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
+                                    <th>Select</th>
                                     <th pColumn="supplierName">{{ 'bid.tableColumn.supplierName' | translate }}</th>
                                     <th pColumn="status">{{ 'bid.tableColumn.status' | translate }}</th>
                                     <th pColumn="bidDate">{{ 'bid.tableColumn.bidDate' | translate }}</th>
@@ -107,6 +108,9 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-bid>
                                 <tr>
+                                    <td>
+                                        <p-checkbox [binary]="true" (onChange)="onToggleBid(bid)"></p-checkbox>
+                                    </td>
                                     <td>
                                         {{bid.supplierName? bid.supplierName : bid.userFirstName}}
                                     </td>
@@ -249,7 +253,7 @@
         </p-table>
 
     </ng-template>
-    {{currentBid | json}}
+    <!-- {{currentBid | json}} -->
 </p-dialog>
 
 
@@ -284,3 +288,131 @@
             (click)="rejectBid()"></button>
     </ng-template>
 </p-dialog>
+
+
+<!-- compare bids dialoge -->
+<p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag"
+            header="{{ 'bid.compareBids' | translate }}" [(visible)]="displayCompareBids" [modal]="true"
+            [style]="{width: '90vw'}" [draggable]="false" [resizable]="false" (onHide)="onHideCompareBids()">
+            <div class="p-datatable p-datatable-gridlines">
+                <table class="p-datatable-table" id="bids-table" #bidsTable>
+                    <thead class="p-datatable-thead">
+                        <tr>
+                            <th>{{ 'request.tableColumn.partName' | translate }}</th>
+                            <th>{{ 'common.supplier' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.partType' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.warranty' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.deliverDays' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.qty' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.originalPrice' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.discount' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.vat' | translate }}</th>
+                            <th>{{ 'bid.bidDetails.price' | translate }}</th>
+                            <th>servicePrice</th>
+                            <th>{{ 'bid.bidDetails.totalPrice' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="p-element p-datatable-tbody">
+                        <tr *ngFor="let part of modifiedBids">
+                            <th class="border-1 border-300">{{part.part}}</th>
+                        <td class="p-0">
+                        <tr class="flex flex-column">
+                            <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                {{bid.supplierName}}
+                            </td>
+                        </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                    {{bid.partType == 1? 'Genuine-OEM' : bid.partType == 2? 'Aftermarket' : 'Used'}}
+                                </td>
+                            </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">{{bid.warranty}}</td>
+                            </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                    {{bid.availability}}
+                                </td>
+                            </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                    {{bid.qty}}
+                                </td>
+                            </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                    {{bid.originalPrice | number}}
+                                </td>
+                            </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                    {{bid.discount}} {{bid.discountType == 'flat'? 'OMR' : '%'}}
+                                </td>
+                            </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                    {{bid.vat}}
+                                </td>
+                            </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                    {{bid.price | number}}
+                                </td>
+                            </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                    {{bid.servicePrice | number}}
+                                </td>
+                            </tr>
+                        </td>
+                        <td class="p-0">
+                            <tr class="flex flex-column">
+                                <td [ngClass]="{'border-black-alpha-10 border-bottom-1': i !== (part.bids.length - 1)}"
+                                    class="p-2" *ngFor="let bid of part.bids; let i = index">
+                                    {{bid.price + bid.servicePrice | number}}
+                                </td>
+                            </tr>
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ng-template pTemplate="footer">
+                <div class="text-center pt-3">
+                    <p-button (click)="downloadPdf()" label="{{ 'bid.bidDialog.download' | translate }}"
+                        [disabled]="printAuth===true"
+                        styleClass="p-button bg-indigo-100 text-indigo-600 border-0 font-light px-5"></p-button>
+                    <p-button (click)="displayCompareBids=false" label="{{ 'bid.bidDialog.changeSupp' | translate }}"
+                        styleClass="p-button"></p-button>
+                </div>
+            </ng-template>
+        </p-dialog>
+

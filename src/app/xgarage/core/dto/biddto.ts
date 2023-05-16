@@ -32,4 +32,5 @@ export interface BidDto{
     reviseVoiceNote?: string;
     orderId?: number;
     bidImages?: string;
+    added?: boolean;
 }

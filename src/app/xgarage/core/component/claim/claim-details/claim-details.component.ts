@@ -39,6 +39,10 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     approveBidDialog: boolean = false;
     currentBid: any[] = [];
     reqId: number;
+    suppliersBidToCompare = [];
+    displayCompareBids: boolean = false;
+    modifiedBids = [];
+    visible: boolean = true;
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }]);
@@ -72,7 +76,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     getClaimBids() {
         this.bidService.getBidsByClaim(this.claimId).subscribe(res => {
             this.bidDto = res;
-            console.log('claim bids',this.bidDto);
+            console.log('claim bids', this.bidDto);
         }, err => console.log(err))
     }
 
@@ -150,7 +154,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.claimServie.getClaimBidByBidId(bid.bidId).subscribe(res => {
             console.log(res)
             this.currentBid = res;
-            this.supplierName = this.bidDto[0].supplierName? bid.supplierName : bid.userFirstName;
+            this.supplierName = this.bidDto[0].supplierName ? bid.supplierName : bid.userFirstName;
             this.bidDetailsDialog = true;
 
         }, err => console.log(err))
@@ -180,6 +184,72 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         });
 
         this.rejectBidDialog = false;
+    }
+
+    onToggleBid(supplierBid) {
+        this.claimServie.getClaimBidByBidId(supplierBid.bidId).subscribe(res => {
+            //console.log(res)
+            res.forEach(res => {
+                if (res.added) {
+                    if (res.added == true) {
+                        res.added = false;
+                        this.suppliersBidToCompare = this.suppliersBidToCompare.filter(bid => {
+                            return bid.bidId !== res.bidId
+                        });
+                    } else {
+                        this.suppliersBidToCompare.push(res);
+                    }
+                } else {
+                    res.added = true;
+                    res.supplierId = supplierBid.supplierId;
+                    res.supplierName = supplierBid.supplierName;
+                    this.suppliersBidToCompare.push(res);
+                }
+
+
+                //console.log(this.suppliersBidToCompare);
+
+            })
+        }, err => console.log(err));
+
+    }
+
+    onCompareBids() {
+        this.modifiedBids = [];
+        this.suppliersBidToCompare.forEach(bid => {
+            let i = this.modifiedBids.find(modifieddBid => modifieddBid.part == bid.part.name);
+            if(!i) {
+                this.modifiedBids.push({part: bid.part.name, bids: []});
+            }
+        })
+
+
+        this.modifiedBids.forEach(bid => {
+            this.suppliersBidToCompare.forEach(sup => {
+                if(sup.part.name == bid.part) {
+                    bid.bids.push(sup)
+                }
+            })
+        })
+
+        // console.log(this.modifiedBids);
+        if(this.modifiedBids.length !== 0 && this.modifiedBids[0].bids.length >= 2) {
+            this.displayCompareBids = true;
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'please select 2 or more bids to comapre' });
+        }
+
+    }
+
+    onHideCompareBids() {
+        this.suppliersBidToCompare.forEach(bid => {
+            delete bid.added;
+        });
+
+        this.suppliersBidToCompare = [];
+        this.modifiedBids = [];
+        this.visible = false;
+        setTimeout(() => this.visible = true, 0);
     }
 
 }

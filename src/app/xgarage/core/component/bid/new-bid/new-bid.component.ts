@@ -76,7 +76,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             });
 
         } else if (this.type == 'new claimBid') {
-            console.log(this.type)
+            //console.log(this.type)
             this.requests.forEach(req => {
                 this.setClaimBid(req);
             });
@@ -90,7 +90,7 @@ export class NewBidComponent implements OnInit, OnChanges {
         this.bidTotalDiscount = 0;
         //console.log(changes)
         if (this.type == 'job bid' || this.type == 'claim bid') {
-            console.log('value changed')
+            // console.log('value changed')
             this.requests.forEach(req => {
                 // console.log(req.discountType)
                 req.qty2 = req.qty
@@ -441,7 +441,7 @@ export class NewBidComponent implements OnInit, OnChanges {
                 vat: bid.vat,
                 originalPrice: bid.originalPrice,
                 warranty: bid.warranty,
-                availability: bid.availability
+                availability: bid.deliverDays
             };
 
             this.bids.push(part);

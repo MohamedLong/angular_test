@@ -1,10 +1,10 @@
 <p-toast></p-toast>
-<p-toolbar styleClass="mb-2 width-100" *ngIf="type == 'claim bid'">
+<p-toolbar styleClass="mb-2 width-100 justify-content-end" *ngIf="type == 'claim bid'">
     <ng-template pTemplate="right">
         <div>
             <button (click)="confirmCancel(requests[0].bid)" pButton pRipple type="button"
                     [disabled]="requests[0].statusId !== 1" class="width-100 p-button-warning"
-                    label="{{'USERSUBMENU.DIALOG.CANCEL' | translate}}"></button>
+                    label="Cancel Bids"></button>
         </div>
     </ng-template>
 </p-toolbar>
@@ -275,7 +275,6 @@
     <p>this request has no parts for bid</p>
 </div>
 <div class="p-3" *ngIf="type == 'new claimBid'">
-    {{type}}
     <label class="block mb-2 fw-700">Note</label>
     <textarea rows="5" class="width-100" pInputTextarea [(ngModel)]="note"></textarea>
     <div class="text-center mt-5">
