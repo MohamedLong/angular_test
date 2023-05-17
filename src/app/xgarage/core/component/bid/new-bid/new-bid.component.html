@@ -146,8 +146,8 @@
                             [options]="discountType" [(ngModel)]="part.discountType"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.discountType}}
-                        <!-- {{part.discountType ? (part.discountType == 'flat'? '%' : 'OMR') : 'OMR'}} -->
+                        <!-- {{part.discountType}} -->
+                        {{part.discountType == 'flat' || part.discountType == '%'? '%': 'OMR'}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -158,8 +158,7 @@
                             [style]="{'width':'100%'}" [(ngModel)]="part.discount" [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.discount}} {{part.discountType}}
-                        <!-- {{part.discountType == 'flat'? '%' : 'OMR'}} -->
+                        {{part.discount}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -219,7 +218,7 @@
                         icon="pi pi-pencil" class="p-button-rounded p-button-text" [disabled]="part.saved"></button>
                     <button *ngIf="editing && !part.isSending" pButton pRipple type="button" pSaveEditableRow
                         icon="pi pi-check" (click)="onRowEditSave(part)"
-                        class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                        class="p-button-rounded p-button-text p-button-success mr-2" [disabled]="!isRowValid"></button>
                     <button *ngIf="editing && !part.isSending" pButton pRipple type="button" pCancelEditableRow
                         icon="pi pi-times" (click)="onRowEditCancel(part, ri)"
                         class="p-button-rounded p-button-text p-button-danger"></button>

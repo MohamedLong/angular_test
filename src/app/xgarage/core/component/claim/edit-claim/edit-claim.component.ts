@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { ClaimService } from '../../../service/claim.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -9,9 +9,9 @@ import { Claim } from '../../../model/claim';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-edit-claim',
-  templateUrl: './edit-claim.component.html',
-  providers: [MessageService]
+    selector: 'app-edit-claim',
+    templateUrl: './edit-claim.component.html',
+    providers: [MessageService]
 })
 export class EditClaimComponent implements OnInit {
 
@@ -22,34 +22,41 @@ export class EditClaimComponent implements OnInit {
     actions: string[] = ['No Action', 'Replace', 'Repair'];
     assignTypes = Object.keys(AssignType);
     privacyList = Object.keys(Privacy);
-    claimId: any  = '';
+    claimId: any = '';
     claim: any;
     loading: boolean = true;
     tenantId: number = JSON.parse(this.authService.getStoredUser()).tenant.id;
     updateClaimForm: FormGroup = this.formBuilder.group({
         id: [''],
-        inspectedBy: [''],
-        surveyedBy: [''],
-        repairCost: [0],
-        repairHrs: [0],
-        officeLocation: [''],
-        workshopGrade: [''],
-        bidClosingDate: [''],
-        assignType: ['Bidding'],
-        assignedGarage: 0,
-        privacy: ['Public'],
+        inspectedBy: ['', Validators.required],
+        surveyedBy: ['', Validators.required],
+        repairCost: [0, Validators.required],
+        repairHrs: [0, Validators.required],
+        officeLocation: ['', Validators.required],
+        workshopGrade: ['', Validators.required],
+        bidClosingDate: ['', Validators.required],
+        assignType: ['Bidding', Validators.required],
+        assignedGarage: [0],
+        privacy: ['Public', Validators.required],
         suppliers: [[]],
         notes: [''],
     });
-    saving: boolean = false;
     addPartDialog: boolean = false;
+    submitted: boolean = false;
+    saving: boolean = false;
+    claimDate: Date;
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }, { 'label': 'Edit Claim', routerLink: ['edit-claim'] }]);
         this.claim = JSON.parse(localStorage.getItem('claim'));
+
+        //get claim date & add one day to it
+        this.claimDate =  new Date(this.claim.claimDate);
+        this.claimDate.setDate(this.claimDate.getDate() + 1);
+
         this.onGetClaimPartList();
 
-         //set claim fields on edit??
+        //set claim fields on edit??
     }
 
     onAction(event, part) {
@@ -116,7 +123,7 @@ export class EditClaimComponent implements OnInit {
 
     onEnabelBidding(e: boolean) {
         console.log(e)
-        if(e) {
+        if (e) {
             this.updateClaimForm.get('privacy').enable();
             this.updateClaimForm.get('assignedGarage').reset();
         } else {
@@ -127,37 +134,46 @@ export class EditClaimComponent implements OnInit {
     }
 
     onUpdateClaim() {
-        this.saving = true;
+        this.submitted = true;
+        if (this.updateClaimForm.valid) {
+            if (this.selectedParts.length > 0) {
+                this.saving = true;
 
-        //console.log(this.updateClaimForm.value);
-        this.updateClaimForm.get('id').setValue(this.claim.id);
-        for(const claimKey in this.claim) {
-            for(const updatedClaimkey in  this.updateClaimForm.value) {
-                if(claimKey == updatedClaimkey) {
-                    this.claim[claimKey] = this.updateClaimForm.value[updatedClaimkey];
+                console.log('form is valid');
+                //console.log(this.updateClaimForm.value);
+                this.updateClaimForm.get('id').setValue(this.claim.id);
+                for (const claimKey in this.claim) {
+                    for (const updatedClaimkey in this.updateClaimForm.value) {
+                        if (claimKey == updatedClaimkey) {
+                            this.claim[claimKey] = this.updateClaimForm.value[updatedClaimkey];
+                        }
+                    }
+                };
+
+                let claimBody = {
+                    claim: this.claim,
+                    claimPartsDtoList: this.selectedParts
                 }
+
+                //console.log(claimBody);
+
+                this.claimServie.updateClaim(claimBody).subscribe(res => {
+                    //console.log(res);
+                    this.saving = false;
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully' });
+                    this.selectedParts = [];
+                }, err => {
+                    //console.log(err);
+                    this.saving = false;
+                    this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'failed to update claim, please try again.' });
+                });
+            } else {
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'You must select at least one part.' });
             }
-        };
-
-        // console.log(this.claim)
-
-        let claimBody = {
-            claim: this.claim,
-            claimPartsDtoList: this.selectedParts
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Some Fields Are Not Valid, Please Try Again.' });
         }
 
-        //console.log(claimBody);
-
-        this.claimServie.updateClaim(claimBody).subscribe(res => {
-            //console.log(res);
-            this.saving = false;
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully' });
-            this.selectedParts = [];
-        }, err => {
-            //console.log(err);
-            this.saving = false;
-            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'failed to update claim, please try again.' });
-        });
     }
 
     calcHalf(arr) {

@@ -59,47 +59,71 @@
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Inspection By</label>
                     <input formControlName="inspectedBy" class="width-100 mb-2" type="text" pInputText />
+                    <small
+                        *ngIf="submitted && !updateClaimForm.get('inspectedBy').valid  && updateClaimForm.get('inspectedBy').errors?.['required']"
+                        class="p-error">Inspection By is required</small>
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Surveyed By</label>
                     <input formControlName="surveyedBy" class="width-100 mb-2" type="text" pInputText />
+                    <small
+                        *ngIf="submitted && !updateClaimForm.get('surveyedBy').valid  && updateClaimForm.get('surveyedBy').errors?.['required']"
+                        class="p-error">Surveyed By is required</small>
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Repair Cost</label>
                     <p-inputNumber currencyDisplay="code" styleClass="width-100 mb-2" formControlName="repairCost"
                         mode="currency" currency="OMR" locale="en-US"></p-inputNumber>
+                    <small
+                        *ngIf="submitted && !updateClaimForm.get('repairCost').valid  && updateClaimForm.get('repairCost').errors?.['required']"
+                        class="p-error">Repair Cost is required</small>
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Repair Hrs.</label>
                     <p-inputNumber formControlName="repairHrs" styleClass="width-100 mb-2" suffix=" Hrs">
                     </p-inputNumber>
+                    <small
+                        *ngIf="submitted && !updateClaimForm.get('repairHrs').valid  && updateClaimForm.get('repairHrs').errors?.['required']"
+                        class="p-error">Repair Hrs is required</small>
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Office Location</label>
                     <input formControlName="officeLocation" class="width-100 mb-2" type="text" pInputText />
+                    <small
+                        *ngIf="submitted && !updateClaimForm.get('officeLocation').valid  && updateClaimForm.get('officeLocation').errors?.['required']"
+                        class="p-error">Office Location is required</small>
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Workshop Grade</label>
                     <input formControlName="workshopGrade" class="width-100 mb-2" type="text" pInputText />
+                    <small
+                        *ngIf="submitted && !updateClaimForm.get('workshopGrade').valid  && updateClaimForm.get('workshopGrade').errors?.['required']"
+                        class="p-error">Workshop Grade is required</small>
                 </div>
                 <div class="col-12 md:col-4">
                     <label class="block mb-2">Bid Closing Date</label>
                     <p-calendar dataType="string" formControlName="bidClosingDate" class="width-100 mb-2"
-                        appendTo="body" dateFormat="yy-mm-dd"></p-calendar>
+                        appendTo="body" dateFormat="yy-mm-dd" [minDate]="claimDate"></p-calendar>
+                    <small
+                        *ngIf="submitted && !updateClaimForm.get('bidClosingDate').valid  && updateClaimForm.get('bidClosingDate').errors?.['required']"
+                        class="p-error">Bid Closing Date is required</small>
                 </div>
                 <div class="col-12 md:col-4">
-                    <!-- <label class="block mb-2">Assign Type</label> -->
-                    <!-- <p-dropdown [options]="assignTypes" optionValue="type" optionLabel="type"
-                        formControlName="assignType" (onChange)="onAssignTypeChange($event)"></p-dropdown> -->
                     <app-privacy [selectionList]="assignTypes" label="Assign Type" type="claim" [id]="tenantId"
                         [privacyControl]="updateClaimForm.controls['assignType']"
                         [suppliersControl]="updateClaimForm.controls['assignedGarage']"
                         (enableBidding)="onEnabelBidding($event)"></app-privacy>
+                    <small
+                        *ngIf="submitted && !updateClaimForm.get('assignType').valid  && updateClaimForm.get('assignType').errors?.['required']"
+                        class="p-error">Assign Type is required</small>
                 </div>
                 <div class="col-12 md:col-4">
                     <app-privacy [selectionList]="privacyList" label="{{ 'job.form.privacy' | translate }}" type="claim"
                         [id]="tenantId" [privacyControl]="updateClaimForm.controls['privacy']"
                         [suppliersControl]="updateClaimForm.controls['suppliers']"></app-privacy>
+                    <small
+                        *ngIf="submitted && !updateClaimForm.get('privacy').valid  && updateClaimForm.get('privacy').errors?.['required']"
+                        class="p-error">{{ 'job.form.privacy' | translate }} is required</small>
                 </div>
                 <div class="col-12">
                     <label class="block mb-2 fw-700">Note</label>
@@ -120,7 +144,9 @@
         [resizable]="false">
         <!-- <app-new-part type="claim"></app-new-part> -->
         <div class="text-center my-2">
-            <button class="width-100 md:w-20rem p-button-success" pButton pRipple type="button" label="Add Part"></button>
+            <button class="width-100 md:w-20rem p-button-success" pButton pRipple
+                icon="{{submitted? 'pi pi-spin pi-spinner' : ''}}" type="submit" iconPos="right"
+                label="Add Part"></button>
         </div>
     </p-dialog>
 </div>

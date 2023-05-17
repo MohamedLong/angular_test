@@ -60,6 +60,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     totalServicePrice: number = 0;
     bidDto: any[] = [];
     claimBidId: number;
+    isRowValid: boolean = false;
 
     ngOnInit(): void {
         if (this.type == 'new bid') {
@@ -109,10 +110,6 @@ export class NewBidComponent implements OnInit, OnChanges {
         }
     }
 
-    onSelect(e) {
-        console.log(e)
-    }
-
     onRowEditSave(part) {
         console.log(part)
         let date = new Date();
@@ -142,7 +139,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             warranty: part.warranty,
             location: this.type == 'new bid' ? part.locationName : JSON.parse(this.authService.getStoredUser()).tenant.location,
             discount: part.discount,
-            discountType: part.discountType == 'OMR' ? 'fixed' : 'flat',
+            discountType: part.discountType == 'OMR' || part.discountType == 'fixed' ? 'fixed' : 'flat',
             vat: part.vat,
             originalPrice: part.originalPrice,
             reviseVoiceNote: null,
@@ -193,25 +190,24 @@ export class NewBidComponent implements OnInit, OnChanges {
         };
     }
 
-    onRowEditCancel(data) {
-        console.log('cancel')
-    }
-
     onDiscount($event) {
         let price = $event.originalPrice * $event.qty2;
         let discount = $event.discountType == 'OMR' ? $event.discount : (price * $event.discount) / 100;
 
         if ($event.originalPrice > 0 && discount >= 0) {
             this.updatePrice($event);
+            this.isRowValid = true;
         }
 
         if (discount < 0 || discount == null) {
             this.messageService.add({ severity: 'error', summary: 'Discount is Not Valid', detail: 'Discount Can Not be Less Than 0' });
+            this.isRowValid = false;
             discount = 0;
         }
 
         if (discount >= $event.originalPrice) {
             this.messageService.add({ severity: 'error', summary: 'Discount is Not Valid', detail: 'Discount Can Not be More Than Original Price' });
+            this.isRowValid = false;
             $event.discount = 0;
         }
     }
@@ -227,29 +223,36 @@ export class NewBidComponent implements OnInit, OnChanges {
             this.messageService.add({ severity: 'error', summary: 'Original Price is Not Valid', detail: 'Original Price Can Not be Less Than 1' });
             $event.price = 1;
             $event.originalPrice = 1;
+            this.isRowValid = false;
         } else {
             this.updatePrice($event);
+            this.isRowValid = true;
         }
     }
 
     onVat($event) {
         if ($event.vat == null || $event.vat < 0) {
             this.messageService.add({ severity: 'error', summary: 'Vat is Not Valid', detail: 'Vat Can Not be Less Than 0' });
+            this.isRowValid = false;
             $event.vat = 0;
         } else {
             this.updatePrice($event);
+            this.isRowValid = true;
         }
     }
 
     onQty(part) {
         if (part.qty2 <= 0) {
             this.messageService.add({ severity: 'error', summary: 'Quantity is Not Valid', detail: 'Quantity Can Not be Less Than 0' });
+            this.isRowValid = false;
             part.qty2 = part.qty;
         } else if (part.qty2 > part.qty) {
             this.messageService.add({ severity: 'error', summary: 'Quantity is Not Valid', detail: `Quantity Can Not be More Than ${part.qty}` });
+            this.isRowValid = false;
             part.qty2 = part.qty;
         } else {
-            this.updatePrice(part)
+            this.updatePrice(part);
+            this.isRowValid = true;
         }
         console.log(part.qty2, part.qty)
     }
@@ -437,7 +440,7 @@ export class NewBidComponent implements OnInit, OnChanges {
                 price: bid.price,
                 servicePrice: bid.servicePrice,
                 discount: bid.discount,
-                discountType: bid.discountType == 'OMR' ? 'fixed' : 'flat',
+                discountType: bid.discountType == 'OMR' || bid.discountType == 'fixed' ? 'fixed' : 'flat',
                 vat: bid.vat,
                 originalPrice: bid.originalPrice,
                 warranty: bid.warranty,
