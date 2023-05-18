@@ -55,7 +55,9 @@ export class AddClaimComponent implements OnInit {
         car: [''],
     });
     saving: boolean = false;
+    saved: boolean = false;
     submitted: boolean = false;
+    minExcDeliveryDate:  Date;
 
     ngOnInit(): void {
         this.onGetJobTicks();
@@ -126,9 +128,14 @@ export class AddClaimComponent implements OnInit {
 
             this.claimService.add(updatedClaimForm).subscribe(res => {
                 //console.log(res)
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Created Succefully' });
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Created Succefully. Redirecting To Claim..' });
                 this.saving = false;
+                this.saved = true;
                 //this.claimForm.reset('');
+                setTimeout(() => {
+                    this.goToClaimDetails(res.id);
+                }, 1000)
+
             }, err => {
                 //console.log(err)
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.error });
@@ -137,6 +144,17 @@ export class AddClaimComponent implements OnInit {
         } else {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Some Fields Are Not Valid, Please Try Again.' });
         }
+    }
+
+    goToClaimDetails(id: number) {
+        localStorage.setItem('claimId', JSON.stringify(id));
+        this.router.navigate(['claim-details']);
+    }
+
+    onRecievedDateSelect(val: any) {
+        this.claimForm.get('excDeliveryDate').setValue('');
+        this.minExcDeliveryDate =  new Date(val);
+        this.minExcDeliveryDate.setDate(this.minExcDeliveryDate.getDate() + 1);
     }
 
 }

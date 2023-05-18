@@ -5,12 +5,12 @@
         <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <!-- <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
-                        class="p-button-success mr-2 mb-2" (click)="new()" [disabled]="newAuth===false"
-                        [hidden]="false"></button> -->
+                    <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
+                        class="p-button-success mr-2 mb-2" (click)="new()" [disabled]="newAuth===false" [hidden]="false"
+                        *ngIf="user !== 'insurance'"></button>
                     <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
                         class="p-button-success mr-2 mb-2" [routerLink]="['/add-claim']" [disabled]="newAuth===false"
-                        [hidden]="false"></button>
+                        [hidden]="false" *ngIf="user == 'insurance'"></button>
                 </ng-template>
 
                 <ng-template pTemplate="right">
@@ -64,7 +64,7 @@
                         </td>
                         <td>
                             <span>
-                                <a (click)="goDetails(claim.id)" style="cursor: pointer;"><mark
+                                <a (click)="goToClaimDetails(claim.id)" style="cursor: pointer;"><mark
                                         class="text-blue-400 hover:text-pink-500">{{claim.claimNo}}</mark>
                                 </a>
                             </span>
@@ -86,10 +86,12 @@
                         </td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                                [disabled]="!editAuth" (click)="edit(claim)" [disabled]="edituth===false"></button>
-                            <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
+                                (click)="edit(claim)" [disabled]="edituth===false || (claim.status == 'Canceled')"></button>
+                            <!-- <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
                                 [disabled]="!editAuth" (click)="deleteAction(claim)"
-                                [disabled]="deleteAuth===false"></button>
+                                [disabled]="deleteAuth===false"></button> -->
+                            <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
+                                [disabled]="(editAuth===false && deleteAuth===false) || (claim.status == 'Canceled') || (claim.status == 'Confirmed')" (click)="deleteAction(claim)"></button>
                         </td>
                     </tr>
                 </ng-template>

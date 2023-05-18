@@ -9,6 +9,7 @@ import { RequestService } from '../../../service/request.service';
 import { ClaimService } from '../../../service/claim.service';
 import { Bid } from '../../../model/bid';
 import { BidDto } from '../../../dto/biddto';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-new-bid',
@@ -23,7 +24,7 @@ import { BidDto } from '../../../dto/biddto';
 })
 export class NewBidComponent implements OnInit, OnChanges {
 
-    constructor(private claimService: ClaimService, private confirmationService: ConfirmationService, private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
+    constructor(private router: Router, private claimService: ClaimService, private confirmationService: ConfirmationService, private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
     checked: boolean = false;
     @Input() requests: any[] = [];
     @Input() type: string = 'new bid';
@@ -452,9 +453,12 @@ export class NewBidComponent implements OnInit, OnChanges {
 
         if (this.bids.length > 0) {
             this.claimService.saveClaimBid(this.bids).subscribe(res => {
-                //console.log(res)
+                console.log(res)
                 this.isSubmittingBids = false;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Bids Submitted Successfully' });
+                setTimeout(() => {
+                    this.router.navigateByUrl('/bids');
+                }, 500)
             }, err => {
                 //console.log(err);
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: 'failed to submit bid, please try again.' });

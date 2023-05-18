@@ -168,7 +168,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="newAuth == true" header="{{ 'job.tableColumn.addBids' | translate }}">
+                    <p-tabPanel *ngIf="newAuth == true && role > 1" header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                     </p-tabPanel>
                 </p-tabView>

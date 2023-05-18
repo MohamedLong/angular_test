@@ -43,10 +43,12 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     displayCompareBids: boolean = false;
     modifiedBids = [];
     visible: boolean = true;
+    deletePartDialog: boolean = false;
+    partToBeDeleted: number;
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }]);
-
+        localStorage.removeItem('claimSelectedParts');
         this.claimId = JSON.parse(localStorage.getItem('claimId'));
         this.onGetClaimByClaimId();
         this.onGetClaimParts();
@@ -250,6 +252,30 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.modifiedBids = [];
         this.visible = false;
         setTimeout(() => this.visible = true, 0);
+    }
+
+    onEditClaim() {
+        if(this.details.length !== 0) {
+            localStorage.setItem('claimSelectedParts', JSON.stringify(this.details));
+        }
+
+        this.router.navigateByUrl('/edit-claim');
+    }
+
+    deletePart(id: number) {
+        this.deletePartDialog = true;
+        this.partToBeDeleted = id;
+    }
+
+    confirmDeletePart() {
+        this.claimServie.deleteClaimPartByPartId(this.partToBeDeleted).subscribe(res => {
+            console.log(res);
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Part deleted.', life: 3000 });
+            this.onGetClaimParts();
+        }, err => {
+            console.log(err);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete claim part', life: 3000 })
+        })
     }
 
 }

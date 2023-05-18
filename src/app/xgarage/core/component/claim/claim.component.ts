@@ -33,6 +33,8 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     active: boolean = true;
     today: string = new Date().toISOString().slice(0, 10);
 
+    //get from backend permissions??
+    user: string = 'insurance';
 
     ngOnInit(): void {
         this.onGetClaimsByTenant();
@@ -89,7 +91,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
 
         this.claimService.getClaimsByTenant().subscribe(res => {
             console.log(res)
-            this.masterDtos = res;
+            this.masterDtos = res.reverse();
             this.loading = false;
         }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 }))
 
@@ -170,20 +172,23 @@ export class ClaimComponent extends GenericComponent implements OnInit {
             id: StatusConstants.CANCELED_STATUS
         }
         this.claimService.changeStatus(this.master.id, cancelStatus).subscribe(res => {
-            if (res.messageCode == 200) {
+            console.log(res)
+            if (res) {
                 this.messageService.add({ severity: 'success', summary: 'Claim cancelled successfully' });
-                this.deleteSingleDialog = false;
                 this.onGetClaimsByTenant();
             }
             else {
                 this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Could Not Cancel Claim', life: 3000 });
             }
+
+            this.deleteSingleDialog = false;
         }, err => {
             this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.error.message, life: 3000 });
+            this.deleteSingleDialog = false;
         })
     }
 
-    goDetails(id: number) {
+    goToClaimDetails(id: number) {
         localStorage.setItem('claimId', JSON.stringify(id));
         this.router.navigate(['claim-details']);
     }

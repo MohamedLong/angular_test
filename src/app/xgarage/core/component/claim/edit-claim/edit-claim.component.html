@@ -6,7 +6,7 @@
             <app-details-card type="claim" *ngIf="claim" [master]="claim" [role]=""></app-details-card>
         </div>
     </div>
-    <div class="col-12" *ngFor="let part of partsList">
+    <div class="col-12" *ngFor="let part of partsList" #partList>
         <h5>{{part.categoryName}}</h5>
         <div class="card">
             <p-table [value]="part.list" [loading]="loading">
@@ -18,23 +18,20 @@
                         <th>
                             Action
                         </th>
-                        <!-- <th>
-                            Parts Name
-                        </th>
-                        <th>
-                            Action
-                        </th> -->
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-parts let-rowIndex="rowIndex">
+                <ng-template pTemplate="body" let-part let-rowIndex="rowIndex">
                     <tr>
                         <td>
-                            {{parts.partName}}
+                            {{part.partName}}
                         </td>
-                        <!-- <td>{{parts.partOption}}</td> -->
                         <td>
-                            <p-dropdown [options]="actions"
-                                (onChange)="onAction($event.value, {partId: parts.partId})"></p-dropdown>
+                            <div class="flex">
+                                <div *ngFor="let action of actions; let i = index;" class="field-checkbox mr-3">
+                                    <p-radioButton [disabled]="part.disabled" (onClick)="onAction(part.action, {partId: part.partId})" [inputId]="action.id" [name]="action.name" [value]="action.name" [(ngModel)]="part.action"></p-radioButton>
+                                    <label [for]="action.id" class="ml-2">{{ action.name }}</label>
+                                </div>
+                            </div>
                         </td>
                         <!-- <td *ngIf="rowIndex >= calcHalf(part.list)">
                             {{rowIndex}} {{calcHalf(part.list)}} {{parts.partName}}
@@ -48,11 +45,11 @@
             </p-table>
         </div>
     </div>
-    <div class="col-12 text-right  mb-4">
+    <!-- <div class="col-12 text-right  mb-4">
         <button (click)="addPartDialog = true" class="width-100 md:w-20rem" pButton pRipple type="button"
             label="Add New Part" icon="pi pi-plus" iconPos="left">
         </button>
-    </div>
+    </div> -->
     <div class="col-12">
         <form [formGroup]="updateClaimForm">
             <div class="grid card">
@@ -131,7 +128,7 @@
                 </div>
                 <div class="col-12 text-center">
                     <button (click)="onUpdateClaim()" class="width-100 md:w-20rem" pButton pRipple type="submit"
-                        label="Create Request" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
+                        [label]="label" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
                     </button>
                 </div>
             </div>

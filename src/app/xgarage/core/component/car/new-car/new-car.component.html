@@ -79,28 +79,27 @@
                     class="p-error">{{ 'car.form.plateRequired' | translate }}</small>
             </div>
             <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
-                <label class="block">Customer Name</label>
+                <label class="block">{{ 'common.customer' | translate }}</label>
                 <input [(ngModel)]="customerName" [ngModelOptions]="{standalone: true}" class="width-100 my-2"
                     type="text" pInputText placeholder="" required />
-                <small
-                    *ngIf="submitted && !customerName"
-                    class="block p-error mr-auto">Customer Name is Required</small>
+                <small *ngIf="submitted && !customerName" class="block p-error mr-auto">{{ 'common.customerRequired' |
+                    translate }}</small>
             </div>
             <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
-                <label class="block">Contact No</label>
+                <label class="block">{{ 'common.contactNo' | translate }}</label>
                 <input [(ngModel)]="contactNO" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text"
                     pInputText placeholder="" required />
-                <small
-                    *ngIf="submitted && !contactNO"
-                    class="block p-error mr-auto">Contact No is Required</small>
+                <!-- <p-inputNumber [useGrouping]="false" [(ngModel)]="contactNO" [ngModelOptions]="{standalone: true}" class="width-100 my-2" prefix="+986 " mode="decimal" required>
+                </p-inputNumber> -->
+                <small *ngIf="submitted && !contactNO" class="block p-error mr-auto">{{ 'common.contactNoRequired' |
+                    translate }}</small>
             </div>
             <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
-                <label class="block">Excess R.O</label>
+                <label class="block">{{ 'claim.form.excess' | translate }}</label>
                 <input [(ngModel)]="excess" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text"
                     pInputText placeholder="" required />
-                <small
-                    *ngIf="submitted && !excess"
-                    class="block p-error mr-auto">Excess R.O is Required</small>
+                <small *ngIf="submitted && !excess" class="block p-error mr-auto">{{ 'claim.form.excessRequired' |
+                    translate }}</small>
             </div>
             <!-- <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
                 <label class="block">Prepared By</label>

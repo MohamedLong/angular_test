@@ -65,7 +65,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         this.getPartTypes();
 
         if (this.type == 'edit req') {
-            console.log(this.requestDetails)
+            //console.log(this.requestDetails)
             this.setRequestInfo();
         }
 
@@ -186,6 +186,8 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         this.selectedPartTypes = this.requestDetails.partTypes; //set part types
         this.description = this.requestDetails.description; //set description
         this.qty = this.requestDetails.qty; //set qty
+
+        //console.log(this.requestDetails)
     }
 
     getPart() {
@@ -219,12 +221,12 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         if (this.responseBody.hasOwnProperty('id')) {
             // console.log('updating old request')
             this.requestService.update(reqFormData).subscribe((res: MessageResponse) => {
-                console.log(res)
+                //console.log(res)
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
                 this.request.emit(res);
             }, err => {
-                console.log(err.error)
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
+                //console.log(err.error.message)
+                this.messageService.add({ severity: 'error', summary: 'Success', detail: err.error.message });
                 this.request.emit(err);
             });
 

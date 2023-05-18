@@ -22,7 +22,8 @@ export class BidDetailsComponent implements OnInit {
     selectedState = 'All';
     pageNo: number = 0;
     user: string = 'ins';
-    constructor( private breadcrumbService: AppBreadcrumbService, private bidService: BidService, private jobService: JobService, private msgService: MessageService, private claimService: ClaimService) { }
+
+    constructor(private breadcrumbService: AppBreadcrumbService, private bidService: BidService, private jobService: JobService, private msgService: MessageService, private claimService: ClaimService) { }
 
     ngOnInit(): void {
         if (this.user == 'ins') {
@@ -32,106 +33,108 @@ export class BidDetailsComponent implements OnInit {
         }
 
         this.breadcrumbService.setItems([{ 'label': 'My Bids', 'routerLink': ['bids'] }]);
-    }
+}
 
-    getJobBids(page: number) {
-        this.loading = true;
-        this.jobService.getBidsByJob(page).subscribe({
-            next: (res) => {
-                console.log(res)
-                this.bids = res;
-                this.fillteredBids = res;
-                this.loading = false;
-                this.setStatusNames(this.bids);
-            },
-            error: (e) => {
-                this.msgService.add({ severity: 'error', summary: 'Server Information', detail: e.error.message, life: 3000 });
-                this.loading = false;
+getJobBids(page: number) {
+    this.loading = true;
+    this.jobService.getBidsByJob(page).subscribe({
+        next: (res) => {
+            console.log(res)
+            this.bids = res.reverse();
+            this.fillteredBids = res.reverse();
+            this.loading = false;
+            this.setStatusNames(this.bids);
+        },
+        error: (e) => {
+            this.msgService.add({ severity: 'error', summary: 'Server Information', detail: e.error.message, life: 3000 });
+            this.loading = false;
+        }
+    });
+}
+
+getClaimBids() {
+    this.loading = true;
+    this.claimService.getClaimBids().subscribe({
+        next: (res) => {
+            //console.log(res)
+            res.reverse()
+            this.bids = res;
+            this.fillteredBids = res;
+
+            this.loading = false;
+            this.setStatusNames(this.bids);
+        },
+        error: (e) => {
+            this.msgService.add({ severity: 'error', summary: 'Server Information', detail: e.error.message, life: 3000 });
+            this.loading = false;
+        }
+    });
+}
+
+onBidView(id: any) {
+    // console.log(event)
+    if (this.user == 'ins') {
+        this.claimService.getClaimBidByBidId(id).subscribe(res => {
+            if (res.length > 0) {
+                this.bidDetails = res;
+                console.log(this.bidDetails)
+                this.displayModal = true;
+            } else {
+                this.msgService.add({ severity: 'info', summary: 'This job has no bids', life: 3000 });
+            }
+
+        }, err => {
+            console.log(err)
+        })
+    } else {
+        this.bidService.getByJob(id).subscribe(res => {
+            if (res.length > 0) {
+                this.bidDetails = res;
+                this.displayModal = true;
+            } else {
+                this.msgService.add({ severity: 'info', summary: 'This job has no bids', life: 3000 });
+            }
+
+        }, err => {
+            console.log(err)
+        })
+    }
+}
+
+setStatusNames(arr) {
+    let names = [];
+    arr.forEach(element => {
+        names.push(element.jobStatus);
+    });
+
+    if (names.length > 0) {
+        names.forEach(name => {
+            if (!this.status.includes(name)) {
+                this.status.push(name);
             }
         });
     }
+}
 
-    getClaimBids() {
-        this.loading = true;
-        this.claimService.getClaimBids().subscribe({
-            next: (res) => {
-                console.log(res)
-                this.bids = res;
-                this.fillteredBids = res;
-                this.loading = false;
-                this.setStatusNames(this.bids);
-            },
-            error: (e) => {
-                this.msgService.add({ severity: 'error', summary: 'Server Information', detail: e.error.message, life: 3000 });
-                this.loading = false;
-            }
+filterByStatus(state: any) {
+    this.selectedState = state;
+    if (state == 'All') {
+        this.fillteredBids = this.bids;
+    } else {
+        this.fillteredBids = this.bids.filter(bid => {
+            return bid.jobStatus == state;
         });
     }
+}
 
-    onBidView(id: any) {
-        // console.log(event)
-        if (this.user == 'ins') {
-            this.claimService.getClaimBidByBidId(id).subscribe(res => {
-                if (res.length > 0) {
-                    this.bidDetails = res;
-                    console.log(this.bidDetails)
-                    this.displayModal = true;
-                } else {
-                    this.msgService.add({ severity: 'info', summary: 'This job has no bids', life: 3000 });
-                }
-
-            }, err => {
-                console.log(err)
-            })
-        } else {
-            this.bidService.getByJob(id).subscribe(res => {
-                if (res.length > 0) {
-                    this.bidDetails = res;
-                    this.displayModal = true;
-                } else {
-                    this.msgService.add({ severity: 'info', summary: 'This job has no bids', life: 3000 });
-                }
-
-            }, err => {
-                console.log(err)
-            })
+loadBids(e) {
+    //console.log(e);
+    if (this.fillteredBids.length == 100) {
+        if ((this.fillteredBids.length - e.first) <= 10) {
+            this.pageNo++;
+            this.getJobBids(this.pageNo);
         }
     }
-
-    setStatusNames(arr) {
-        let names = [];
-        arr.forEach(element => {
-            names.push(element.jobStatus);
-        });
-
-        if (names.length > 0) {
-            names.forEach(name => {
-                if (!this.status.includes(name)) {
-                    this.status.push(name);
-                }
-            });
-        }
-    }
-
-    filterByStatus(state: any) {
-        this.selectedState = state;
-        if (state == 'All') {
-            this.fillteredBids = this.bids;
-        } else {
-            this.fillteredBids = this.bids.filter(bid => {
-                return bid.jobStatus == state;
-            });
-        }
-    }
-
-    loadBids(e) {
-        //console.log(e);
-        if (this.fillteredBids.length == 100) {
-            if ((this.fillteredBids.length - e.first) <= 10) {
-                this.pageNo++;
-                this.getJobBids(this.pageNo);
-            }
-        }
-    }
+}
 
 }

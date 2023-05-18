@@ -180,7 +180,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         this.isFetching = true;
         this.requestService.getByJob(this.master.id).subscribe({
             next: (requests) => {
-                console.log('requests:',requests)
+                console.log('requests from get request by job:', requests)
                 this.details = requests;
                 this.fillteredDetails = requests;
                 this.setStatusNames(this.details)
@@ -599,7 +599,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     onReq(event) {
         this.hideDialog();
         if (event.error) {
-            this.messageService.add({ severity: 'erorr', summary: 'Error', detail: event.error.message });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: event.error.message });
         } else {
             this.messageService.add({ severity: 'success', summary: 'Success', detail: event.message });
             let index = this.fillteredDetails.findIndex((el) => el.id === event.id);

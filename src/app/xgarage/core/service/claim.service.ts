@@ -23,7 +23,7 @@ export class ClaimService extends GenericService<Claim>{
     }
 
     getClaimsByTenant() {
-        return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant?pageSize=60');
+        return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant?pageSize=70');
     }
 
     getClaimTicks() {
@@ -56,6 +56,10 @@ export class ClaimService extends GenericService<Claim>{
 
     getClaimBidByBidId(id:  number) {
         return this.http.get<BidDto[]>(config.coreApiUrl + '/claimBid/bid/' + id);
+    }
+
+    deleteClaimPartByPartId(id: number) {
+        return this.http.delete<any>(config.coreApiUrl + '/claimParts/delete/' + id);
     }
 
 }

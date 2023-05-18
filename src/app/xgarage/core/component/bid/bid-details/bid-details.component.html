@@ -28,7 +28,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-bid>
-            <tr>
+            <tr [ngClass]="{'bg-green-50': latestBid == bid.id}">
                 <td class="font-bold">
                     {{bid.jobTitle || bid.claimTitle || '-'}}
                 </td>
