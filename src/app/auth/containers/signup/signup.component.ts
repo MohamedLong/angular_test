@@ -19,7 +19,7 @@ import { Brand } from 'src/app/xgarage/common/model/brand';
 @Component({
     selector: 'app-signup',
     templateUrl: './signup.component.html',
-    styles: ['.pages-body{height: 100%}', '.pages-body .topbar {background-color: #fff;}'],
+    styles: ['.pages-body{height: unset}', '.pages-body .topbar {background-color: #fff;}'],
     providers: [MessageService]
 })
 export class SignupComponent implements OnInit {
@@ -43,12 +43,12 @@ export class SignupComponent implements OnInit {
         location: ['']
     });
 
-    serviceTypes: ServiceType[] = [{ id: 1}];
-    brands: Brand[] = [{ id: 1}];
-    partTypes: PartType[] = [{ id: 1}];
-    supplierLocations: SupplierLocation[] = [{ id: 1}];
+    serviceTypes: ServiceType[] = [{ id: 1 }];
+    brands: Brand[] = [{ id: 1 }];
+    partTypes: PartType[] = [{ id: 1 }];
+    supplierLocations: SupplierLocation[] = [{ id: 1 }];
     userId: number;
-    supplier: Supplier= {};
+    supplier: Supplier = {};
     tenants: Tenant[];
     tenantTypes: TenantType[];
     selectedType: TenantType = {};
@@ -78,7 +78,7 @@ export class SignupComponent implements OnInit {
     }
 
 
-    createUserWithNewTenant(){
+    createUserWithNewTenant() {
         if (this.signupForm.controls.newTenantName.value && this.signupForm.controls.newCr.value) {
             this.selectedTenant.tenantType = this.tenantTypes.find(val => val.id == this.signupForm.controls.tenantType.value);
             this.selectedTenant.name = this.signupForm.controls.newTenantName.value;
@@ -104,15 +104,17 @@ export class SignupComponent implements OnInit {
         }
     }
 
-    createUserOnExistingTenant(){
+    createUserOnExistingTenant() {
         if (this.signupForm.valid) {
             let user = this.createUserObjectFromSignupForm();
             this.authService.newSignup(user).subscribe(res => {
                 this.userId = res;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User successfully created, waiting for Approval.' });
-                // this.router.navigate[''];
+                setTimeout(() => {
+                    this.router.navigateByUrl('login')
+                }, 500);
             }, err => {
-                this.messageService.add({ severity: 'error', summary: 'Erorr', detail:  err.error.message });
+                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.error.message });
             })
         } else {
             this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Please fill out all fields' })
@@ -124,28 +126,28 @@ export class SignupComponent implements OnInit {
         this.selectedType.id = this.signupForm.controls.tenantType.value;
         this.selectedTenant.tenantType = this.selectedType;
         let user: User = {
-            createdDate : new Date(),
-            email : this.signupForm.get('email').value,
-            firstName : this.signupForm.get('firstName').value,
-            lastName : this.signupForm.get('lastName').value,
-            phone : this.signupForm.get('phone').value,
-            userId : this.signupForm.get('email').value,
-            password : this.signupForm.get('password').value,
-            provider : 'local',
-            tenant : this.selectedTenant,
+            createdDate: new Date(),
+            email: this.signupForm.get('email').value,
+            firstName: this.signupForm.get('firstName').value,
+            lastName: this.signupForm.get('lastName').value,
+            phone: this.signupForm.get('phone').value,
+            userId: this.signupForm.get('email').value,
+            password: this.signupForm.get('password').value,
+            provider: 'local',
+            tenant: this.selectedTenant,
         }
         return user;
     }
 
     onSubmit() {
-        if(this.newTenantTrigger){
+        if (this.newTenantTrigger) {
             this.createUserWithNewTenant();
         }
-        else if(!this.newTenantTrigger){
+        else if (!this.newTenantTrigger) {
             this.createUserOnExistingTenant();
         }
         else {
             this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Error in creating the user' })
         }
     }
-    }
+}
