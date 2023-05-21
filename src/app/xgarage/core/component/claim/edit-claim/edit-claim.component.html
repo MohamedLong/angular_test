@@ -6,61 +6,7 @@
             <app-details-card type="claim" *ngIf="claim" [master]="claim" [role]=""></app-details-card>
         </div>
     </div>
-    <div class="col-12 mb-4" *ngFor="let part of partsList" #partList>
-        <h5>{{part.categoryName}}</h5>
-        <div class="card">
-            <p-table [value]="part.list" [loading]="loading">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            Parts Name
-                        </th>
-                        <th>
-                            Action
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-part let-rowIndex="rowIndex">
-                    <tr>
-                        <td>
-                            {{part.partName}}
-                        </td>
-                        <td>
-                            <div class="flex">
-                                <div *ngFor="let action of actions; let i = index;" class="field-checkbox mr-3">
-                                    <p-radioButton [disabled]="part.disabled" (onClick)="onAction(part.action, {partId: part.partId})" [inputId]="action.id" [name]="action.name" [value]="action.name" [(ngModel)]="part.action"></p-radioButton>
-                                    <label [for]="action.id" class="ml-2">{{ action.name }}</label>
-                                </div>
-                            </div>
-                        </td>
-                        <!-- <td *ngIf="rowIndex >= calcHalf(part.list)">
-                            {{rowIndex}} {{calcHalf(part.list)}} {{parts.partName}}
-                        </td>
-                        <td *ngIf="rowIndex >= calcHalf(part.list)">
-                            <p-dropdown [options]="actions"
-                                (onChange)="onAction($event.value, {partId: parts.partId})"></p-dropdown>
-                        </td> -->
-                    </tr>
-                </ng-template>
-            </p-table>
-            <div class="py-3">
-                <div class="col-12">
-                    <button (click)="onAddNewPart(part.list[0])" class="" pButton pRipple type="button"
-                        label="Add New Part" icon="pi pi-plus" iconPos="left">
-                    </button>
-                </div>
-                <!-- <p-inplace closable="closable" closeIcon="pi pi-check" (onDeactivate)="onAddNewPart(part.list[0].categoryId, part.list[0].subcategoryId)">
-                    <ng-template pTemplate="display">
-                        <span class="fw-500 text-indigo-500"><i class="pi pi-plus"></i> Add New Part</span>
-                    </ng-template>
-                    <ng-template pTemplate="content">
-                        <input class="mr-3" type="text" placeholder="Enter Part Name" pInputText [(ngModel)]="partName" />
-                    </ng-template>
-                </p-inplace> -->
-            </div>
-        </div>
-    </div>
-    <div class="col-12">
+    <div class="col-12 mt-4">
         <form [formGroup]="updateClaimForm">
             <div class="grid card">
                 <div class="col-12 md:col-6">
@@ -136,14 +82,59 @@
                     <label class="block mb-2 fw-700">Note</label>
                     <textarea formControlName="notes" rows="3" class="width-100" pInputTextarea></textarea>
                 </div>
-                <div class="col-12 text-center">
-                    <button (click)="onUpdateClaim()" class="width-100 md:w-20rem" pButton pRipple type="submit"
-                        [label]="label" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
+            </div>
+        </form>
+    </div>
+    <div class="col-12 mb-4" *ngFor="let part of partsList" #partList>
+        <h5>{{part.categoryName}}</h5>
+        <div class="card">
+            <p-table [value]="part.list" [loading]="loading">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            Parts Name
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-part let-rowIndex="rowIndex">
+                    <tr>
+                        <td>
+                            {{part.partName}}
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <div *ngFor="let action of actions; let i = index;" class="field-checkbox mr-3">
+                                    <p-radioButton [disabled]="part.disabled" (onClick)="onAction(part.action, {partId: part.partId})" [inputId]="action.id" [name]="action.name" [value]="action.name" [(ngModel)]="part.action"></p-radioButton>
+                                    <label [for]="action.id" class="ml-2">{{ action.name }}</label>
+                                </div>
+                            </div>
+                        </td>
+                        <!-- <td *ngIf="rowIndex >= calcHalf(part.list)">
+                            {{rowIndex}} {{calcHalf(part.list)}} {{parts.partName}}
+                        </td>
+                        <td *ngIf="rowIndex >= calcHalf(part.list)">
+                            <p-dropdown [options]="actions"
+                                (onChange)="onAction($event.value, {partId: parts.partId})"></p-dropdown>
+                        </td> -->
+                    </tr>
+                </ng-template>
+            </p-table>
+            <div class="py-3">
+                <div class="col-12">
+                    <button (click)="onAddNewPart(part.list[0])" class="" pButton pRipple type="button"
+                        label="Add New Part" icon="pi pi-plus" iconPos="left">
                     </button>
                 </div>
             </div>
-        </form>
-
+        </div>
+    </div>
+    <div class="col-12 text-center">
+        <button (click)="onUpdateClaim()" class="width-100 md:w-20rem" pButton pRipple type="submit"
+            [label]="label" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
+        </button>
     </div>
 
     <!-- Add New Part Dialog -->
@@ -152,7 +143,7 @@
         <app-new-part type="claim" [actions]="actions" [category]="partCategory" *ngIf="addPartDialog" [subcategory]="partSubcategory"></app-new-part>
         <div class="text-center my-2">
             <button class="width-100 md:w-20rem p-button-success" pButton pRipple
-                icon="{{submitted? 'pi pi-spin pi-spinner' : ''}}" type="submit" iconPos="right"
+                icon="{{submittedPart? 'pi pi-spin pi-spinner' : ''}}" type="submit" iconPos="right"
                 label="Add Part" (click)="onSavePart()"></button>
         </div>
     </p-dialog>

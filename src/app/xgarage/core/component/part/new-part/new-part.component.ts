@@ -37,14 +37,14 @@ export class NewPartComponent implements OnInit {
     @Input() category: Category;
     @Input() subcategory: SubCategory;
     @Input() actions: any[] = [];
-
+    isAlreadyExists: boolean = false;
 
     ngOnInit(): void {
-        console.log(this.actions)
+        //console.log(this.actions)
         if (this.type == 'new part') {
             this.getPartCategories();
         } else {
-            console.log(this.category, this.subcategory)
+            //console.log(this.category, this.subcategory)
             this.categories.push(this.category);
             this.subCategories.push(this.subcategory);
             this.selectedCategory = this.category;
@@ -86,9 +86,18 @@ export class NewPartComponent implements OnInit {
                 this.parts = res;
                 this.isFetching = false;
             } else {
-                this.disableList = false;
-                this.selectedPart = null;
-                this.isFetching = false;
+                if (this.type == 'new part') {
+                    this.disableList = false;
+                    this.selectedPart = null;
+                    this.isFetching = false;
+                } else {
+                    console.log('this is a new part');
+                    this.disableList = true;
+                    this.updatedPart = {
+                        name: this.partName,
+                        status: 0
+                    };
+                }
             }
         }, err => {
             this.disableList = false;
@@ -117,15 +126,13 @@ export class NewPartComponent implements OnInit {
             })
         } else {
             console.log(part)
-            if(part.categoryId == this.category.id) {
-                console.log('this part already exists')
+            if (part.categoryId == this.category.id) {
+                console.log('this part already exists');
+                this.isAlreadyExists = true;
+                this.updatedPart = part;
             } else {
                 console.log('this part doesnt exists on this category');
-                //add new part
-                //console.log('actionName',this.actionName)
                 this.updatedPart = part;
-                //console.log('updatedPart', updatedPart)
-                //this.requestService.part.next(this.updatedPart);
             }
         }
     }
@@ -167,9 +174,7 @@ export class NewPartComponent implements OnInit {
     }
 
     onAction($event) {
-        console.log($event)
-        //this.updatedPart.partOption = $event;
-        //console.log(this.updatedPart)
-        this.requestService.part.next({part: this.updatedPart, option: $event});
+        //console.log($event)
+        this.requestService.part.next({ part: this.updatedPart, option: $event, exists: this.isAlreadyExists });
     }
 }

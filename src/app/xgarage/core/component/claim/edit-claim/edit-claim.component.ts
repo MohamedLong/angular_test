@@ -5,10 +5,8 @@ import { ClaimService } from '../../../service/claim.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Privacy } from '../../../../common/model/privacy';
 import { AssignType } from '../../../../common/model/assigntype';
-import { Claim } from '../../../model/claim';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
-import { Part } from '../../../model/part';
 import { RequestService } from '../../../service/request.service';
 import { PartService } from '../../../service/part.service';
 
@@ -52,6 +50,7 @@ export class EditClaimComponent implements OnInit {
     });
     addPartDialog: boolean = false;
     submitted: boolean = false;
+    submittedPart: boolean = false;
     saving: boolean = false;
     claimDate: Date;
     label: string = "Create Request";
@@ -163,7 +162,7 @@ export class EditClaimComponent implements OnInit {
                     })
                 });
 
-                //console.log(this.partsList)
+                console.log(this.partsList)
 
             }, err => {
                 console.log(err);
@@ -232,22 +231,7 @@ export class EditClaimComponent implements OnInit {
     }
 
     onAddNewPart(part: any) {
-        console.log(this.partName, part)
-        // let body = {
-        //     claim: {id: this.claim.id},
-        //     part: {
-        //         name: this.partName,
-        //         subCategoryId: subcategoryId,
-        //         categoryId: categoryId
-        //     }
-        // };
-
-        // this.claimServie.saveClaimPart(body).subscribe(res => {
-        //     console.log(res);
-        //     this.onGetClaimPartList();
-        // }, err => {
-        //     console.log(err);
-        // })
+       // console.log(this.partName, part)
 
         this.partCategory = { id: part.categoryId, name: part.categoryName };
         this.partSubcategory = { id: part.subcategoryId, name: part.subcategoryName };;
@@ -256,35 +240,73 @@ export class EditClaimComponent implements OnInit {
     }
 
     onSavePart() {
+        this.submittedPart = true;
         this.requestService.part.subscribe(val => {
-            console.log('in edit claim comp', val)
             val.part.categoryId = this.partCategory.id;
-            val.part.subCategory = {id: this.partSubcategory.id};
-            delete val.part.id;
-            delete val.part.categoryId;
-            delete val.part.subCategoryId;
-
+            val.part.subCategoryId = this.partSubcategory.id;
+            val.part.subCategory = { id: this.partSubcategory.id };
 
             let body = {
                 claim: { id: this.claim.id },
-                part: val.part,
+                part: { id: val.part.id },
                 partOption: val.option
             };
 
-            this.partservice.add(val.part).subscribe(res => {
-                console.log(res)
-            }, err => {
-                console.log(err)
-            })
+            console.log('in edit claim comp', val.part, body)
+            if (val.exists) {
+                this.claimServie.saveClaimPart(body).subscribe(res => {
+                    //console.log('saving exsiting part to claim parts', res);
+                    //this.onGetClaimPartList();
+                    res.part.action = res.partOption;
+                    res.part.partName = res.part.name;
+                    delete res.part.name;
+
+                    let updateList = this.partsList.find(part => part.id == res.part.categoryId);
+                    updateList.list.push(res.part);
+
+                    this.onAction(res.part.action, {partId: res.part.id});
+
+                    this.addPartDialog = false;
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Part Added Succefully' });
+                    this.submittedPart = false;
+                }, err => {
+                    //console.log('seconde save err', err);
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to Add Part, Please Try Again Later.' });
+                    this.submittedPart = false;
+                })
+            } else {
+                this.partservice.add(val.part).subscribe(res => {
+                    //console.log('first save done');
+                    if(res.id) {
+                        body.part.id = res.id;
+                    }
+
+                    this.claimServie.saveClaimPart(body).subscribe(res => {
+                        //console.log('seconde save done', res);
+                        //this.onGetClaimPartList();
+                        res.part.action = res.partOption;
+                        res.part.partName = res.part.name;
+                        delete res.part.name;
+
+                        let updateList = this.partsList.find(part => part.id == res.part.categoryId);
+                        updateList.list.push(res.part);
+
+                        this.onAction(res.part.action, {partId: res.part.id});
+
+                        this.addPartDialog = false;
+                        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Part Added Succefully' });
+                        this.submittedPart = false;
+                    }, err => {
+                        //console.log('seconde save err', err);
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to Add Part, Please Try Again Later.' });
+                        this.submittedPart = false;
+                    })
+                }, err => {
+                    console.log('first save err', err);
+                });
+            }
 
 
-
-            // this.claimServie.saveClaimPart(body).subscribe(res => {
-            //     console.log(res);
-            //     this.onGetClaimPartList();
-            // }, err => {
-            //     console.log(err);
-            // })
         })
     }
 
