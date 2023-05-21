@@ -83,9 +83,6 @@ export class AppComponent implements OnInit {
             }
         });
 
-        if(this.authService.isLoggedIn()) {
-            this.authService.getAuth();
-        }
     }
 
 

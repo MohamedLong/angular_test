@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
 import { AppComponent } from '../app.component';
 import { MenuService } from '../app.menu.service';
+import { AuthService } from '../auth/services/auth.service';
 
 @Component({
     selector: 'app-xgarage',
@@ -50,7 +51,7 @@ export class XgarageComponent implements AfterViewInit, OnInit, OnDestroy  {
     menuActiveMobile: boolean;
     menuInactiveDesktop: boolean;
     isDashboard: boolean = false;
-    constructor(public renderer: Renderer2, private menuService: MenuService, private primengConfig: PrimeNGConfig,
+    constructor(private authService: AuthService, public renderer: Renderer2, private menuService: MenuService, private primengConfig: PrimeNGConfig,
         public app: AppComponent, private router: Router) { }
 
     ngOnInit() {
@@ -58,6 +59,11 @@ export class XgarageComponent implements AfterViewInit, OnInit, OnDestroy  {
         if (this.router.url == '/') {
             this.isDashboard = true;
         }
+
+        if(this.authService.isLoggedIn()) {
+            // console.log('user logged in')
+             this.authService.getAuth();
+         }
     }
 
     ngAfterViewInit() {
