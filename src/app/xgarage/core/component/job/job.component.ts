@@ -39,7 +39,7 @@ export class JobComponent extends GenericComponent implements OnInit {
     selectedState = 'All';
     pageNo: number = 0;
     ngOnInit(): void {
-        if (localStorage.getItem('jobId')) {
+        if (localStorage.getItem('jobId') || localStorage.getItem('bidView')) {
             localStorage.removeItem('jobId');
             localStorage.removeItem('bidView');
         }
@@ -55,7 +55,7 @@ export class JobComponent extends GenericComponent implements OnInit {
         if (JSON.parse(user).tenant) {
             this.jobService.getForTenant(page).subscribe({
                 next: (data) => {
-                    this.masterDtos = data;
+                    this.masterDtos = data.reverse();
                     this.masterDtos = this.masterDtos.filter(job => job.id != null);
                     this.cols = [
                         { field: 'jobNo', header: 'Job Number' },
