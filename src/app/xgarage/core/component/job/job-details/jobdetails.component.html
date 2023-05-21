@@ -95,11 +95,11 @@
                                         <td [hidden]="(printingMode || role == 2)" style="text-align:center">
                                             <button pButton pRipple type="button" icon="pi pi-pencil"
                                                 (click)="editRequest(request)"
-                                                [disabled]="!(master.status.id == 1 && editAuth===true) || disabledRequest(request)"
+                                                [disabled]="!(master.status.id == 1 && editAuth==true) || disabledRequest(request)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                             <button pButton pRipple type="button" icon="pi pi-times"
                                                 (click)="deleteAction(request || role == 2)"
-                                                [disabled]="!(master.status.id == 1 && editAuth===true) || disabledRequest(request)"
+                                                [disabled]="!(master.status.id == 1 && editAuth==true) || disabledRequest(request)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                         </td>
                                     </ng-container>
@@ -120,7 +120,7 @@
                     </p-tabPanel>
                     <p-tabPanel *ngIf="viewAuth == true" header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
-                            <button (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
+                            <button *ngIf="supplierBids.length > 0" (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
                                 class="p-button-rounded bg-indigo-100 text-indigo-600 border-0 font-light px-5"></button>
                         </div>
 
@@ -168,7 +168,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="newAuth == true" header="{{ 'job.tableColumn.addBids' | translate }}">
+                    <p-tabPanel *ngIf="newAuth == true && role > 1" header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                     </p-tabPanel>
                 </p-tabView>
