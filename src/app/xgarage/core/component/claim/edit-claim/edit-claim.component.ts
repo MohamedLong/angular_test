@@ -8,6 +8,9 @@ import { AssignType } from '../../../../common/model/assigntype';
 import { Claim } from '../../../model/claim';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { Part } from '../../../model/part';
+import { RequestService } from '../../../service/request.service';
+import { PartService } from '../../../service/part.service';
 
 @Component({
     selector: 'app-edit-claim',
@@ -16,7 +19,7 @@ import { Router } from '@angular/router';
 })
 export class EditClaimComponent implements OnInit {
 
-    constructor(private router: Router, private messageService: MessageService, private authService: AuthService, private breadcrumbService: AppBreadcrumbService, private formBuilder: FormBuilder, private claimServie: ClaimService) { }
+    constructor(private partservice: PartService, private requestService: RequestService, private router: Router, private messageService: MessageService, private authService: AuthService, private breadcrumbService: AppBreadcrumbService, private formBuilder: FormBuilder, private claimServie: ClaimService) { }
     partsList: any[] = [];
     parts: any[] = [];
     selectedParts = [];
@@ -54,6 +57,9 @@ export class EditClaimComponent implements OnInit {
     label: string = "Create Request";
     selectedPartOptions: any[] = [];
     @ViewChild('partList') partList: ElementRef;
+    partName: string = '';
+    partCategory: any;
+    partSubcategory: any;
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }, { 'label': 'Edit Claim', routerLink: ['edit-claim'] }]);
@@ -73,13 +79,13 @@ export class EditClaimComponent implements OnInit {
         this.updateClaimForm.patchValue({
             inspectedBy: this.claim.inspectedBy,
             surveyedBy: this.claim.surveyedBy,
-            repairCost: this.claim.repairCost? this.claim.repairCost : 0,
-            repairHrs: this.claim.repairHrs? this.claim.repairHrs : 0,
+            repairCost: this.claim.repairCost ? this.claim.repairCost : 0,
+            repairHrs: this.claim.repairHrs ? this.claim.repairHrs : 0,
             officeLocation: this.claim.officeLocation,
             workshopGrade: this.claim.workshopGrade,
-            bidClosingDate: this.claim.bidClosingDate? new Date(this.claim.bidClosingDate) : '',
+            bidClosingDate: this.claim.bidClosingDate ? new Date(this.claim.bidClosingDate) : '',
             assignType: this.claim.assignType,
-            assignedGarage: this.claim.assignedGarage? this.claim.assignedGarage : 0,
+            assignedGarage: this.claim.assignedGarage ? this.claim.assignedGarage : 0,
             privacy: this.claim.privacy,
             suppliers: this.claim.suppliers,
             notes: this.claim.notes,
@@ -223,6 +229,63 @@ export class EditClaimComponent implements OnInit {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Some Fields Are Not Valid, Please Try Again.' });
         }
 
+    }
+
+    onAddNewPart(part: any) {
+        console.log(this.partName, part)
+        // let body = {
+        //     claim: {id: this.claim.id},
+        //     part: {
+        //         name: this.partName,
+        //         subCategoryId: subcategoryId,
+        //         categoryId: categoryId
+        //     }
+        // };
+
+        // this.claimServie.saveClaimPart(body).subscribe(res => {
+        //     console.log(res);
+        //     this.onGetClaimPartList();
+        // }, err => {
+        //     console.log(err);
+        // })
+
+        this.partCategory = { id: part.categoryId, name: part.categoryName };
+        this.partSubcategory = { id: part.subcategoryId, name: part.subcategoryName };;
+
+        this.addPartDialog = true;
+    }
+
+    onSavePart() {
+        this.requestService.part.subscribe(val => {
+            console.log('in edit claim comp', val)
+            val.part.categoryId = this.partCategory.id;
+            val.part.subCategory = {id: this.partSubcategory.id};
+            delete val.part.id;
+            delete val.part.categoryId;
+            delete val.part.subCategoryId;
+
+
+            let body = {
+                claim: { id: this.claim.id },
+                part: val.part,
+                partOption: val.option
+            };
+
+            this.partservice.add(val.part).subscribe(res => {
+                console.log(res)
+            }, err => {
+                console.log(err)
+            })
+
+
+
+            // this.claimServie.saveClaimPart(body).subscribe(res => {
+            //     console.log(res);
+            //     this.onGetClaimPartList();
+            // }, err => {
+            //     console.log(err);
+            // })
+        })
     }
 
     calcHalf(arr) {

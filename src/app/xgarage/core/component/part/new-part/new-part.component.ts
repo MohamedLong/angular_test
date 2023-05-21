@@ -18,7 +18,7 @@ export class NewPartComponent implements OnInit {
 
     parts: Part[] = [];
     categories: Category[] = [];
-    subCategories: SubCategory[];
+    subCategories: SubCategory[] = [];
     selectedPart: Part;
     selectedCategory: Category;
     selectedSubCategory: SubCategory;
@@ -29,13 +29,29 @@ export class NewPartComponent implements OnInit {
     disableList: boolean = false;
     part: Part;
     partName: string;
-
+    actionName: string;
+    updatedPart: any
     @Input() type: string = 'new part';
     @Input() partDetails: Part = {};
     @Input() errMsg: string = "";
+    @Input() category: Category;
+    @Input() subcategory: SubCategory;
+    @Input() actions: any[] = [];
+
 
     ngOnInit(): void {
-        this.getPartCategories();
+        console.log(this.actions)
+        if (this.type == 'new part') {
+            this.getPartCategories();
+        } else {
+            console.log(this.category, this.subcategory)
+            this.categories.push(this.category);
+            this.subCategories.push(this.subcategory);
+            this.selectedCategory = this.category;
+            this.selectedSubCategory = this.subcategory;
+
+            this.disableList = true;
+        }
     }
 
     getPartCategories() {
@@ -88,16 +104,30 @@ export class NewPartComponent implements OnInit {
     }
 
     onChoosePart(part: Part) {
-        this.selectedPart = part;
-        this.selectedCategory = this.categories.find(c => c.id == this.selectedPart.categoryId);
-        this.subCategoryService.getSubCategoriesByCategory(this.selectedPart.categoryId).subscribe(res => {
-            this.subCategories = res;
-            this.selectedSubCategory = this.subCategories.find(c => c.id = this.selectedPart.subCategoryId);
-            this.disableList = true;
-            this.part = this.selectedPart;
-            this.part.subCategoryId = this.selectedSubCategory.id;
-            this.requestService.part.next(this.part)
-        })
+        if (this.type == 'new part') {
+            this.selectedPart = part;
+            this.selectedCategory = this.categories.find(c => c.id == this.selectedPart.categoryId);
+            this.subCategoryService.getSubCategoriesByCategory(this.selectedPart.categoryId).subscribe(res => {
+                this.subCategories = res;
+                this.selectedSubCategory = this.subCategories.find(c => c.id = this.selectedPart.subCategoryId);
+                this.disableList = true;
+                this.part = this.selectedPart;
+                this.part.subCategoryId = this.selectedSubCategory.id;
+                this.requestService.part.next(this.part)
+            })
+        } else {
+            console.log(part)
+            if(part.categoryId == this.category.id) {
+                console.log('this part already exists')
+            } else {
+                console.log('this part doesnt exists on this category');
+                //add new part
+                //console.log('actionName',this.actionName)
+                this.updatedPart = part;
+                //console.log('updatedPart', updatedPart)
+                //this.requestService.part.next(this.updatedPart);
+            }
+        }
     }
 
     onSelectPart() {
@@ -134,5 +164,12 @@ export class NewPartComponent implements OnInit {
         }
 
         this.requestService.part.next(this.part);
+    }
+
+    onAction($event) {
+        console.log($event)
+        //this.updatedPart.partOption = $event;
+        //console.log(this.updatedPart)
+        this.requestService.part.next({part: this.updatedPart, option: $event});
     }
 }

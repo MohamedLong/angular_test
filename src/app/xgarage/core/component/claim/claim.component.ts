@@ -32,12 +32,13 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     statuses: Status[];
     active: boolean = true;
     today: string = new Date().toISOString().slice(0, 10);
+    pageNo: number = 0;
 
     //get from backend permissions??
     user: string = 'insurance';
 
     ngOnInit(): void {
-        this.onGetClaimsByTenant();
+        this.onGetClaimsByTenant(this.pageNo);
         this.getAllTenants();
         super.callInsideOnInit();
 
@@ -57,7 +58,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         })
     }
 
-    onGetClaimsByTenant() {
+    onGetClaimsByTenant(page?: number) {
         // let user = this.authService.getStoredUser();
         // if (JSON.parse(user).tenant !== null) {
         //     let tenant = JSON.parse(user).tenant.id;
@@ -89,7 +90,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         //     });
         // }
 
-        this.claimService.getClaimsByTenant().subscribe(res => {
+        this.claimService.getClaimsByTenant(page).subscribe(res => {
             console.log(res)
             this.masterDtos = res.reverse();
             this.loading = false;
@@ -191,6 +192,15 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     goToClaimDetails(id: number) {
         localStorage.setItem('claimId', JSON.stringify(id));
         this.router.navigate(['claim-details']);
+    }
+
+    loadClaims(e) {
+        if (this.masterDtos.length == 100) {
+            if ((this.masterDtos.length - e.first) <= 10) {
+                this.pageNo++;
+                this.onGetClaimsByTenant(this.pageNo);
+            }
+        }
     }
 
 }

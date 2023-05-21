@@ -172,13 +172,13 @@
             <div class="grid p-fluid">
                 <div class="col-12 md:col-5">
                     <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
-                        icon="pi pi-check" (click)="approveBidDialog = true" [disabled]="editAuth == false"
+                        icon="pi pi-check" (click)="approveBidDialog = true" [disabled]="editAuth == false || currentBidStatus > 1"
                         class="p-button-success mr-2 mb-3"></button>
                 </div>
 
                 <div class="col-12 md:col-5">
                     <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
-                        icon="pi pi-times" (click)="rejectBidDialog = true" [disabled]="editAuth ==false"
+                        icon="pi pi-times" (click)="rejectBidDialog = true" [disabled]="editAuth ==false  || currentBidStatus > 2"
                         class="p-button-danger mr-2 mb-3"></button>
                 </div>
 

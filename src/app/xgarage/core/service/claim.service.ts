@@ -6,6 +6,7 @@ import { config } from "src/app/config";
 import { GenericService } from '../../common/generic/genericservice';
 import { ClaimDto } from '../dto/claimdto';
 import { BidDto } from '../dto/biddto';
+import { Part } from '../model/part';
 
 
 @Injectable({
@@ -22,8 +23,9 @@ export class ClaimService extends GenericService<Claim>{
         return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant/' + tenantId);
     }
 
-    getClaimsByTenant() {
-        return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant?pageSize=70');
+    getClaimsByTenant(page?: number) {
+        let endpoint = page? `/claim/tenant?pageNo=${page}&pageSize=100` : '/claim/tenant';
+        return this.http.get<ClaimDto[]>(config.coreApiUrl + endpoint);
     }
 
     getClaimTicks() {
@@ -60,6 +62,10 @@ export class ClaimService extends GenericService<Claim>{
 
     deleteClaimPartByPartId(id: number) {
         return this.http.delete<any>(config.coreApiUrl + '/claimParts/delete/' + id);
+    }
+
+    saveClaimPart(body: {claim: {id: number}, part: Part}) {
+        return this.http.post<any>(config.coreApiUrl + '/claimParts/save', body);
     }
 
 }

@@ -6,7 +6,7 @@
             <app-details-card type="claim" *ngIf="claim" [master]="claim" [role]=""></app-details-card>
         </div>
     </div>
-    <div class="col-12" *ngFor="let part of partsList" #partList>
+    <div class="col-12 mb-4" *ngFor="let part of partsList" #partList>
         <h5>{{part.categoryName}}</h5>
         <div class="card">
             <p-table [value]="part.list" [loading]="loading">
@@ -43,13 +43,23 @@
                     </tr>
                 </ng-template>
             </p-table>
+            <div class="py-3">
+                <div class="col-12">
+                    <button (click)="onAddNewPart(part.list[0])" class="" pButton pRipple type="button"
+                        label="Add New Part" icon="pi pi-plus" iconPos="left">
+                    </button>
+                </div>
+                <!-- <p-inplace closable="closable" closeIcon="pi pi-check" (onDeactivate)="onAddNewPart(part.list[0].categoryId, part.list[0].subcategoryId)">
+                    <ng-template pTemplate="display">
+                        <span class="fw-500 text-indigo-500"><i class="pi pi-plus"></i> Add New Part</span>
+                    </ng-template>
+                    <ng-template pTemplate="content">
+                        <input class="mr-3" type="text" placeholder="Enter Part Name" pInputText [(ngModel)]="partName" />
+                    </ng-template>
+                </p-inplace> -->
+            </div>
         </div>
     </div>
-    <!-- <div class="col-12 text-right  mb-4">
-        <button (click)="addPartDialog = true" class="width-100 md:w-20rem" pButton pRipple type="button"
-            label="Add New Part" icon="pi pi-plus" iconPos="left">
-        </button>
-    </div> -->
     <div class="col-12">
         <form [formGroup]="updateClaimForm">
             <div class="grid card">
@@ -139,11 +149,11 @@
     <!-- Add New Part Dialog -->
     <p-dialog header="Header" [(visible)]="addPartDialog" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false"
         [resizable]="false">
-        <!-- <app-new-part type="claim"></app-new-part> -->
+        <app-new-part type="claim" [actions]="actions" [category]="partCategory" *ngIf="addPartDialog" [subcategory]="partSubcategory"></app-new-part>
         <div class="text-center my-2">
             <button class="width-100 md:w-20rem p-button-success" pButton pRipple
                 icon="{{submitted? 'pi pi-spin pi-spinner' : ''}}" type="submit" iconPos="right"
-                label="Add Part"></button>
+                label="Add Part" (click)="onSavePart()"></button>
         </div>
     </p-dialog>
 </div>

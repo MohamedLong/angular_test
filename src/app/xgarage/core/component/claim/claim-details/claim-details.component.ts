@@ -45,6 +45,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     visible: boolean = true;
     deletePartDialog: boolean = false;
     partToBeDeleted: number;
+    currentBidStatus: number;
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }]);
@@ -151,14 +152,13 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     }
 
     viewBid(bid: any) {
-        console.log(bid)
+        this.currentBidStatus = bid.statusId;
         this.currentBid = [];
         this.claimServie.getClaimBidByBidId(bid.bidId).subscribe(res => {
-            console.log(res)
+            //console.log(res)
             this.currentBid = res;
             this.supplierName = this.bidDto[0].supplierName ? bid.supplierName : bid.userFirstName;
             this.bidDetailsDialog = true;
-
         }, err => console.log(err))
     }
 
@@ -167,6 +167,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
             console.log(res)
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
             this.bidDetailsDialog = false;
+            this.getClaimBids();
         }, err => {
             console.log(err)
             this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
@@ -180,6 +181,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
             console.log(res)
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
             this.bidDetailsDialog = false;
+            this.getClaimBids();
         }, err => {
             console.log(err)
             this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });

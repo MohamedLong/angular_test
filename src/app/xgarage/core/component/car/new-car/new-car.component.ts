@@ -52,8 +52,9 @@ export class NewCarComponent implements OnInit {
     });
 
     customerName: string = '';
-    contactNO: number = null;
+    contactNO: string = null;
     excess: string = '';
+    contactNoErr: boolean = true;
     //preparedBy: string = '';
 
     @Input() type: string = 'new car';
@@ -81,6 +82,21 @@ export class NewCarComponent implements OnInit {
                     excessRo: this.excess,
                 }
             })
+            // let reg = /^[279]\d{7}$/;
+            // console.log(reg.test(this.contactNO))
+            // if(reg.test(this.contactNO)) {
+
+            //     this.carForm.patchValue({
+            //         'claimData': {
+            //             customerName: this.customerName,
+            //             contactNo: this.contactNO,
+            //             excessRo: this.excess,
+            //         }
+            //     })
+            // }
+            // else {
+            //     this.contactNoErr = false;
+            // }
         };
 
         this.submitted = true;

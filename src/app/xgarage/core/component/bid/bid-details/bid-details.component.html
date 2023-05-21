@@ -1,6 +1,6 @@
 <div class="card">
     <p-toast></p-toast>
-    <p-table #dt styleClass="p-invoice-datatable-responsive"  (onPage)="loadBids($event)" [rows]="10" [paginator]="true" dataKey="id"
+    <p-table #dt styleClass="p-invoice-datatable-responsive" (onPage)="loadBids($event)" [rows]="10" [paginator]="true" dataKey="id"
         [globalFilterFields]="['jobTitle','client','partNames','jobStatus', 'totalPrice']"
         [loading]="loading" [value]="fillteredBids" responsiveLayout="scroll">
         <ng-template pTemplate="caption" class="pb-0">
@@ -28,7 +28,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-bid>
-            <tr [ngClass]="{'bg-green-50': latestBid == bid.id}">
+            <tr [ngClass]="{'bg-green-50': highlight}">
                 <td class="font-bold">
                     {{bid.jobTitle || bid.claimTitle || '-'}}
                 </td>

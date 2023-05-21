@@ -89,10 +89,12 @@
                 <label class="block">{{ 'common.contactNo' | translate }}</label>
                 <input [(ngModel)]="contactNO" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text"
                     pInputText placeholder="" required />
-                <!-- <p-inputNumber [useGrouping]="false" [(ngModel)]="contactNO" [ngModelOptions]="{standalone: true}" class="width-100 my-2" prefix="+986 " mode="decimal" required>
+                <!-- <p-inputNumber [useGrouping]="false" [(ngModel)]="contactNO" [ngModelOptions]="{standalone: true}" styleClass="width-100 my-2" prefix="+986 " mode="decimal" required>
                 </p-inputNumber> -->
-                <small *ngIf="submitted && !contactNO" class="block p-error mr-auto">{{ 'common.contactNoRequired' |
-                    translate }}</small>
+                <small *ngIf="submitted && !contactNO" class="block p-error mr-auto">
+                    <!-- {{contactNoErr? 'contact number is required' : 'invalid contact number'}} -->
+                    {{ 'common.contactNoRequired' | translate }}
+                </small>
             </div>
             <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
                 <label class="block">{{ 'claim.form.excess' | translate }}</label>
