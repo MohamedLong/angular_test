@@ -103,7 +103,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         }
 
         if (localStorage.getItem('bidView')) {
-            this.activeTab = 1;
+            if(this.role == 1) {
+                this.activeTab = 1;
+            } else {
+                this.activeTab = 2;
+            }
         }
 
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
