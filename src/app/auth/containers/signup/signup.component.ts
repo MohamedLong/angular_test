@@ -112,7 +112,7 @@ export class SignupComponent implements OnInit {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User successfully created, waiting for Approval.' });
                 setTimeout(() => {
                     this.router.navigateByUrl('login')
-                }, 500);
+                }, 1000);
             }, err => {
                 this.messageService.add({ severity: 'error', summary: 'Erorr', detail: err.error.message });
             })

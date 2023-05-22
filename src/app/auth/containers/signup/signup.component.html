@@ -86,7 +86,7 @@
                                 <input type="text" id="newTenantName" pInputText formControlName="newTenantName"
                                     placeholder="{{ 'tenant.tableColumn.name' | translate }}" required>
                             </span>
-                            <small *ngIf="!signupForm.get('newTenantName').valid && signupForm.get('newTenantName').touched && signupForm.get('newTenantName').errors?.['required']" class="p-error block pt-1">{{'tenant.tenantDialog.nameRequired'}}</small>
+                            <small *ngIf="!signupForm.get('newTenantName').valid && signupForm.get('newTenantName').touched && signupForm.get('newTenantName').errors?.['required']" class="p-error block pt-1">{{'tenant.tenantDialog.nameRequired' | translate }}</small>
                         </div>
                         <div class="p-inputgroup mt-3 flex-column align-items-start">
                             <span class="p-input-icon-left width-100">

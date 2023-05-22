@@ -123,9 +123,11 @@
                             <button *ngIf="supplierBids.length > 0" (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
                                 class="p-button-rounded bg-indigo-100 text-indigo-600 border-0 font-light px-5"></button>
                         </div>
-
+                        <div class="pb-3 text-center" *ngIf="supplierBids.length  == 0">
+                            this job has no bids yet.
+                        </div>
                         <p-table [columns]="cols" [rows]="10" [value]="supplierBids"
-                            styleClass="p-invoice-datatable-responsive pb-3" *ngIf="visible" [paginator]="true">
+                            styleClass="p-invoice-datatable-responsive pb-3" *ngIf="visible && supplierBids.length > 0" [paginator]="true">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th>Select</th>
