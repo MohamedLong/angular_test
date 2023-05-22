@@ -41,16 +41,16 @@ export class NewPartComponent implements OnInit {
 
     ngOnInit(): void {
         //console.log(this.actions)
-        if (this.type == 'new part') {
-            this.getPartCategories();
-        } else {
-            //console.log(this.category, this.subcategory)
+        if (this.type == 'claim') {
             this.categories.push(this.category);
             this.subCategories.push(this.subcategory);
             this.selectedCategory = this.category;
             this.selectedSubCategory = this.subcategory;
 
             this.disableList = true;
+        } else {
+            //console.log(this.category, this.subcategory)
+            this.getPartCategories();
         }
     }
 
@@ -86,17 +86,18 @@ export class NewPartComponent implements OnInit {
                 this.parts = res;
                 this.isFetching = false;
             } else {
-                if (this.type == 'new part') {
-                    this.disableList = false;
-                    this.selectedPart = null;
-                    this.isFetching = false;
-                } else {
+                if (this.type == 'claim') {
                     console.log('this is a new part');
                     this.disableList = true;
                     this.updatedPart = {
                         name: this.partName,
                         status: 0
                     };
+                } else {
+                    this.disableList = false;
+                    this.selectedPart = null;
+                    this.isFetching = false;
+
                 }
             }
         }, err => {
@@ -113,7 +114,17 @@ export class NewPartComponent implements OnInit {
     }
 
     onChoosePart(part: Part) {
-        if (this.type == 'new part') {
+        if (this.type == 'claim') {
+            console.log(part)
+            if (part.categoryId == this.category.id) {
+                console.log('this part already exists');
+                this.isAlreadyExists = true;
+                this.updatedPart = part;
+            } else {
+                console.log('this part doesnt exists on this category');
+                this.updatedPart = part;
+            }
+        } else {
             this.selectedPart = part;
             this.selectedCategory = this.categories.find(c => c.id == this.selectedPart.categoryId);
             this.subCategoryService.getSubCategoriesByCategory(this.selectedPart.categoryId).subscribe(res => {
@@ -124,16 +135,6 @@ export class NewPartComponent implements OnInit {
                 this.part.subCategoryId = this.selectedSubCategory.id;
                 this.requestService.part.next(this.part)
             })
-        } else {
-            console.log(part)
-            if (part.categoryId == this.category.id) {
-                console.log('this part already exists');
-                this.isAlreadyExists = true;
-                this.updatedPart = part;
-            } else {
-                console.log('this part doesnt exists on this category');
-                this.updatedPart = part;
-            }
         }
     }
 

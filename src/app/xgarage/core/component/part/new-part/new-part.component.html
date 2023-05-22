@@ -39,7 +39,7 @@
                 inputId="binary"></p-checkbox>
             <label for="binary" class="mb-0 ml-2">{{ 'part.partDialog.setnew' | translate}}</label>
         </div>
-        <div class="field col-12">
+        <div class="field col-12" *ngIf="type == 'claim'">
             <label>Action</label>
             <div class="flex" *ngIf="actions.length > 0">
                 <div *ngFor="let action of actions;" class="field-checkbox mr-3">

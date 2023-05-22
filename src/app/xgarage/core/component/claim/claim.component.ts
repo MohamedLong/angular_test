@@ -33,6 +33,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     active: boolean = true;
     today: string = new Date().toISOString().slice(0, 10);
     pageNo: number = 0;
+    id = JSON.parse(this.authService.getStoredUser()).id;
 
     //get from backend permissions??
     user: string = 'insurance';
@@ -91,7 +92,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         // }
 
         this.claimService.getClaimsByTenant(page).subscribe(res => {
-            console.log(res)
+            console.log(res, page)
             this.masterDtos = res.reverse();
             this.loading = false;
         }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 }))

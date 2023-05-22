@@ -13,10 +13,10 @@
                         [hidden]="false" *ngIf="user == 'insurance'"></button>
                 </ng-template>
 
-                <ng-template pTemplate="right">
+                <!-- <ng-template pTemplate="right">
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload"
                         class="p-button-help mb-2" (click)="dt.exportCSV()" [disabled]="printAuth===false"></button>
-                </ng-template>
+                </ng-template> -->
             </p-toolbar>
 
             <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
@@ -52,7 +52,7 @@
                         <th pSortableColumn="status">{{ 'claim.tableColumn.status' | translate }}<p-sortIcon
                                 field="claimDate"></p-sortIcon>
                         </th>
-                        <th pColumn="actions">{{'common.actions' | translate }}
+                        <th pColumn="actions"  *ngIf="id == 323">{{'common.actions' | translate }}
                         </th>
 
                     </tr>
@@ -84,7 +84,7 @@
                         <td>
                             {{claim.status}}
                         </td>
-                        <td>
+                        <td   *ngIf="id == 323">
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
                                 (click)="edit(claim)" [disabled]="edituth===false || (claim.status == 'Canceled')"></button>
                             <!-- <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"

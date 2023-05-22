@@ -138,7 +138,7 @@
     </div>
 
     <!-- Add New Part Dialog -->
-    <p-dialog header="Header" [(visible)]="addPartDialog" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false"
+    <p-dialog header="Add New Part" [(visible)]="addPartDialog" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false"
         [resizable]="false">
         <app-new-part type="claim" [actions]="actions" [category]="partCategory" *ngIf="addPartDialog" [subcategory]="partSubcategory"></app-new-part>
         <div class="text-center my-2">

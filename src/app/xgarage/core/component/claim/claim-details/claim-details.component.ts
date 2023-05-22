@@ -46,8 +46,10 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     deletePartDialog: boolean = false;
     partToBeDeleted: number;
     currentBidStatus: number;
+    id = JSON.parse(this.authService.getStoredUser()).id;
 
     ngOnInit(): void {
+        console.log(this.id)
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }]);
         localStorage.removeItem('claimSelectedParts');
         this.claimId = JSON.parse(localStorage.getItem('claimId'));
@@ -222,22 +224,22 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.modifiedBids = [];
         this.suppliersBidToCompare.forEach(bid => {
             let i = this.modifiedBids.find(modifieddBid => modifieddBid.part == bid.part.name);
-            if(!i) {
-                this.modifiedBids.push({part: bid.part.name, bids: []});
+            if (!i) {
+                this.modifiedBids.push({ part: bid.part.name, bids: [] });
             }
         })
 
 
         this.modifiedBids.forEach(bid => {
             this.suppliersBidToCompare.forEach(sup => {
-                if(sup.part.name == bid.part) {
+                if (sup.part.name == bid.part) {
                     bid.bids.push(sup)
                 }
             })
         })
 
         // console.log(this.modifiedBids);
-        if(this.modifiedBids.length !== 0 && this.modifiedBids[0].bids.length >= 2) {
+        if (this.modifiedBids.length !== 0 && this.modifiedBids[0].bids.length >= 2) {
             this.displayCompareBids = true;
         } else {
             this.messageService.add({ severity: 'error', summary: 'please select 2 or more bids to comapre' });
@@ -257,7 +259,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     }
 
     onEditClaim() {
-        if(this.details.length !== 0) {
+        if (this.details.length !== 0) {
             localStorage.setItem('claimSelectedParts', JSON.stringify(this.details));
         }
 
@@ -274,9 +276,17 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
             console.log(res);
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Part deleted.', life: 3000 });
             this.onGetClaimParts();
+            this.deletePartDialog = false;
         }, err => {
             console.log(err);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete claim part', life: 3000 })
+            if (err.status == 200) {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Part deleted.', life: 3000 });
+                this.onGetClaimParts();
+                this.deletePartDialog = false;
+            } else {
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete claim part', life: 3000 })
+                this.deletePartDialog = false;
+            }
         })
     }
 

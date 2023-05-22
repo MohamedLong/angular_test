@@ -30,7 +30,8 @@
                                     <p-messages [styleClass]="'car-info'" severity="info">
                                         <ng-template pTemplate>
                                             <p class="mb-0">
-                                                {{car.brandId.brandName}} {{car.carModelId.name}} {{car.carModelYearId.year}} {{car.carModelTypeId.type}};
+                                                {{car.brandId.brandName}} {{car.carModelId.name}}
+                                                {{car.carModelYearId.year}} {{car.carModelTypeId.type}};
                                                 Gear Box: {{car.gearType}};
                                                 {{ 'car.form.chassisNo' | translate }}: {{car.chassisNumber}};
                                                 {{ 'car.form.licencePlate' | translate }}: {{car.plateNumber}}
@@ -66,8 +67,9 @@
                                 </div>
                                 <div class="col-12 md:col-6">
                                     <label class="block mb-2">{{ 'claim.form.datetime' | translate }}</label>
-                                    <p-calendar (onSelect)="onRecievedDateSelect($event)" dataType="string" formControlName="claimDate" appendTo="body"
-                                        dateFormat="yy-mm-dd" [showTime]="true"></p-calendar>
+                                    <p-calendar (onSelect)="onRecievedDateSelect($event)" dataType="string"
+                                        formControlName="claimDate" appendTo="body" dateFormat="yy-mm-dd"
+                                        [showTime]="true"></p-calendar>
                                     <small
                                         *ngIf="submitted && !claimForm.get('claimDate').valid  && claimForm.get('claimDate').errors?.['required']"
                                         class="p-error">{{ 'claim.form.calimDateRequired' | translate }}</small>
@@ -78,7 +80,8 @@
                                 </div> -->
                                 <div class="col-12 md:col-6">
                                     <label class="block mb-2">{{ 'claim.form.delivryDate' | translate }}</label>
-                                    <p-calendar [minDate]="minExcDeliveryDate"  dataType="string" formControlName="excDeliveryDate" appendTo="body"
+                                    <p-calendar [minDate]="minExcDeliveryDate" dataType="string"
+                                        formControlName="excDeliveryDate" appendTo="body"
                                         dateFormat="yy-mm-dd"></p-calendar>
                                     <small
                                         *ngIf="submitted && !claimForm.get('excDeliveryDate').valid  && claimForm.get('excDeliveryDate').errors?.['required']"
@@ -86,6 +89,7 @@
                                 </div>
                                 <div class="col-12 md:col-6">
                                     <label class="block mb-2">{{ 'claim.form.breakdown' | translate }}</label>
+                                    <!-- <input class="width-100 mb-2" type="text" formControlName="breakDown" pInputText /> -->
                                     <p-calendar dataType="string" formControlName="breakDown" appendTo="body"
                                         dateFormat="yy-mm-dd"></p-calendar>
                                     <small
@@ -100,6 +104,7 @@
                                     <label class="block mb-2">{{ 'claim.form.km' | translate }}</label>
                                     <p-calendar dataType="string" formControlName="km" appendTo="body"
                                         dateFormat="yy-mm-dd"></p-calendar>
+                                    <!-- <input class="width-100 mb-2" type="text" formControlName="km" pInputText /> -->
                                     <small
                                         *ngIf="submitted && !claimForm.get('km').valid  && claimForm.get('km').errors?.['required']"
                                         class="p-error">{{ 'claim.form.kmRequired' | translate }}</small>
@@ -120,9 +125,9 @@
                                     class="p-error">Must Select One At Least</small> -->
                                 </div>
                                 <div class="col-12 text-center">
-                                    <button class="width-100 md:w-20rem" pButton pRipple type="submit" label="Create Claim"
-                                        (click)="onCreateCalim()" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}"
-                                        iconPos="right">
+                                    <button class="width-100 md:w-20rem" pButton pRipple type="submit"
+                                        label="Create Claim" (click)="onCreateCalim()"
+                                        icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
                                     </button>
                                 </div>
                             </div>

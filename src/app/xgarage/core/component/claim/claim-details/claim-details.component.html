@@ -42,8 +42,8 @@
                                     <th>{{ 'bid.bidDetails.partName' | translate }}</th>
                                     <th>{{ 'request.tableColumn.partTypes' | translate }}</th>
                                     <th>{{ 'claim.tableColumn.requestFor' | translate }}</th>
-                                    <th>{{ 'common.status' | translate }}</th>
-                                    <th [hidden]="role == 2">
+                                    <!-- <th>{{ 'common.status' | translate }}</th> -->
+                                    <th [hidden]="role == 2"  *ngIf="id == 323">
                                         {{'operations.actions' | translate }}</th>
                                     <!-- <th [hidden]="role == 2">
                                         Bids</th> -->
@@ -66,10 +66,10 @@
                                     <td>
                                         {{part.partOption}}
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         {{getStatus(part.part.status)}}
-                                    </td>
-                                    <td>
+                                    </td> -->
+                                    <td *ngIf="id == 323">
                                         <button pButton pRipple icon="pi pi-times"
                                             class="p-button-rounded p-button-warning mt-2"
                                             [disabled]="(editAuth===false || deleteAuth===false)"
@@ -84,7 +84,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="viewAuth == true" header="{{ 'job.tableColumn.receivedBids' | translate }}">
+                    <p-tabPanel *ngIf="viewAuth == true && id == 323" header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
                             <button [disabled]="bidDto.length == 0" (click)="onCompareBids()" pButton pRipple
                                 type="button" label="Compare Bids"
@@ -132,7 +132,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="newAuth == true" header="{{ 'job.tableColumn.addBids' | translate }}">
+                    <p-tabPanel *ngIf="newAuth == true  && id == 325" header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid type="new claimBid" *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                         <div class="py-5 text-center" *ngIf="!isFetching && details.length == 0">
                             {{ 'claim.tableColumn.claimNotFound' | translate }}
