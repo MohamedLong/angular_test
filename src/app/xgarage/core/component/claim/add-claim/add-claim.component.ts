@@ -5,7 +5,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { InsuranceType } from '../../../model/insurancetype';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Claim } from '../../../model/claim';
 
 @Component({
     selector: 'app-add-claim',
@@ -35,47 +36,61 @@ import { Router } from '@angular/router';
 })
 export class AddClaimComponent implements OnInit {
 
-    constructor(private router: Router, private messageService: MessageService, private authService: AuthService, private breadcrumbService: AppBreadcrumbService, private claimService: ClaimService, private formBuilder: FormBuilder) { }
+    constructor(private router: Router, private route: ActivatedRoute, private messageService: MessageService, private authService: AuthService, private breadcrumbService: AppBreadcrumbService, private claimService: ClaimService, private formBuilder: FormBuilder) { }
 
     activeTab = 'car-info';
 
     car: any;
     ticks: { id: number, name: string }[];
     selectedTicks;
-    insuranceType = Object.keys(InsuranceType);
+
     claimForm: FormGroup = this.formBuilder.group({
-        tenant: [JSON.parse(this.authService.getStoredUser()).tenant.id],
-        insuranceType: ['', Validators.required],
-        claimNo: ['', Validators.required],
-        claimDate: ['', Validators.required],
+        id: [''],
         excDeliveryDate: ['', Validators.required],
-        breakDown: ['', Validators.required],
+        breakDown: [''],
         km: ['', Validators.required],
-        claimTicks: [[]],
-        car: [''],
+        claimDate: [''],
+        claimTicks: [[]]
     });
     saving: boolean = false;
     saved: boolean = false;
+    isBreakdown: boolean = false;
     submitted: boolean = false;
-    minExcDeliveryDate:  Date;
+    minExcDeliveryDate: Date;
+    claim: Claim;
 
     ngOnInit(): void {
         this.onGetJobTicks();
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Add Claim', routerLink: ['add-claim'] }]);
+
+
+        this.route.queryParamMap.subscribe(params => {
+            if (params.has('update')) {
+                if (localStorage.getItem('claim')) {
+                    this.activeTab = 'create-claim';
+                    this.claim = JSON.parse(localStorage.getItem('claim'));
+
+                    this.claimForm.patchValue({
+                        id: this.claim.id,
+                        excDeliveryDate: new Date(this.claim.excDeliveryDate),
+                        breakDown: new Date(this.claim.breakDown),
+                        km: this.claim.km,
+                        claimDate: new Date(this.claim.claimDate),
+                        //to do 28/5
+                        //claimTicks: [[]]
+                    });
+
+                    // check if breakdown is null or not
+                    if(this.claim.breakDown) {
+                        this.isBreakdown = true;
+                    }
+                }
+            }
+        })
     }
 
-    onCarFormEvent(event) {
-        console.log(event);
-        this.car = event;
-
-        for (const key in event.claimData) {
-            this.claimForm.addControl(key, new FormControl(event.claimData[key]));
-        };
-
-        this.claimForm.get('car').setValue({ id: event.id });
-        this.claimForm.addControl('claimTitle', new FormControl(`${event.brandId.brandName} ${event.carModelId.name} ${event.carModelYearId.year},  ${event.carModelTypeId.type}`));
-
-        this.activeTab = 'create-claim';
+    onCheckedChanged(e) {
+        this.isBreakdown = e.checked;
     }
 
     onGetJobTicks() {
@@ -107,7 +122,7 @@ export class AddClaimComponent implements OnInit {
 
     }
 
-    onCreateCalim() {
+    onUpdateCalim() {
 
         this.submitted = true;
 
@@ -120,15 +135,26 @@ export class AddClaimComponent implements OnInit {
 
             this.saving = true;
 
+            this.claimForm.get('id').setValue(this.claim.id);
             let datetime = new Date(this.claimForm.get('claimDate').value).toISOString();
             let updatedClaimForm = this.claimForm.value;
             updatedClaimForm.claimDate = datetime;
 
-            //console.log(updatedClaimForm)
+            let claimBody = {
+                claim: updatedClaimForm,
+                claimPartsDtoList: []
+            }
+            // console.log(updatedClaimForm)
 
-            this.claimService.add(updatedClaimForm).subscribe(res => {
-                //console.log(res)
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Created Succefully. Redirecting To Claim..' });
+            let stringUpdatedClaimBody = JSON.stringify(claimBody);
+            let UpdatedClaimFormData = new FormData();
+
+            UpdatedClaimFormData.append('claimBody', stringUpdatedClaimBody);
+            UpdatedClaimFormData.append('claimDocument', null);
+
+            this.claimService.updateClaim(UpdatedClaimFormData).subscribe(res => {
+                console.log(res)
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully. Redirecting To Claim..' });
                 this.saving = false;
                 this.saved = true;
                 //this.claimForm.reset('');
@@ -153,7 +179,7 @@ export class AddClaimComponent implements OnInit {
 
     onRecievedDateSelect(val: any) {
         this.claimForm.get('excDeliveryDate').setValue('');
-        this.minExcDeliveryDate =  new Date(val);
+        this.minExcDeliveryDate = new Date(val);
         this.minExcDeliveryDate.setDate(this.minExcDeliveryDate.getDate() + 1);
     }
 

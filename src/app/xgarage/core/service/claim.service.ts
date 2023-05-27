@@ -45,7 +45,7 @@ export class ClaimService extends GenericService<Claim>{
     }
 
     updateClaim(claim: any) {
-        return this.http.put<MessageResponse>(config.coreApiUrl + '/claim/updateClaim', claim);
+        return this.http.put<any>(config.coreApiUrl + '/claim/updateClaim', claim);
     }
 
     saveClaimBid(bid: any) {
@@ -66,6 +66,10 @@ export class ClaimService extends GenericService<Claim>{
 
     saveClaimPart(body: {claim: {id: number}, part: Part}) {
         return this.http.post<any>(config.coreApiUrl + '/claimParts/save', body);
+    }
+
+    saveClaim(body) {
+        return this.http.post<any>(config.coreApiUrl + '/claim/saveClaim', body);
     }
 
 }

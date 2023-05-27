@@ -5,8 +5,9 @@
             <div class="wizard-card">
                 <div class="wizard-card-header">
                     <div class="grid col py-3">
+                        <!-- (click)="activeTab = 'car-info'" -->
                         <div class="col-6 tab flex align-items-center justify-content-center car-info-tab"
-                            [ngClass]="{'selected-tab': activeTab == 'car-info'}" (click)="activeTab = 'car-info'">
+                            [ngClass]="{'selected-tab': activeTab == 'car-info'}">
                             <div class="title">{{ 'car.title' | translate }}</div>
                         </div>
                         <!-- (click)="activeTab = 'create-claim'" -->
@@ -17,49 +18,34 @@
                     </div>
                 </div>
                 <div class="wizard-card-content car-info" [ngClass]="{'active-content': activeTab === 'car-info'}">
-                    <app-new-car [type]="'new claim'" (carEvent)="onCarFormEvent($event)"></app-new-car>
+                    <app-new-car [type]="'new claim'"></app-new-car>
                 </div>
                 <div class="wizard-card-content request" [ngClass]="{'active-content': activeTab === 'create-claim'}">
                     <p-blockUI [target]="pnl" [blocked]="saved">
                         <i class="pi pi-spin pi-spinner" style="font-size: 3rem"></i>
                     </p-blockUI>
-                    <p-panel #pnl header="Header" styleClass="mt-4">
+                    <p-panel #pnl header="Update Claim" styleClass="mt-4">
                         <form [formGroup]="claimForm">
                             <div class="grid">
-                                <div class="col-12" *ngIf="car">
+                                <div class="col-12" *ngIf="claim">
                                     <p-messages [styleClass]="'car-info'" severity="info">
                                         <ng-template pTemplate>
                                             <p class="mb-0">
-                                                {{car.brandId.brandName}} {{car.carModelId.name}}
-                                                {{car.carModelYearId.year}} {{car.carModelTypeId.type}};
-                                                Gear Box: {{car.gearType}};
-                                                {{ 'car.form.chassisNo' | translate }}: {{car.chassisNumber}};
-                                                {{ 'car.form.licencePlate' | translate }}: {{car.plateNumber}}
+                                                {{claim.claimTitle}};
+                                                <!-- {{car.brandId.brandName}} {{car.carModelId.name}}
+                                                {{car.carModelYearId.year}} {{car.carModelTypeId.type}}; -->
+                                                Gear Box: {{claim.car.gearType}};
+                                                {{ 'car.form.chassisNo' | translate }}: {{claim.car.chassisNumber}};
+                                                {{ 'car.form.licencePlate' | translate }}: {{claim.car.plateNumber}}
                                             </p>
-                                            <p-button label="Change" styleClass="p-button-sm"
-                                                (click)="activeTab = 'car-info'"></p-button>
+                                            <!-- <p-button label="Change" styleClass="p-button-sm"
+                                                (click)="activeTab = 'car-info'"></p-button> -->
                                         </ng-template>
                                     </p-messages>
+                                    <app-new-claim [claim]="claim"></app-new-claim>
                                 </div>
 
-                                <div class="col-12 md:col-6">
-                                    <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
-                                    <p-dropdown formControlName="insuranceType" [options]="insuranceType"
-                                        placeholder="OD/TP"></p-dropdown>
-                                    <small
-                                        *ngIf="submitted && !claimForm.get('insuranceType').valid  && claimForm.get('insuranceType').errors?.['required']"
-                                        class="p-error">{{ 'job.form.selectInsurance' | translate }}</small>
-                                </div>
-                                <div class="col-12  md:col-6">
-                                    <label class="block">{{ 'job.form.claimNo' | translate }}</label>
-                                    <span class="p-input-icon-right width-100 my-2">
-                                        <input class="width-100" type="text" pInputText formControlName="claimNo"
-                                            placeholder="" required />
-                                    </span>
-                                    <small
-                                        *ngIf="submitted && !claimForm.get('claimNo').valid  && claimForm.get('claimNo').errors?.['required']"
-                                        class="p-error">{{ 'job.form.enterclaimNo' | translate }}</small>
-                                </div>
+
                                 <div class="col-12">
                                     <p-divider align="left">
                                         <b class="bg-bluegray-50">{{ 'bid.form.addMoreDetails' | translate }}</b>
@@ -87,31 +73,35 @@
                                         *ngIf="submitted && !claimForm.get('excDeliveryDate').valid  && claimForm.get('excDeliveryDate').errors?.['required']"
                                         class="p-error">{{ 'claim.form.delivryDateRequired' | translate }}</small>
                                 </div>
-                                <div class="col-12 md:col-6">
-                                    <label class="block mb-2">{{ 'claim.form.breakdown' | translate }}</label>
-                                    <!-- <input class="width-100 mb-2" type="text" formControlName="breakDown" pInputText /> -->
-                                    <p-calendar dataType="string" formControlName="breakDown" appendTo="body"
-                                        dateFormat="yy-mm-dd"></p-calendar>
-                                    <small
-                                        *ngIf="submitted && !claimForm.get('breakDown').valid  && claimForm.get('breakDown').errors?.['required']"
-                                        class="p-error">{{ 'claim.form.breakdownRequired' | translate }}</small>
-                                </div>
                                 <!-- <div class="col-12 md:col-6">
                                     <label class="block mb-2">Type of Job</label>
                                     <input class="width-100 mb-2" type="text" pInputText />
                                 </div> -->
                                 <div class="col-12 md:col-6">
-                                    <label class="block mb-2">{{ 'claim.form.km' | translate }}</label>
-                                    <p-calendar dataType="string" formControlName="km" appendTo="body"
-                                        dateFormat="yy-mm-dd"></p-calendar>
-                                    <!-- <input class="width-100 mb-2" type="text" formControlName="km" pInputText /> -->
+                                    <label class="block mb-3">{{ 'claim.form.km' | translate }}</label>
+                                    <input class="width-100 mb-2" type="number" formControlName="km" pInputText />
                                     <small
                                         *ngIf="submitted && !claimForm.get('km').valid  && claimForm.get('km').errors?.['required']"
                                         class="p-error">{{ 'claim.form.kmRequired' | translate }}</small>
                                 </div>
+                                <div class="col-12 md:col-6 flex flex-column justify-content-center">
+                                    <div class="flex mb-2">
+                                        <p-checkbox styleClass="mr-2" (onChange)="onCheckedChanged($event)"
+                                        [ngModelOptions]="{standalone: true}" [(ngModel)]="isBreakdown" [binary]="true"
+                                        inputId="binary"></p-checkbox>
+                                        <label class="block">{{ 'claim.form.breakdown' | translate }}</label>
+                                    </div>
+                                    <div *ngIf="isBreakdown">
+                                        <p-calendar dataType="string" formControlName="breakDown" appendTo="body"
+                                            dateFormat="yy-mm-dd"></p-calendar>
+                                        <small
+                                            *ngIf="submitted && !claimForm.get('breakDown').valid  && claimForm.get('breakDown').errors?.['required']"
+                                            class="p-error">{{ 'claim.form.breakdownRequired' | translate }}</small>
+                                    </div>
+                                </div>
                                 <div class="col-12">
                                     <p-divider align="left">
-                                        <b class="bg-bluegray-50">{{ 'claim.form.whatYouRecived' | translate }}d</b>
+                                        <b class="bg-bluegray-50">{{ 'claim.form.whatYouRecived' | translate }}</b>
                                     </p-divider>
                                 </div>
                                 <div class="col-12">
@@ -126,14 +116,13 @@
                                 </div>
                                 <div class="col-12 text-center">
                                     <button class="width-100 md:w-20rem" pButton pRipple type="submit"
-                                        label="Create Claim" (click)="onCreateCalim()"
+                                        label="Update Claim" (click)="onUpdateCalim()"
                                         icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
                                     </button>
                                 </div>
                             </div>
                         </form>
                     </p-panel>
-
                 </div>
             </div>
         </div>

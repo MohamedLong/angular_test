@@ -14,7 +14,11 @@
                     (click)="menu.toggle($event)"></button>
             </div>
             <div class="field">
-                <button pButton pRipple label="Edit Claim" class="p-button-success mr-2 mb-3"
+                <button pButton pRipple label="Review & Update Claim" class="p-button-success mr-2 mb-3"
+                    [disabled]="!(master.status.id == 1 && editAuth==true)" [routerLink]="['/add-claim']" [queryParams]="{ update: true}"></button>
+            </div>
+            <div class="field">
+                <button pButton pRipple label="Survey" class="p-button-success mr-2 mb-3"
                     [disabled]="!(master.status.id == 1 && editAuth==true)" (click)="onEditClaim()"></button>
             </div>
         </ng-template>
