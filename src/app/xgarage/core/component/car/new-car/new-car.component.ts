@@ -83,6 +83,7 @@ export class NewCarComponent implements OnInit {
     }
 
     saveNewCar(claimEvent?: any) {
+        //console.log(this.carForm.value)
         this.saving = true;
         let carBody = {
             "brandId": this.carForm.value.brandId.id,
@@ -305,6 +306,7 @@ export class NewCarComponent implements OnInit {
     }
 
     saveClaim(claimBody: any) {
+        //console.log(claimBody, this.carForm.getRawValue())
         claimBody.car = { id: this.carForm.getRawValue().id };
         claimBody.claimTitle = `${this.carForm.getRawValue().brandId.brandName} ${this.carForm.getRawValue().carModelId.name} ${this.carForm.getRawValue().carModelYearId.year}, ${this.carForm.getRawValue().carModelTypeId.type}`;
 
@@ -327,6 +329,6 @@ export class NewCarComponent implements OnInit {
 
     goToClaimDetails(id: number) {
         localStorage.setItem('claimId', JSON.stringify(id));
-        this.router.navigate(['claim-details']);
+        this.router.navigate(['/claim-details']);
     }
 }

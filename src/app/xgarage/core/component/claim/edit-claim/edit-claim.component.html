@@ -11,16 +11,18 @@
             <div class="grid card">
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Inspection By</label>
-                    <input formControlName="inspectedBy" class="width-100 mb-2" type="text" pInputText />
+                    <!-- <input formControlName="inspector" class="width-100 mb-2" type="text" pInputText /> -->
+                    <p-autoComplete formControlName="inspector" [suggestions]="filteredPrinciples" (completeMethod)="filterPrinciples($event)" field="name" (onSelect)="onPrincipleselect($event)"></p-autoComplete>
                     <small
-                        *ngIf="submitted && !updateClaimForm.get('inspectedBy').valid  && updateClaimForm.get('inspectedBy').errors?.['required']"
+                        *ngIf="submitted && !updateClaimForm.get('inspector').valid  && updateClaimForm.get('inspector').errors?.['required']"
                         class="p-error">Inspection By is required</small>
                 </div>
                 <div class="col-12 md:col-6">
                     <label class="block mb-2">Surveyed By</label>
-                    <input formControlName="surveyedBy" class="width-100 mb-2" type="text" pInputText />
+                    <p-autoComplete formControlName="surveyer" [suggestions]="filteredPrinciples" (completeMethod)="filterPrinciples($event)" field="name" (onSelect)="onPrincipleselect($event)"></p-autoComplete>
+                    <!-- <input formControlName="surveyer" class="width-100 mb-2" type="text" pInputText /> -->
                     <small
-                        *ngIf="submitted && !updateClaimForm.get('surveyedBy').valid  && updateClaimForm.get('surveyedBy').errors?.['required']"
+                        *ngIf="submitted && !updateClaimForm.get('surveyer').valid  && updateClaimForm.get('surveyer').errors?.['required']"
                         class="p-error">Surveyed By is required</small>
                 </div>
                 <div class="col-12 md:col-6">
@@ -62,7 +64,7 @@
                         class="p-error">Bid Closing Date is required</small>
                 </div>
                 <div class="col-12 md:col-4">
-                    <app-privacy [selectionList]="assignTypes" label="Assign Type" type="claim" [id]="tenantId"
+                    <app-privacy [selectionList]="assignTypes" label="Assign Type" type="claim" [id]="tenant.tenantType.id"
                         [privacyControl]="updateClaimForm.controls['assignType']"
                         [suppliersControl]="updateClaimForm.controls['assignedGarage']"
                         (enableBidding)="onEnabelBidding($event)"></app-privacy>
@@ -72,7 +74,7 @@
                 </div>
                 <div class="col-12 md:col-4">
                     <app-privacy [selectionList]="privacyList" label="{{ 'job.form.privacy' | translate }}" type="claim"
-                        [id]="tenantId" [privacyControl]="updateClaimForm.controls['privacy']"
+                        [id]="tenant.tenantType.id" [privacyControl]="updateClaimForm.controls['privacy']"
                         [suppliersControl]="updateClaimForm.controls['suppliers']"></app-privacy>
                     <small
                         *ngIf="submitted && !updateClaimForm.get('privacy').valid  && updateClaimForm.get('privacy').errors?.['required']"

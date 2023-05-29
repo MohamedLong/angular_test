@@ -15,11 +15,13 @@
             </div>
             <div class="field">
                 <button pButton pRipple label="Review & Update Claim" class="p-button-success mr-2 mb-3"
-                    [disabled]="!(master.status.id == 1 && editAuth==true)" [routerLink]="['/add-claim']" [queryParams]="{ update: true}"></button>
+                    [disabled]="!((master.status.id == 1 || master.status.id == 13 || master.status.id == 12) && editAuth==true)"
+                    [routerLink]="['/add-claim']" [queryParams]="{ update: true}"></button>
             </div>
             <div class="field">
                 <button pButton pRipple label="Survey" class="p-button-success mr-2 mb-3"
-                    [disabled]="!(master.status.id == 1 && editAuth==true)" (click)="onEditClaim()"></button>
+                    [disabled]="!((master.status.id == 1 || master.status.id == 13 || master.status.id == 12) && editAuth==true)"
+                    (click)="onEditClaim()"></button>
             </div>
         </ng-template>
     </p-toolbar>
@@ -47,7 +49,7 @@
                                     <th>{{ 'request.tableColumn.partTypes' | translate }}</th>
                                     <th>{{ 'claim.tableColumn.requestFor' | translate }}</th>
                                     <!-- <th>{{ 'common.status' | translate }}</th> -->
-                                    <th [hidden]="role == 2"  *ngIf="id == 323">
+                                    <th [hidden]="role == 2" *ngIf="id == 323">
                                         {{'operations.actions' | translate }}</th>
                                     <!-- <th [hidden]="role == 2">
                                         Bids</th> -->
@@ -88,7 +90,8 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="viewAuth == true && id == 323" header="{{ 'job.tableColumn.receivedBids' | translate }}">
+                    <p-tabPanel *ngIf="viewAuth == true && id == 323"
+                        header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
                             <button [disabled]="bidDto.length == 0" (click)="onCompareBids()" pButton pRipple
                                 type="button" label="Compare Bids"
@@ -136,7 +139,8 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="newAuth == true  && id == 325" header="{{ 'job.tableColumn.addBids' | translate }}">
+                    <p-tabPanel *ngIf="newAuth == true  && id == 325"
+                        header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid type="new claimBid" *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                         <div class="py-5 text-center" *ngIf="!isFetching && details.length == 0">
                             {{ 'claim.tableColumn.claimNotFound' | translate }}
@@ -176,13 +180,15 @@
             <div class="grid p-fluid">
                 <div class="col-12 md:col-5">
                     <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
-                        icon="pi pi-check" (click)="approveBidDialog = true" [disabled]="editAuth == false || currentBidStatus > 1"
+                        icon="pi pi-check" (click)="approveBidDialog = true"
+                        [disabled]="editAuth == false || currentBidStatus > 1"
                         class="p-button-success mr-2 mb-3"></button>
                 </div>
 
                 <div class="col-12 md:col-5">
                     <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
-                        icon="pi pi-times" (click)="rejectBidDialog = true" [disabled]="editAuth ==false  || currentBidStatus > 2"
+                        icon="pi pi-times" (click)="rejectBidDialog = true"
+                        [disabled]="editAuth ==false  || currentBidStatus > 2"
                         class="p-button-danger mr-2 mb-3"></button>
                 </div>
 
@@ -430,6 +436,7 @@
     <ng-template pTemplate="footer">
         <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
             (click)="deletePartDialog = false"></button>
-        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeletePart()"></button>
+        <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+            (click)="confirmDeletePart()"></button>
     </ng-template>
 </p-dialog>

@@ -8,7 +8,9 @@ import { AssignType } from '../../../../common/model/assigntype';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { RequestService } from '../../../service/request.service';
+import { PrincipleService } from '../../../service/principle.service'
 import { PartService } from '../../../service/part.service';
+import { StatusService } from 'src/app/xgarage/common/service/status.service';
 
 @Component({
     selector: 'app-edit-claim',
@@ -17,7 +19,10 @@ import { PartService } from '../../../service/part.service';
 })
 export class EditClaimComponent implements OnInit {
 
-    constructor(private partservice: PartService, private requestService: RequestService, private router: Router, private messageService: MessageService, private authService: AuthService, private breadcrumbService: AppBreadcrumbService, private formBuilder: FormBuilder, private claimServie: ClaimService) { }
+    constructor(private partservice: PartService, private requestService: RequestService, private router: Router,
+        private messageService: MessageService, private authService: AuthService, private breadcrumbService: AppBreadcrumbService,
+        private formBuilder: FormBuilder, private claimServie: ClaimService,
+        private principleService: PrincipleService, private statusService: StatusService) { }
     partsList: any[] = [];
     parts: any[] = [];
     selectedParts = [];
@@ -32,11 +37,11 @@ export class EditClaimComponent implements OnInit {
     claimId: any = '';
     claim: any;
     loading: boolean = true;
-    tenantId: number = JSON.parse(this.authService.getStoredUser()).tenant.id;
+    tenant: any = JSON.parse(this.authService.getStoredUser()).tenant;
     updateClaimForm: FormGroup = this.formBuilder.group({
         id: [''],
-        inspectedBy: ['', Validators.required],
-        surveyedBy: ['', Validators.required],
+        inspector: ['', Validators.required],
+        surveyer: ['', Validators.required],
         repairCost: [0, Validators.required],
         repairHrs: [0, Validators.required],
         officeLocation: ['', Validators.required],
@@ -59,6 +64,8 @@ export class EditClaimComponent implements OnInit {
     partName: string = '';
     partCategory: any;
     partSubcategory: any;
+    principles: any[];
+    filteredPrinciples: any[];
 
     ngOnInit(): void {
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }, { 'label': 'Edit Claim', routerLink: ['edit-claim'] }]);
@@ -68,16 +75,19 @@ export class EditClaimComponent implements OnInit {
             this.label = 'Update Claim';
         };
 
+        //get all principles
+        this.onGetPrinciples();
+
         //get claim date & add one day to it
         this.claimDate = new Date(this.claim.claimDate);
         this.claimDate.setDate(this.claimDate.getDate() + 1);
 
         this.onGetClaimPartList();
 
-        //set claim fields on edit??
+        //set claim fields on edit
         this.updateClaimForm.patchValue({
-            inspectedBy: this.claim.inspectedBy,
-            surveyedBy: this.claim.surveyedBy,
+            inspector: this.claim.inspector,
+            surveyer: this.claim.surveyer,
             repairCost: this.claim.repairCost ? this.claim.repairCost : 0,
             repairHrs: this.claim.repairHrs ? this.claim.repairHrs : 0,
             officeLocation: this.claim.officeLocation,
@@ -88,7 +98,11 @@ export class EditClaimComponent implements OnInit {
             privacy: this.claim.privacy,
             suppliers: this.claim.suppliers,
             notes: this.claim.notes,
-        })
+        });
+
+        if(this.updateClaimForm.get('privacy').value == 'Public') {
+            this.updateClaimForm.get('privacy').disable();
+        }
     }
 
     onAction(action: string, part: any) {
@@ -162,7 +176,7 @@ export class EditClaimComponent implements OnInit {
                     })
                 });
 
-                console.log(this.partsList)
+                //console.log(this.partsList)
 
             }, err => {
                 console.log(err);
@@ -189,6 +203,27 @@ export class EditClaimComponent implements OnInit {
             this.saving = true;
 
             console.log('form is valid');
+
+            //check if entered inpector is new
+            if (!this.updateClaimForm.get('inspector').value.id) {
+                this.updateClaimForm.get('inspector').setValue({
+                    role: "Inspector",
+                    name: this.updateClaimForm.get('inspector').value,
+                    tenant: this.tenant.id,
+                    deleted: false
+                })
+            }
+
+            //check if entered surveyor is new
+            if (!this.updateClaimForm.get('surveyer').value.id) {
+                this.updateClaimForm.get('surveyer').setValue({
+                    role: "Surveyer",
+                    name: this.updateClaimForm.get('surveyer').value,
+                    tenant: this.tenant.id,
+                    deleted: false
+                })
+            }
+
             //console.log(this.updateClaimForm.value);
             this.updateClaimForm.get('id').setValue(this.claim.id);
             for (const claimKey in this.claim) {
@@ -199,17 +234,37 @@ export class EditClaimComponent implements OnInit {
                 }
             };
 
+            delete this.claim.updatedAt;
+            delete this.claim.createdAt;
+
+            if(this.claim.suppliers.length > 0) {
+                this.claim.suppliers.forEach((sup, i) => {
+                    this.claim.suppliers[i] = {id: sup.id}
+                })
+            };
+
+            this.claim.status = this.statusService.statuses.find(status => {return status.id == 12});
+
+
+            //console.log(this.claim)
+
             let claimBody = {
                 claim: this.claim,
                 claimPartsDtoList: this.selectedParts
             }
 
+            let stringUpdatedClaimBody = JSON.stringify(claimBody);
+            let UpdatedClaimFormData = new FormData();
+
+            UpdatedClaimFormData.append('claimBody', stringUpdatedClaimBody);
+            UpdatedClaimFormData.append('claimDocument', null);
+
             //console.log(claimBody);
 
-            this.claimServie.updateClaim(claimBody).subscribe(res => {
+            this.claimServie.updateClaim(UpdatedClaimFormData).subscribe(res => {
                 //console.log(res);
                 this.saving = false;
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully' });
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully. Redirecting To Claim..', life: 2000 });
                 setTimeout(() => {
                     this.router.navigate(['claim-details']);
                 }, 1000);
@@ -220,6 +275,7 @@ export class EditClaimComponent implements OnInit {
                 this.saving = false;
                 this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'failed to update claim, please try again.' });
             });
+
             // else {
             //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'You must select at least one part.' });
             //     this.getYPosition();
@@ -338,5 +394,32 @@ export class EditClaimComponent implements OnInit {
 
     getYPosition() {
         this.partList.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    onGetPrinciples() {
+        this.principleService.getForTenant().subscribe(res => {
+            //console.log(res);
+            this.principles = res;
+        }, err => {
+            console.log(err);
+        })
+    }
+
+    filterPrinciples(event) {
+        let filtered: any[] = [];
+        let query = event.query;
+
+        for (let i = 0; i < this.principles.length; i++) {
+            let country = this.principles[i];
+            if (country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+                filtered.push(country);
+            }
+        }
+
+        this.filteredPrinciples = filtered;
+    }
+
+    onPrincipleselect(value) {
+        console.log(value)
     }
 }

@@ -27,11 +27,17 @@ export class PrivacyComponent implements OnInit {
     multipleSelect: boolean;
 
     ngOnInit(): void {
-        // console.log(this.type)
+        // if(typeof this.suppliersControl.value == 'number') {
+        //     console.log(this.suppliersControl.value)
+        //     if(this.suppliersControl.value > 0) {
+
+        //     }
+        // }
+
     }
 
     onSelectChange(value: string) {
-        //console.log(value)
+        console.log('select changed')
         this.privateSuppliersList = [];
         this.suppliersControl.reset(this.suppliersControl.value);
 
@@ -44,6 +50,7 @@ export class PrivacyComponent implements OnInit {
                 this.privacyControl.setValue('Private');
                 this.multipleSelect = true;
             } else {
+                this.privateSuppliersList = [];
                 this.multipleSelect = false
             };
         } else {
@@ -68,7 +75,6 @@ export class PrivacyComponent implements OnInit {
         console.log(value)
         if (value.length > 0 && this.multipleSelect) {
             this.supplierSelected = true;
-
         } else if (value.length > 0 && !this.multipleSelect) {
             this.suppliersControl.setValue(value[0].id);
             //console.log(this.suppliersControl)

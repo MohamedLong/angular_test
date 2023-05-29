@@ -9,4 +9,6 @@ export class StatusService extends GenericService<Status> {
     constructor(http: HttpClient){
         super(http, config.coreApiUrl + '/status');
     }
+
+    statuses: Status[];
 }

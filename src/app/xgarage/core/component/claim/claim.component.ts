@@ -10,6 +10,7 @@ import { ClaimService } from '../../service/claim.service';
 import { Tenant } from 'src/app/xgarage/common/model/tenant';
 import { Status } from 'src/app/xgarage/common/model/status';
 import { TenantService } from 'src/app/xgarage/common/service/tenant.service';
+import { StatusService } from 'src/app/xgarage/common/service/status.service';
 
 @Component({
     selector: 'app-claim',
@@ -22,7 +23,8 @@ export class ClaimComponent extends GenericComponent implements OnInit {
 
     constructor(public route: ActivatedRoute, private router: Router, private authService: AuthService, private tenantService: TenantService,
         private claimService: ClaimService,
-        public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
+        public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService,
+        private statusService: StatusService) {
         super(route, datePipe, breadcrumbService);
     }
 
@@ -34,6 +36,9 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     today: string = new Date().toISOString().slice(0, 10);
     pageNo: number = 0;
     id = JSON.parse(this.authService.getStoredUser()).id;
+    status: string[] = ["All", "Open", "Waiting for Survey", "Confirmed"];
+    selectedState = 'All';
+    fillteredMaster: any = [];
 
     //get from backend permissions??
     user: string = 'insurance';
@@ -43,11 +48,13 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         this.getAllTenants();
         super.callInsideOnInit();
 
-        if(localStorage.getItem('claimId')) {
+        if (localStorage.getItem('claimId')) {
             localStorage.removeItem('claimId');
         }
 
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }]);
+
+        this.getAllStatuses();
     }
 
     getAllTenants() {
@@ -94,6 +101,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         this.claimService.getClaimsByTenant(page).subscribe(res => {
             console.log(res, page)
             this.masterDtos = res.reverse();
+            this.fillteredMaster = this.masterDtos;
             this.loading = false;
         }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 }))
 
@@ -201,6 +209,25 @@ export class ClaimComponent extends GenericComponent implements OnInit {
                 this.pageNo++;
                 this.onGetClaimsByTenant(this.pageNo);
             }
+        }
+    }
+
+    getAllStatuses() {
+        this.statusService.getAll().subscribe(res => {
+            this.statusService.statuses = res;
+            // console.log(this.statusService.statuses)
+        }, err => {
+            console.log(err)
+        })
+    }
+
+    filterByStatus(state: any) {
+        console.log('state: ', state);
+        this.selectedState = state;
+        if (state == 'All') {
+            this.fillteredMaster = this.masterDtos;
+        } else {
+            this.fillteredMaster = this.masterDtos.filter(master => master.status == state);
         }
     }
 

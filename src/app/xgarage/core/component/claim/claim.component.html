@@ -19,11 +19,12 @@
                 </ng-template> -->
             </p-toolbar>
 
-            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="fillteredMaster" [columns]="cols" [rows]="10" [paginator]="true"
                 [globalFilterFields]="['id','claimNo','tenantName','createdUser','status']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
                 (onFilter)="onFilter($event, dt)" [showCurrentPageReport]="true"  (onPage)="loadClaims($event)">
+
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between table-header">
                         <h5 class="m-0">{{ 'claim.title' | translate }}</h5>
@@ -32,6 +33,14 @@
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
                                 placeholder="{{ 'operations.filter' | translate }}" />
                         </span>
+                    </div>
+                    <div class="mt-3 border-300 border-bottom-1">
+                        <ng-container *ngFor="let state of status">
+                            <button (click)="filterByStatus(state)" pButton pRipple type="button"
+                                label="{{state}}"
+                                [ngClass]="{'active': selectedState == state, 'text-black-alpha-40': selectedState !== state}"
+                                class="mr-3 p-button-text"></button>
+                        </ng-container>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -82,7 +91,7 @@
                             {{claim.statusDate | date:'longDate'}}
                         </td>
                         <td>
-                            {{claim.status}}
+                            <p-badge value="{{claim.status}}" severity="{{claim.status == 'Open'? 'info' : claim.status == 'Waiting for Survey'? 'warning' : claim.status == 'Confirmed'? 'success': 'danger'}}"></p-badge>
                         </td>
                         <td   *ngIf="id == 323">
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"

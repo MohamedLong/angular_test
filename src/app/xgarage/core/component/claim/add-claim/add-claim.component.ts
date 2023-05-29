@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { ClaimService } from '../../../service/claim.service';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { InsuranceType } from '../../../model/insurancetype';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Claim } from '../../../model/claim';
+import { StatusService } from 'src/app/xgarage/common/service/status.service';
 
 @Component({
     selector: 'app-add-claim',
@@ -36,7 +36,12 @@ import { Claim } from '../../../model/claim';
 })
 export class AddClaimComponent implements OnInit {
 
-    constructor(private router: Router, private route: ActivatedRoute, private messageService: MessageService, private authService: AuthService, private breadcrumbService: AppBreadcrumbService, private claimService: ClaimService, private formBuilder: FormBuilder) { }
+    constructor(private router: Router, private route: ActivatedRoute,
+        private messageService: MessageService,
+        private breadcrumbService: AppBreadcrumbService,
+        private claimService: ClaimService,
+        private formBuilder: FormBuilder,
+        private statusService: StatusService) { }
 
     activeTab = 'car-info';
 
@@ -61,7 +66,7 @@ export class AddClaimComponent implements OnInit {
 
     ngOnInit(): void {
         this.onGetJobTicks();
-        this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Add Claim', routerLink: ['add-claim'] }]);
+        this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }, { 'label': 'Add Claim', routerLink: ['add-claim'] }]);
 
 
         this.route.queryParamMap.subscribe(params => {
@@ -72,10 +77,10 @@ export class AddClaimComponent implements OnInit {
 
                     this.claimForm.patchValue({
                         id: this.claim.id,
-                        excDeliveryDate: new Date(this.claim.excDeliveryDate),
-                        breakDown: new Date(this.claim.breakDown),
+                        excDeliveryDate: this.claim.excDeliveryDate? new Date(this.claim.excDeliveryDate) : '',
+                        breakDown: this.claim.breakDown? new Date(this.claim.breakDown) : '',
                         km: this.claim.km,
-                        claimDate: new Date(this.claim.claimDate),
+                        claimDate: this.claim.claimDate? new Date(this.claim.claimDate) : '',
                         //to do 28/5
                         //claimTicks: [[]]
                     });
@@ -139,12 +144,14 @@ export class AddClaimComponent implements OnInit {
             let datetime = new Date(this.claimForm.get('claimDate').value).toISOString();
             let updatedClaimForm = this.claimForm.value;
             updatedClaimForm.claimDate = datetime;
+            updatedClaimForm.status = this.statusService.statuses.find(status => {return status.id == 13});
 
             let claimBody = {
                 claim: updatedClaimForm,
                 claimPartsDtoList: []
             }
-            // console.log(updatedClaimForm)
+
+            //console.log(updatedClaimForm)
 
             let stringUpdatedClaimBody = JSON.stringify(claimBody);
             let UpdatedClaimFormData = new FormData();
@@ -154,7 +161,7 @@ export class AddClaimComponent implements OnInit {
 
             this.claimService.updateClaim(UpdatedClaimFormData).subscribe(res => {
                 console.log(res)
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully. Redirecting To Claim..' });
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully. Redirecting To Claim..', life: 2000 });
                 this.saving = false;
                 this.saved = true;
                 //this.claimForm.reset('');
