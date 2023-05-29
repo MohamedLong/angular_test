@@ -36,7 +36,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     today: string = new Date().toISOString().slice(0, 10);
     pageNo: number = 0;
     id = JSON.parse(this.authService.getStoredUser()).id;
-    status: string[] = ["All", "Open", "Waiting for Survey", "Confirmed"];
+    status: string[] = ["All"];
     selectedState = 'All';
     fillteredMaster: any = [];
 
@@ -102,6 +102,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
             console.log(res, page)
             this.masterDtos = res.reverse();
             this.fillteredMaster = this.masterDtos;
+            this.setStatusNames(this.masterDtos);
             this.loading = false;
         }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 }))
 
@@ -228,6 +229,22 @@ export class ClaimComponent extends GenericComponent implements OnInit {
             this.fillteredMaster = this.masterDtos;
         } else {
             this.fillteredMaster = this.masterDtos.filter(master => master.status == state);
+        }
+    }
+
+    setStatusNames(arr) {
+        let names = [];
+
+        arr.forEach(element => {
+            names.push(element.status);
+        });
+
+        if (names.length > 0) {
+            names.forEach((name, index) => {
+                if (!this.status.includes(name)) {
+                    this.status.push(name);
+                }
+            });
         }
     }
 
