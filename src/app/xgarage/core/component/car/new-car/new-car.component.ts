@@ -119,7 +119,7 @@ export class NewCarComponent implements OnInit {
             }
 
         }, err => {
-            this.messageService.add({ severity: 'erorr', summary: 'Error', detail: 'Erorr Saving Car' });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error Saving Car' });
         })
     }
 
@@ -290,8 +290,6 @@ export class NewCarComponent implements OnInit {
         console.log('create form submitted', event);
         if (this.carForm.valid) {
             if (this.found && this.type == 'new claim') {
-                // event.car = { id: this.carForm.getRawValue().id };
-                // event.claimTitle = `${this.carForm.getRawValue().brandId.brandName} ${this.carForm.getRawValue().carModelId.name} ${this.carForm.getRawValue().carModelYearId.year}, ${this.carForm.getRawValue().carModelTypeId.type}`;
                 //save claim
                 this.saveClaim(event);
             } else {
@@ -299,22 +297,22 @@ export class NewCarComponent implements OnInit {
                 this.saveNewCar(event);
             }
         } else {
-            this.messageService.add({ severity: 'erorr', summary: 'Error', detail: 'Please select or add a new car.' });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select or add a new car.' });
             console.log('car is not valid')
         }
 
     }
 
     saveClaim(claimBody: any) {
-        //console.log(claimBody, this.carForm.getRawValue())
-        claimBody.car = { id: this.carForm.getRawValue().id };
-        claimBody.claimTitle = `${this.carForm.getRawValue().brandId.brandName} ${this.carForm.getRawValue().carModelId.name} ${this.carForm.getRawValue().carModelYearId.year}, ${this.carForm.getRawValue().carModelTypeId.type}`;
+        console.log(claimBody, this.carForm.getRawValue())
+        claimBody.form.car = { id: this.carForm.getRawValue().id };
+        claimBody.form.claimTitle = `${this.carForm.getRawValue().brandId.brandName} ${this.carForm.getRawValue().carModelId.name} ${this.carForm.getRawValue().carModelYearId.year}, ${this.carForm.getRawValue().carModelTypeId.type}`;
 
-        let stringClaimBody = JSON.stringify(claimBody);
+        let stringClaimBody = JSON.stringify(claimBody.form);
         let claimFormData = new FormData();
 
         claimFormData.append('claimBody', stringClaimBody);
-        claimFormData.append('claimDocument', null);
+        claimFormData.append('claimDocument', claimBody.carsheet ? claimBody.carsheet : null);
         claimFormData.append('carDocument', null);
 
         this.claimService.saveClaim(claimFormData).subscribe(res => {

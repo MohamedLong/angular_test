@@ -11,4 +11,6 @@ export interface Claim extends MasterEntity{
     excDeliveryDate?: string;
     breakDown?: string;
     km?: number;
+    documents?: any[];
+    claimTicks?: any[];
 }

@@ -53,8 +53,6 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         }
 
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }]);
-
-        this.getAllStatuses();
     }
 
     getAllTenants() {
@@ -213,14 +211,6 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         }
     }
 
-    getAllStatuses() {
-        this.statusService.getAll().subscribe(res => {
-            this.statusService.statuses = res;
-            // console.log(this.statusService.statuses)
-        }, err => {
-            console.log(err)
-        })
-    }
 
     filterByStatus(state: any) {
         console.log('state: ', state);

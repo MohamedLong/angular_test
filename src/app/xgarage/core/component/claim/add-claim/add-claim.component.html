@@ -87,8 +87,8 @@
                                 <div class="col-12 md:col-6 flex flex-column justify-content-center">
                                     <div class="flex mb-2">
                                         <p-checkbox styleClass="mr-2" (onChange)="onCheckedChanged($event)"
-                                        [ngModelOptions]="{standalone: true}" [(ngModel)]="isBreakdown" [binary]="true"
-                                        inputId="binary"></p-checkbox>
+                                            [ngModelOptions]="{standalone: true}" [(ngModel)]="isBreakdown"
+                                            [binary]="true" inputId="binary"></p-checkbox>
                                         <label class="block">{{ 'claim.form.breakdown' | translate }}</label>
                                     </div>
                                     <div *ngIf="isBreakdown">
@@ -104,9 +104,10 @@
                                         <b class="bg-bluegray-50">{{ 'claim.form.whatYouRecived' | translate }}</b>
                                     </p-divider>
                                 </div>
-                                <div class="col-12">
+                                <div class="col-12 md:col-6">
                                     <div *ngFor="let tick of ticks; let i = index;" class="field-checkbox">
-                                        <p-checkbox name="group" [binary]="true" [value]="tick"
+                                        <p-checkbox name="group" [value]="tick" [(ngModel)]="selectedTicks"
+                                        [ngModelOptions]="{standalone: true}"
                                             (onChange)="onTicksChange(tick, $event)" [inputId]="tick.id"></p-checkbox>
                                         <label [for]="tick.id">{{ tick.name }}</label>
                                     </div>
@@ -114,9 +115,18 @@
                                     *ngIf="submitted && !claimForm.get('claimTicks').valid  && claimForm.get('claimTicks').errors?.['required']"
                                     class="p-error">Must Select One At Least</small> -->
                                 </div>
+                                <div class="col-12 md:col-6 text-center">
+                                    <p-button [disabled]="undo" icon="pi pi-undo"
+                                        styleClass="p-button-rounded p-button-secondary p-button-outlined"
+                                        (click)="undoMousePos($event)"></p-button>
+                                    <div class="mx-auto relative" style="max-width: 350px" #secondCar
+                                        (click)="printMousePos($event)">
+                                        <img class="width-100" [src]="carImageSrc" alt="">
+                                    </div>
+                                </div>
                                 <div class="col-12 text-center">
                                     <button class="width-100 md:w-20rem" pButton pRipple type="submit"
-                                        label="Update Claim" (click)="onUpdateCalim()"
+                                        label="Update Claim" (click)="convertToImage()"
                                         icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
                                     </button>
                                 </div>

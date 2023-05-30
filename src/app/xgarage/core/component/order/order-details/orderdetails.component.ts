@@ -121,9 +121,11 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                     var width = doc.internal.pageSize.getWidth();
                     var height = doc.internal.pageSize.getHeight();
 
-                    //download pdf
+
                     doc.addImage(newImage, 'PNG', 10, 10, width, height);
                     filename = 'order _' + '.pdf';
+
+                    //download pdf
                     //doc.save(filename);
 
                     //send pdf to the server

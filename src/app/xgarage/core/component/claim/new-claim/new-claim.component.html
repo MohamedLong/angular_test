@@ -10,38 +10,54 @@
             <span class="p-input-icon-right width-100 my-2">
                 <input class="width-100" type="text" pInputText formControlName="claimNo" placeholder="" required />
             </span>
-            <small *ngIf="submitted && !newClaimForm.get('claimNo').valid  && newClaimForm.get('claimNo').errors?.['required']" class="p-error">{{ 'job.form.enterclaimNo' | translate }}</small>
+            <small
+                *ngIf="submitted && !newClaimForm.get('claimNo').valid  && newClaimForm.get('claimNo').errors?.['required']"
+                class="p-error">{{ 'job.form.enterclaimNo' | translate }}</small>
         </div>
         <div class="col-12 md:col-6">
             <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
             <p-dropdown formControlName="insuranceType" [options]="insuranceType" placeholder="OD/TP"></p-dropdown>
-            <small *ngIf="submitted && !newClaimForm.get('insuranceType').valid  && newClaimForm.get('insuranceType').errors?.['required']" class="p-error" class="p-error">{{ 'job.form.selectInsurance' | translate}}</small>
+            <small
+                *ngIf="submitted && !newClaimForm.get('insuranceType').valid  && newClaimForm.get('insuranceType').errors?.['required']"
+                class="p-error" class="p-error">{{ 'job.form.selectInsurance' | translate}}</small>
         </div>
         <div class="col-12 md:col-6">
             <label class="block">{{ 'claim.form.excess' | translate }}</label>
-            <input formControlName="excessRo" class="width-100 my-2" type="text"
-                pInputText placeholder="" required />
-            <small *ngIf="submitted && !newClaimForm.get('excessRo').valid  && newClaimForm.get('excessRo').errors?.['required']" class="block p-error mr-auto">{{ 'claim.form.excessRequired' |
+            <input formControlName="excessRo" class="width-100 my-2" type="text" pInputText placeholder="" required />
+            <small
+                *ngIf="submitted && !newClaimForm.get('excessRo').valid  && newClaimForm.get('excessRo').errors?.['required']"
+                class="block p-error mr-auto">{{ 'claim.form.excessRequired' |
                 translate }}</small>
         </div>
         <div class="col-12 md:col-6">
             <label class="block">{{ 'common.customer' | translate }}</label>
-            <input formControlName="customerName" class="width-100 my-2" type="text"
-                pInputText placeholder="" required />
-            <small *ngIf="submitted && !newClaimForm.get('customerName').valid  && newClaimForm.get('customerName').errors?.['required']" class="block p-error mr-auto">{{ 'common.customerRequired' |
+            <input formControlName="customerName" class="width-100 my-2" type="text" pInputText placeholder=""
+                required />
+            <small
+                *ngIf="submitted && !newClaimForm.get('customerName').valid  && newClaimForm.get('customerName').errors?.['required']"
+                class="block p-error mr-auto">{{ 'common.customerRequired' |
                 translate }}</small>
         </div>
         <div class="col-12 md:col-6">
             <label class="block">{{ 'common.contactNo' | translate }}</label>
-            <input formControlName="contactNo" class="width-100 my-2" type="text"
-                pInputText placeholder="" required />
+            <input formControlName="contactNo" class="width-100 my-2" type="text" pInputText placeholder="" required />
             <!-- <p-inputNumber [useGrouping]="false" formControlName="contactNO" styleClass="width-100 my-2" prefix="+986 " mode="decimal" required>
             </p-inputNumber> -->
-            <small *ngIf="submitted && !newClaimForm.get('contactNo').valid  && newClaimForm.get('contactNo').errors?.['required']" class="block p-error mr-auto">
+            <small
+                *ngIf="submitted && !newClaimForm.get('contactNo').valid  && newClaimForm.get('contactNo').errors?.['required']"
+                class="block p-error mr-auto">
                 <!-- {{contactNoErr? 'contact number is required' : 'invalid contact number'}} -->
                 {{ 'common.contactNoRequired' | translate }}
             </small>
         </div>
+        <div class="col-12 text-center bg-white rounded">
+            <p-button  *ngIf="!claim" [disabled]="undo" icon="pi pi-undo" styleClass="p-button-rounded p-button-secondary p-button-outlined" (click)="undoMousePos($event)"></p-button>
+            <div class="mx-auto relative" style="max-width: 350px" #car (click)="!claim && printMousePos($event)">
+                <img class="width-100" [src]="carImageSrc"   alt="">
+            </div>
+        </div>
+        <!-- <button class="width-100 md:w-20rem" pButton pRipple type="button" label="Create image" (click)="convertToImage()">
+            </button> -->
 
         <!-- <div class="col-12 md:col-6">
             <label class="block">Prepared By</label>
@@ -49,9 +65,8 @@
                 placeholder="" required />
         </div> -->
         <div class="col-12 text-center" *ngIf="!claim">
-            <button class="width-100 md:w-20rem" pButton pRipple type="submit"
-                label="Create Claim" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}"
-                iconPos="right">
+            <button class="width-100 md:w-20rem" pButton pRipple type="submit" label="Create Claim"
+                icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
             </button>
         </div>
     </div>
