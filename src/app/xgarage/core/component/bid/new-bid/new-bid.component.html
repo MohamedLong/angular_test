@@ -40,7 +40,7 @@
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved || checked}">
             <td (click)="showModal(part)" style="cursor: pointer; border-right: 1px solid #dee2e6;">
                 <span>
-                    {{type == 'new bid' || 'new claimBid'? part.part.name : part.partName}}
+                    {{type == 'new bid' || type == 'new claimBid'? part.part.name : part.partName}}
                 </span>
                 <i *ngIf="type == 'new bid' || type == 'job bid'" class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
             </td>
@@ -171,7 +171,7 @@
                         {{part.servicePrice}}
                     </ng-template>
                 </p-cellEditor>
-            
+
             </td>
             <td>
                 <p-cellEditor>
@@ -266,7 +266,7 @@
             <td><input pInputText type="text" [(ngModel)]="totalBidsPrices" value="{{totalBidsPrices | number}}" [style]="{'width':'100%'}"  [disabled]="!checked"></td>
             <td></td>
         </tr>
-        
+
     </ng-template>
 
     <ng-template pTemplate="summary" *ngIf="type == 'new bid'">

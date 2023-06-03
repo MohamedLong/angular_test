@@ -39,14 +39,15 @@
                     {{bid.partNames}}
                 </td>
                 <td>
-                    {{user == 'ins'? bid.status : bid.jobStatus}}
+                    {{user == 1? bid.status : bid.jobStatus}}
                 </td>
                 <td>
                     {{!bid.totalPrice?  0 : bid.totalPrice | number }}
                 </td>
                 <td>
-                    <button *ngIf="bid.part !== null" (click)="onBidView(user !== 'ins'? bid.id : bid.bidId)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
+                    <button (click)="onBidView(bid)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
                 </td>
+                <!-- {{bid | json}} -->
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
@@ -59,5 +60,32 @@
 
 <p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag" [header]="bidDetails[0]?.requestTitle" [(visible)]="displayModal" [modal]="true" [style]="{width: '90vw'}"
     [draggable]="false" [resizable]="false">
-    <app-new-bid *ngIf="bidDetails.length > 0" [requests]="bidDetails" [type]="'claim bid'"></app-new-bid>
+    <app-new-bid *ngIf="bidDetails.length > 0 && displayModal" [requests]="bidDetails" [type]="typeOfBid"></app-new-bid>
 </p-dialog>
+<p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag" [header]="bidDetails[0]?.requestTitle" [(visible)]="displaylumpsumModal" [modal]="true" [style]="{width: 'auto'}"
+    [draggable]="false" [resizable]="false">
+    <p-table #dt styleClass="p-invoice-datatable-responsive" dataKey="id" [value]="bidDetails" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>{{ 'job.tableColumn.parts' | translate }}</th>
+                <th>{{ 'bid.bidDetails.totalPrice' | translate }}</th>
+                <th>{{ 'operations.action' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-biddetail>
+            <tr [ngClass]="{'bg-green-50': highlight}">
+                <td class="font-bold">
+                    {{biddetail.partName}}
+                </td>
+                <td>
+                    {{biddetail.price}}
+                </td>
+
+                <td>
+                    <button (click)="confirmCancel(biddetail.id)" pButton pRipple type="button" label="Cancel Bid" class="p-button-warning"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<p-confirmDialog></p-confirmDialog>

@@ -65,7 +65,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     bid: Bid;
 
     ngOnInit(): void {
-        //console.log(this.type)
+        console.log(this.type)
         if (this.type == 'new bid') {
             //console.log(this.requests)
             this.requests = this.requests.filter(req => req.status.id !== StatusConstants.CANCELED_STATUS && req.status.id !== StatusConstants.COMPLETED_STATUS);
@@ -406,8 +406,8 @@ export class NewBidComponent implements OnInit, OnChanges {
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
                     this.router.navigateByUrl('/bids');
                 }
-                
-                
+
+
             }, err => {
                 part.isSending = false;
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
@@ -477,7 +477,7 @@ export class NewBidComponent implements OnInit, OnChanges {
                 warranty: 0,
                 availability: 0
             };
-            
+
             this.bids.push(part);
             console.log('claim bids:', this.bids)
         }
