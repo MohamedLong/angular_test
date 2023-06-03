@@ -397,6 +397,22 @@
             "errMsg": "{{msg}}"
         }
     },
+    "role": {
+        "title": "Manage Roles",
+        "export": "Export",
+        "dividerTitle": " Or Select Manually",
+        "tableColumn": {
+            "roleName": "Role Name",
+            "roleNameSearch": "Search by role name",
+            "roleDescription": "Role Description"
+        },
+        "Dialog": {
+            "title": "Role Details",
+            "roleNamePlaceHolder": "Write Role Name",
+            "roleNameRequired": "Role Name is required.",
+            "roleDescriptionPlaceHolder": "Write Role Description"
+        }
+    },
     "USER": {
         "TITLE": "Users",
         "TITLE_2": "Manage Users",
