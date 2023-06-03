@@ -21,29 +21,29 @@
                 {{master.car.chassisNumber}}</p>
         </div>
         <div class="flex mb-3">
-            <div class="mr-8">
+            <div class="mr-5">
                 <h6 class="mb-2">{{'job.form.status' | translate}}</h6>
                 <p *ngIf="master.status.nameEn === 'Open'" class="font-medium muted-text text-blue-500">
                     {{master.status.nameEn}}</p>
                 <p *ngIf="master.status.nameEn === 'Approved'"
                     class="font-medium muted-text text-green-500">{{master.status.nameEn}}</p>
                 <p *ngIf="master.status.nameEn === 'Canceled'"
-                    class="font-medium muted-text text-orange-700">{{master.status.nameEn}}</p>
+                    class="font-medium muted-text text-orange-500">{{master.status.nameEn}}</p>
 
             </div>
-            <div class="mr-8">
+            <div class="mr-5">
                 <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
                 <p class="font-medium muted-text">{{master.claimNo}}</p>
             </div>
 
-            <div class="mr-8">
+            <div class="mr-5">
                 <div class="mr-3 flex align-items-center">
                     <h6 class="mb-2">{{'job.tableColumn.jobNo' | translate}} </h6>
                 </div>
                 <div *ngIf="role == 1" class="mr-2 flex align-items-center">
                     <p class="font-medium muted-text"
                         style="display: flex; align-items: flex-start; cursor: pointer;"
-                        title="Edit Job Number" (click)="editJobNumber(master)"><span
+                        title="Edit Job Number" (click)="editJob()"><span
                             style="color: blue">{{master.jobNo}}</span>
                         <span style="margin-left: 5px;"><i class="pi pi-pencil"></i></span>
                     </p>

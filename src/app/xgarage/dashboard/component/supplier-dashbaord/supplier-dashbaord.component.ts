@@ -19,7 +19,7 @@ export class SupplierDashbaordComponent implements OnInit {
         private messageService: MessageService, private breadcrumbService: AppBreadcrumbService,
         private dialogService: DialogService) { }
     requests = [];
-    latestRequest= [];
+    latestRequest = [];
     master: Job;
     job: Job;
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
@@ -31,17 +31,17 @@ export class SupplierDashbaordComponent implements OnInit {
         this.breadcrumbService.setItems([]);
     }
 
-    search(event){
+    search(event) {
         const searchTerm = event.query;
         this.jobService.searchlJob(searchTerm).subscribe(jobs => {
             this.searchResults = jobs;
-          });
+        });
     }
 
     onSelect(event: any) {
         localStorage.setItem('jobId', event.id);
         this.router.navigate(['job-details']);
-      }
+    }
 
     getAllForTenant() {
         let user = this.authService.getStoredUser();
@@ -78,17 +78,20 @@ export class SupplierDashbaordComponent implements OnInit {
     }
 
     onBid(dto: any) {
-        this.jobService.getById(dto.id).subscribe(
-            {
-                next: (data) => {
-                    this.master = data;
-                    this.master.claimNo = dto.claimNo;
-                    localStorage.setItem('job', JSON.stringify(this.master));
-                    localStorage.setItem('bidView', 'true');
-                    this.router.navigate(['job-details']);
-                },
-                error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
-            });
+        localStorage.setItem('jobId', JSON.stringify(dto.id));
+        localStorage.setItem('bidView', 'true');
+        this.router.navigate(['job-details']);
+        // this.jobService.getById(dto.id).subscribe(
+        //     {
+        //         next: (data) => {
+        //             this.master = data;
+        //             this.master.claimNo = dto.claimNo;
+        //             localStorage.setItem('job', JSON.stringify(this.master));
+        //             localStorage.setItem('bidView', 'true');
+        //             this.router.navigate(['job-details']);
+        //         },
+        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.statusMsg, life: 3000 })
+        //     });
     }
 
 }

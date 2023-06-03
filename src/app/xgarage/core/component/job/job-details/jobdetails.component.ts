@@ -90,6 +90,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     displayNotInterestedSuppliers: boolean = false;
     notInterestedSuppliers: any[] = [];
     JobStatusChanged: boolean = true;
+    bidDetails: any[] = [];
     constructor(public route: ActivatedRoute, private jobService: JobService, private requestService: RequestService, public router: Router, public messageService: MessageService, public confirmService: ConfirmationService, private cd: ChangeDetectorRef,
         public breadcrumbService: AppBreadcrumbService, private bidService: BidService, public datePipe: DatePipe, public statusService: StatusService, private authService: AuthService) {
         super(route, router, requestService, datePipe, statusService, breadcrumbService);
@@ -103,7 +104,11 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
         }
 
         if (localStorage.getItem('bidView')) {
-            this.activeTab = 1;
+            if(this.role == 1) {
+                this.activeTab = 1;
+            } else {
+                this.activeTab = 2;
+            }
         }
 
         this.breadcrumbService.setItems([{ 'label': 'Requests', routerLink: ['jobs'] }, { 'label': 'Request Details', routerLink: ['job-details'] }]);
@@ -183,6 +188,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 // console.log(requests)
                 this.details = requests;
                 this.fillteredDetails = requests;
+                this.bidDetails = requests;
                 this.setStatusNames(this.details)
                 this.loading = false;
                 this.isFetching = false;
@@ -600,7 +606,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     onReq(event) {
         this.hideDialog();
         if (event.error) {
-            this.messageService.add({ severity: 'erorr', summary: 'Error', detail: event.error.message });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: event.error.message });
         } else {
             this.messageService.add({ severity: 'success', summary: 'Success', detail: event.message });
             let index = this.fillteredDetails.findIndex((el) => el.id === event.id);
@@ -612,7 +618,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     }
 
 
-    editJobNumber(dto: any) {
+    onEditJobNumber(dto: any) {
         this.jobDto.id = dto.id;
         this.jobDto.jobNumber = dto.jobNo;
         this.jobDto.status = dto.status.id;

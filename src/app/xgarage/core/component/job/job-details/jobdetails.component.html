@@ -3,69 +3,8 @@
 
     <p-toolbar styleClass="mb-3 align-items-start">
         <ng-template pTemplate="left">
-            <!-- <app-details-card [master]="master" [role]="role"></app-details-card> -->
-            <div class="flex py-2">
-                <div class="mr-3 relative" style="min-width: 150px;">
-                    <p-skeleton animation="{{master.car?.document.length == 0? 'none' : 'wave'}}"
-                        class="absolute top-0 left-0 z-1" size="150px"
-                        *ngIf="!imageLoaded && master.car?.document !== null"></p-skeleton>
-                    <div class="height-100 align-items-center bg-black-alpha-20 flex flex-column justify-content-center rounded-normal"
-                        *ngIf="!imageLoaded && master.car?.document == null">
-                        <p-message styleClass="mx-2 text-center" severity="warn" text="no images"></p-message>
-                    </div>
-                    <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="150"
-                        src="{{master.car?.document? 'http://letsgo-oman.com:6060/api/v1/document/' + master.car?.document?.name : ''}}"
-                        alt="">
-                </div>
-                <div class="py-2">
-                    <div class="mb-3">
-                        <h6 class="mb-2">{{master.jobTitle}}</h6>
-                        <p class="mb-0 font-medium muted-text">{{'car.form.spec' | translate}}:
-                            {{master.car.carModelTypeId == 1 ? 'GCC' : master.car.carModelTypeId == 2 ?
-                            'Others': 'USA'}}</p>
-                        <p class="font-medium muted-text">{{'job.tableColumn.carChassisNumber' | translate}}:
-                            {{master.car.chassisNumber}}</p>
-                    </div>
-                    <div class="flex mb-3">
-                        <div class="mr-8">
-                            <h6 class="mb-2">{{'job.form.status' | translate}}</h6>
-                            <p *ngIf="master.status.nameEn === 'Open'" class="font-medium muted-text text-blue-500">
-                                {{master.status.nameEn}}</p>
-                            <p *ngIf="master.status.nameEn === 'Approved'"
-                                class="font-medium muted-text text-green-500">{{master.status.nameEn}}</p>
-                            <p *ngIf="master.status.nameEn === 'Canceled'"
-                                class="font-medium muted-text text-orange-700">{{master.status.nameEn}}</p>
-
-                        </div>
-                        <div class="mr-8">
-                            <h6 class="mb-2">{{'job.form.claimNo' | translate}}</h6>
-                            <p class="font-medium muted-text">{{master.claimNo}}</p>
-                        </div>
-
-                        <div class="mr-8">
-                            <div class="mr-3 flex align-items-center">
-                                <h6 class="mb-2">{{'job.tableColumn.jobNo' | translate}} </h6>
-                            </div>
-                            <div *ngIf="role == 1" class="mr-2 flex align-items-center">
-                                <p class="font-medium muted-text"
-                                    style="display: flex; align-items: flex-start; cursor: pointer;"
-                                    title="Edit Job Number" (click)="editJobNumber(master)"><span
-                                        style="color: blue">{{master.jobNo}}</span>
-                                    <span style="margin-left: 5px;"><i class="pi pi-pencil"></i></span>
-                                </p>
-                            </div>
-                            <p *ngIf="role !== 1" class="font-medium muted-text">{{master.jobNo}}</p>
-                        </div>
-                        <div>
-                            <h6 class="mb-2">{{'job.form.garageLocation' | translate}}</h6>
-                            <p class="font-medium muted-text">{{master.location? master.location : '-'}}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <app-details-card [master]="master" [role]="role" (editJobNumber)="onEditJobNumber(master)"></app-details-card>
         </ng-template>
-
         <ng-template pTemplate="right">
             <div class="field col" *ngIf="role == 1">
                 <p-confirmPopup></p-confirmPopup>
@@ -156,11 +95,11 @@
                                         <td [hidden]="(printingMode || role == 2)" style="text-align:center">
                                             <button pButton pRipple type="button" icon="pi pi-pencil"
                                                 (click)="editRequest(request)"
-                                                [disabled]="!(master.status.id == 1 && editAuth===true) || disabledRequest(request)"
+                                                [disabled]="!(master.status.id == 1 && editAuth==true) || disabledRequest(request)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                             <button pButton pRipple type="button" icon="pi pi-times"
                                                 (click)="deleteAction(request || role == 2)"
-                                                [disabled]="!(master.status.id == 1 && editAuth===true) || disabledRequest(request)"
+                                                [disabled]="!(master.status.id == 1 && editAuth==true) || disabledRequest(request)"
                                                 class="p-button-rounded p-button-text hidden-print"></button>
                                         </td>
                                     </ng-container>
@@ -179,14 +118,16 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="viewAuth == true" header="{{ 'job.tableColumn.receivedBids' | translate }}">
+                    <p-tabPanel *ngIf="viewAuth == true && role == 1" header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
-                            <button (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
+                            <button *ngIf="supplierBids.length > 0" (click)="onCompareBids()" pButton pRipple type="button" label="Compare Bids"
                                 class="p-button-rounded bg-indigo-100 text-indigo-600 border-0 font-light px-5"></button>
                         </div>
-
+                        <div class="pb-3 text-center" *ngIf="supplierBids.length  == 0">
+                            this job has no bids yet.
+                        </div>
                         <p-table [columns]="cols" [rows]="10" [value]="supplierBids"
-                            styleClass="p-invoice-datatable-responsive pb-3" *ngIf="visible" [paginator]="true">
+                            styleClass="p-invoice-datatable-responsive pb-3" *ngIf="visible && supplierBids.length > 0" [paginator]="true">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <th>Select</th>
@@ -229,7 +170,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="newAuth == true" header="{{ 'job.tableColumn.addBids' | translate }}">
+                    <p-tabPanel *ngIf="newAuth == true && role > 1" header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                     </p-tabPanel>
                 </p-tabView>
