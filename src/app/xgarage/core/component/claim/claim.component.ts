@@ -41,7 +41,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     fillteredMaster: any = [];
 
     //get from backend permissions??
-    user: string = 'insurance';
+    user: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
 
     ngOnInit(): void {
         this.onGetClaimsByTenant(this.pageNo);

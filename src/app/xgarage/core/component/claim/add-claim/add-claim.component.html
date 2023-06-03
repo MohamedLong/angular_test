@@ -116,16 +116,20 @@
                                     class="p-error">Must Select One At Least</small> -->
                                 </div>
                                 <div class="col-12 md:col-6 text-center">
-                                    <p-button [disabled]="undo" icon="pi pi-undo"
+                                    <p-button *ngIf="!claim.documents[1]" [disabled]="undo" icon="pi pi-undo"
                                         styleClass="p-button-rounded p-button-secondary p-button-outlined"
-                                        (click)="undoMousePos($event)"></p-button>
+                                        (click)="undoMousePos()"></p-button>
                                     <div class="mx-auto relative" style="max-width: 350px" #secondCar
-                                        (click)="printMousePos($event)">
+                                        (click)="!claim.documents[1] && printMousePos($event)">
                                         <img class="width-100" [src]="carImageSrc" alt="">
                                     </div>
+                                    <small *ngIf="submitted && undo"
+                                        class="p-error">please Fill the Car Image Sheet</small>
                                 </div>
                                 <div class="col-12 text-center">
-                                    <button class="width-100 md:w-20rem" pButton pRipple type="submit"
+                                    <p-button styleClass="width-100 md:w-10rem mr-3 p-button-secondary" type="button" label="Cancel" [routerLink]="['/claim-details']">
+                                    </p-button>
+                                    <button class="width-100 md:w-15rem" pButton pRipple type="submit"
                                         label="Update Claim" (click)="convertToImage()"
                                         icon="{{saving? 'pi pi-spin pi-spinner' : ''}}" iconPos="right">
                                     </button>

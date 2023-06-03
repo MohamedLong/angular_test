@@ -24,6 +24,7 @@ export class NewClaimComponent implements OnInit {
         tenant: [JSON.parse(this.authService.getStoredUser()).tenant.id],
         insuranceType: ['', Validators.required],
         claimNo: ['', Validators.required],
+        claimDate: [new Date().toISOString()],
         customerName: ['', Validators.required],
         contactNo: [null, Validators.required],
         excessRo: [0, Validators.required],
@@ -31,7 +32,8 @@ export class NewClaimComponent implements OnInit {
 
     insuranceType: string[] = Object.keys(InsuranceType);;
     submitted: boolean = false;
-    saving: boolean = false;
+    @Input() claimSaving: boolean;
+    @Input() saving: boolean = false;
     @Input() claim: Claim;
     @Output() createClaimEvent = new EventEmitter<any>();
     @ViewChild('car', { read: ElementRef }) car: ElementRef;
@@ -61,16 +63,14 @@ export class NewClaimComponent implements OnInit {
 
     onNewClaimFormSubmit() {
         this.submitted = true;
+        this.saving = this.claimSaving;
 
-        if (this.newClaimForm.valid) {
-            if(this.undo) {
-                this.createClaimEvent.emit({form: this.newClaimForm.value, carsheet: this.carsheetDoc});
-            } else {
-                this.convertToImage();
-            }
-            //this.createClaimEvent.emit({form: this.newClaimForm.value, carsheet: this.carsheetDoc});
+        if (this.newClaimForm.valid && !this.undo) {
+            //convert car to image first than send the request
+            this.convertToImage();
         } else {
-            console.log('form is not valid')
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please Fill All required Fields.' });
+            this.saving = false;
         }
     }
 
@@ -92,7 +92,7 @@ export class NewClaimComponent implements OnInit {
         this.undo = false;
     }
 
-    undoMousePos(event) {
+    undoMousePos() {
         if (this.car.nativeElement.querySelector(`.zone-${this.count}`)) {
             this.car.nativeElement.querySelector(`.zone-${this.count}`).remove();
             this.count--;
@@ -113,10 +113,10 @@ export class NewClaimComponent implements OnInit {
                 img = new Image();
                 img.src = dataUrl;
 
-                console.log(dataUrl)
+                //console.log(dataUrl)
 
                 var arr = dataUrl.split(','),
-                    mime = arr[0].match(/:(.*?);/)[1],
+                    //mime = arr[0].match(/:(.*?);/)[1],
                     bstr = atob(arr[arr.length - 1]),
                     n = bstr.length,
                     u8arr = new Uint8Array(n);
@@ -124,8 +124,8 @@ export class NewClaimComponent implements OnInit {
                     u8arr[n] = bstr.charCodeAt(n);
                 }
 
-                this.carsheetDoc =  new File([u8arr], 'carsheet.png');
-                this.createClaimEvent.emit({form: this.newClaimForm.value, carsheet: this.carsheetDoc});
+                this.carsheetDoc = new File([u8arr], 'carsheet.png');
+                this.createClaimEvent.emit({ form: this.newClaimForm.value, carsheet: this.carsheetDoc });
             }
         )
     }

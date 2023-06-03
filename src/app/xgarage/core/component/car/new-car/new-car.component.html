@@ -1,4 +1,4 @@
-<div [ngClass]="{'card': type == 'new car'}">
+<div [ngClass]="{'card': type == 'new car'}" #carFormEl>
     <p-toast></p-toast>
     <form [formGroup]="carForm" (ngSubmit)="onCarFormSubmit()">
         <div class="grid">
@@ -93,7 +93,7 @@
                     </div>
                 </ng-container>
             </div>
-            <app-new-claim *ngIf="type == 'new claim'" (createClaimEvent)="onCreateClaimEvent($event)"></app-new-claim>
+            <app-new-claim *ngIf="type == 'new claim'" (createClaimEvent)="onCreateClaimEvent($event)" [saving]="claimSaving"></app-new-claim>
             <div class="col-12 text-center" *ngIf="type !== 'new claim'">
                 <button class="width-100 md:w-20rem" pButton pRipple type="submit"
                     label="{{type == 'new car'? 'Add Car' : 'NEXT'}}" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}"

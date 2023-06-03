@@ -68,6 +68,7 @@ export class AddClaimComponent implements OnInit {
     carsheetDoc: File;
     carImageSrc: any = 'assets/layout/images/car.jpg'
     @ViewChild('secondCar', { read: ElementRef }) secondCar: ElementRef;
+
     ngOnInit(): void {
         this.onGetJobTicks();
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }, { 'label': 'Add Claim', routerLink: ['add-claim'] }]);
@@ -85,8 +86,6 @@ export class AddClaimComponent implements OnInit {
                         breakDown: this.claim.breakDown ? new Date(this.claim.breakDown) : '',
                         km: this.claim.km,
                         claimDate: this.claim.claimDate ? new Date(this.claim.claimDate) : '',
-                        //to do 28/5
-                        //claimTicks: [[]]
                     });
 
                     // check if breakdown is null or not
@@ -94,14 +93,23 @@ export class AddClaimComponent implements OnInit {
                         this.isBreakdown = true;
                     }
 
-                    this.carImageSrc = "http://letsgo-oman.com:6060/api/v1/document/" + this.claim.documents[1].name;
+                    if (this.claim.documents[1]) {
+                        this.undo = false;
+                        this.carImageSrc = "http://letsgo-oman.com:6060/api/v1/document/" + this.claim.documents[1].name;
+                    }
                 }
             }
         })
     }
 
     onCheckedChanged(e) {
+        //console.log(e)
         this.isBreakdown = e.checked;
+        if (!this.isBreakdown) {
+            this.claimForm.get('breakDown').setValue('');
+        } else {
+            this.claim.breakDown ? this.claimForm.get('breakDown').setValue(new Date(this.claim.breakDown)) : ''
+        }
     }
 
     onGetJobTicks() {
@@ -109,39 +117,43 @@ export class AddClaimComponent implements OnInit {
             //console.log(res)
             this.ticks = res;
             if (this.claim && this.claim.claimTicks.length > 0 && this.ticks.length > 0) {
-                console.log('ticks')
+                //console.log('ticks')
                 this.claim.claimTicks.forEach(claimTick => {
                     let foundTick = this.ticks.find(tick => {
                         return tick.id == claimTick.id
                     });
 
                     this.selectedTicks.push(foundTick);
-
+                    this.claimForm.get('claimTicks').setValue([...this.claimForm.get('claimTicks').value, { id: foundTick.id }]);
                 });
             }
 
-
-            //this.claimForm.get('claimTicks').setValue(res);
+            //console.log(this.claimForm.get('claimTicks').value)
         })
     }
 
     onTicksChange(tick: any, event: any) {
-        //console.log(tick, event)
-        if (!event.checked) {
+        console.log(tick, event)
+        //if (!event.checked) {
 
-            let isTickFound = this.claimForm.get('claimTicks').value.filter(claimTick => {
-                return claimTick.id == tick.id;
-            });
+        let isTickFound = this.claimForm.get('claimTicks').value.filter(claimTick => {
+            return claimTick.id == tick.id;
+        });
 
-            if (isTickFound) {
-                this.claimForm.get('claimTicks').setValue(
-                    this.claimForm.get('claimTicks').value.filter(val => {
-                        return val.id !== tick.id;
-                    })
-                );
-            }
+        console.log(isTickFound)
+
+        if (isTickFound.length > 0) {
+            console.log('tick is found')
+            this.claimForm.get('claimTicks').setValue(
+                this.claimForm.get('claimTicks').value.filter(val => {
+                    return val.id !== tick.id;
+                })
+            );
+
+            //console.log(this.claimForm.get('claimTicks').value)
         } else {
             this.claimForm.get('claimTicks').setValue([...this.claimForm.get('claimTicks').value, { id: tick.id }]);
+            //console.log(this.claimForm.get('claimTicks').value)
         }
 
     }
@@ -149,53 +161,45 @@ export class AddClaimComponent implements OnInit {
     onUpdateCalim() {
         console.log('updating claim>>>')
 
+        this.claimForm.get('id').setValue(this.claim.id);
+        let datetime = new Date(this.claimForm.get('claimDate').value).toISOString();
+        let updatedClaimForm = this.claimForm.value;
+        updatedClaimForm.claimDate = datetime;
 
-        if (this.claimForm.valid) {
-            //this.saving = true;
-
-            this.claimForm.get('id').setValue(this.claim.id);
-            let datetime = new Date(this.claimForm.get('claimDate').value).toISOString();
-            let updatedClaimForm = this.claimForm.value;
-            updatedClaimForm.claimDate = datetime;
-
-            //check if status is already updated & update status if not
-            if (this.claim.status.id == 1) {
-                updatedClaimForm.status = this.statusService.statuses.find(status => { return status.id == 13 });
-            }
-
-
-            let claimBody = {
-                claim: updatedClaimForm,
-                claimPartsDtoList: []
-            }
-
-            //console.log(updatedClaimForm)
-
-            let stringUpdatedClaimBody = JSON.stringify(claimBody);
-            let UpdatedClaimFormData = new FormData();
-
-            UpdatedClaimFormData.append('claimBody', stringUpdatedClaimBody);
-            UpdatedClaimFormData.append('claimDocument', this.carsheetDoc ? this.carsheetDoc : null);
-
-            this.claimService.updateClaim(UpdatedClaimFormData).subscribe(res => {
-                console.log(res)
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully. Redirecting To Claim..', life: 2000 });
-                this.saving = false;
-                this.saved = true;
-                //this.claimForm.reset('');
-                setTimeout(() => {
-                    this.goToClaimDetails(res.id);
-                }, 1000)
-
-            }, err => {
-                //console.log(err)
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.error });
-                this.saving = false;
-            });
-        } else {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Some Fields Are Not Valid, Please Try Again.' });
-            this.saving = false;
+        //check if status is already updated & update status if not
+        if (this.claim.status.id == 1) {
+            updatedClaimForm.status = this.statusService.statuses.find(status => { return status.id == 13 });
         }
+
+
+        let claimBody = {
+            claim: updatedClaimForm,
+            claimPartsDtoList: []
+        }
+
+        //console.log(updatedClaimForm)
+
+        let stringUpdatedClaimBody = JSON.stringify(claimBody);
+        let UpdatedClaimFormData = new FormData();
+
+        UpdatedClaimFormData.append('claimBody', stringUpdatedClaimBody);
+        UpdatedClaimFormData.append('claimDocument', this.carsheetDoc ? this.carsheetDoc : null);
+
+        this.claimService.updateClaim(UpdatedClaimFormData).subscribe(res => {
+            console.log(res)
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Updated Succefully. Redirecting To Claim..', life: 2000 });
+            this.saving = false;
+            this.saved = true;
+            //this.claimForm.reset('');
+            setTimeout(() => {
+                this.goToClaimDetails(res.id);
+            }, 1000)
+
+        }, err => {
+            //console.log(err)
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.error });
+            this.saving = false;
+        });
     }
 
     goToClaimDetails(id: number) {
@@ -227,7 +231,7 @@ export class AddClaimComponent implements OnInit {
         this.undo = false;
     }
 
-    undoMousePos(event) {
+    undoMousePos() {
         if (this.secondCar.nativeElement.querySelector(`.zone-${this.count}`)) {
             this.secondCar.nativeElement.querySelector(`.zone-${this.count}`).remove();
             this.count--;
@@ -240,33 +244,46 @@ export class AddClaimComponent implements OnInit {
     }
 
     convertToImage() {
-        console.log('converting img>>>')
-        this.saving = true;
         this.submitted = true;
-        var node = this.secondCar.nativeElement;
-        var img;
+        console.log(this.claimForm.value)
+        if (this.claimForm.valid && !this.undo) {
+            console.log('converting img>>>')
+            this.saving = true;
 
-        domtoimage.toPng(node, { bgcolor: '#fff' }).then(
-            (dataUrl: string) => {
-                img = new Image();
-                img.src = dataUrl;
-
-                console.log(dataUrl)
-
-                var arr = dataUrl.split(','),
-                    mime = arr[0].match(/:(.*?);/)[1],
-                    bstr = atob(arr[arr.length - 1]),
-                    n = bstr.length,
-                    u8arr = new Uint8Array(n);
-                while (n--) {
-                    u8arr[n] = bstr.charCodeAt(n);
-                }
-
-                // this.carImageSrc = dataUrl;
-                this.carsheetDoc = new File([u8arr], 'carsheet.png');
+            if (this.claim.documents[1]) {
                 this.onUpdateCalim();
+            } else {
+                var node = this.secondCar.nativeElement;
+                var img;
+
+                domtoimage.toPng(node, { bgcolor: '#fff' }).then(
+                    (dataUrl: string) => {
+                        img = new Image();
+                        img.src = dataUrl;
+
+                        //console.log(dataUrl)
+
+                        var arr = dataUrl.split(','),
+                            // mime = arr[0].match(/:(.*?);/)[1],
+                            bstr = atob(arr[arr.length - 1]),
+                            n = bstr.length,
+                            u8arr = new Uint8Array(n);
+                        while (n--) {
+                            u8arr[n] = bstr.charCodeAt(n);
+                        }
+
+                        // this.carImageSrc = dataUrl;
+                        this.carsheetDoc = new File([u8arr], 'carsheet.png');
+                        this.onUpdateCalim();
+                    }
+                )
             }
-        )
+
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Some Fields Are Not Valid, Please Try Again.' });
+            this.saving = false;
+        }
+
     }
 
 }

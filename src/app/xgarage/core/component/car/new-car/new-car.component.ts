@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Brand } from 'src/app/xgarage/common/model/brand';
@@ -46,6 +46,7 @@ export class NewCarComponent implements OnInit {
     notFound: boolean = false;
     image: string = '';
     saving: boolean = false;
+    claimSaving: boolean = false;
     carForm: FormGroup = this.formBuilder.group({
         chassisNumber: ['', [Validators.minLength(13), Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
         brandId: ['', Validators.required],
@@ -56,6 +57,7 @@ export class NewCarComponent implements OnInit {
         gearType: ['Automatic', Validators.required],
     });
     claim: any;
+    @ViewChild('carFormEl') carFormEl: ElementRef;
 
     @Input() type: string = 'new car';
     @Output() carEvent = new EventEmitter<{ car: Car }>();
@@ -119,7 +121,9 @@ export class NewCarComponent implements OnInit {
             }
 
         }, err => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error Saving Car' });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error Saving Car, Please Try Again Later.' });
+            this.saving = false;
+            this.claimSaving = false;
         })
     }
 
@@ -289,6 +293,7 @@ export class NewCarComponent implements OnInit {
     onCreateClaimEvent(event) {
         console.log('create form submitted', event);
         if (this.carForm.valid) {
+            this.claimSaving = true;
             if (this.found && this.type == 'new claim') {
                 //save claim
                 this.saveClaim(event);
@@ -297,14 +302,15 @@ export class NewCarComponent implements OnInit {
                 this.saveNewCar(event);
             }
         } else {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select or add a new car.' });
-            console.log('car is not valid')
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select or add a new car.', life: 3000 });
+            this.getYPosition();
+            this.claimSaving = false;
         }
 
     }
 
     saveClaim(claimBody: any) {
-        console.log(claimBody, this.carForm.getRawValue())
+        //console.log(claimBody, this.carForm.getRawValue())
         claimBody.form.car = { id: this.carForm.getRawValue().id };
         claimBody.form.claimTitle = `${this.carForm.getRawValue().brandId.brandName} ${this.carForm.getRawValue().carModelId.name} ${this.carForm.getRawValue().carModelYearId.year}, ${this.carForm.getRawValue().carModelTypeId.type}`;
 
@@ -316,17 +322,25 @@ export class NewCarComponent implements OnInit {
         claimFormData.append('carDocument', null);
 
         this.claimService.saveClaim(claimFormData).subscribe(res => {
-            console.log(res)
+            //console.log(res)
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Created Succefully. Redirecting To Claim..' });
-
+            this.claimSaving = false;
             setTimeout(() => {
                 this.goToClaimDetails(res);
             }, 1000)
-        }, err => console.log(err))
+        }, err => {
+            console.log(err)
+            this.messageService.add({ severity: 'error', summary: 'Success', detail: err });
+            this.claimSaving = false;
+        })
     }
 
     goToClaimDetails(id: number) {
         localStorage.setItem('claimId', JSON.stringify(id));
         this.router.navigate(['/claim-details']);
+    }
+
+    getYPosition() {
+        this.carFormEl.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 }
