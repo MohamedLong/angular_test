@@ -83,9 +83,11 @@ export class BidDetailsComponent implements OnInit {
                     this.bidDetails[0].requestTitle = bid.claimTitle;
 
                     if (this.bidDetails.length == 1 && this.bidDetails[0].originalPrice == 0) {
-                        console.log('this is lump sum')
+
                         this.bidDetails[0].partName = bid.partNames;
+                        this.bidDetails[0].statusId = bid.status;
                         this.displaylumpsumModal = true;
+                        console.log('this is lump sum', this.bidDetails[0].statusId)
                     } else {
                         console.log('this is regular bid')
                         this.displayModal = true;

@@ -82,7 +82,7 @@
                 </td>
 
                 <td>
-                    <button (click)="confirmCancel(biddetail.id)" pButton pRipple type="button" label="Cancel Bid" class="p-button-warning"></button>
+                    <button [disabled]="bidDetails[0].statusId !== 'Open'" (click)="confirmCancel(biddetail.bid)" pButton pRipple type="button" label="Cancel Bid" class="p-button-warning"></button>
                 </td>
             </tr>
         </ng-template>

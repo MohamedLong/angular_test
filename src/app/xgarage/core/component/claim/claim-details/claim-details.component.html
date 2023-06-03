@@ -205,7 +205,7 @@
         </ng-template>
     </p-toolbar>
     <ng-template pTemplate="content">
-        <p-table #dt [value]="currentBid" [columns]="cols" [rows]="10">
+        <p-table #dt [value]="currentBid" *ngIf="currentBid[0].originalPrice > 0" [columns]="cols" [rows]="10">
             <ng-template pTemplate="header">
                 <tr>
                     <th pColumn="id">Part Name</th>
@@ -265,9 +265,29 @@
                 </tr>
             </ng-template>
         </p-table>
-
+        <p-table [value]="currentBid" *ngIf="currentBid[0].originalPrice == 0">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pColumn="id">Part Name</th>
+                    <th pColumn="totalPrice">{{ 'bid.bidDetails.totalPrice' | translate }}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-bid>
+                <tr>
+                    <td>
+                        <span *ngFor="let detail of details">
+                            {{detail.part.name}},
+                        </span>
+                    </td>
+                    <td>
+                        {{bid.price | number}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
     </ng-template>
-    {{currentBid | json}}
+    <!-- {{currentBid | json}} -->
 </p-dialog>
 
 

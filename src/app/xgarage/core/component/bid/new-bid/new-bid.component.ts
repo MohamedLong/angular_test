@@ -124,7 +124,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             part: this.checked ? null : part.part,
             voiceNote: null,
             images: [],
-            order: this.type == 'new bid' || this.checked ? 0 : part.id,
+            order: this.type == 'new bid' || this.checked ? null : part.id,
             cu: null,
             cuRate: 0,
             partType: this.type == 'new bid' ? { id: part.preferred.id } : this.checked ? {id: 1} : { id: part.partType.id },

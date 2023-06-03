@@ -91,15 +91,12 @@
                             {{claim.statusDate | date:'longDate'}}
                         </td>
                         <td>
-                            <p-button label="{{claim.status}}" styleClass="p-button-text {{claim.status == 'Open'? '' : claim.status == 'Waiting for Survey'? 'p-button-warning' : claim.status == 'Confirmed'? 'p-button-success': claim.status == 'Waiting for Approval'? 'p-button-help':'p-button-danger'}}"></p-button>
+                            <p-button label="{{claim.status}}" styleClass="p-button-text p-button-sm {{claim.status == 'Open'? 'bg-blue-100' : claim.status == 'Waiting for Survey'? 'p-button-warning bg-orange-100' : claim.status == 'Confirmed'? 'p-button-success bg-green-100': claim.status == 'Waiting for Approval'? 'p-button-help  bg-indigo-100':'p-button-danger bg-pink-100'}}"></p-button>
                             <!-- <p-badge value="{{claim.status}}" severity="{{claim.status == 'Open'? 'info' : claim.status == 'Waiting for Survey'? 'warning' : claim.status == 'Confirmed'? 'success': 'danger'}}"></p-badge> -->
                         </td>
                         <td   *ngIf="id == 323">
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
                                 (click)="edit(claim)" [disabled]="edituth===false || (claim.status == 'Canceled')"></button>
-                            <!-- <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
-                                [disabled]="!editAuth" (click)="deleteAction(claim)"
-                                [disabled]="deleteAuth===false"></button> -->
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
                                 [disabled]="(editAuth===false && deleteAuth===false) || (claim.status == 'Canceled') || (claim.status == 'Confirmed')" (click)="deleteAction(claim)"></button>
                         </td>

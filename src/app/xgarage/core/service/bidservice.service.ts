@@ -27,7 +27,7 @@ export class BidService extends GenericService<any> {
     }
 
     cancelBid(bidId: number){
-        return this.http.post(this.apiServerUrl + '/cancelBid/' + bidId, {"comments": ""});
+        return this.http.post(this.apiServerUrl + '/cancelBid/' + bidId, {"comments": null});
     }
 
     approveMultipleBids(bidOrderDto: BidOrderDto) {

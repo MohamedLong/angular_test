@@ -147,8 +147,8 @@ export class AddClaimComponent implements OnInit {
     }
 
     onUpdateCalim() {
+        console.log('updating claim>>>')
 
-        this.submitted = true;
 
         if (this.claimForm.valid) {
             //this.saving = true;
@@ -159,10 +159,10 @@ export class AddClaimComponent implements OnInit {
             updatedClaimForm.claimDate = datetime;
 
             //check if status is already updated & update status if not
-            if (updatedClaimForm.status.id == 1) {
+            if (this.claim.status.id == 1) {
                 updatedClaimForm.status = this.statusService.statuses.find(status => { return status.id == 13 });
             }
-            
+
 
             let claimBody = {
                 claim: updatedClaimForm,
@@ -240,8 +240,9 @@ export class AddClaimComponent implements OnInit {
     }
 
     convertToImage() {
+        console.log('converting img>>>')
         this.saving = true;
-
+        this.submitted = true;
         var node = this.secondCar.nativeElement;
         var img;
 

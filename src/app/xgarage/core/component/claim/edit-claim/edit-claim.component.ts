@@ -212,6 +212,9 @@ export class EditClaimComponent implements OnInit {
                     tenant: this.tenant.id,
                     deleted: false
                 })
+            } else {
+                delete this.updateClaimForm.get('inspector').value.updatedAt;
+                delete this.updateClaimForm.get('inspector').value.createdAt;
             }
 
             //check if entered surveyor is new
@@ -222,6 +225,9 @@ export class EditClaimComponent implements OnInit {
                     tenant: this.tenant.id,
                     deleted: false
                 })
+            } else {
+                delete this.updateClaimForm.get('surveyer').value.updatedAt;
+                delete this.updateClaimForm.get('surveyer').value.createdAt;
             }
 
             //console.log(this.updateClaimForm.value);
