@@ -45,7 +45,7 @@
                     {{!bid.totalPrice?  0 : bid.totalPrice | number }}
                 </td>
                 <td>
-                    <button (click)="onBidView(user !== 'ins'? bid.id : bid.bidId)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
+                    <button *ngIf="bid.part !== null" (click)="onBidView(user !== 'ins'? bid.id : bid.bidId)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
                 </td>
             </tr>
         </ng-template>

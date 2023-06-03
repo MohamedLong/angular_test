@@ -100,7 +100,7 @@ export class EditClaimComponent implements OnInit {
             notes: this.claim.notes,
         });
 
-        if (this.updateClaimForm.get('privacy').value == 'Public') {
+        if (this.updateClaimForm.get('privacy').value == 'private') {
             this.updateClaimForm.get('privacy').disable();
         }
     }
@@ -243,8 +243,10 @@ export class EditClaimComponent implements OnInit {
                 })
             };
 
-            this.claim.status = this.statusService.statuses.find(status => { return status.id == 12 });
-
+            //check if status is already updated & update status if not
+            if (this.claim.status == 13) {
+                this.claim.status = this.statusService.statuses.find(status => { return status.id == 12 });
+            }
 
             //console.log(this.claim)
 

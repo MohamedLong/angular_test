@@ -91,7 +91,8 @@
                             {{claim.statusDate | date:'longDate'}}
                         </td>
                         <td>
-                            <p-badge value="{{claim.status}}" severity="{{claim.status == 'Open'? 'info' : claim.status == 'Waiting for Survey'? 'warning' : claim.status == 'Confirmed'? 'success': 'danger'}}"></p-badge>
+                            <p-button label="{{claim.status}}" styleClass="p-button-text {{claim.status == 'Open'? '' : claim.status == 'Waiting for Survey'? 'p-button-warning' : claim.status == 'Confirmed'? 'p-button-success': claim.status == 'Waiting for Approval'? 'p-button-help':'p-button-danger'}}"></p-button>
+                            <!-- <p-badge value="{{claim.status}}" severity="{{claim.status == 'Open'? 'info' : claim.status == 'Waiting for Survey'? 'warning' : claim.status == 'Confirmed'? 'success': 'danger'}}"></p-badge> -->
                         </td>
                         <td   *ngIf="id == 323">
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"

@@ -37,7 +37,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     supplierBids: BidDto[] = []
     rejectBidDialog: boolean = false;
     approveBidDialog: boolean = false;
-    currentBid: any[] = [];
+    currentBid: any = [];
     reqId: number;
     suppliersBidToCompare = [];
     displayCompareBids: boolean = false;
@@ -46,10 +46,10 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     deletePartDialog: boolean = false;
     partToBeDeleted: number;
     currentBidStatus: number;
-    id = JSON.parse(this.authService.getStoredUser()).id;
+    //id = JSON.parse(this.authService.getStoredUser()).id;
 
     ngOnInit(): void {
-        console.log(this.id)
+        //console.log(this.id)
         this.breadcrumbService.setItems([{ 'label': 'Claims', routerLink: ['claims'] }, { 'label': 'Claim Details', routerLink: ['claim-details'] }]);
         localStorage.removeItem('claimSelectedParts');
         this.claimId = JSON.parse(localStorage.getItem('claimId'));
@@ -157,10 +157,13 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         this.currentBidStatus = bid.statusId;
         this.currentBid = [];
         this.claimServie.getClaimBidByBidId(bid.bidId).subscribe(res => {
-            //console.log(res)
+            console.log(res)
             this.currentBid = res;
             this.supplierName = this.bidDto[0].supplierName ? bid.supplierName : bid.userFirstName;
-            this.bidDetailsDialog = true;
+            if(this.supplierName && this.currentBid.length > 0) {
+                this.bidDetailsDialog = true;
+            }
+            
         }, err => console.log(err))
     }
 

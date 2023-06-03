@@ -1,12 +1,16 @@
+import { PartType } from "../../common/model/parttype";
+import { Part } from "../model/part";
+
 export interface BidDto{
     bidId?: number;
+    part?: Part;
     partName?: string;
-    partType?: string;
+    partType?: PartType;
     requestId?: number;
     userId?: number;
     userFirstName?: string;
     userCreatedDate?: Date;
-    bidDate?: Date;
+    bidDate?: string;
     statusId?: number;
     price?: number;
     originalPrice?: number;

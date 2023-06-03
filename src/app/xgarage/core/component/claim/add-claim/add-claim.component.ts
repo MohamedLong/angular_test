@@ -157,7 +157,12 @@ export class AddClaimComponent implements OnInit {
             let datetime = new Date(this.claimForm.get('claimDate').value).toISOString();
             let updatedClaimForm = this.claimForm.value;
             updatedClaimForm.claimDate = datetime;
-            updatedClaimForm.status = this.statusService.statuses.find(status => { return status.id == 13 });
+
+            //check if status is already updated & update status if not
+            if (updatedClaimForm.status.id == 1) {
+                updatedClaimForm.status = this.statusService.statuses.find(status => { return status.id == 13 });
+            }
+            
 
             let claimBody = {
                 claim: updatedClaimForm,
