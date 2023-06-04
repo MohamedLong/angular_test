@@ -143,7 +143,7 @@
                         </p-table>
                     </p-tabPanel>
                     <!-- && id == 325 -->
-                    <p-tabPanel *ngIf="newAuth == true && viewAuth == true"
+                    <p-tabPanel *ngIf="newAuth == true"
                         header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid type="new claimBid" *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                         <div class="py-5 text-center" *ngIf="!isFetching && details.length == 0">
