@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Router, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { RandomGuard } from '../auth/guards/random.guard';
-import { AuthService } from '../auth/services/auth.service';
 import { BrandComponent } from './common/component/brand/brand.component';
 import { CarModelComponent } from './common/component/car-model/car-model.component';
 import { CategoryComponent } from './common/component/category/category.component';
