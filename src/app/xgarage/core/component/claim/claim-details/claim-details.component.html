@@ -176,7 +176,7 @@
 <p-dialog [(visible)]="bidDetailsDialog" [modal]="true" styleClass="" (onHide)="closeBidDialog()">
     <p-toolbar styleClass="mb-2 width-100">
         <ng-template pTemplate="left">
-            <p class="font-medium muted-text text-xl">{{'bid.bidDialog.titleBySupplier' | translate }} {{supplierName?
+            <p class="font-medium muted-text text-xl mr-5">{{'bid.bidDialog.titleBySupplier' | translate }} {{supplierName?
                 supplierName : '-'}}</p>
         </ng-template>
 
@@ -186,19 +186,18 @@
                     <button pButton pRipple type="button" label="{{ 'operations.approve' | translate }}"
                         icon="pi pi-check" (click)="approveBidDialog = true"
                         [disabled]="editAuth == false || currentBidStatus > 1"
-                        class="p-button-success mr-2 mb-3"></button>
+                        class="p-button-success mr-2"></button>
                 </div>
 
                 <div class="col-12 md:col-5">
                     <button pButton pRipple type="button" label="{{ 'operations.reject' | translate }}"
                         icon="pi pi-times" (click)="rejectBidDialog = true"
                         [disabled]="editAuth ==false  || currentBidStatus > 2"
-                        class="p-button-danger mr-2 mb-3"></button>
+                        class="p-button-danger mr-2"></button>
                 </div>
 
                 <div class="col-12 md:col-2">
-                    <button pButton pRipple type="button" icon="pi pi-times" (click)="closeBidDialog()"
-                        class="mb-3"></button>
+                    <button pButton pRipple type="button" icon="pi pi-times" (click)="closeBidDialog()"></button>
                 </div>
             </div>
 
@@ -219,10 +218,10 @@
                     </th>
                     <th pColumn="discount">{{ 'bid.bidDetails.discount' | translate }}
                     </th>
-                    <th pColumn="vat">{{ 'bid.bidDetails.vat' | translate }}
-                    </th>
                     <th>
                         Service Price
+                    </th>
+                    <th pColumn="vat">{{ 'bid.bidDetails.vat' | translate }}
                     </th>
                     <th pColumn="totalPrice">{{ 'bid.bidDetails.totalPrice' | translate }}
                     </th>
@@ -251,13 +250,13 @@
                         {{bid.discount? bid.discount : 0 }} {{bid.discountType == 'flat'? '%' : ' OMR'}}
                     </td>
                     <td>
-                        {{bid.vat}}
-                    </td>
-                    <td>
                         {{bid.servicePrice + ' OMR'}}
                     </td>
                     <td>
-                        {{bid.price + bid.servicePrice | number}}
+                        {{bid.vat}}
+                    </td>
+                    <td>
+                        {{bid.price | number}}
                     </td>
                     <!-- <td>
                         {{getStatusName(bid.statusId)}}

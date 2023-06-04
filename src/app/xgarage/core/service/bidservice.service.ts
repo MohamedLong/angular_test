@@ -38,6 +38,10 @@ export class BidService extends GenericService<any> {
         return this.http.post(this.apiServerUrl + '/approveBid/' + reqId + '/' + bidId, '');
     }
 
+    approveBid(bidOrderDto: BidOrderDto) {
+        return this.http.post(this.apiServerUrl + '/approveBid', bidOrderDto);
+    }
+
     rejectBidByBidId(reqId: number, bidId: number) {
         return this.http.post(this.apiServerUrl + '/rejectBid/' + reqId + '/' + bidId, null);
     }

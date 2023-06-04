@@ -150,7 +150,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onRowEditSave(part) {
-        console.log(part)
+        //console.log(part)
         this.updatePrice(part);
 
         //prepare bid request body
@@ -310,7 +310,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     updatePrice(part) {
-        console.log(part)
+       // console.log(part)
         let price = part.originalPrice * part.qty2;
         let discount = part.discountType == 'OMR' ? part.discount : (price * part.discount) / 100;
         let priceAfterDiscount = price - discount;
@@ -419,7 +419,8 @@ export class NewBidComponent implements OnInit, OnChanges {
         //calc total bid price for job bid
         this.total = this.total + part.totalPrice;
 
-        console.log('saving bid>>>', bidBody)
+        // console.log('saving bid>>>', bidBody)
+        // console.log(this.bidDto)
 
         if (this.checked ||(part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
             this.bidService.add(bidFormData).subscribe((res: any) => {

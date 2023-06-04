@@ -21,6 +21,7 @@ import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 })
 export class ClaimDetailsComponent extends GenericDetailsComponent implements OnInit {
     supplierName: any;
+    supplierId: number;
     originalBidList: BidDto[];
 
     constructor(private authService: AuthService, private bidService: BidService, public messageService: MessageService, public route: ActivatedRoute, public router: Router, public datePipe: DatePipe, public statusService: StatusService, private claimServie: ClaimService, public breadcrumbService: AppBreadcrumbService) {
@@ -154,13 +155,15 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     }
 
     viewBid(bid: any) {
+        // console.log(bid)
+        this.supplierId = bid.supplierId;
         this.currentBidStatus = bid.statusId;
         this.currentBid = [];
         this.claimServie.getClaimBidByBidId(bid.bidId).subscribe(res => {
             console.log(res)
             this.currentBid = res;
             this.supplierName = this.bidDto[0].supplierName ? bid.supplierName : bid.userFirstName;
-            if(this.supplierName && this.currentBid.length > 0) {
+            if (this.supplierName && this.currentBid.length > 0) {
                 this.bidDetailsDialog = true;
             }
 
@@ -168,6 +171,8 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     }
 
     approveBid() {
+        let bidToApprove: BidOrderDto = this.prepareClaimBidToApprove();
+        console.log(bidToApprove)
         this.bidService.approveBidByBidId(this.reqId, this.currentBid[0].bid).subscribe((res: MessageResponse) => {
             console.log(res)
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
@@ -177,6 +182,16 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
             console.log(err)
             this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
         });
+
+        // this.bidService.approveBid(bidToApprove).subscribe((res: MessageResponse) => {
+        //     console.log(res)
+        //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
+        //     this.bidDetailsDialog = false;
+        //     this.getClaimBids();
+        // }, err => {
+        //     console.log(err)
+        //     this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
+        // });
 
         this.approveBidDialog = false;
     }
@@ -193,6 +208,41 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         });
 
         this.rejectBidDialog = false;
+    }
+
+    prepareClaimBidToApprove() {
+        let totalOrderAmount = 0;
+        let totalVat = 0;
+        let totalDiscount = 0;
+        let totalTotalAmount = 0;
+        let bids = [];
+
+        this.currentBid.forEach(bid => {
+            totalOrderAmount = totalOrderAmount + bid.originalPrice;
+            totalVat = totalVat + bid.vat;
+            totalDiscount = totalDiscount + bid.discount;
+            totalTotalAmount = totalTotalAmount + bid.price;
+            bids.push(bid.bid);
+        });
+
+        let bidToApprove = {
+            bids: bids,
+            shippingAddress: 1,
+            shippingMethod: 1,
+            paymentMethod: 1,
+            orderType: OrderType.Bid,
+            customer: JSON.parse(this.authService.getStoredUser()).id,
+            phone: JSON.parse(this.authService.getStoredUser()).phone,
+            supplier: this.supplierId,
+            deliveryFees: 0,
+            orderDate: new Date(),
+            orderAmount: totalOrderAmount,
+            vat: totalVat,
+            discount: totalDiscount,
+            totalAmount: totalTotalAmount
+        };
+
+        return bidToApprove;
     }
 
     onToggleBid(supplierBid) {
