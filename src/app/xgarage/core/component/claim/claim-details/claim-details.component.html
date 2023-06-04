@@ -110,6 +110,7 @@
                                     <th>{{ 'common.select' | translate }}</th>
                                     <th pColumn="supplierName">{{ 'bid.tableColumn.supplierName' | translate }}</th>
                                     <th pColumn="status">{{ 'bid.tableColumn.status' | translate }}</th>
+                                    <th>Type Of Bid</th>
                                     <th pColumn="bidDate">{{ 'bid.tableColumn.bidDate' | translate }}</th>
                                     <th pColumn="bidValue">{{ 'bid.tableColumn.bidValue' | translate }}</th>
                                     <th [hidden]="printingMode===true">{{
@@ -127,6 +128,7 @@
                                     <td>
                                         {{getStatusName(bid.statusId)}}
                                     </td>
+                                    <td><p-badge value="{{bid.originalPrice == 0? 'Bid by Total' : 'Bid by Part'}}" severity="{{bid.originalPrice == 0? 'success' : 'info'}}"></p-badge></td>
                                     <td>
                                         {{bid.bidDate | date: 'dd/MM/yyyy hh:mm'}}
                                     </td>

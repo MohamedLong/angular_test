@@ -175,18 +175,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         console.log(bidToApprove)
 
         //original
-        this.bidService.approveBidByBidId(this.reqId, this.currentBid[0].bid).subscribe((res: MessageResponse) => {
-            console.log(res)
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
-            this.bidDetailsDialog = false;
-            this.getClaimBids();
-        }, err => {
-            console.log(err)
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
-        });
-
-        //current
-        // this.bidService.approveBid(bidToApprove).subscribe((res: MessageResponse) => {
+        // this.bidService.approveBidByBidId(this.reqId, this.currentBid[0].bid).subscribe((res: MessageResponse) => {
         //     console.log(res)
         //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
         //     this.bidDetailsDialog = false;
@@ -195,6 +184,17 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         //     console.log(err)
         //     this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
         // });
+
+        //current
+        this.bidService.approveBid(bidToApprove).subscribe((res: MessageResponse) => {
+            console.log(res)
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
+            this.bidDetailsDialog = false;
+            this.getClaimBids();
+        }, err => {
+            console.log(err)
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
+        });
 
         //testing
         // this.bidService.approveMultipleBids(bidToApprove).subscribe((res: MessageResponse) => {
@@ -241,6 +241,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
 
         let bidToApprove = {
             bids: [this.currentBid[0].bid],
+            //bids: bids,
             shippingAddress: 1,
             shippingMethod: 1,
             paymentMethod: 1,
@@ -289,27 +290,34 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
 
     onCompareBids() {
         this.modifiedBids = [];
-        this.suppliersBidToCompare.forEach(bid => {
-            let i = this.modifiedBids.find(modifieddBid => modifieddBid.part == bid.part.name);
-            if (!i) {
-                this.modifiedBids.push({ part: bid.part.name, bids: [] });
-            }
-        })
 
-
-        this.modifiedBids.forEach(bid => {
-            this.suppliersBidToCompare.forEach(sup => {
-                if (sup.part.name == bid.part) {
-                    bid.bids.push(sup)
+        let isSumlumpBid = this.suppliersBidToCompare.find(bid => {return bid.part == null});
+        console.log(isSumlumpBid, this.suppliersBidToCompare);
+        if(!isSumlumpBid) {
+            this.suppliersBidToCompare.forEach(bid => {
+                let i = this.modifiedBids.find(modifieddBid => modifieddBid.part == bid.part.name);
+                if (!i) {
+                    this.modifiedBids.push({ part: bid.part.name, bids: [] });
                 }
             })
-        })
 
-        // console.log(this.modifiedBids);
-        if (this.modifiedBids.length !== 0 && this.modifiedBids[0].bids.length >= 2) {
-            this.displayCompareBids = true;
+
+            this.modifiedBids.forEach(bid => {
+                this.suppliersBidToCompare.forEach(sup => {
+                    if (sup.part.name == bid.part) {
+                        bid.bids.push(sup)
+                    }
+                })
+            })
+
+            console.log(this.modifiedBids);
+            if (this.modifiedBids.length !== 0 && this.modifiedBids[0].bids.length >= 2) {
+                this.displayCompareBids = true;
+            } else {
+                this.messageService.add({ severity: 'error', summary: 'please select 2 or more bids to comapre' });
+            }
         } else {
-            this.messageService.add({ severity: 'error', summary: 'please select 2 or more bids to comapre' });
+            this.messageService.add({ severity: 'error', summary: "you can't compare between 2 diffrenet types of bids." });
         }
 
     }
