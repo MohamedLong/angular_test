@@ -59,6 +59,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     isSubmittingBids: boolean = false;
     totalBidsPrices: number = 0;
     totalServicePrice: number = 0;
+    totalVat: number = 0;
     bidDto: any[] = [];
     claimBidId: number;
     isRowValid: boolean = false;
@@ -193,6 +194,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             this.bidDto.forEach(bid => {
                 this.totalBidsPrices = this.totalBidsPrices + bid.price;
                 this.totalServicePrice = this.totalServicePrice + bid.servicePrice;
+                this.totalVat = this.totalVat + bid.vat;
             });
         };
     }
@@ -232,6 +234,18 @@ export class NewBidComponent implements OnInit, OnChanges {
             $event.originalPrice = 1;
             this.isRowValid = false;
         } else {
+            this.updatePrice($event);
+            this.isRowValid = true;
+        }
+    }
+
+    onServicePriceChange($event) {
+        console.log('onServicePriceChange:',$event)
+        if ($event.servicePrice == null || $event.service < 0) {
+            this.messageService.add({ severity: 'error', summary: 'Service Price is Not Valid', detail: 'Service Price Can Not be Less Than 0' });
+            this.isRowValid = false;
+        } else {
+            console.log('uppdating price')
             this.updatePrice($event);
             this.isRowValid = true;
         }
@@ -296,14 +310,28 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     updatePrice(part) {
+        console.log(part)
         let price = part.originalPrice * part.qty2;
         let discount = part.discountType == 'OMR' ? part.discount : (price * part.discount) / 100;
         let priceAfterDiscount = price - discount;
-        let vat = (priceAfterDiscount * part.vat) / 100;
-        let totalPrice = priceAfterDiscount + vat;
+        let totalPrice;
+        if(part.servicePrice > 0) {
+            console.log('adding service price')
+            let priceAfterServicePrice = priceAfterDiscount + part.servicePrice;
+            let vat = (priceAfterServicePrice * part.vat) / 100;
+            part.totalPrice = priceAfterServicePrice + vat;
+        } else {
+            console.log('withoutservice price')
+            let vat = (priceAfterDiscount * part.vat) / 100;
+            part.totalPrice = priceAfterDiscount + vat;
+        }
+
+
 
         part.price = price;
-        part.totalPrice = totalPrice;
+        //part.totalPrice = totalPrice;
+
+        console.log(part.totalPrice, part.price)
 
         // this.part = part;
     }
