@@ -31,7 +31,7 @@ export class TokenInterceptor implements HttpInterceptor {
     return request.clone({
       setHeaders: {
         'Authorization': 'Bearer ' + token,
-        'X-Skip-SSL-Verification': 'true'
+        // 'X-Skip-SSL-Verification': 'true'
       }
     });
   }

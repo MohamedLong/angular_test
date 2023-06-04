@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Brand } from 'src/app/xgarage/common/model/brand';
@@ -12,6 +12,9 @@ import { Car } from '../../../model/car';
 import { GearType } from '../../../model/geartype';
 import { CarService } from '../../../service/car.service';
 import { config } from "src/app/config";
+import { InsuranceType } from '../../../model/insurancetype';
+import { ClaimService } from '../../../service/claim.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-new-car',
@@ -26,7 +29,9 @@ export class NewCarComponent implements OnInit {
         private carModelYearService: CarModelYearService,
         private carSpecService: CarModelTypeService,
         private carService: CarService,
-        private messageService: MessageService,) { }
+        private messageService: MessageService,
+        private claimService: ClaimService,
+        private router: Router) { }
 
     brands: Brand[];
     carModels: CarModel[];
@@ -41,6 +46,7 @@ export class NewCarComponent implements OnInit {
     notFound: boolean = false;
     image: string = '';
     saving: boolean = false;
+    claimSaving: boolean = false;
     carForm: FormGroup = this.formBuilder.group({
         chassisNumber: ['', [Validators.minLength(13), Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
         brandId: ['', Validators.required],
@@ -50,14 +56,12 @@ export class NewCarComponent implements OnInit {
         plateNumber: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
         gearType: ['Automatic', Validators.required],
     });
-
-    customerName: string = '';
-    contactNO: number = null;
-    excess: string = '';
-    preparedBy: string = '';
+    claim: any;
+    @ViewChild('carFormEl') carFormEl: ElementRef;
 
     @Input() type: string = 'new car';
     @Output() carEvent = new EventEmitter<{ car: Car }>();
+    // @Output() claimEvent = new EventEmitter<{ car: Car }>();
     @Output() close = new EventEmitter<void>();
 
 
@@ -68,55 +72,59 @@ export class NewCarComponent implements OnInit {
     }
 
     onCarFormSubmit() {
-        // console.log(this.carForm.getRawValue())
-        let claimData = {
-            customerName: this.customerName,
-            contactNO: this.contactNO,
-            excess: this.excess,
-            preparedBy: this.preparedBy
-        }
-
+        console.log(this.found, this.type)
         this.submitted = true;
         if (this.carForm.valid) {
-            if (this.found && (this.type == 'new job' || this.type == 'new claim')) {
-                this.type == 'new claim'?  this.carForm.addControl('claimData', new FormControl(claimData)) : null;
+            if (this.found && this.type == 'new job') {
                 this.carEvent.emit(this.carForm.getRawValue());
             } else {
                 //add new/update car
-                this.saving = true;
-                let carBody = {
-                    "brandId": this.carForm.value.brandId.id,
-                    "carModelId": this.carForm.value.carModelId.id,
-                    "carModelTypeId": this.carForm.value.carModelTypeId.id,
-                    "carModelYearId": this.carForm.value.carModelYearId.id,
-                    "chassisNumber": this.carForm.value.chassisNumber,
-                    "plateNumber": this.carForm.value.plateNumber,
-                    "gearType": this.carForm.value.gearType
-                }
-
-                let stringCarBody = JSON.stringify(carBody);
-                let carFormData = new FormData();
-
-                carFormData.append('carBody', stringCarBody);
-                carFormData.append('carDocument', this.carFile ? this.carFile : null);
-
-                //console.log('carDocument: ', carFormData.get('carDocument'));
-                this.carService.add(carFormData).subscribe(res => {
-                    if (this.type == "new job"  || this.type == 'new claim') {
-                        this.setSelectedCar(res);
-                        this.type == 'new claim'?  this.carForm.addControl('claimData', new FormControl(claimData)) : null;
-                        this.carEvent.emit(this.carForm.getRawValue());
-                    }
-
-                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
-                    this.resetCarForm();
-                    this.saving = false;
-                    this.close.emit();
-                }, err => {
-                    this.messageService.add({ severity: 'erorr', summary: 'Error', detail: 'Erorr Saving Car' });
-                })
+                this.saveNewCar();
             }
         }
+    }
+
+    saveNewCar(claimEvent?: any) {
+        //console.log(this.carForm.value)
+        this.saving = true;
+        let carBody = {
+            "brandId": this.carForm.value.brandId.id,
+            "carModelId": this.carForm.value.carModelId.id,
+            "carModelTypeId": this.carForm.value.carModelTypeId.id,
+            "carModelYearId": this.carForm.value.carModelYearId.id,
+            "chassisNumber": this.carForm.value.chassisNumber,
+            "plateNumber": this.carForm.value.plateNumber,
+            "gearType": this.carForm.value.gearType
+        }
+
+        let stringCarBody = JSON.stringify(carBody);
+        let carFormData = new FormData();
+
+        carFormData.append('carBody', stringCarBody);
+        carFormData.append('carDocument', this.carFile ? this.carFile : null);
+
+        //console.log('carDocument: ', carFormData.get('carDocument'));
+        this.carService.add(carFormData).subscribe(res => {
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Car Added Susccessfully!' });
+            if (this.type == "new job") {
+                this.setSelectedCar(res);
+                this.carEvent.emit(this.carForm.getRawValue());
+            } else if (this.type == "new claim") {
+                this.setSelectedCar(res);
+                //save claim
+                console.log('saving claim');
+                this.saveClaim(claimEvent);
+            } else {
+                this.resetCarForm();
+                this.saving = false;
+                this.close.emit();
+            }
+
+        }, err => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error Saving Car, Please Try Again Later.' });
+            this.saving = false;
+            this.claimSaving = false;
+        })
     }
 
     onChnKeyUp() {
@@ -280,5 +288,59 @@ export class NewCarComponent implements OnInit {
         this.carForm.get('chassisNumber').enable();
         this.carForm.get('plateNumber').enable();
         this.carForm.get('gearType').enable();
+    }
+
+    onCreateClaimEvent(event) {
+        console.log('create form submitted', event);
+        if (this.carForm.valid) {
+            this.claimSaving = true;
+            if (this.found && this.type == 'new claim') {
+                //save claim
+                this.saveClaim(event);
+            } else {
+                //save new car than save claim
+                this.saveNewCar(event);
+            }
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select or add a new car.', life: 3000 });
+            this.getYPosition();
+            this.claimSaving = false;
+        }
+
+    }
+
+    saveClaim(claimBody: any) {
+        //console.log(claimBody, this.carForm.getRawValue())
+        claimBody.form.car = { id: this.carForm.getRawValue().id };
+        claimBody.form.claimTitle = `${this.carForm.getRawValue().brandId.brandName} ${this.carForm.getRawValue().carModelId.name} ${this.carForm.getRawValue().carModelYearId.year}, ${this.carForm.getRawValue().carModelTypeId.type}`;
+
+        let stringClaimBody = JSON.stringify(claimBody.form);
+        let claimFormData = new FormData();
+
+        claimFormData.append('claimBody', stringClaimBody);
+        claimFormData.append('claimDocument', claimBody.carsheet ? claimBody.carsheet : null);
+        claimFormData.append('carDocument', null);
+
+        this.claimService.saveClaim(claimFormData).subscribe(res => {
+            //console.log(res)
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Claim Created Succefully. Redirecting To Claim..' });
+            this.claimSaving = false;
+            setTimeout(() => {
+                this.goToClaimDetails(res);
+            }, 1000)
+        }, err => {
+            console.log(err)
+            this.messageService.add({ severity: 'error', summary: 'Success', detail: err });
+            this.claimSaving = false;
+        })
+    }
+
+    goToClaimDetails(id: number) {
+        localStorage.setItem('claimId', JSON.stringify(id));
+        this.router.navigate(['/claim-details']);
+    }
+
+    getYPosition() {
+        this.carFormEl.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 }

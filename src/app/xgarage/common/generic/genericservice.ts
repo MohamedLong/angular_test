@@ -36,6 +36,7 @@ export abstract class GenericService<T> {
     }
 
     public add(t: T): Observable<T> {
+        console.log(this.apiServerUrl + '/save')
         return this.http.post<T>(this.apiServerUrl + '/save', t);
     }
 

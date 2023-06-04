@@ -18,7 +18,7 @@ export class NewPartComponent implements OnInit {
 
     parts: Part[] = [];
     categories: Category[] = [];
-    subCategories: SubCategory[];
+    subCategories: SubCategory[] = [];
     selectedPart: Part;
     selectedCategory: Category;
     selectedSubCategory: SubCategory;
@@ -29,13 +29,29 @@ export class NewPartComponent implements OnInit {
     disableList: boolean = false;
     part: Part;
     partName: string;
-
+    actionName: string;
+    updatedPart: any
     @Input() type: string = 'new part';
     @Input() partDetails: Part = {};
     @Input() errMsg: string = "";
+    @Input() category: Category;
+    @Input() subcategory: SubCategory;
+    @Input() actions: any[] = [];
+    isAlreadyExists: boolean = false;
 
     ngOnInit(): void {
-        this.getPartCategories();
+        //console.log(this.actions)
+        if (this.type == 'claim') {
+            this.categories.push(this.category);
+            this.subCategories.push(this.subcategory);
+            this.selectedCategory = this.category;
+            this.selectedSubCategory = this.subcategory;
+
+            this.disableList = true;
+        } else {
+            //console.log(this.category, this.subcategory)
+            this.getPartCategories();
+        }
     }
 
     getPartCategories() {
@@ -70,9 +86,19 @@ export class NewPartComponent implements OnInit {
                 this.parts = res;
                 this.isFetching = false;
             } else {
-                this.disableList = false;
-                this.selectedPart = null;
-                this.isFetching = false;
+                if (this.type == 'claim') {
+                    console.log('this is a new part');
+                    this.disableList = true;
+                    this.updatedPart = {
+                        name: this.partName,
+                        status: 0
+                    };
+                } else {
+                    this.disableList = false;
+                    this.selectedPart = null;
+                    this.isFetching = false;
+
+                }
             }
         }, err => {
             this.disableList = false;
@@ -88,16 +114,28 @@ export class NewPartComponent implements OnInit {
     }
 
     onChoosePart(part: Part) {
-        this.selectedPart = part;
-        this.selectedCategory = this.categories.find(c => c.id == this.selectedPart.categoryId);
-        this.subCategoryService.getSubCategoriesByCategory(this.selectedPart.categoryId).subscribe(res => {
-            this.subCategories = res;
-            this.selectedSubCategory = this.subCategories.find(c => c.id = this.selectedPart.subCategoryId);
-            this.disableList = true;
-            this.part = this.selectedPart;
-            this.part.subCategoryId = this.selectedSubCategory.id;
-            this.requestService.part.next(this.part)
-        })
+        if (this.type == 'claim') {
+            console.log(part)
+            if (part.categoryId == this.category.id) {
+                console.log('this part already exists');
+                this.isAlreadyExists = true;
+                this.updatedPart = part;
+            } else {
+                console.log('this part doesnt exists on this category');
+                this.updatedPart = part;
+            }
+        } else {
+            this.selectedPart = part;
+            this.selectedCategory = this.categories.find(c => c.id == this.selectedPart.categoryId);
+            this.subCategoryService.getSubCategoriesByCategory(this.selectedPart.categoryId).subscribe(res => {
+                this.subCategories = res;
+                this.selectedSubCategory = this.subCategories.find(c => c.id = this.selectedPart.subCategoryId);
+                this.disableList = true;
+                this.part = this.selectedPart;
+                this.part.subCategoryId = this.selectedSubCategory.id;
+                this.requestService.part.next(this.part)
+            })
+        }
     }
 
     onSelectPart() {
@@ -134,5 +172,10 @@ export class NewPartComponent implements OnInit {
         }
 
         this.requestService.part.next(this.part);
+    }
+
+    onAction($event) {
+        //console.log($event)
+        this.requestService.part.next({ part: this.updatedPart, option: $event, exists: this.isAlreadyExists });
     }
 }

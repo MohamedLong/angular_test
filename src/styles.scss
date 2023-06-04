@@ -13,12 +13,15 @@
 
 // .p-fileupload-choose,
 .p-dropdown,
+p-dropdown.p-element,
+p-inputnumber.p-element,
+p-inputnumber .p-inputnumber-input,
 .p-cascadeselect,
 .p-calendar,
 .p-multiselect,
 .p-autocomplete,
 .p-autocomplete>input {
-    width: 100%;
+    width: 100% !important;
 }
 
 .car-info>.p-message.p-message-info {

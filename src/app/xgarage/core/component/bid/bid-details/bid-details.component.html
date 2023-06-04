@@ -1,6 +1,6 @@
 <div class="card">
     <p-toast></p-toast>
-    <p-table #dt styleClass="p-invoice-datatable-responsive"  (onPage)="loadBids($event)" [rows]="10" [paginator]="true" dataKey="id"
+    <p-table #dt styleClass="p-invoice-datatable-responsive" (onPage)="loadBids($event)" [rows]="10" [paginator]="true" dataKey="id"
         [globalFilterFields]="['jobTitle','client','partNames','jobStatus', 'totalPrice']"
         [loading]="loading" [value]="fillteredBids" responsiveLayout="scroll">
         <ng-template pTemplate="caption" class="pb-0">
@@ -27,26 +27,27 @@
                 <th>{{ 'operations.action' | translate }}</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-job>
-            <tr>
+        <ng-template pTemplate="body" let-bid>
+            <tr [ngClass]="{'bg-green-50': highlight}">
                 <td class="font-bold">
-                    {{job.jobTitle}}
+                    {{bid.jobTitle || bid.claimTitle || '-'}}
                 </td>
                 <td>
-                    {{job.client}}
+                    {{bid.client || bid.tenantName}}
                 </td>
                 <td>
-                    {{job.partNames}}
+                    {{bid.partNames}}
                 </td>
                 <td>
-                    {{job.jobStatus}}
+                    {{user == 1? bid.status : bid.jobStatus}}
                 </td>
                 <td>
-                    {{!job.totalPrice?  0 : job.totalPrice | number }}
+                    {{!bid.totalPrice?  0 : bid.totalPrice | number }}
                 </td>
                 <td>
-                    <button (click)="onBidView(job)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
+                    <button (click)="onBidView(bid)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
                 </td>
+                <!-- {{bid | json}} -->
             </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
@@ -57,7 +58,34 @@
     </p-table>
 </div>
 
-<p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag" [header]="jobBids[0]?.requestTitle" [(visible)]="displayModal" [modal]="true" [style]="{width: '90vw'}"
+<p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag" [header]="bidDetails[0]?.requestTitle" [(visible)]="displayModal" [modal]="true" [style]="{width: '90vw'}"
     [draggable]="false" [resizable]="false">
-    <app-new-bid *ngIf="jobBids.length > 0" [requests]="jobBids" type="edit bid"></app-new-bid>
+    <app-new-bid *ngIf="bidDetails.length > 0 && displayModal" [requests]="bidDetails" [type]="typeOfBid"></app-new-bid>
 </p-dialog>
+<p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag" [header]="bidDetails[0]?.requestTitle" [(visible)]="displaylumpsumModal" [modal]="true" [style]="{width: 'auto'}"
+    [draggable]="false" [resizable]="false">
+    <p-table #dt styleClass="p-invoice-datatable-responsive" dataKey="id" [value]="bidDetails" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>{{ 'job.tableColumn.parts' | translate }}</th>
+                <th>{{ 'bid.bidDetails.totalPrice' | translate }}</th>
+                <th>{{ 'operations.action' | translate }}</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-biddetail>
+            <tr [ngClass]="{'bg-green-50': highlight}">
+                <td class="font-bold">
+                    {{biddetail.partName}}
+                </td>
+                <td>
+                    {{biddetail.price}}
+                </td>
+
+                <td>
+                    <button [disabled]="bidDetails[0].statusId !== 'Open'" (click)="confirmCancel(biddetail.bid)" pButton pRipple type="button" label="Cancel Bid" class="p-button-warning"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<p-confirmDialog></p-confirmDialog>

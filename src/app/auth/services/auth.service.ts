@@ -155,6 +155,8 @@ export class AuthService {
         localStorage.removeItem('orderData');
         localStorage.removeItem('jobId');
         localStorage.removeItem('subs');
+        localStorage.removeItem('claim');
+        localStorage.removeItem('claimId');
     }
 
     changePassword(body: any) {
@@ -186,6 +188,7 @@ export class AuthService {
         //console.log('getting auth')
         let userRole = JSON.parse(localStorage.getItem('user')).roles[0].id;
         this.usersubmenuservice.getUserSubMenusByRoleId(userRole).then(subs => {
+            console.log('saving subs in local storage>>>')
             localStorage.setItem('subs', JSON.stringify(subs));
             //console.log('setting auth in local storage')
         });

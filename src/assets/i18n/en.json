@@ -80,8 +80,10 @@
         "profile": "Profile",
         "x": "X-Garage",
         "description": "Description",
+        "contactNo": "Contact No",
         "customer": "Customer Name",
         "customerRequired": "Customer name is required.",
+        "contactNoRequired": "Contact No is Required.",
         "customerSearch": "Search by customer name",
         "supplier": "Supplier Name",
         "supplierRequired": "Supplier name is required",
@@ -298,16 +300,41 @@
             "tenantName": "Tenant Name",
             "statusDate": "Status Date",
             "claimNo": "Claim No",
-            "status": "Status"
-
-
+            "status": "Status",
+            "claimNotFound": "this claim has no requests",
+            "claimBidsNotFound": "this claim has no bids yet",
+            "requestFor": "Request For"
         },
         "claimDialog": {
             "title": "Claim Details",
             "claimDateRequired": "Claim date is required.",
             "tenantRequired": "Tenant is required.",
             "claimNoRequired": "Claim Number is required."
-
+        },
+        "form": {
+            "datetime": "Received Date & Time",
+            "delivryDate": "Exc. Delivery Date",
+            "breakdown": "Breakdown",
+            "km": "K.M",
+            "whatYouRecived": "What You Received",
+            "calimDateRequired": "Calim Date is Required",
+            "delivryDateRequired": "Exc. Delivery Date is Required",
+            "breakdownRequired": "Breakdown is Required",
+            "kmRequired": "K.M is Required",
+            "excess": "Excess R.O",
+            "excessRequired": "Excess R.O is Required",
+            "inspectionBy": "Inspection By",
+            "inspectionByRequired": "Inspection By is required",
+            "surveyedBy": "Surveyed By",
+            "surveyedByRequired": "Surveyed By is required",
+            "repairCost": "Repair Cost",
+            "repairCostRequired": "Repair Cost is required",
+            "repairHrs": "Repair Hrs.",
+            "repairHrsRequired" : "Repair Hrs is required",
+            "Office Location": "Office Location",
+            "officeLocationRequired": "Office Location is required",
+            "deletePartMsg": "Are you sure you want to delete this part?",
+            "claimDetails": "Claim Details"
         }
     },
     "supplier": {
@@ -565,7 +592,9 @@
             "approveBid": "Approve Bids",
             "approveMultipleBids": "Please confirm that the selected Bids will be approved, LPO will be generated and sent via emails to the selected suppliers? ",
             "rejectBid": "Reject Bids",
-            "rejectMultipleBids": "Please confirm that the selected Bids will be rejected and notifications of rejection will be sent to the selected suppliers?"
+            "approveBids": "Please confirm that the Bids will be approved, LPO will be generated and sent via emails to the selected suppliers?",
+            "rejectMultipleBids": "Please confirm that the selected Bids will be rejected and notifications of rejection will be sent to the selected suppliers?",
+            "rejectBids": "Please confirm that the Bids will be rejected and notifications of rejection will be sent to the selected suppliers?"
         },
         "form": {
             "insuranceFrom": "Insurance From",

@@ -1,0 +1,27 @@
+<label class="block mb-2">{{label}}</label>
+<p-dropdown appendTo="body" [formControl]="privacyControl" [options]="selectionList"
+    (onChange)="onSelectChange($event.value)"></p-dropdown>
+
+<div class="mt-3" *ngIf="privateSuppliersList.length > 0">
+    <ng-container *ngFor="let supplier of privateSuppliersList">
+        <p-chip class="mr-2" [removable]="true" (onRemove)="removePrivateSupplier(supplier)">
+            {{supplier.name}}
+        </p-chip>
+    </ng-container>
+</div>
+
+<p-dialog [modal]="true" [style]="{width: '50vw'}" [(visible)]="displayPrivateSuppliers"
+    (onHide)="resetPrivacy()" header="Header">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold">Private Suppliers</span>
+        <!-- <i class="pi pi-times"></i> -->
+    </ng-template>
+    <p-listbox *ngIf="selectedPrivateSuppliers | async as selectedPrivateSuppliers; else loading"
+        (onChange)="selectSupplier(multipleSelect? $event.value : [$event.value])" [checkbox]="true" [options]="selectedPrivateSuppliers"
+        [formControl]="suppliersControl" [multiple]="multipleSelect" optionLabel="name"></p-listbox>
+    <ng-template #loading>loading suppliers..</ng-template>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" (click)="displayPrivateSuppliers=false" label="Ok" styleClass="p-button-text"
+            [disabled]="!supplierSelected"></p-button>
+    </ng-template>
+</p-dialog>

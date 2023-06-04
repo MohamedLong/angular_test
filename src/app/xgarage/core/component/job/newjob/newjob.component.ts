@@ -8,7 +8,7 @@ import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { Privacy } from 'src/app/xgarage/common/model/privacy';
 import { InsuranceType } from '../../../model/insurancetype';
 import { Supplier } from '../../../model/supplier';
-import { ClaimService } from '../../../service/claimservice';
+import { ClaimService } from '../../../service/claim.service';
 import { JobService } from '../../../service/job.service';
 import { SupplierService } from '../../../service/supplier.service';
 
@@ -56,6 +56,13 @@ import { SupplierService } from '../../../service/supplier.service';
 })
 export class NewJobComponent implements OnInit {
 
+    constructor(private formBuilder: FormBuilder,
+        private jobService: JobService,
+        private authService: AuthService,
+        private calimService: ClaimService,
+        private dataService: DataService<any>,
+        private messageService: MessageService) { }
+
     activeTab = 'car-info';
     @ViewChild('fromContainer') fromContainer: ElementRef;
     isTypingClaim: boolean = false;
@@ -73,13 +80,12 @@ export class NewJobComponent implements OnInit {
         jobId: ['', Validators.required],
         location: [''],
         privacy: ['Public', Validators.required],
-        suppliers: [],
+        suppliers: [[]],
         car: [''],
         carDocument: [''],
     });
 
     ClaimTypingTimer;  //timer identifier
-    InsuranceType = Object.keys(InsuranceType);
     jobFound: { found: boolean, multiple: boolean } = {
         found: false,
         multiple: false
@@ -93,14 +99,6 @@ export class NewJobComponent implements OnInit {
     numberOfrequests: number = 1;
     newJob: boolean = false;
     @Input() type: string = 'new job';
-
-    constructor(private formBuilder: FormBuilder,
-        private jobService: JobService,
-        private authService: AuthService,
-        private calimService: ClaimService,
-        private supplierService: SupplierService,
-        private dataService: DataService<any>,
-        private messageService: MessageService) { }
 
     ngOnInit(): void {
         //set location
@@ -218,7 +216,7 @@ export class NewJobComponent implements OnInit {
     }
 
     onJobFormSubmit() {
-        //console.log(this.jobForm.value)
+        console.log(this.jobForm.value)
         console.log('request emitted')
         this.submitted = true;
         if (this.jobForm.get('jobId').value && (this.jobForm.get('jobId').value !== 0)) {
@@ -231,7 +229,7 @@ export class NewJobComponent implements OnInit {
     }
 
     onNewJob() {
-        if(this.jobForm.get('claim').value !== '') {
+        if (this.jobForm.get('claim').value !== '') {
             this.jobFound.multiple = false;
             this.jobForm.get('job').enable();
             this.jobForm.get('location').enable();
@@ -307,77 +305,13 @@ export class NewJobComponent implements OnInit {
         }
     }
 
-    getYPosition() {
-        this.fromContainer.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    onPrivacyChange(value) {
-        // console.log(value)
-        if (value == 'Private') {
-            this.getSupplierByBrandId();
-            this.displayPrivateSuppliers = true;
-        } else {
-            this.privateSuppliersList = [];
-            this.jobForm.patchValue({
-                'suppliers': []
-            });
-            this.displayPrivateSuppliers = false;
-        }
-    }
-
-    getSupplierByBrandId() {
-        if (this.jobForm.get('car')) {
-            this.selectedPrivateSuppliers = this.supplierService.getSupplierByBrandId(this.jobForm.get('car').value.brandId.id);
-        }
-    }
-
     addRequest() {
         this.numberOfrequests++;
         this.addOneMoreRequest = false;
     }
 
-    selectSupplier(value: Supplier[]) {
-        //check if at least 1 supplier is slected
-        console.log(value)
-        if (value.length > 0) {
-            this.supplierSelected = true;
-
-        } else {
-            this.supplierSelected = false;
-        }
-
-        this.privateSuppliersList = value;
-    }
-
-    removePrivateSupplier(value) {
-        // console.log(value)
-        let updatedPrivateSuplliers = this.jobForm.get('suppliers').value.filter(supplier => {
-            return supplier.id !== value.id;
-        });
-
-        this.jobForm.patchValue({
-            'suppliers': updatedPrivateSuplliers
-        });
-
-        this.privateSuppliersList = updatedPrivateSuplliers
-
-        if (this.jobForm.get('suppliers').value.length == 0) {
-            this.jobForm.patchValue({
-                'privacy': 'Public'
-            });
-
-            this.supplierSelected = false;
-        }
-    }
-
-    resetPrivacy() {
-        //console.log(this.privateSuppliersList)
-        if (this.privateSuppliersList.length == 0) {
-            this.jobForm.patchValue({
-                'suppliers': this.privateSuppliersList,
-                'privacy': 'Public'
-            });
-        }
+    getYPosition() {
+        this.fromContainer.nativeElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
 }

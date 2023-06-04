@@ -1,4 +1,4 @@
-<div [ngClass]="{'card': type == 'new car'}">
+<div [ngClass]="{'card': type == 'new car'}" #carFormEl>
     <p-toast></p-toast>
     <form [formGroup]="carForm" (ngSubmit)="onCarFormSubmit()">
         <div class="grid">
@@ -24,7 +24,8 @@
                             *ngIf="!carForm.get('chassisNumber').valid  && carForm.get('chassisNumber').errors?.['pattern']"
                             class="block p-error">{{ 'car.form.onlyLetters' | translate }}</small>
                     </div>
-                    <small class="block muted-text" *ngIf="notFound && !isTyping">{{ 'car.form.chassisNoNotFound' | translate }}</small>
+                    <small class="block muted-text" *ngIf="notFound && !isTyping">{{ 'car.form.chassisNoNotFound' |
+                        translate }}</small>
                 </div>
             </div>
             <div class="col-12 md:col-6">
@@ -77,42 +78,23 @@
                     *ngIf="submitted && !carForm.get('plateNumber').valid &&  carForm.get('plateNumber').errors?.['required']"
                     class="p-error">{{ 'car.form.plateRequired' | translate }}</small>
             </div>
-            <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
-                <label class="block">Customer Name</label>
-                <input [(ngModel)]="customerName" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text" pInputText
-                    placeholder="" required />
-            </div>
-            <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
-                <label class="block">Contact No</label>
-                <input [(ngModel)]="contactNO" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text" pInputText
-                    placeholder="" required />
-            </div>
-            <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
-                <label class="block">Excess R.O</label>
-                <input [(ngModel)]="excess" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text" pInputText
-                    placeholder="" required />
-            </div>
-            <div class="col-12 md:col-6" *ngIf="type == 'new claim'">
-                <label class="block">Prepared By</label>
-                <input [(ngModel)]="preparedBy" [ngModelOptions]="{standalone: true}" class="width-100 my-2" type="text" pInputText
-                    placeholder="" required />
-            </div>
+
             <div class="col-12 flex align-items-center mt-3">
-                <p-fileUpload class="mt-2 width-100"  mode="advanced"
-                    [chooseIcon]="'pi pi-cloud-upload'" customUpload="true" accept="image/*" maxFileSize="10000000"
+                <p-fileUpload class="mt-2 width-100" mode="advanced" [chooseIcon]="'pi pi-cloud-upload'"
+                    customUpload="true" accept="image/*" maxFileSize="10000000"
                     chooseLabel="{{ 'car.form.uploadCarImg' | translate }}" auto="true"
                     (uploadHandler)="onCarImageUpload($event)" *ngIf="!found"></p-fileUpload>
 
                 <ng-container *ngIf="found && image !== ''">
                     <div class="mr-4 relative">
                         <p-skeleton class="absolute top-0 left-0 z-1" size="200px" *ngIf="!imageLoaded"></p-skeleton>
-                        <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="200"
-                            src="{{image}}" alt="">
+                        <img (load)="imageLoaded = true" class="rounded-large shadow-3" width="200" src="{{image}}"
+                            alt="">
                     </div>
                 </ng-container>
-
             </div>
-            <div class="col-12 text-center">
+            <app-new-claim *ngIf="type == 'new claim'" (createClaimEvent)="onCreateClaimEvent($event)" [saving]="claimSaving"></app-new-claim>
+            <div class="col-12 text-center" *ngIf="type !== 'new claim'">
                 <button class="width-100 md:w-20rem" pButton pRipple type="submit"
                     label="{{type == 'new car'? 'Add Car' : 'NEXT'}}" icon="{{saving? 'pi pi-spin pi-spinner' : ''}}"
                     iconPos="right">

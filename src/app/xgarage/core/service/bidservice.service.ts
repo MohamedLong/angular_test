@@ -27,14 +27,30 @@ export class BidService extends GenericService<any> {
     }
 
     cancelBid(bidId: number){
-        return this.http.post(this.apiServerUrl + '/cancelBid/' + bidId, {"comments": ""});
+        return this.http.post(this.apiServerUrl + '/cancelBid/' + bidId, {"comments": null});
     }
 
     approveMultipleBids(bidOrderDto: BidOrderDto) {
         return this.http.post(this.apiServerUrl + '/approveBid/multiple', bidOrderDto);
     }
 
+    approveBidByBidId(reqId: number, bidId: number) {
+        return this.http.post(this.apiServerUrl + '/approveBid/' + reqId + '/' + bidId, '');
+    }
+
+    approveBid(bidOrderDto: BidOrderDto) {
+        return this.http.post(this.apiServerUrl + '/approveBid', bidOrderDto);
+    }
+
+    rejectBidByBidId(reqId: number, bidId: number) {
+        return this.http.post(this.apiServerUrl + '/rejectBid/' + reqId + '/' + bidId, null);
+    }
+
     rejectMutltipleBids(bidList: MultipleBids) {
         return this.http.post(this.apiServerUrl + '/rejectBid/multiple', bidList);
+    }
+
+    getBidsByClaim(id: number) {
+        return this.http.get<BidDto[]>(this.apiServerUrl + '/claim/' + id);
     }
 }

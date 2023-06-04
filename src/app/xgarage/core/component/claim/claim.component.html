@@ -6,24 +6,25 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
-                        class="p-button-success mr-2 mb-2" (click)="new()" [disabled]="newAuth===false"
-                        [hidden]="false"></button>
-                    <!-- <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
+                        class="p-button-success mr-2 mb-2" (click)="new()" [disabled]="newAuth===false" [hidden]="false"
+                        *ngIf="user == 2"></button>
+                    <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
                         class="p-button-success mr-2 mb-2" [routerLink]="['/add-claim']" [disabled]="newAuth===false"
-                        [hidden]="false"></button> -->
+                        [hidden]="false" *ngIf="user == 1"></button>
                 </ng-template>
 
-                <ng-template pTemplate="right">
+                <!-- <ng-template pTemplate="right">
                     <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload"
                         class="p-button-help mb-2" (click)="dt.exportCSV()" [disabled]="printAuth===false"></button>
-                </ng-template>
+                </ng-template> -->
             </p-toolbar>
 
-            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10" [paginator]="true"
+            <p-table #dt [value]="fillteredMaster" [columns]="cols" [rows]="10" [paginator]="true"
                 [globalFilterFields]="['id','claimNo','tenantName','createdUser','status']"
                 [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
                 currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                (onFilter)="onFilter($event, dt)" [showCurrentPageReport]="true">
+                (onFilter)="onFilter($event, dt)" [showCurrentPageReport]="true"  (onPage)="loadClaims($event)">
+
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between table-header">
                         <h5 class="m-0">{{ 'claim.title' | translate }}</h5>
@@ -32,6 +33,14 @@
                             <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
                                 placeholder="{{ 'operations.filter' | translate }}" />
                         </span>
+                    </div>
+                    <div class="mt-3 border-300 border-bottom-1">
+                        <ng-container *ngFor="let state of status">
+                            <button (click)="filterByStatus(state)" pButton pRipple type="button"
+                                label="{{state}}"
+                                [ngClass]="{'active': selectedState == state, 'text-black-alpha-40': selectedState !== state}"
+                                class="mr-3 p-button-text"></button>
+                        </ng-container>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -63,10 +72,14 @@
                             {{claim.id}}
                         </td>
                         <td>
-                            {{claim.claimNo}}
+                            <span>
+                                <a (click)="goToClaimDetails(claim.id)" style="cursor: pointer;"><mark
+                                        class="text-blue-400 hover:text-pink-500">{{claim.claimNo}}</mark>
+                                </a>
+                            </span>
                         </td>
                         <td>
-                            {{claim.claimDate | date:'longDate'}}
+                            {{claim.claimDate| date:'longDate'}}
                         </td>
                         <td>
                             {{claim.tenantName}}
@@ -78,14 +91,14 @@
                             {{claim.statusDate | date:'longDate'}}
                         </td>
                         <td>
-                            {{claim.status}}
+                            <p-button label="{{claim.status}}" styleClass="p-button-text p-button-sm {{claim.status == 'Open'? 'bg-blue-100' : claim.status == 'Waiting for Survey'? 'p-button-warning bg-orange-100' : claim.status == 'Confirmed'? 'p-button-success bg-green-100': claim.status == 'Waiting for Approval'? 'p-button-help  bg-indigo-100':'p-button-danger bg-pink-100'}}"></p-button>
+                            <!-- <p-badge value="{{claim.status}}" severity="{{claim.status == 'Open'? 'info' : claim.status == 'Waiting for Survey'? 'warning' : claim.status == 'Confirmed'? 'success': 'danger'}}"></p-badge> -->
                         </td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                                [disabled]="!editAuth" (click)="edit(claim)" [disabled]="edituth===false"></button>
+                                (click)="edit(claim)" [disabled]="edituth===false || (claim.status == 'Canceled')  || (claim.status == 'Confirmed')"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
-                                [disabled]="!editAuth" (click)="deleteAction(claim)"
-                                [disabled]="deleteAuth===false"></button>
+                                [disabled]="(editAuth===false && deleteAuth===false) || (claim.status == 'Canceled') || (claim.status == 'Confirmed')" (click)="deleteAction(claim)"></button>
                         </td>
                     </tr>
                 </ng-template>

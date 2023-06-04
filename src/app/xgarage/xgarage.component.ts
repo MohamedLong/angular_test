@@ -4,12 +4,13 @@ import { PrimeNGConfig } from 'primeng/api';
 import { AppComponent } from '../app.component';
 import { MenuService } from '../app.menu.service';
 import { AuthService } from '../auth/services/auth.service';
+import { StatusService } from './common/service/status.service';
 
 @Component({
     selector: 'app-xgarage',
     templateUrl: './xgarage.component.html',
 })
-export class XgarageComponent implements AfterViewInit, OnInit, OnDestroy  {
+export class XgarageComponent implements AfterViewInit, OnInit, OnDestroy {
 
     topbarMenuActive: boolean;
 
@@ -51,8 +52,8 @@ export class XgarageComponent implements AfterViewInit, OnInit, OnDestroy  {
     menuActiveMobile: boolean;
     menuInactiveDesktop: boolean;
     isDashboard: boolean = false;
-    constructor(private authService: AuthService, public renderer: Renderer2, private menuService: MenuService, private primengConfig: PrimeNGConfig,
-        public app: AppComponent, private router: Router) { }
+    constructor(public renderer: Renderer2, private menuService: MenuService, private primengConfig: PrimeNGConfig,
+        public app: AppComponent, private router: Router, private authService: AuthService, private statusService: StatusService) { }
 
     ngOnInit() {
         this.menuActive = this.isStatic() && !this.isMobile();
@@ -60,10 +61,13 @@ export class XgarageComponent implements AfterViewInit, OnInit, OnDestroy  {
             this.isDashboard = true;
         }
 
-        if(this.authService.isLoggedIn()) {
-            // console.log('user logged in')
-             this.authService.getAuth();
-         }
+        //get user subMenu permissions & statuses
+        if (this.authService.isLoggedIn()) {
+            this.authService.getAuth();
+            this.getAllStatuses();
+        }
+
+
     }
 
     ngAfterViewInit() {
@@ -240,6 +244,15 @@ export class XgarageComponent implements AfterViewInit, OnInit, OnDestroy  {
             document.body.className = document.body.className.replace(new RegExp('(^|\\b)' +
                 'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
         }
+    }
+
+    getAllStatuses() {
+        this.statusService.getAll().subscribe(res => {
+            this.statusService.statuses = res;
+            // console.log(this.statusService.statuses)
+        }, err => {
+            console.log(err)
+        })
     }
 
     ngOnDestroy() {

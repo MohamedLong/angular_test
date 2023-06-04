@@ -4,12 +4,12 @@
             <label>{{'part.tableColumn.partName' | translate}}</label>
             <span class="p-input-icon-right block">
                 <i class="pi pi-search z-1" *ngIf="!isFetching"></i>
-                <p-autoComplete [showEmptyMessage]="true" class="width-100" [(ngModel)]="partName" [suggestions]="parts" field="name"
-                    (completeMethod)="onSearchPart($event)" (onClear)="onClearSearchPart()" (onSelect)="onChoosePart($event)"
-                    placeholder="Ex: Break Shoe"></p-autoComplete>
+                <p-autoComplete [showEmptyMessage]="true" class="width-100" [(ngModel)]="partName" [suggestions]="parts"
+                    field="name" (completeMethod)="onSearchPart($event)" (onClear)="onClearSearchPart()"
+                    (onSelect)="onChoosePart($event)" placeholder="Ex: Break Shoe"></p-autoComplete>
             </span>
         </div>
-        <div class="col-12">
+        <div class="col-12" *ngIf="type !== 'claim'">
             <p-divider align="center">
                 <span class="text-black-alpha-60">{{ 'part.dividerTitle' | translate }}</span>
             </p-divider>
@@ -28,16 +28,26 @@
                 [ngClass]="{'ng-invalid ng-dirty': errMsg !== ''}"
                 placeholder="{{ 'part.partDialog.subCategoryPlaceHolder' | translate}}"></p-dropdown>
         </div>
-        <div class="field col-12">
+        <div class="field col-12" *ngIf="type !== 'claim'">
             <label>{{ 'part.tableColumn.partName' | translate}}</label>
             <p-dropdown [options]="parts" [(ngModel)]="selectedPart" optionLabel="name" [disabled]="disableList"
-                placeholder="{{ 'part.partDialog.partNamePlaceHolder' | translate}}"
-                (onChange)="onSelectPart()" [ngClass]="{'ng-invalid ng-dirty': errMsg !== ''}"></p-dropdown>
+                placeholder="{{ 'part.partDialog.partNamePlaceHolder' | translate}}" (onChange)="onSelectPart()"
+                [ngClass]="{'ng-invalid ng-dirty': errMsg !== ''}"></p-dropdown>
         </div>
-        <div class="field col-12 flex align-items-center" *ngIf="!selectedPart">
+        <div class="field col-12 flex align-items-center" *ngIf="!selectedPart && type !== 'claim'">
             <p-checkbox [(ngModel)]="checked" [binary]="true" (onChange)="createNewPart()"
                 inputId="binary"></p-checkbox>
             <label for="binary" class="mb-0 ml-2">{{ 'part.partDialog.setnew' | translate}}</label>
+        </div>
+        <div class="field col-12" *ngIf="type == 'claim'">
+            <label>Action</label>
+            <div class="flex" *ngIf="actions.length > 0">
+                <div *ngFor="let action of actions;" class="field-checkbox mr-3">
+                    <p-radioButton *ngIf="action.name !== 'No Action'" (onClick)="onAction(action.name)" [inputId]="action.id" [name]="action.name"
+                        [value]="action.name" [(ngModel)]="actionName"></p-radioButton>
+                    <label *ngIf="action.name !== 'No Action'" [for]="action.id" class="ml-2">{{ action.name }}</label>
+                </div>
+            </div>
         </div>
     </div>
     <small *ngIf="errMsg !== ''" class="p-error">{{ 'part.partDialog.errMsg' | translate: {'msg': errMsg} }}</small>

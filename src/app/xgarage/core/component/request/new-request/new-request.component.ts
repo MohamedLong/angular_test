@@ -54,7 +54,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     @Input() edit: boolean = false;
     @Input() passedJob: any = {};
     @Output() request = new EventEmitter<null | any>();
-    @ViewChild('partComponent') partComponent : ElementRef;
+    @ViewChild('partComponent') partComponent: ElementRef;
     blocked: boolean = false;
     isSending: boolean = false;
     buttonTxt = 'Send Request';
@@ -65,7 +65,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         this.getPartTypes();
 
         if (this.type == 'edit req') {
-            console.log(this.requestDetails)
+            //console.log(this.requestDetails)
             this.setRequestInfo();
         }
 
@@ -87,11 +87,11 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     sendRequest() {
         this.request.emit();
         this.submitted = true;
-        console.log('inside sendRequest');
+        //console.log('inside sendRequest>>>');
         setTimeout(() => {
             this.dataService.name.subscribe({
                 next: (data) => {
-                    console.log('inside dataService.name');
+                    //console.log('inside dataService.name>>>');
                     if (data && JSON.stringify(data) !== '{}') {
                         console.log(data)
                         this.isSending = true;
@@ -114,11 +114,14 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                         this.responseBody.qty = this.qty;
 
                         this.getPart();
-                        console.log('before formatThenSaveRequest');
+                        //console.log('before formatThenSaveRequest<<<', this.responseBody);
                         if (this.subCategoryId && this.responseBody.part && this.responseBody.partTypes && this.responseBody.partTypes.length != 0 && this.responseBody.qty >= 1) {
                             this.partErrorMsg = '';
-                            console.log('inside formatThenSaveRequest', this.responseBody);
+                            console.log('inside formatThenSaveRequest>>>', this.responseBody);
                             this.formatThenSaveRequest();
+                        } else {
+                            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'some fields are invalid, please try again.' });
+                            this.isSending = false;
                         }
 
                         if (!this.responseBody.part) {
@@ -143,7 +146,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.submitted = true;
 
             if (this.type == 'edit req') {
-                console.log(this.requestDetails)
+                //console.log(this.requestDetails)
                 this.responseBody.id = this.requestDetails.id;
                 this.responseBody.job = this.requestDetails.job;
                 this.responseBody.description = this.description;
@@ -155,7 +158,8 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 this.responseBody.user = this.requestDetails.user;
                 this.responseBody.partTypes = this.selectedPartTypes;
                 this.responseBody.qty = this.qty;
-            } else { // new request case when this.type == 'new req'
+            } else {
+                // new request case when this.type == 'new req'
                 this.responseBody.job = this.passedJob.id;
                 this.responseBody.description = this.description;
                 this.responseBody.qty = this.qty;
@@ -178,14 +182,16 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     }
 
     setRequestInfo() {
-        console.log('setting req info')
+        //console.log('setting req info')
         this.selectedPartTypes = this.requestDetails.partTypes; //set part types
         this.description = this.requestDetails.description; //set description
         this.qty = this.requestDetails.qty; //set qty
+
+        //console.log(this.requestDetails)
     }
 
     getPart() {
-        console.log('getting part')
+        //console.log('getting part')
         this.requestService.part.subscribe(part => {
             if (JSON.stringify(part) !== '{}') {
                 this.responseBody.part = {
@@ -200,6 +206,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     }
 
     formatThenSaveRequest() {
+        // console.log(this.responseBody)
         let stringRequestBody = JSON.stringify(this.responseBody);
         let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId }
         let reqFormData = new FormData();
@@ -209,15 +216,17 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
         for (let i = 0; i < this.partImages.length; i++) {
             reqFormData.append('partImages', this.partImages[i]);
         }
+
+        //console.log(reqFormData)
         if (this.responseBody.hasOwnProperty('id')) {
-            console.log('updating old request')
+            // console.log('updating old request')
             this.requestService.update(reqFormData).subscribe((res: MessageResponse) => {
-                console.log(res)
+                //console.log(res)
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
                 this.request.emit(res);
             }, err => {
-                console.log(err.error)
-                this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
+                //console.log(err.error.message)
+                this.messageService.add({ severity: 'error', summary: 'Success', detail: err.error.message });
                 this.request.emit(err);
             });
 
@@ -226,14 +235,13 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
 
         } else {
             this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
-            console.log('inisde save requets block', res);
+                //console.log('inisde save requets block', res);
                 if (this.type == 'new req') {
-                    //this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
                     this.request.emit(res);
-                    //super.hideDialog();
                 } else {
                     this.requestService.part.next({});
                     this.blocked = true;
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
                     this.buttonTxt = 'Request Sent Successfully';
                 }
 
@@ -241,10 +249,8 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
                 this.isSending = false;
                 this.submitted = false;
             }, err => {
-                console.log('inside save request block', err);
+                //console.log('inside save request block', err);
                 if (this.type == 'new req') {
-                    //this.messageService.add({ severity: 'erorr', summary: 'Error', detail: err.error.message });
-                    //super.hideDialog();
                     this.request.emit(err);
                 } else {
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'something went wrong, please try again.' });

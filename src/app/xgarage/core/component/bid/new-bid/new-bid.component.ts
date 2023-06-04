@@ -6,11 +6,15 @@ import { PartType } from 'src/app/xgarage/common/model/parttype';
 import { StatusConstants } from 'src/app/xgarage/common/model/statusconstatnts';
 import { BidService } from '../../../service/bidservice.service';
 import { RequestService } from '../../../service/request.service';
+import { ClaimService } from '../../../service/claim.service';
+import { Bid } from '../../../model/bid';
+import { BidDto } from '../../../dto/biddto';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-new-bid',
     templateUrl: './new-bid.component.html',
-    styles: [`:host ::ng-deep .row-disabled {background-color: rgba(0,0,0,.15) !important;}
+    styles: [`:host ::ng-deep .row-disabled {background-color: rgba(0,0,0,.15) !important; cursor: not-allowed}
     .car-image:not(:last-of-type) {margin-right: .5rem}
     .prices:not(:last-of-type) {
         display: none;
@@ -20,24 +24,24 @@ import { RequestService } from '../../../service/request.service';
 })
 export class NewBidComponent implements OnInit, OnChanges {
 
-    constructor(private confirmationService: ConfirmationService, private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
+    constructor(private router: Router, private claimService: ClaimService, private confirmationService: ConfirmationService, private authService: AuthService, private messageService: MessageService, private bidService: BidService, private reqService: RequestService) { }
     checked: boolean = false;
     @Input() requests: any[] = [];
     @Input() type: string = 'new bid';
     partTypes: PartType[] = [
         {
-          "id": 2,
-          "partType": "Aftermarket"
+            "id": 2,
+            "partType": "Aftermarket"
         },
         {
-          "id": 1,
-          "partType": "Genuine-OEM"
+            "id": 1,
+            "partType": "Genuine-OEM"
         },
         {
-          "id": 3,
-          "partType": "Used"
+            "id": 3,
+            "partType": "Used"
         }
-      ];
+    ];
     preferredTypes: string = '';
     bids: any[] = [];
     total: number = 0.0;
@@ -52,10 +56,19 @@ export class NewBidComponent implements OnInit, OnChanges {
     bidTotalDiscount: number = 0;
     isSavingBid: boolean = false;
     discountType = ['OMR', '%'];
-    user: string = '';
+    isSubmittingBids: boolean = false;
+    totalBidsPrices: number = 0;
+    totalServicePrice: number = 0;
+    totalVat: number = 0;
+    bidDto: any[] = [];
+    claimBidId: number;
+    isRowValid: boolean = false;
+    bid: Bid;
 
     ngOnInit(): void {
+        console.log(this.requests, this.type)
         if (this.type == 'new bid') {
+            //console.log(this.requests)
             this.requests = this.requests.filter(req => req.status.id !== StatusConstants.CANCELED_STATUS && req.status.id !== StatusConstants.COMPLETED_STATUS);
             this.requests.forEach((req) => {
                 req.images = [];
@@ -67,8 +80,12 @@ export class NewBidComponent implements OnInit, OnChanges {
                 });
             });
 
+        } else if (this.type == 'new claimBid') {
+            // console.log(this.requests)
+            this.requests.forEach(req => {
+                this.setClaimBid(req);
+            });
         }
-
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -77,7 +94,8 @@ export class NewBidComponent implements OnInit, OnChanges {
         this.bidTotalOriginalPrice = 0;
         this.bidTotalDiscount = 0;
         //console.log(changes)
-        if (this.type == 'edit bid') {
+        if (this.type == 'job bid' || this.type == 'claim bid') {
+            // console.log('value changed')
             this.requests.forEach(req => {
                 // console.log(req.discountType)
                 req.qty2 = req.qty
@@ -86,92 +104,99 @@ export class NewBidComponent implements OnInit, OnChanges {
                 //this.bidTotalDiscount = this.bidTotalDiscount + req.discount;
 
 
-                if(req.discountType == 'fixed' || req.discountType == null) {
+                if (req.discountType == 'fixed' || req.discountType == null) {
+                    console.log('dis is fixed')
                     this.bidTotalDiscount = this.bidTotalDiscount + req.discount;
-                } else if(req.discountType == 'flat') {
+                } else if (req.discountType == 'flat') {
                     this.bidTotalDiscount = this.bidTotalDiscount + (req.discount * (req.originalPrice * req.qty)) / 100;
                 }
             })
         }
     }
 
-    onSelect(e) {
-        console.log(e)
-    }
-
-    onRowEditSave(part) {
+    setBidBody(part?: any) {
         let date = new Date();
         let getYear = date.toLocaleString("default", { year: "numeric" });
         let getMonth = date.toLocaleString("default", { month: "2-digit" });
         let getDay = date.toLocaleString("default", { day: "2-digit" });
-        this.updatePrice(part);
 
-        let bidBody = {
-            partName: part.part.name,
+        this.bid = {
+            partName: this.checked ? '' : part.part.name,
+            part: this.checked ? null : part.part,
             voiceNote: null,
             images: [],
-            order: null,
+            order: this.type == 'new bid' || this.checked ? null : part.id,
             cu: null,
             cuRate: 0,
-            partType: { id: part.preferred.id },
+            partType: this.type == 'new bid' ? { id: part.preferred.id } : this.checked ? {id: 1} : { id: part.partType.id },
             bidDate: getYear + "-" + getMonth + "-" + getDay,
-            price: part.totalPrice,
-            request: { id: part.id },
-            servicePrice: 0,
+            price: this.checked ? Number(this.totalBidsPrices) : part.totalPrice,
+            request: this.type == 'new bid' ? { id: part.id } : { id: JSON.parse(localStorage.getItem('claim')).request },
+            servicePrice: this.type == 'new bid' || this.checked ? 0 : part.servicePrice,
             supplier: JSON.parse(this.authService.getStoredUser()).id,
             comments: this.note,
-            deliverDays: part.availability,
-            warranty: part.warranty,
-            location: part.locationName,
-            discount: part.discount,
-            discountType: part.discountType == 'OMR'? 'fixed' : 'flat',
-            vat: part.vat,
-            originalPrice: part.originalPrice,
+            deliverDays: this.checked ? 0: part.availability,
+            warranty: this.checked ? 0 : part.warranty,
+            location: this.type == 'new bid' ? part.locationName : JSON.parse(this.authService.getStoredUser()).tenant.location,
+            discount: this.checked ? 0 : part.discount,
+            discountType: this.checked ? 'fixed' : part.discountType == 'OMR' || part.discountType == 'fixed' ? 'fixed' : 'flat',
+            vat: this.checked ? 0 : part.vat,
+            originalPrice: this.checked ? 0 : part.originalPrice,
             reviseVoiceNote: null,
             reviseComments: "",
             actionComments: "",
-            qty: part.qty2
-        }
-
-
-        //console.log(bidBody)
-        if (part.preferred.id == 4) {
-            this.reqService.setSupplierNotInterested(part.id).subscribe(res => {
-                part.saved = true;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'part added as not interested / not available' });
-            }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message }))
-
-        } else {
-            part.isSending = true;
-            let bid = { bidBody: JSON.stringify(bidBody), voiceNote: '' }
-            let bidFormData = new FormData();
-            for (var key in bid) {
-                bidFormData.append(key, bid[key]);
-            }
-            for (let i = 0; i < part.images.length; i++) {
-                bidFormData.append('bidImages', part.images[i]);
-            }
-
-            this.total = this.total + part.totalPrice;
-
-            if ((part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
-                this.bidService.add(bidFormData).subscribe((res: MessageResponse) => {
-                    part.saved = true;
-                    part.isSending = false;
-                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
-                }, err => {
-                    part.isSending = false;
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
-                })
-            } else {
-                part.isSending = false;
-                this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'some fileds are not valid, please try again.' });
-            }
-        }
+            qty: this.checked ? 0 : part.qty2
+        };
     }
 
-    onRowEditCancel(data) {
-        console.log('cancel')
+    onRowEditSave(part) {
+        //console.log(part)
+        this.updatePrice(part);
+
+        //prepare bid request body
+        this.setBidBody(part);
+
+        if (this.type == 'new bid') {
+            //set supplier as not interested or else save bid
+            if (part.preferred.id == 4) {
+                this.reqService.setSupplierNotInterested(part.id).subscribe(res => {
+                    part.saved = true;
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'part added as not interested / not available' });
+                }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message }))
+
+            } else {
+                part.isSending = true;
+                delete this.bid.part;
+                this.saveBid(part, this.bid);
+            }
+
+        } else if (this.type == 'new claimBid') {
+            this.totalBidsPrices = 0;
+            this.totalServicePrice = 0;
+            delete this.bid.partName;
+
+            var isFound = this.bidDto.find(bid => {
+                return bid.order == part.id;
+            })
+
+            if (isFound) {
+                this.bidDto.forEach((bid, i) => {
+                    if (bid.order == part.id) this.bidDto[i] = this.bid;
+                });
+            } else {
+                this.bidDto.push(this.bid);
+            }
+
+            //console.log(part, this.bidDto)
+
+            //calc total price for claim bids
+            //calc total service price for claim bids
+            this.bidDto.forEach(bid => {
+                this.totalBidsPrices = this.totalBidsPrices + bid.price;
+                this.totalServicePrice = this.totalServicePrice + bid.servicePrice;
+                this.totalVat = this.totalVat + bid.vat;
+            });
+        };
     }
 
     onDiscount($event) {
@@ -180,15 +205,18 @@ export class NewBidComponent implements OnInit, OnChanges {
 
         if ($event.originalPrice > 0 && discount >= 0) {
             this.updatePrice($event);
+            this.isRowValid = true;
         }
 
         if (discount < 0 || discount == null) {
             this.messageService.add({ severity: 'error', summary: 'Discount is Not Valid', detail: 'Discount Can Not be Less Than 0' });
+            this.isRowValid = false;
             discount = 0;
         }
 
         if (discount >= $event.originalPrice) {
             this.messageService.add({ severity: 'error', summary: 'Discount is Not Valid', detail: 'Discount Can Not be More Than Original Price' });
+            this.isRowValid = false;
             $event.discount = 0;
         }
     }
@@ -199,33 +227,53 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onOriginalPrice($event) {
+        //console.log($event)
         if ($event.originalPrice == null || $event.originalPrice <= 0) {
             this.messageService.add({ severity: 'error', summary: 'Original Price is Not Valid', detail: 'Original Price Can Not be Less Than 1' });
             $event.price = 1;
             $event.originalPrice = 1;
+            this.isRowValid = false;
         } else {
             this.updatePrice($event);
+            this.isRowValid = true;
+        }
+    }
+
+    onServicePriceChange($event) {
+        console.log('onServicePriceChange:',$event)
+        if ($event.servicePrice == null || $event.service < 0) {
+            this.messageService.add({ severity: 'error', summary: 'Service Price is Not Valid', detail: 'Service Price Can Not be Less Than 0' });
+            this.isRowValid = false;
+        } else {
+            console.log('uppdating price')
+            this.updatePrice($event);
+            this.isRowValid = true;
         }
     }
 
     onVat($event) {
         if ($event.vat == null || $event.vat < 0) {
             this.messageService.add({ severity: 'error', summary: 'Vat is Not Valid', detail: 'Vat Can Not be Less Than 0' });
+            this.isRowValid = false;
             $event.vat = 0;
         } else {
             this.updatePrice($event);
+            this.isRowValid = true;
         }
     }
 
     onQty(part) {
         if (part.qty2 <= 0) {
             this.messageService.add({ severity: 'error', summary: 'Quantity is Not Valid', detail: 'Quantity Can Not be Less Than 0' });
+            this.isRowValid = false;
             part.qty2 = part.qty;
         } else if (part.qty2 > part.qty) {
             this.messageService.add({ severity: 'error', summary: 'Quantity is Not Valid', detail: `Quantity Can Not be More Than ${part.qty}` });
+            this.isRowValid = false;
             part.qty2 = part.qty;
         } else {
-            this.updatePrice(part)
+            this.updatePrice(part);
+            this.isRowValid = true;
         }
         console.log(part.qty2, part.qty)
     }
@@ -262,14 +310,28 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     updatePrice(part) {
+       // console.log(part)
         let price = part.originalPrice * part.qty2;
         let discount = part.discountType == 'OMR' ? part.discount : (price * part.discount) / 100;
         let priceAfterDiscount = price - discount;
-        let vat = (priceAfterDiscount * part.vat) / 100;
-        let totalPrice = priceAfterDiscount + vat;
+        let totalPrice;
+        if(part.servicePrice > 0) {
+            console.log('adding service price')
+            let priceAfterServicePrice = priceAfterDiscount + part.servicePrice;
+            let vat = (priceAfterServicePrice * part.vat) / 100;
+            part.totalPrice = priceAfterServicePrice + vat;
+        } else {
+            console.log('withoutservice price')
+            let vat = (priceAfterDiscount * part.vat) / 100;
+            part.totalPrice = priceAfterDiscount + vat;
+        }
+
+
 
         part.price = price;
-        part.totalPrice = totalPrice;
+        //part.totalPrice = totalPrice;
+
+        console.log(part.totalPrice, part.price)
 
         // this.part = part;
     }
@@ -330,7 +392,7 @@ export class NewBidComponent implements OnInit, OnChanges {
         this.displayNotesModal = true
     }
 
-    onProposedChange(part)  {
+    onProposedChange(part) {
         // console.log('val changed')
         // console.log(part)
         if (part.preferred.id == 4) {
@@ -339,5 +401,190 @@ export class NewBidComponent implements OnInit, OnChanges {
             part.isNotInterested = false;
         }
 
+    }
+
+    saveBid(part: any, bidBody: any) {
+        let bid = { bidBody: JSON.stringify(bidBody), voiceNote: '' }
+        let bidFormData = new FormData();
+
+        for (var key in bid) {
+            bidFormData.append(key, bid[key]);
+        }
+
+        if (this.type == 'new bid') {
+            for (let i = 0; i < part.images.length; i++) {
+                bidFormData.append('bidImages', part.images[i]);
+            }
+        }
+        //calc total bid price for job bid
+        this.total = this.total + part.totalPrice;
+
+        // console.log('saving bid>>>', bidBody)
+        // console.log(this.bidDto)
+
+        if (this.checked ||(part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
+            this.bidService.add(bidFormData).subscribe((res: any) => {
+                console.log('success saving single bid>>>')
+                if (this.type == 'new claimBid') {
+                    this.claimBidId = res;
+                    this.addBid();
+                    this.isSubmittingBids = false;
+                } else {
+                    part.saved = true;
+                    part.isSending = false;
+                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
+                    this.router.navigateByUrl('/bids');
+                }
+
+
+            }, err => {
+                part.isSending = false;
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
+                this.isSubmittingBids = false;
+            })
+        } else {
+            part.isSending = false;
+            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'some fileds are not valid, please try again.' });
+        }
+    }
+
+    setClaimBid(part) {
+        part.partType = { id: 1, partType: 'Genuine-OEM' },
+            part.requestFor = part.partOption,
+            part.partOption = part.partOption,
+            part.qty = 1,
+            part.price = 0,
+            part.servicePrice = 0,
+            part.discount = 0,
+            part.discountType = 'OMR',
+            part.vat = 5,
+            part.originalPrice = 0,
+            part.warranty = 0,
+            part.availability = 0,
+            part.originalPrice = 0,
+            part.qty2 = part.qty,
+            part.totalPrice = 0,
+            part.req = JSON.parse(localStorage.getItem('claim')).request
+    }
+
+    addBid() {
+        if(!this.checked) {
+            this.bidDto.forEach(bid => {
+                let part = {
+                    bid: this.claimBidId,
+                    part: bid.part,
+                    partType: bid.partType.id,
+                    requestFor: 'Replace',
+                    partOption: 'Replace',
+                    qty: bid.qty,
+                    price: bid.price,
+                    servicePrice: bid.servicePrice,
+                    discount: bid.discount,
+                    discountType: bid.discountType == 'OMR' || bid.discountType == 'fixed' ? 'fixed' : 'flat',
+                    vat: bid.vat,
+                    originalPrice: bid.originalPrice,
+                    warranty: bid.warranty,
+                    availability: bid.deliverDays
+                };
+
+                this.bids.push(part);
+            });
+        } else {
+            let part = {
+                bid: this.claimBidId,
+                part: null,
+                partType: 0,
+                requestFor: 'Replace',
+                partOption: 'Replace',
+                qty: 0,
+                price: this.bid.price,
+                servicePrice: 0,
+                discount: 0,
+                discountType: 'fixed',
+                vat: 0,
+                originalPrice: 0,
+                warranty: 0,
+                availability: 0
+            };
+
+            this.bids.push(part);
+            console.log('claim bids:', this.bids)
+        }
+
+        if (this.bids.length > 0) {
+            this.claimService.saveClaimBid(this.bids).subscribe(res => {
+                console.log(res)
+                this.isSubmittingBids = false;
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Bids Submitted Successfully' });
+                setTimeout(() => {
+                    this.router.navigateByUrl('/bids');
+                }, 500)
+            }, err => {
+                //console.log(err);
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'failed to submit bid, please try again.' });
+                this.isSubmittingBids = false
+            })
+        } else {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'please modify bid before submitting' });
+            this.isSubmittingBids = false;
+        }
+    }
+
+    onSubmitBid() {
+        if (!this.checked && this.requests.length !== this.bidDto.length) {
+            this.messageService.add({ severity: 'info', summary: 'error', detail: 'you must submit a bid for all parts.' });
+        } else if (this.checked) {
+            this.isSubmittingBids = true;
+            this.setBidBody();
+            delete this.bid.part;
+            this.saveBid(this.bid, this.bid)
+        } else {
+            this.isSubmittingBids = true;
+            this.prepareBidMaster();
+        }
+    }
+
+    prepareBidMaster() {
+        console.log('preparing bid>>>')
+        var part: Bid = {
+            cuRate: 0,
+            deliverDays: 0,
+            discount: 0,
+            originalPrice: 0,
+            price: 0,
+            qty: 0,
+            vat: 0,
+            warranty: 0,
+            partType: null,
+            servicePrice: 0
+        };
+
+        this.bidDto.forEach(bid => {
+            part.voiceNote = null,
+                part.images = [],
+                part.order = null,
+                part.cu = null,
+                part.cuRate = 0,
+                part.deliverDays = part.deliverDays + bid.deliverDays,
+                part.discount = part.discount + bid.discount,
+                part.location = bid.location,
+                part.originalPrice = part.originalPrice + bid.originalPrice,
+                part.partName = '',
+                part.price = part.price + bid.price,
+                part.qty = part.qty + bid.qty,
+                part.request = bid.request,
+                part.supplier = bid.supplier,
+                part.vat = part.vat + bid.vat,
+                part.warranty = part.warranty + bid.warranty,
+                part.reviseVoiceNote = null,
+                part.reviseComments = "",
+                part.actionComments = "",
+                part.comments = this.note,
+                part.bidDate = bid.bidDate,
+                part.servicePrice = bid.servicePrice + part.servicePrice
+        });
+
+        //console.log(part)
+        this.saveBid(part, part);
     }
 }

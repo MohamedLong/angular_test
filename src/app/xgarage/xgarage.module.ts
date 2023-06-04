@@ -139,6 +139,10 @@ import { RandomGuard } from '../auth/guards/random.guard';
 import { TokenInterceptor } from '../auth/token.interceptor';
 import { AddClaimComponent } from './core/component/claim/add-claim/add-claim.component';
 import { DetailsCardComponent } from './common/component/details-card/details-card.component';
+import { ClaimDetailsComponent } from './core/component/claim/claim-details/claim-details.component';
+import { PrivacyComponent } from './common/component/privacy/privacy.component';
+import { EditClaimComponent } from './core/component/claim/edit-claim/edit-claim.component';
+import { NewClaimComponent } from './core/component/claim/new-claim/new-claim.component';
 
 @NgModule({
     declarations: [
@@ -187,13 +191,17 @@ import { DetailsCardComponent } from './common/component/details-card/details-ca
         SupplierprofileComponent,
         NumToWordsPipe,
         AddClaimComponent,
-        DetailsCardComponent
-    ],
+        DetailsCardComponent,
+        ClaimDetailsComponent,
+        PrivacyComponent,
+        EditClaimComponent,
+        NewClaimComponent,    ],
     imports: [
         CommonModule,
         XgarageRoutingModule,
         AgmCoreModule.forRoot({
-            apiKey: 'AIzaSyADzH9TYbj2-CbcBpqMC73t8_hetC9CvAs'
+            apiKey: 'AIzaSyADzH9TYbj2-CbcBpqMC73t8_hetC9CvAs',
+            libraries: ['places']
         }),
         ProgressSpinnerModule,
         BlockUIModule,
