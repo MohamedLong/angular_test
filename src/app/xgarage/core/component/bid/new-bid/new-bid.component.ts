@@ -65,7 +65,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     bid: Bid;
 
     ngOnInit(): void {
-        console.log(this.type)
+        console.log(this.requests, this.type)
         if (this.type == 'new bid') {
             //console.log(this.requests)
             this.requests = this.requests.filter(req => req.status.id !== StatusConstants.CANCELED_STATUS && req.status.id !== StatusConstants.COMPLETED_STATUS);
@@ -80,7 +80,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             });
 
         } else if (this.type == 'new claimBid') {
-            //console.log(this.type)
+            // console.log(this.requests)
             this.requests.forEach(req => {
                 this.setClaimBid(req);
             });

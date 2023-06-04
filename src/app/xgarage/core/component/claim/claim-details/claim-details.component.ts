@@ -72,9 +72,9 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
 
     onGetClaimParts() {
         this.claimServie.getClaimParts(this.claimId).subscribe(res => {
-            console.log('parts', res);
-            this.details = res;
 
+            this.details = res;
+            console.log('parts', this.details);
         }, err => console.log(err))
     }
 
@@ -163,7 +163,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
             if(this.supplierName && this.currentBid.length > 0) {
                 this.bidDetailsDialog = true;
             }
-            
+
         }, err => console.log(err))
     }
 

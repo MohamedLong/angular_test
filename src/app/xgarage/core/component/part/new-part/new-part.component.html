@@ -43,9 +43,9 @@
             <label>Action</label>
             <div class="flex" *ngIf="actions.length > 0">
                 <div *ngFor="let action of actions;" class="field-checkbox mr-3">
-                    <p-radioButton (onClick)="onAction(action.name)" [inputId]="action.id" [name]="action.name"
+                    <p-radioButton *ngIf="action.name !== 'No Action'" (onClick)="onAction(action.name)" [inputId]="action.id" [name]="action.name"
                         [value]="action.name" [(ngModel)]="actionName"></p-radioButton>
-                    <label [for]="action.id" class="ml-2">{{ action.name }}</label>
+                    <label *ngIf="action.name !== 'No Action'" [for]="action.id" class="ml-2">{{ action.name }}</label>
                 </div>
             </div>
         </div>

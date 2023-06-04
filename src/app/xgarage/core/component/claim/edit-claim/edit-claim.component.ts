@@ -94,19 +94,22 @@ export class EditClaimComponent implements OnInit {
             workshopGrade: this.claim.workshopGrade,
             bidClosingDate: this.claim.bidClosingDate ? new Date(this.claim.bidClosingDate) : '',
             assignType: this.claim.assignType,
-            assignedGarage: this.claim.assignedGarage ? this.claim.assignedGarage : 0,
+            assignedGarage: this.claim.assignedGarage ? this.claim.assignedGarage : null,
             privacy: this.claim.privacy,
             suppliers: this.claim.suppliers,
             notes: this.claim.notes,
         });
 
-        if (this.updateClaimForm.get('privacy').value == 'private') {
+        if (this.updateClaimForm.get('suppliers').value.length > 0 || this.updateClaimForm.get('assignedGarage').value !== null) {
             this.updateClaimForm.get('privacy').disable();
+            this.updateClaimForm.get('assignType').disable();
         }
+
     }
 
     onAction(action: string, part: any) {
-        // console.log(action, part);
+        console.log(action, part);
+        console.log('before:', this.selectedParts)
         part.partOption = action;
         if (action !== this.actions[0].name) {
             if (this.selectedParts.length == 0) {
@@ -176,7 +179,7 @@ export class EditClaimComponent implements OnInit {
                     })
                 });
 
-                //console.log(this.partsList)
+                console.log(this.partsList)
 
             }, err => {
                 console.log(err);
@@ -250,7 +253,7 @@ export class EditClaimComponent implements OnInit {
             };
 
             //check if status is already updated & update status if not
-            if (this.claim.status == 13) {
+            if (this.claim.status.id == 13) {
                 this.claim.status = this.statusService.statuses.find(status => { return status.id == 12 });
             }
 
@@ -290,6 +293,7 @@ export class EditClaimComponent implements OnInit {
             // }
         } else {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Some Fields Are Not Valid, Please Try Again.' });
+            this.getYPosition();
         }
 
     }
@@ -335,6 +339,8 @@ export class EditClaimComponent implements OnInit {
                 if (!partFound) {
                     if (val.exists) {
                         let updateList = this.partsList.find(part => part.id == val.part.categoryId);
+                        val.part.action = val.option;
+                        val.part.partName = val.part.name;
                         updateList.list.push(val.part);
 
                         this.onAction(val.part.action, { partId: val.part.id });
@@ -342,29 +348,9 @@ export class EditClaimComponent implements OnInit {
                         this.addPartDialog = false;
                         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Part Added Succefully' });
                         this.submittedPart = false;
-                        // this.claimServie.saveClaimPart(body).subscribe(res => {
-                        //     console.log('saving exsiting part to claim parts', res);
-                        //     //this.onGetClaimPartList();
-                        //     res.part.action = res.partOption;
-                        //     res.part.partName = res.part.name;
-                        //     delete res.part.name;
-
-                        //     let updateList = this.partsList.find(part => part.id == res.part.categoryId);
-                        //     updateList.list.push(res.part);
-
-                        //     this.onAction(res.part.action, { partId: res.part.id });
-
-                        //     this.addPartDialog = false;
-                        //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Part Added Succefully' });
-                        //     this.submittedPart = false;
-                        // }, err => {
-                        //     //console.log('err:', err);
-                        //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to Add Part, Please Try Again Later.' });
-                        //     this.submittedPart = false;
-                        // })
                     } else {
                         this.partservice.add(val.part).subscribe(res => {
-                            //console.log('first save done');
+                            console.log(res)
                             if (res.id) {
                                 body.part.id = res.id;
                             }
@@ -372,43 +358,25 @@ export class EditClaimComponent implements OnInit {
                             res.action = body.partOption;
                             res.partName = res.name;
                             delete res.name;
-
+                            console.log('res after:', res)
                             let updateList = this.partsList.find(part => part.id == res.categoryId);
                             updateList.list.push(res);
 
-                            this.onAction(res.part.action, { partId: res.part.id });
+                            this.onAction(res.action, { partId: res.id });
 
-                            this.addPartDialog = false;
+
                             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Part Added Succefully' });
                             this.submittedPart = false;
-
-                            // this.claimServie.saveClaimPart(body).subscribe(res => {
-                            //     //console.log('seconde save done', res);
-                            //     //this.onGetClaimPartList();
-                            //     res.part.action = res.partOption;
-                            //     res.part.partName = res.part.name;
-                            //     delete res.part.name;
-
-                            //     let updateList = this.partsList.find(part => part.id == res.part.categoryId);
-                            //     updateList.list.push(res.part);
-
-                            //     this.onAction(res.part.action, { partId: res.part.id });
-
-                            //     this.addPartDialog = false;
-                            //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Part Added Succefully' });
-                            //     this.submittedPart = false;
-                            // }, err => {
-                            //     //console.log('seconde save err', err);
-                            //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to Add Part, Please Try Again Later.' });
-                            //     this.submittedPart = false;
-                            // })
+                            this.addPartDialog = false;
                         }, err => {
-                            console.log('first save err', err);
+                            this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Something Went Wrong, Please Try Again Later.' });
+                            this.submittedPart = false;
+                            this.addPartDialog = false;
                         });
                     }
                 } else {
-                    console.log(this.partsList, categoryFound, partFound)
-                    this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'This part already exists on the list.' });
+                    //console.log(this.partsList, categoryFound, partFound)
+                    this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'This part already exists on the list.', life: 3000 });
                     this.addPartDialog = false;
                     this.submittedPart = false;
                 }

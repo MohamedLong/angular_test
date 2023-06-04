@@ -40,7 +40,7 @@
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved || checked}">
             <td (click)="showModal(part)" style="cursor: pointer; border-right: 1px solid #dee2e6;">
                 <span>
-                    {{type == 'new bid' || type == 'new claimBid'? part.part.name : part.partName}}
+                    {{type == 'new bid' || type == 'new claimBid' || type == 'claim bid' ? part.part.name : part.partName}}
                 </span>
                 <i *ngIf="type == 'new bid' || type == 'job bid'" class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
             </td>
@@ -254,9 +254,9 @@
             <td>{{bidTotalOriginalPrice | number}} OMR</td>
             <td></td>
             <td>{{bidTotalDiscount}} OMR</td>
-            <td></td>
+            <td colspan="2"></td>
             <td>{{bidTotalPrice | number}} OMR</td>
-            <td></td>
+            <!-- <td></td> -->
         </tr>
         <tr class="prices font-bold"  *ngIf="type == 'new claimBid'">
             <td colspan="8"><p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"></p-checkbox> Add a total price Instead of adding price for each parts</td>
