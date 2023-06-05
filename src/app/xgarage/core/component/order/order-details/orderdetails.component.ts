@@ -50,6 +50,8 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
             //masterDTO
             this.masterDto = JSON.parse(localStorage.getItem('order'));
             this.getOrder(this.masterDto.id);
+
+            //console.log(this.masterDto)
         }
 
         this.dataCols = [
@@ -220,7 +222,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
             this.getPdf();
         }else{
             let orderRequest: any = {
-                sellerId: JSON.parse(this.authService.getStoredUser()).id,
+                sellerId: JSON.parse(this.authService.getStoredUser()).tenant.id,
                 orderId: this.masterDto.id,
                 multipleBid: true
             }
@@ -228,6 +230,7 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
                 next: (data) => {
                     if (data.messageCode == 200) {
                         this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: data.message, life: 3000 });
+                        this.getOrder(this.masterDto.id);
                     } else {
                         this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: data.message, life: 3000 });
                     }

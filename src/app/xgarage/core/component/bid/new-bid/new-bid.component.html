@@ -3,8 +3,7 @@
     <ng-template pTemplate="right">
         <div>
             <button (click)="confirmCancel(requests[0].bid)" pButton pRipple type="button"
-                    [disabled]="requests[0].statusId !== 1" class="width-100 p-button-warning"
-                    label="Cancel Bids"></button>
+                [disabled]="requests[0].statusId !== 1" class="width-100 p-button-warning" label="Cancel Bids"></button>
         </div>
     </ng-template>
 </p-toolbar>
@@ -21,7 +20,7 @@
             <th>{{'bid.bidDetails.warranty' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.deliverDays' | translate}} {{'bid.bidDetails.days' | translate}}</th>
             <th>{{'bid.bidDetails.originalPrice' | translate}}</th>
-            <th  *ngIf="type == 'new bid' || type == 'job bid'">{{'bid.bidDetails.price' | translate}}</th>
+            <th *ngIf="type == 'new bid'">{{'bid.bidDetails.price' | translate}}</th>
             <th>
                 {{'bid.bidDetails.discountType' | translate}}
             </th>
@@ -40,11 +39,13 @@
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved || checked}">
             <td (click)="showModal(part)" style="cursor: pointer; border-right: 1px solid #dee2e6;">
                 <span>
-                    {{type == 'new bid' || type == 'new claimBid' || type == 'claim bid' ? part.part.name : part.partName}}
+                    {{type == 'new bid' || type == 'new claimBid' || type == 'claim bid' ? part.part.name :
+                    part.partName}}
                 </span>
-                <i *ngIf="type == 'new bid' || type == 'job bid'" class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
+                <i *ngIf="type == 'new bid' || type == 'job bid'"
+                    class="pi pi-images fs-large m-2 ml-3  text-blue-500"></i>
             </td>
-            <td  *ngIf="type !== 'new claimBid'">
+            <td *ngIf="type !== 'new claimBid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="1" max="{{part.qty}}" (input)="onQty(part)" pInputText type="number"
@@ -76,11 +77,12 @@
             <td *ngIf="type == 'new claimBid' || type == 'claim bid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <p-dropdown [options]="partTypes" optionLabel="partType" [(ngModel)]="part.partType" appendTo="body"
-                            [style]="{'width':'100%'}"></p-dropdown>
+                        <p-dropdown [options]="partTypes" optionLabel="partType" [(ngModel)]="part.partType"
+                            appendTo="body" [style]="{'width':'100%'}"></p-dropdown>
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.partType.partType || part.partType == 1? "Genuine-OEM" :  part.partType == 2? "Aftermarket" : "Used"}}
+                        {{part.partType.partType || part.partType == 1? "Genuine-OEM" : part.partType == 2?
+                        "Aftermarket" : "Used"}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -112,7 +114,7 @@
                             [disabled]="part.isNotInterested">
                     </ng-template>
                     <ng-template pTemplate="output">
-                        {{part.availability}}
+                        {{part.availability? part.availability : part.deliverDays}}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -128,7 +130,7 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td *ngIf="type == 'new bid' || type == 'job bid'">
+            <td *ngIf="type == 'new bid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
                         <input min="0" pInputText type="number" [style]="{'width':'100%'}" [(ngModel)]="part.price"
@@ -165,7 +167,8 @@
             <td *ngIf="type == 'new claimBid' || type == 'claim bid'">
                 <p-cellEditor>
                     <ng-template pTemplate="input">
-                        <input pInputText type="number" (input)="onServicePriceChange(part)" [(ngModel)]="part.servicePrice" [style]="{'width':'100%'}">
+                        <input pInputText type="number" (input)="onServicePriceChange(part)"
+                            [(ngModel)]="part.servicePrice" [style]="{'width':'100%'}">
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{part.servicePrice}}
@@ -185,7 +188,7 @@
                 </p-cellEditor>
             </td>
             <td>
-                {{type == 'new bid'  || type == 'new claimBid'? (part.totalPrice | number) : (part.price | number)}}
+                {{type == 'new bid' || type == 'new claimBid'? (part.totalPrice | number) : (part.price | number)}}
             </td>
             <td *ngIf="type == 'new bid'">
                 <p-cellEditor>
@@ -215,13 +218,13 @@
             <td *ngIf="type == 'new bid' || type == 'new claimBid'">
                 <div class="flex align-items-center justify-content-center gap-2">
                     <button *ngIf="!editing && !part.isSending" pButton pRipple type="button" pInitEditableRow
-                        icon="pi pi-pencil" class="p-button-rounded p-button-text" [disabled]="part.saved || checked"></button>
+                        icon="pi pi-pencil" class="p-button-rounded p-button-text"
+                        [disabled]="part.saved || checked"></button>
                     <button *ngIf="editing && !part.isSending" pButton pRipple type="button" pSaveEditableRow
                         icon="pi pi-check" (click)="onRowEditSave(part)"
                         class="p-button-rounded p-button-text p-button-success mr-2" [disabled]="!isRowValid"></button>
                     <button *ngIf="editing && !part.isSending" pButton pRipple type="button" pCancelEditableRow
-                        icon="pi pi-times"
-                        class="p-button-rounded p-button-text p-button-danger"></button>
+                        icon="pi pi-times" class="p-button-rounded p-button-text p-button-danger"></button>
                     <i *ngIf="part.isSending" class="pi pi-spin pi-spinner" style="color: #22c55e"></i>
                 </div>
             </td>
@@ -237,18 +240,17 @@
                     styleClass="" label="{{'USERSUBMENU.DIALOG.CANCEL' | translate}}"></button>
             </td>
         </tr>
-        <tr class="font-bold prices" *ngIf="type == 'job bid'">
+        <tr class="font-bold prices bg-bluegray-100" *ngIf="type == 'job bid'">
             <td colspan="4"></td>
             <td>Total</td>
-            <td>{{bidTotalOriginalPrice | number}}</td>
-            <td>{{bidTotalPrice | number}} OMR</td>
+            <td>{{bidTotalOriginalPrice | number}} OMR</td>
             <td></td>
             <td>{{bidTotalDiscount}} OMR</td>
             <td></td>
             <td>{{bidTotalPrice | number}} OMR</td>
             <td colspan="3"></td>
         </tr>
-        <tr class="font-bold prices" *ngIf="type == 'claim bid'">
+        <tr class="font-bold prices bg-bluegray-100" *ngIf="type == 'claim bid'">
             <td colspan="5"></td>
             <td>Total</td>
             <td>{{bidTotalOriginalPrice | number}} OMR</td>
@@ -258,13 +260,16 @@
             <td>{{bidTotalPrice | number}} OMR</td>
             <!-- <td></td> -->
         </tr>
-        <tr class="prices font-bold"  *ngIf="type == 'new claimBid'">
-            <td colspan="8"><p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"></p-checkbox> Add a total price Instead of adding price for each parts</td>
+        <tr class="prices font-bold bg-bluegray-50" *ngIf="type == 'new claimBid'">
+            <td colspan="8"><p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"></p-checkbox> Add a total
+                price Instead of adding price for each parts</td>
             <!-- <td *ngIf="!checked"><input pInputText type="text" [(ngModel)]="totalServicePrice" value="{{totalServicePrice | number}}" [style]="{'width':'100%'}" [disabled]="!checked"></td> -->
-            <td *ngIf="checked" colspan="2" class="text-right"><i class="pi pi-info-circle mr-1 text-indigo-500" tooltipPosition="bottom" pTooltip="Total Price with Service Price & Vat."></i>
+            <td *ngIf="checked" colspan="2" class="text-right"><i class="pi pi-info-circle mr-1 text-indigo-500"
+                    tooltipPosition="bottom" pTooltip="Total Price with Service Price & Vat."></i>
                 Total:</td>
             <td *ngIf="!checked" colspan="2"></td>
-            <td colspan="2"><input pInputText type="text" [(ngModel)]="totalBidsPrices" value="{{totalBidsPrices | number}}" [style]="{'width':'100%'}"  [disabled]="!checked"></td>
+            <td colspan="2"><input pInputText type="text" [(ngModel)]="totalBidsPrices"
+                    value="{{totalBidsPrices | number}}" [style]="{'width':'100%'}" [disabled]="!checked"></td>
         </tr>
 
     </ng-template>
@@ -281,8 +286,8 @@
     <label class="block mb-2 fw-700">Note</label>
     <textarea rows="5" class="width-100" pInputTextarea [(ngModel)]="note"></textarea>
     <div class="text-center mt-5">
-        <button icon="{{isSubmittingBids? 'pi pi-spin pi-spinner' : ''}}"
-        iconPos="right" (click)="onSubmitBid()" class="width-100 md:w-20rem" pButton pRipple type="submit" label="Submit Bid">
+        <button icon="{{isSubmittingBids? 'pi pi-spin pi-spinner' : ''}}" iconPos="right" (click)="onSubmitBid()"
+            class="width-100 md:w-20rem" pButton pRipple type="submit" label="Submit Bid">
         </button>
     </div>
 </div>
