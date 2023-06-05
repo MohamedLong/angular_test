@@ -75,13 +75,13 @@ export class BidDetailsComponent implements OnInit {
     }
 
     onBidView(bid) {
-        //console.log(bid)
+        console.log(bid)
         if (this.user == 1) {
             this.claimService.getClaimBidByBidId(bid.bidId).subscribe(res => {
                 if (res.length > 0) {
                     this.bidDetails = res;
                     this.bidDetails[0].requestTitle = bid.claimTitle;
-
+                    this.bidDetails[0].statusId = bid.status == "Open"? 1 : 2;
                     if (this.bidDetails.length == 1 && this.bidDetails[0].originalPrice == 0) {
 
                         this.bidDetails[0].partName = bid.partNames;
