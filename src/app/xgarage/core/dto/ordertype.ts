@@ -1,4 +1,5 @@
 export enum OrderType{
     Shop = "Shop",
-    Bid = "Bid"
+    Bid = "Bid",
+    Claim = "Claim"
 }

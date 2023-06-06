@@ -196,17 +196,6 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
             this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
         });
 
-        //testing
-        // this.bidService.approveMultipleBids(bidToApprove).subscribe((res: MessageResponse) => {
-        //     console.log(res)
-        //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message, life: 3000 });
-        //     this.bidDetailsDialog = false;
-        //     this.getClaimBids();
-        // }, err => {
-        //     console.log(err)
-        //     this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 });
-        // });
-
         this.approveBidDialog = false;
     }
 
@@ -241,11 +230,10 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
 
         let bidToApprove = {
             bids: [this.currentBid[0].bid],
-            //bids: bids,
             shippingAddress: 1,
             shippingMethod: 1,
             paymentMethod: 1,
-            orderType: OrderType.Bid,
+            orderType: OrderType.Claim,
             customer: JSON.parse(this.authService.getStoredUser()).id,
             phone: JSON.parse(this.authService.getStoredUser()).phone,
             supplier: this.supplierId,
