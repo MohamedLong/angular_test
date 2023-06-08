@@ -6,7 +6,6 @@ import { AppBreadcrumbService } from 'src/app/app.breadcrumb.service';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { DataService } from 'src/app/xgarage/common/generic/dataservice';
 import { GenericComponent } from 'src/app/xgarage/common/generic/genericcomponent';
-import { BidService } from '../../service/bidservice.service';
 import { OrderService } from '../../service/order.service';
 
 @Component({
@@ -35,7 +34,7 @@ import { OrderService } from '../../service/order.service';
 })
 export class OrderComponent extends GenericComponent implements OnInit {
 
-    constructor(private bidService: BidService, private authService: AuthService, private orderService: OrderService, public route: ActivatedRoute, private router: Router, private dataService: DataService<any>, public confirmationService: ConfirmationService,
+    constructor(private authService: AuthService, private orderService: OrderService, public route: ActivatedRoute, private router: Router, private dataService: DataService<any>, public confirmationService: ConfirmationService,
         public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService) {
             super(route, datePipe, breadcrumbService);
     }

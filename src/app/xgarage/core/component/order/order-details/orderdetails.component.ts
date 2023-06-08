@@ -45,16 +45,11 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
     @ViewChild('invoice') invoice!: ElementRef;
     isPdf: boolean = false;
-    typeOfOrder = 'job order';
 
     ngOnInit() {
         if (localStorage.getItem('order')) {
             //masterDTO
             this.masterDto = JSON.parse(localStorage.getItem('order'));
-            if (!this.masterDto.jobNumber) {
-                this.typeOfOrder = 'claim order';
-            }
-
             this.getOrder(this.masterDto.id);
             //console.log(this.masterDto)
         }
@@ -77,23 +72,13 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     }
 
     getOrder(id: number) {
-        this.bidService.getByOrder(id).subscribe(jobBids => {
-            if (this.typeOfOrder == 'claim order') {
-                this.claimService.getClaimBidByBidId(jobBids[0].bidId).subscribe(claimBids => {
-                    console.log(claimBids);
-                    this.bidList = claimBids;
-                }, err => {
-                    console.log(err)
-                })
-            } else {
-                this.bidList = jobBids;
-                this.bidList.forEach(order => {
-                    order.taxAmount = (order.vat / 100) * (order.originalPrice * order.qty - order.discount);
-                    this.totalVat = this.totalVat + order.taxAmount;
-                });
+        this.bidService.getByOrder(id).subscribe(res => {
+            this.bidList = res;
 
-            }
-
+            this.bidList.forEach(order => {
+                order.taxAmount = (order.vat / 100) * (order.originalPrice * order.qty - order.discount);
+                this.totalVat = this.totalVat + order.taxAmount;
+            });
             // console.log('data:', this.bidList)
         }, err => {
             this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.error.statusMsg, life: 3000 })

@@ -1,0 +1,106 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <!-- <button pButton pRipple label="{{ 'operations.new' | translate }}"  icon="pi pi-plus" class="p-button-success mr-2 mb-2"
+                        (click)="openNew()" [disabled]="newAuth===false"></button> -->
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="{{ 'operations.import' | translate }}"
+                        chooseLabel="{{ 'operations.import' | translate }}" class="mr-2 mb-2 inline-block"></p-fileUpload> -->
+                    <button pButton pRipple label="{{ 'operations.export' | translate }}" icon="pi pi-upload"
+                        class="p-button-help mb-2" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="masterDtos" [columns]="cols" [rows]="10"
+                [paginator]="true" (onFilter)="onFilter($event, dt)"
+                [globalFilterFields]="['id','orderId','orderDate','insertDate', 'payedStatus', 'deliveryStatus', 'customerPartyName', 'statusNameEn', 'cuCurrencyCode']"
+                [(selection)]="selectedEntries" [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between table-header">
+                        <h5 class="m-0">{{ 'orders.table.tableTitle' | translate }}</h5>
+
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="{{ 'operations.filter' | translate }}" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>{{'common.id' | translate}}</th>
+                        <th>{{'orders.table.date' | translate}}</th>
+                        <th *ngIf="role == 2">{{'orders.table.customerName' | translate}}</th>
+                        <th *ngIf="role == 1">{{'orders.table.supplierName' | translate}}</th>
+                        <th>{{'orders.table.carInfo' | translate}}</th>
+                        <th>{{'orders.table.number' | translate}}</th>
+                        <th>{{'orders.table.amount' | translate}}</th>
+                        <th>{{'orders.table.total' | translate}}</th>
+                        <th>{{'orders.table.sttaus' | translate}}</th>
+                        <th>{{'orders.table.delivery' | translate}}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+                    <tr>
+                        <td>
+                            <span>
+                                <a (click)="goOrderDetails(order)" style="cursor: pointer;">
+                                    <mark class="text-blue-400 hover:text-pink-500">{{order.id}}
+                                    </mark>
+                                </a>
+                            </span>
+
+                        </td>
+                        <td>
+                            {{order?.createdAt | date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td *ngIf="role == 2">
+                            {{order.customerName}}
+                        </td>
+                        <td *ngIf="role == 1">
+                            {{order.supplierName}}
+                        </td>
+                        <td>
+                            {{order.claimTitle? order.claimTitle : '-'}}
+                        </td>
+                        <td>
+                            {{order.claimNumber? order.claimNumber : '-'}}
+                        </td>
+                        <td>
+                            {{order.orderAmount}}
+                        </td>
+                        <td>
+                            {{order.totalAmount}}
+                        </td>
+                        <td>
+                            {{order.orderStatus}}
+                        </td>
+                        <td>
+                            {{order.deliveryFees}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td colspan="5" class="text-left">{{'common.total' | translate}}</td>
+                        <td>{{totalOrderAmount | number}}</td>
+                        <td colspan="2">{{totalAmount | number}}</td>
+                        <td>{{delivaryTotal | number}}</td>
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <div class="flex align-items-center justify-content-between">
+                        {{'orders.table_footer' | translate: {length: masterDtos ? masterDtos.length : 0} }}
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

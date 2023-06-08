@@ -229,7 +229,8 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
         });
 
         let bidToApprove = {
-            bids: [this.currentBid[0].bid],
+            // bids: [this.currentBid[0].bid],
+            bids: bids,
             shippingAddress: 1,
             shippingMethod: 1,
             paymentMethod: 1,

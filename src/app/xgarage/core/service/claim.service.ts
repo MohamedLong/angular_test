@@ -72,4 +72,8 @@ export class ClaimService extends GenericService<Claim>{
         return this.http.post<any>(config.coreApiUrl + '/claim/saveClaim', body);
     }
 
+    getClaimOrders() {
+        return this.http.get<any[]>(config.storeApiUrl + '/orders/claim/tenant');
+    }
+
 }

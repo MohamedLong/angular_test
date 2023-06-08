@@ -143,6 +143,8 @@ import { ClaimDetailsComponent } from './core/component/claim/claim-details/clai
 import { PrivacyComponent } from './common/component/privacy/privacy.component';
 import { EditClaimComponent } from './core/component/claim/edit-claim/edit-claim.component';
 import { NewClaimComponent } from './core/component/claim/new-claim/new-claim.component';
+import { ClaimOrderComponent } from './core/component/claim/claim-order/claim-order.component';
+import { ClaimOrderDetailsComponent } from './core/component/claim/claim-order/claim-order-details/claim-order-details.component';
 
 @NgModule({
     declarations: [
@@ -195,7 +197,9 @@ import { NewClaimComponent } from './core/component/claim/new-claim/new-claim.co
         ClaimDetailsComponent,
         PrivacyComponent,
         EditClaimComponent,
-        NewClaimComponent,    ],
+        NewClaimComponent,
+        ClaimOrderComponent,
+        ClaimOrderDetailsComponent,    ],
     imports: [
         CommonModule,
         XgarageRoutingModule,
