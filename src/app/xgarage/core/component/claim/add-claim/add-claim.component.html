@@ -116,11 +116,11 @@
                                     class="p-error">Must Select One At Least</small> -->
                                 </div>
                                 <div class="col-12 md:col-6 text-center">
-                                    <p-button *ngIf="!claim.documents[1]" [disabled]="undo" icon="pi pi-undo"
+                                    <p-button *ngIf="claim && !claim.documents[1]" [disabled]="undo" icon="pi pi-undo"
                                         styleClass="p-button-rounded p-button-secondary p-button-outlined"
                                         (click)="undoMousePos()"></p-button>
                                     <div class="mx-auto relative" style="max-width: 350px" #secondCar
-                                        (click)="!claim.documents[1] && printMousePos($event)">
+                                        (click)="claim && !claim.documents[1] && printMousePos($event)">
                                         <img class="width-100" [src]="carImageSrc" alt="">
                                     </div>
                                     <small *ngIf="submitted && undo"
