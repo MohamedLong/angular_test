@@ -297,7 +297,7 @@
         {{type == 'new bid'? 'Part Images': modalPart.partName}}
     </ng-template>
     <div class="align-items-start flex justify-content-between mb-3"
-        *ngIf="modalPart.bidImages? modalPart.bidImages?.length > 0 : modalPart.documents?.length > 0; else noimages">
+        *ngIf="modalPart.documents?.length > 0; else noimages">
         <ng-container *ngFor="let doc of modalPart.documents">
             <div class="mr-2">
                 <img class="car-image rounded-large shadow-3"
