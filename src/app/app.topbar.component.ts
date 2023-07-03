@@ -152,7 +152,7 @@ export class AppTopBarComponent {
     viewProfile(id: number) {
         localStorage.removeItem('supplierId');
         this.userId = JSON.parse(this.authService.getStoredUser()).id;
-        this.tenantService.selectedTenantId = this.userId;
+        this.tenantService.selectedTenantId = JSON.parse(this.authService.getStoredUser()).tenant.id;
         this.router.navigate(['/supplier-profile']);
     }
 

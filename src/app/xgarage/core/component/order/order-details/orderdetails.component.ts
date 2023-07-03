@@ -227,7 +227,8 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
             }
             this.orderService.changeOrderStatus(orderRequest, this.confirmType).subscribe({
                 next: (data) => {
-                    if (data.messageCode == 200) {
+                    console.log(data)
+                    if (data) {
                         this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: data.message, life: 3000 });
                         this.getOrder(this.masterDto.id);
                     } else {

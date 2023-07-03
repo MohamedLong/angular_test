@@ -98,6 +98,7 @@ export class SupplierprofileComponent implements OnInit {
         });
 
         const supplierId = parseInt(localStorage.getItem('supplierId'), 10);
+
         if (supplierId) {
             this.id = supplierId
         } else {
@@ -117,6 +118,7 @@ export class SupplierprofileComponent implements OnInit {
             speciality: [''],
             enabled: [''],
         });
+
         this.getSupplierByIdNumber(this.id);
     }
 

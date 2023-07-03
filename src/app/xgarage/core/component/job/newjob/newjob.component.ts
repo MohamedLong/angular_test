@@ -119,7 +119,7 @@ export class NewJobComponent implements OnInit {
         });
 
         //console.log(this.jobForm.get('car').value);
-        this.jobForm.addControl('requestTitle', new FormControl(`${event.brandId.brandName} ${event.carModelId.name} ${event.carModelYearId.year},  ${event.carModelTypeId.type}`));
+        this.jobForm.addControl('requestTitle', new FormControl(`${event.brandId.brandName} ${event.carModelId.name} ${event.carModelYearId.year}, ${event.carModelTypeId.type}`));
         this.clickToNavigate('request');
     }
 

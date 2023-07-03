@@ -37,7 +37,7 @@
 
     <ng-template pTemplate="body" let-part let-editing="editing" let-ri="rowIndex">
         <tr [pEditableRow]="part" [ngClass]="{'row-disabled': part.saved || checked}">
-            <td (click)="showModal(part)" style="cursor: pointer; border-right: 1px solid #dee2e6;">
+            <td (click)="showPartImageModal(part)" style="cursor: pointer; border-right: 1px solid #dee2e6;">
                 <span>
                     {{type == 'new bid' || type == 'new claimBid' || type == 'claim bid' ? part.part.name :
                     part.partName}}
@@ -297,7 +297,7 @@
         {{type == 'new bid'? 'Part Images': modalPart.partName}}
     </ng-template>
     <div class="align-items-start flex justify-content-between mb-3"
-        *ngIf="modalPart.documents?.length > 0; else noimages">
+        *ngIf="modalPart.bidImages? modalPart.bidImages?.length > 0 : modalPart.documents?.length > 0; else noimages">
         <ng-container *ngFor="let doc of modalPart.documents">
             <div class="mr-2">
                 <img class="car-image rounded-large shadow-3"

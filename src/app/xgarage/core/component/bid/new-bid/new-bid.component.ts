@@ -381,8 +381,8 @@ export class NewBidComponent implements OnInit, OnChanges {
         }
     }
 
-    showModal(part) {
-        //console.log(part)
+    showPartImageModal(part) {
+        console.log(part)
         this.modalPart = part;
         this.displayModal = true;
     }
@@ -433,10 +433,8 @@ export class NewBidComponent implements OnInit, OnChanges {
                     part.saved = true;
                     part.isSending = false;
                     this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
-                    this.router.navigateByUrl('/bids');
+                    // this.router.navigateByUrl('/bids');
                 }
-
-
             }, err => {
                 part.isSending = false;
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message });
