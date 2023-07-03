@@ -91,7 +91,7 @@
                             {{claim.statusDate | date:'longDate'}}
                         </td>
                         <td>
-                            <p-button label="{{claim.status}}" styleClass="p-button-text p-button-sm {{claim.status == 'Open'? 'bg-blue-100' : claim.status == 'Waiting for Survey'? 'p-button-warning bg-orange-100' : claim.status == 'Confirmed'? 'p-button-success bg-green-100': claim.status == 'Waiting for Approval'? 'p-button-help  bg-indigo-100':'p-button-danger bg-pink-100'}}"></p-button>
+                            <p-tag value="{{claim.status}}" styleClass="p-button-text p-button-sm {{claim.status == 'Open'? 'bg-blue-500' : claim.status == 'Waiting for Survey'? 'p-button-warning bg-orange-500' : claim.status == 'Confirmed' || claim.status == 'Initial Approval' || claim.status == 'Approved'? 'p-button-success bg-green-500': claim.status == 'Waiting for Approval'? 'p-button-help  bg-indigo-500':'p-button-danger bg-pink-500'}}"></p-tag>
                             <!-- <p-badge value="{{claim.status}}" severity="{{claim.status == 'Open'? 'info' : claim.status == 'Waiting for Survey'? 'warning' : claim.status == 'Confirmed'? 'success': 'danger'}}"></p-badge> -->
                         </td>
                         <td>

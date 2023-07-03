@@ -25,7 +25,7 @@ export class ClaimService extends GenericService<Claim>{
 
     getClaimsByTenant(page?: number) {
         let endpoint = page? `/claim/tenant?pageNo=${page}&pageSize=100` : '/claim/tenant';
-        return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant?pageNo=0&pageSize=100');
+        return this.http.get<ClaimDto[]>(config.coreApiUrl + '/claim/tenant?pageNo=0&pageSize=150');
     }
 
     getClaimTicks() {

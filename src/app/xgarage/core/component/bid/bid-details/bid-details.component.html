@@ -62,6 +62,7 @@
     [draggable]="false" [resizable]="false">
     <app-new-bid *ngIf="bidDetails.length > 0 && displayModal" [requests]="bidDetails" [type]="typeOfBid"></app-new-bid>
 </p-dialog>
+
 <p-dialog contentStyleClass="customeDialoagContentt" styleClass="customeDialoag" [header]="bidDetails[0]?.requestTitle" [(visible)]="displaylumpsumModal" [modal]="true" [style]="{width: 'auto'}"
     [draggable]="false" [resizable]="false">
     <p-table #dt styleClass="p-invoice-datatable-responsive" dataKey="id" [value]="bidDetails" responsiveLayout="scroll">

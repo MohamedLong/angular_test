@@ -43,8 +43,10 @@ export class BidDetailsComponent implements OnInit {
         this.jobService.getBidsByJob(page).subscribe({
             next: (res) => {
                 console.log(res)
-                this.bids = res.reverse();
-                this.fillteredBids = res.reverse();
+                res.reverse();
+                this.bids = res;
+                this.fillteredBids = res
+
                 this.loading = false;
                 this.setStatusNames(this.bids);
             },
@@ -60,7 +62,7 @@ export class BidDetailsComponent implements OnInit {
         this.claimService.getClaimBids().subscribe({
             next: (res) => {
                 //console.log(res)
-                res.reverse()
+                res.reverse();
                 this.bids = res;
                 this.fillteredBids = res;
 

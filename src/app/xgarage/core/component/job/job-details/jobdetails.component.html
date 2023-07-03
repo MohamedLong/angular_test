@@ -249,7 +249,7 @@
                     <ng-template pTemplate="body" let-bid>
                         <tr>
                             <td>
-                                <p-tableCheckbox [value]="bid" [disabled]="bid.statusId != 1"></p-tableCheckbox>
+                                <p-tableCheckbox [value]="bid" [disabled]="bid.statusId !== 1"></p-tableCheckbox>
                             </td>
                             <td *ngIf="partName==null">
                                 {{bid.partName}}
