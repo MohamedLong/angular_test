@@ -60,6 +60,7 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
     buttonTxt = 'Send Request';
     user: any;
     ngOnInit(): void {
+        console.log(this.type, this.requestDetails)
         // set user id
         this.user = JSON.parse(this.authService.getStoredUser()).id;
         this.getPartTypes();
@@ -207,6 +208,10 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
 
     formatThenSaveRequest() {
         // console.log(this.responseBody)
+        if(this.type !== 'edit req' && Array.isArray(this.requestDetails)) {
+            var partExistes = this.checkIfPartAlreadyAdded(this.responseBody.part);
+        }
+
         let stringRequestBody = JSON.stringify(this.responseBody);
         let req = { "requestBody": stringRequestBody, "subCategoryId": this.subCategoryId }
         let reqFormData = new FormData();
@@ -234,34 +239,56 @@ export class NewRequestComponent extends GenericDetailsComponent implements OnIn
             this.submitted = false;
 
         } else {
-            this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
-                //console.log('inisde save requets block', res);
-                if (this.type == 'new req') {
-                    this.request.emit(res);
-                } else {
-                    this.requestService.part.next({});
-                    this.blocked = true;
-                    this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
-                    this.buttonTxt = 'Request Sent Successfully';
-                }
+            // console.log(partExistes)
+            if (!partExistes) {
+                this.requestService.add(reqFormData).subscribe((res: MessageResponse) => {
+                    //console.log('inisde save requets block', res);
+                    if (this.type == 'new req') {
+                        this.request.emit(res);
+                    } else {
+                        this.requestService.part.next({});
+                        this.blocked = true;
+                        this.messageService.add({ severity: 'success', summary: 'Success', detail: res.message });
+                        this.buttonTxt = 'Request Sent Successfully';
+                    }
 
-                this.detailDialog = false;
-                this.isSending = false;
-                this.submitted = false;
-            }, err => {
-                //console.log('inside save request block', err);
-                if (this.type == 'new req') {
-                    this.request.emit(err);
-                } else {
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'something went wrong, please try again.' });
-                }
+                    this.detailDialog = false;
+                    this.isSending = false;
+                    this.submitted = false;
+                }, err => {
+                    //console.log('inside save request block', err);
+                    if (this.type == 'new req') {
+                        this.request.emit(err);
+                    } else {
+                        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'something went wrong, please try again.' });
+                    }
 
-                this.isSending = false;
-                this.blocked = false;
-                this.submitted = false;
-            });
+                    this.isSending = false;
+                    this.blocked = false;
+                    this.submitted = false;
+                });
+            } else {
+                this.messageService.add({ severity: 'warn', summary: 'Error', detail: 'This Part is Already Added, Please Select Another One.', life: 3000 });
+            }
         }
+    }
 
+    checkIfPartAlreadyAdded(part) {
+        let existingParts = [];
+        this.requestDetails.forEach(detail => {
+            existingParts.push(detail.part.id);
+        });
+
+        console.log(existingParts, part.id)
+        let isPartFound = existingParts.find(existingPart => {
+            return part.id == existingPart;
+        });
+
+        if (isPartFound) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
