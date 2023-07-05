@@ -162,7 +162,7 @@ export class ClaimOrderDetailsComponent extends GenericDetailsComponent implemen
                 next: (data) => {
                     if (data.messageCode == 200) {
                         this.messageService.add({ severity: 'info', summary: this.confirmStatus.nameEn, detail: data.message, life: 3000 });
-                        this.getClaimOrder(this.masterDto.id);
+                        // this.getClaimOrder(this.masterDto.id);
                     } else {
                         this.messageService.add({ severity: 'error', summary: this.confirmStatus.nameEn, detail: data.message, life: 3000 });
                     }

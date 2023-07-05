@@ -105,29 +105,35 @@ export class NewClaimComponent implements OnInit {
     }
 
     convertToImage() {
-        var node = this.car.nativeElement;
-        var img;
+        if(this.carsheetDoc) {
+            this.createClaimEvent.emit({ form: this.newClaimForm.value, carsheet: this.carsheetDoc });
+        } else {
+            var node = this.car.nativeElement;
+            var img;
 
-        domtoimage.toPng(node, { bgcolor: '#fff' }).then(
-            (dataUrl: string) => {
-                img = new Image();
-                img.src = dataUrl;
+            domtoimage.toPng(node, { bgcolor: '#fff' }).then(
+                (dataUrl: string) => {
+                    img = new Image();
+                    img.src = dataUrl;
 
-                //console.log(dataUrl)
+                    //console.log(dataUrl)
 
-                var arr = dataUrl.split(','),
-                    //mime = arr[0].match(/:(.*?);/)[1],
-                    bstr = atob(arr[arr.length - 1]),
-                    n = bstr.length,
-                    u8arr = new Uint8Array(n);
-                while (n--) {
-                    u8arr[n] = bstr.charCodeAt(n);
+                    var arr = dataUrl.split(','),
+                        //mime = arr[0].match(/:(.*?);/)[1],
+                        bstr = atob(arr[arr.length - 1]),
+                        n = bstr.length,
+                        u8arr = new Uint8Array(n);
+                    while (n--) {
+                        u8arr[n] = bstr.charCodeAt(n);
+                    }
+
+                    this.carsheetDoc = new File([u8arr], 'carsheet.png');
+                    //emit save claim event
+                    this.createClaimEvent.emit({ form: this.newClaimForm.value, carsheet: this.carsheetDoc });
                 }
+            )
+        }
 
-                this.carsheetDoc = new File([u8arr], 'carsheet.png');
-                this.createClaimEvent.emit({ form: this.newClaimForm.value, carsheet: this.carsheetDoc });
-            }
-        )
     }
 
 }

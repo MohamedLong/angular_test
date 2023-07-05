@@ -53,7 +53,7 @@
         <div class="col-12 text-center bg-white rounded">
             <p-button  *ngIf="!claim" [disabled]="undo" icon="pi pi-undo" styleClass="p-button-rounded p-button-secondary p-button-outlined" (click)="undoMousePos($event)"></p-button>
             <div class="mx-auto relative" style="max-width: 350px" #car (click)="!claim && printMousePos($event)">
-                <img class="width-100" [src]="carImageSrc"   alt="">
+                <img class="width-100" [src]="carImageSrc"  alt="">
             </div>
             <small *ngIf="submitted && undo"
                 class="block p-error mr-auto">
