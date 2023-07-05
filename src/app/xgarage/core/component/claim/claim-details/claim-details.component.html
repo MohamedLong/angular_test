@@ -277,8 +277,8 @@
             <ng-template pTemplate="body" let-bid>
                 <tr>
                     <td>
-                        <span *ngFor="let detail of details">
-                            {{detail.part.name}},
+                        <span *ngFor="let detail of details; let index = i;">
+                            {{detail.part.name}}<span *ngIf="details.length > 1 && i < (details.length - 1) ">,</span>
                         </span>
                     </td>
                     <td>
