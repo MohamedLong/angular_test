@@ -23,6 +23,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     supplierName: any;
     supplierId: number;
     originalBidList: BidDto[];
+    currentBidLumpsum: any;
 
     constructor(private authService: AuthService, private bidService: BidService, public messageService: MessageService, public route: ActivatedRoute, public router: Router, public datePipe: DatePipe, public statusService: StatusService, private claimServie: ClaimService, public breadcrumbService: AppBreadcrumbService) {
         super(route, router, claimServie, datePipe, statusService, breadcrumbService);
@@ -155,9 +156,10 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     }
 
     viewBid(bid: any) {
-        // console.log(bid)
+        console.log(bid)
         this.supplierId = bid.supplierId;
         this.currentBidStatus = bid.statusId;
+        this.currentBidLumpsum = bid.lumpSumPrice;
         this.currentBid = [];
         this.claimServie.getClaimBidByBidId(bid.bidId).subscribe(res => {
             console.log(res)

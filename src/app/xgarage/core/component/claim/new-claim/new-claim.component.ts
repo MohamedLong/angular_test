@@ -29,7 +29,7 @@ export class NewClaimComponent implements OnInit {
         contactNo: [null, Validators.required],
         excessRo: [0, Validators.required],
     });
-
+    //s, Validators.pattern(/^[279]\d{7}$/)
     insuranceType: string[] = Object.keys(InsuranceType);;
     submitted: boolean = false;
     @Input() claimSaving: boolean;
@@ -105,9 +105,13 @@ export class NewClaimComponent implements OnInit {
     }
 
     convertToImage() {
+       // console.log(this.carsheetDoc)
         if(this.carsheetDoc) {
+            console.log('carsheet exisits alraedy')
             this.createClaimEvent.emit({ form: this.newClaimForm.value, carsheet: this.carsheetDoc });
         } else {
+            console.log('new carsheet')
+
             var node = this.car.nativeElement;
             var img;
 

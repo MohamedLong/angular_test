@@ -25,6 +25,7 @@ export class BidDetailsComponent implements OnInit {
     pageNo: number = 0;
     user: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
     typeOfBid: string = this.user == 1 ? 'claim bid' : 'job bid';
+    lumpsumTotal: number;
 
     constructor(private authService: AuthService, private breadcrumbService: AppBreadcrumbService, private bidService: BidService, private jobService: JobService, private msgService: MessageService, private claimService: ClaimService, private confirmationService: ConfirmationService) { }
 
@@ -84,11 +85,12 @@ export class BidDetailsComponent implements OnInit {
                     this.bidDetails = res;
                     this.bidDetails[0].requestTitle = bid.claimTitle;
                     this.bidDetails[0].statusId = bid.status == "Open"? 1 : 2;
-                    if (this.bidDetails.length == 1 && this.bidDetails[0].originalPrice == 0) {
+                    if (this.bidDetails[0].originalPrice == 0) {
 
                         this.bidDetails[0].partName = bid.partNames;
                         this.bidDetails[0].statusId = bid.status;
                         this.displaylumpsumModal = true;
+                        this.lumpsumTotal = bid.lumpSumPrice;
                         console.log('this is lump sum', this.bidDetails[0].statusId)
                     } else {
                         console.log('this is regular bid')

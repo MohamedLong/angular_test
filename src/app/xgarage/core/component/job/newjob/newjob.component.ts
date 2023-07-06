@@ -74,7 +74,7 @@ export class NewJobComponent implements OnInit {
     supplierSelected: boolean = false;
     insuranceFrom = Object.keys(InsuranceType);
     jobForm: FormGroup = this.formBuilder.group({
-        insuranceFrom: ['', Validators.required],
+        //insuranceFrom: ['', Validators.required],
         claim: ['', Validators.required],
         job: [''],
         jobId: ['', Validators.required],
@@ -250,7 +250,7 @@ export class NewJobComponent implements OnInit {
                 jobNo: this.jobForm.get('job').value,
                 claim: this.claimId,
                 location: this.jobForm.get('location').value,
-                insuranceType: this.jobForm.get('insuranceFrom').value,
+                //insuranceType: this.jobForm.get('insuranceFrom').value,
                 car: { 'id': this.jobForm.get('car').value.id },
                 privacy: this.jobForm.get('privacy').value,
                 suppliers: this.jobForm.get('suppliers').value,

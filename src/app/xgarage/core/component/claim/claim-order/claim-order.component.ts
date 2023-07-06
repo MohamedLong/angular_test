@@ -41,6 +41,7 @@ export class ClaimOrderComponent extends GenericComponent implements OnInit {
                 this.delivaryTotal = this.delivaryTotal + data.deliveryFees;
             })
 
+            res.reverse();
             this.masterDtos = res;
         })
     }

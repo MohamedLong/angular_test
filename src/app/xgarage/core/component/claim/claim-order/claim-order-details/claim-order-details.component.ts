@@ -21,7 +21,7 @@ import { MessageResponse } from 'src/app/xgarage/common/dto/messageresponse';
 export class ClaimOrderDetailsComponent extends GenericDetailsComponent implements OnInit {
     isLoading: boolean = false;
 
-    constructor( public route: ActivatedRoute, public router: Router, private authService: AuthService,
+    constructor(public route: ActivatedRoute, public router: Router, private authService: AuthService,
         public breadcrumbService: AppBreadcrumbService, public datePipe: DatePipe,
         public messageService: MessageService, public confirmService: ConfirmationService,
         private bidService: BidService, private claimService: ClaimService) {
@@ -43,9 +43,9 @@ export class ClaimOrderDetailsComponent extends GenericDetailsComponent implemen
     ngOnInit(): void {
         if (localStorage.getItem('claim-order')) {
             //masterDTO
-            this.masterDto= JSON.parse(localStorage.getItem('claim-order'));
+            this.masterDto = JSON.parse(localStorage.getItem('claim-order'));
             this.getClaimOrder(this.masterDto.id);
-            //console.log(this.masterDto)
+            console.log(this.masterDto)
         }
 
         this.dataCols = [
@@ -83,8 +83,20 @@ export class ClaimOrderDetailsComponent extends GenericDetailsComponent implemen
     }
 
     getClaimBids(bidId: number) {
+        //old implemnetaion
         this.claimService.getClaimBidByBidId(bidId).subscribe(res => {
-            //console.log(res)
+            console.log('bid lists', res)
+            // if (res.length == 1 && res[0].part == null) {
+            //     this.claimService.getClaimParts(this.masterDto.id).subscribe(parts => {
+
+            //         this.bidList = parts;
+            //         console.log('parts', parts);
+
+            //     }, err => console.log(err))
+            // } else {
+            //     this.bidList = res;
+            // }
+
             this.bidList = res;
 
             this.bidList.forEach(order => {
@@ -98,6 +110,7 @@ export class ClaimOrderDetailsComponent extends GenericDetailsComponent implemen
             this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.error.statusMsg, life: 3000 });
             this.isLoading = false;
         });
+
     }
 
     initActionMenu() {

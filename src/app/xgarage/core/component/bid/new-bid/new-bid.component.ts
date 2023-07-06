@@ -66,7 +66,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     bid: Bid;
 
     ngOnInit(): void {
-        //console.log(this.requests, this.type)
+       // console.log(this.type)
         if (this.type == 'new bid') {
             //console.log(this.requests)
             this.requests = this.requests.filter(req => req.status.id !== StatusConstants.CANCELED_STATUS && req.status.id !== StatusConstants.COMPLETED_STATUS);
@@ -81,7 +81,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             });
 
         } else if (this.type == 'new claimBid') {
-            // console.log(this.requests)
+            console.log(this.requests)
             this.requests.forEach(req => {
                 this.setClaimBid(req);
             });
@@ -105,7 +105,7 @@ export class NewBidComponent implements OnInit, OnChanges {
 
 
                 if (req.discountType == 'fixed' || req.discountType == null) {
-                    console.log('dis is fixed')
+                    //console.log('dis is fixed')
                     this.bidTotalDiscount = this.bidTotalDiscount + req.discount;
                 } else if (req.discountType == 'flat') {
                     this.bidTotalDiscount = this.bidTotalDiscount + (req.discount * (req.originalPrice * req.qty)) / 100;
@@ -128,14 +128,14 @@ export class NewBidComponent implements OnInit, OnChanges {
             order: this.type == 'new bid' || this.checked ? null : part.id,
             cu: null,
             cuRate: 0,
-            partType: this.type == 'new bid' ? { id: part.preferred.id } : this.checked ? {id: 1} : { id: part.partType.id },
+            partType: this.type == 'new bid' ? { id: part.preferred.id } : this.checked ? { id: 1 } : { id: part.partType.id },
             bidDate: getYear + "-" + getMonth + "-" + getDay,
             price: this.checked ? Number(this.totalBidsPrices) : part.totalPrice,
             request: this.type == 'new bid' ? { id: part.id } : { id: JSON.parse(localStorage.getItem('claim')).request },
             servicePrice: this.type == 'new bid' || this.checked ? 0 : part.servicePrice,
             supplier: JSON.parse(this.authService.getStoredUser()).id,
             comments: this.note,
-            deliverDays: this.checked ? 0: part.availability,
+            deliverDays: this.checked ? 0 : part.availability,
             warranty: this.checked ? 0 : part.warranty,
             location: this.type == 'new bid' ? part.locationName : JSON.parse(this.authService.getStoredUser()).tenant.location,
             discount: this.checked ? 0 : part.discount,
@@ -240,12 +240,12 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     onServicePriceChange($event) {
-        console.log('onServicePriceChange:',$event)
+        //console.log('onServicePriceChange:', $event)
         if ($event.servicePrice == null || $event.service < 0) {
             this.messageService.add({ severity: 'error', summary: 'Service Price is Not Valid', detail: 'Service Price Can Not be Less Than 0' });
             this.isRowValid = false;
         } else {
-            console.log('uppdating price')
+            //console.log('uppdating price')
             this.updatePrice($event);
             this.isRowValid = true;
         }
@@ -275,7 +275,7 @@ export class NewBidComponent implements OnInit, OnChanges {
             this.updatePrice(part);
             this.isRowValid = true;
         }
-        console.log(part.qty2, part.qty)
+        //console.log(part.qty2, part.qty)
     }
 
     resetBid(bid) {
@@ -310,18 +310,18 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     updatePrice(part) {
-       // console.log(part)
+        // console.log(part)
         let price = part.originalPrice * part.qty2;
         let discount = part.discountType == 'OMR' ? part.discount : (price * part.discount) / 100;
         let priceAfterDiscount = price - discount;
         let totalPrice;
-        if(part.servicePrice > 0) {
-            console.log('adding service price')
+        if (part.servicePrice > 0) {
+            // console.log('adding service price')
             let priceAfterServicePrice = priceAfterDiscount + part.servicePrice;
             let vat = (priceAfterServicePrice * part.vat) / 100;
             part.totalPrice = priceAfterServicePrice + vat;
         } else {
-            console.log('withoutservice price')
+            //console.log('withoutservice price')
             let vat = (priceAfterDiscount * part.vat) / 100;
             part.totalPrice = priceAfterDiscount + vat;
         }
@@ -419,10 +419,10 @@ export class NewBidComponent implements OnInit, OnChanges {
         //calc total bid price for job bid
         this.total = this.total + part.totalPrice;
 
-        // console.log('saving bid>>>', bidBody)
+        console.log('saving bid>>>', bidBody)
         // console.log(this.bidDto)
 
-        if (this.checked ||(part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
+        if (this.checked || (part.originalPrice > 0) && (part.discount >= 0) && (part.vat >= 0) && (part.discount < part.originalPrice)) {
             this.bidService.add(bidFormData).subscribe((res: any) => {
                 console.log('success saving single bid>>>')
                 if (this.type == 'new claimBid') {
@@ -466,14 +466,20 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     addBid() {
-        if(!this.checked) {
-            this.bidDto.forEach(bid => {
+        //console.log(this.bidDto, this.bid)
+        if (!this.checked) {
+            let parts = [];
+            this.requests.forEach(req => {
+                parts.push({ requestFor: req.requestFor, partOption: req.partOption })
+            });
+
+            this.bidDto.forEach((bid, i) => {
                 let part = {
                     bid: this.claimBidId,
                     part: bid.part,
                     partType: bid.partType.id,
-                    requestFor: 'Replace',
-                    partOption: 'Replace',
+                    requestFor: parts[i].requestFor,
+                    partOption: parts[i].partOption,
                     qty: bid.qty,
                     price: bid.price,
                     servicePrice: bid.servicePrice,
@@ -488,30 +494,34 @@ export class NewBidComponent implements OnInit, OnChanges {
                 this.bids.push(part);
             });
         } else {
-            let part = {
-                bid: this.claimBidId,
-                part: null,
-                partType: 0,
-                requestFor: 'Replace',
-                partOption: 'Replace',
-                qty: 0,
-                price: this.bid.price,
-                servicePrice: 0,
-                discount: 0,
-                discountType: 'fixed',
-                vat: 0,
-                originalPrice: 0,
-                warranty: 0,
-                availability: 0
-            };
+            this.requests.forEach(req => {
+                let part = {
+                    bid: this.claimBidId,
+                    part: {id: req.part.id},
+                    partType: 0,
+                    requestFor: req.requestFor,
+                    partOption: req.partOption,
+                    qty: 0,
+                    price: this.bid.price,
+                    servicePrice: 0,
+                    discount: 0,
+                    discountType: 'fixed',
+                    vat: 0,
+                    originalPrice: 0,
+                    warranty: 0,
+                    availability: 0
+                };
 
-            this.bids.push(part);
-            console.log('claim bids:', this.bids)
+                this.bids.push(part);
+
+            });
         }
+
+        console.log('claim bids:', this.bids)
 
         if (this.bids.length > 0) {
             this.claimService.saveClaimBid(this.bids).subscribe(res => {
-                console.log(res)
+                //console.log(res)
                 this.isSubmittingBids = false;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Bids Submitted Successfully' });
                 setTimeout(() => {
@@ -543,7 +553,7 @@ export class NewBidComponent implements OnInit, OnChanges {
     }
 
     prepareBidMaster() {
-        console.log('preparing bid>>>')
+        //console.log('preparing bid>>>')
         var part: Bid = {
             cuRate: 0,
             deliverDays: 0,
@@ -584,5 +594,13 @@ export class NewBidComponent implements OnInit, OnChanges {
 
         //console.log(part)
         this.saveBid(part, part);
+    }
+
+    checkType(obj) {
+        if(typeof obj == 'string') {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

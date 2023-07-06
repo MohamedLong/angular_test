@@ -300,7 +300,6 @@ export class EditClaimComponent implements OnInit {
 
     onAddNewPart(part: any) {
         // console.log(this.partName, part)
-
         this.partCategory = { id: part.categoryId, name: part.categoryName };
         this.partSubcategory = { id: part.subcategoryId, name: part.subcategoryName };;
 
@@ -312,6 +311,8 @@ export class EditClaimComponent implements OnInit {
         this.requestService.part.subscribe(val => {
             let categoryFound: any;
             let partFound: any;
+
+            console.log(val)
 
             if (Object.keys(val).length !== 0) {
                 //console.log('saving part')
@@ -348,6 +349,9 @@ export class EditClaimComponent implements OnInit {
                         this.addPartDialog = false;
                         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Part Added Succefully' });
                         this.submittedPart = false;
+
+                        //delete last value
+                        this.requestService.part.next({});
                     } else {
                         this.partservice.add(val.part).subscribe(res => {
                             console.log(res)
@@ -368,6 +372,10 @@ export class EditClaimComponent implements OnInit {
                             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Part Added Succefully' });
                             this.submittedPart = false;
                             this.addPartDialog = false;
+
+                            //delete last value
+                            this.requestService.part.next({});
+
                         }, err => {
                             this.messageService.add({ severity: 'error', summary: 'Erorr', detail: 'Something Went Wrong, Please Try Again Later.' });
                             this.submittedPart = false;

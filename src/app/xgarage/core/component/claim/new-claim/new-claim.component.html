@@ -49,6 +49,7 @@
                 <!-- {{contactNoErr? 'contact number is required' : 'invalid contact number'}} -->
                 {{ 'common.contactNoRequired' | translate }}
             </small>
+            <!-- <small *ngIf="submitted &&  newClaimForm.get('contactNo').errors?.['pattern']" class="p-error block pt-1">Incorrect phone number.</small> -->
         </div>
         <div class="col-12 text-center bg-white rounded">
             <p-button  *ngIf="!claim" [disabled]="undo" icon="pi pi-undo" styleClass="p-button-rounded p-button-secondary p-button-outlined" (click)="undoMousePos($event)"></p-button>

@@ -42,7 +42,7 @@
                     {{user == 1? bid.status : bid.jobStatus}}
                 </td>
                 <td>
-                    {{!bid.totalPrice?  0 : bid.totalPrice | number }}
+                    {{bid.lumpSumPrice?  (bid.lumpSumPrice | number ) : (bid.totalPrice | number )}}
                 </td>
                 <td>
                     <button (click)="onBidView(bid)" pButton pRipple type="button" label="View" class="p-button-rounded p-button-outlined"></button>
@@ -73,13 +73,13 @@
                 <th>{{ 'operations.action' | translate }}</th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-biddetail>
-            <tr [ngClass]="{'bg-green-50': highlight}">
+        <ng-template pTemplate="body" let-biddetail let-ri="rowIndex">
+            <tr [ngClass]="{'bg-green-50': highlight}" *ngIf="ri == 0">
                 <td class="font-bold">
                     {{biddetail.partName}}
                 </td>
                 <td>
-                    {{biddetail.price}}
+                    {{lumpsumTotal}}
                 </td>
 
                 <td>

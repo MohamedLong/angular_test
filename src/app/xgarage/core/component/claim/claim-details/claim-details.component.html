@@ -46,14 +46,9 @@
                                     <th pColumn="id">{{ 'common.id' | translate }}</th>
                                     <th>{{ 'job.form.privacy' | translate }}</th>
                                     <th>{{ 'bid.bidDetails.partName' | translate }}</th>
-                                    <!-- <th>{{ 'request.tableColumn.partTypes' | translate }}</th> -->
                                     <th>{{ 'claim.tableColumn.requestFor' | translate }}</th>
-                                    <!-- <th>{{ 'common.status' | translate }}</th> -->
-                                    <!-- *ngIf="id == 323" -->
                                     <th [hidden]="role == 2">
                                         {{'operations.actions' | translate }}</th>
-                                    <!-- <th [hidden]="role == 2">
-                                        Bids</th> -->
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-part>
@@ -67,16 +62,9 @@
                                     <td>
                                         {{part.part.name}}
                                     </td>
-                                    <!-- <td>
-                                        {{part.partType? part.partType.partType : '-'}}
-                                    </td> -->
                                     <td>
                                         {{part.partOption}}
                                     </td>
-                                    <!-- <td>
-                                        {{getStatus(part.part.status)}}
-                                    </td> -->
-                                    <!-- *ngIf="id == 323" -->
                                     <td>
                                         <button pButton pRipple icon="pi pi-times"
                                             class="p-button-rounded p-button-warning mt-2"
@@ -92,7 +80,6 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <!-- && id == 323 -->
                     <p-tabPanel *ngIf="viewAuth == true"
                         header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
@@ -133,7 +120,7 @@
                                         {{bid.bidDate | date: 'dd/MM/yyyy hh:mm'}}
                                     </td>
                                     <td>
-                                        {{bid.price | number}}
+                                        {{bid.lumpSumPrice | number}}
                                     </td>
                                     <td [hidden]="printingMode===true">
                                         <button pButton pRipple icon="pi pi-eye"
@@ -144,7 +131,6 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <!-- && id == 325 -->
                     <p-tabPanel *ngIf="newAuth == true"
                         header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid type="new claimBid" *ngIf="details.length > 0" [requests]="details"></app-new-bid>
@@ -154,9 +140,7 @@
                     </p-tabPanel>
                 </p-tabView>
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -274,15 +258,15 @@
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-bid>
-                <tr>
+            <ng-template pTemplate="body" let-bid let-ri="rowIndex">
+                <tr *ngIf="ri == 0">
                     <td>
                         <span *ngFor="let detail of details; let index = i;">
                             {{detail.part.name}}<span *ngIf="details.length > 1 && i < (details.length - 1) ">,</span>
                         </span>
                     </td>
                     <td>
-                        {{bid.price | number}}
+                        {{currentBidLumpsum | number}}
                     </td>
                 </tr>
             </ng-template>

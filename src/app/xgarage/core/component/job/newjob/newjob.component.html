@@ -42,13 +42,6 @@
                                             </ng-template>
                                         </p-messages>
                                     </div>
-                                    <div class="col-12 md:col-6">
-                                        <app-privacy type="job" label="{{ 'job.form.privacy' | translate }}"
-                                            [selectionList]="privacyList"
-                                            [suppliersControl]="jobForm.controls['suppliers']"
-                                            [privacyControl]="jobForm.controls['privacy']"
-                                            [id]="this.jobForm.get('car').value? jobForm.get('car').value.brandId.id : null"></app-privacy>
-                                    </div>
                                     <div class="col-12  md:col-6">
                                         <label class="block">{{ 'job.form.claimNo' | translate }}</label>
                                         <span class="p-input-icon-right width-100 my-2">
@@ -88,7 +81,7 @@
                                             <b class="bg-white">{{ 'job.form.addMoreDetails' | translate }}</b>
                                         </p-divider>
                                     </div>
-                                    <div class="col-12 md:col-6">
+                                    <!-- <div class="col-12 md:col-6">
                                         <label class="block mb-2">{{ 'job.form.insuranceFrom' | translate }}</label>
                                         <p-dropdown [options]="insuranceFrom" formControlName="insuranceFrom"
                                             placeholder="OD/TP"
@@ -96,6 +89,13 @@
                                         <small
                                             *ngIf="submitted && !jobForm.get('insuranceFrom').valid  && jobForm.get('insuranceFrom').errors?.['required']"
                                             class="p-error">{{ 'job.form.selectInsurance' | translate }}</small>
+                                    </div> -->
+                                    <div class="col-12 md:col-6">
+                                        <app-privacy type="job" label="{{ 'job.form.privacy' | translate }}"
+                                            [selectionList]="privacyList"
+                                            [suppliersControl]="jobForm.controls['suppliers']"
+                                            [privacyControl]="jobForm.controls['privacy']"
+                                            [id]="this.jobForm.get('car').value? jobForm.get('car').value.brandId.id : null"></app-privacy>
                                     </div>
                                     <div class="col-12 md:col-6">
                                         <label class="block mb-2">{{ 'job.form.garageLocation' | translate }}</label>

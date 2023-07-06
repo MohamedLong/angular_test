@@ -97,7 +97,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         // }
 
         this.claimService.getClaimsByTenant(page).subscribe(res => {
-            console.log(res, page)
+            //console.log(res, page)
             this.masterDtos = res.reverse();
             this.fillteredMaster = this.masterDtos;
             this.setStatusNames(this.masterDtos);
