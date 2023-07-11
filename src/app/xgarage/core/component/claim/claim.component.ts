@@ -21,10 +21,8 @@ import { StatusService } from 'src/app/xgarage/common/service/status.service';
 })
 export class ClaimComponent extends GenericComponent implements OnInit {
 
-    constructor(public route: ActivatedRoute, private router: Router, private authService: AuthService, private tenantService: TenantService,
-        private claimService: ClaimService,
-        public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService,
-        private statusService: StatusService) {
+    constructor(public route: ActivatedRoute, private router: Router, private authService: AuthService, private tenantService: TenantService, private claimService: ClaimService,
+        public messageService: MessageService, public datePipe: DatePipe, breadcrumbService: AppBreadcrumbService,) {
         super(route, datePipe, breadcrumbService);
     }
 
@@ -44,6 +42,8 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     user: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
 
     ngOnInit(): void {
+        this.resetRouterLink();
+
         this.onGetClaimsByTenant(this.pageNo);
         this.getAllTenants();
         super.callInsideOnInit();
@@ -65,41 +65,20 @@ export class ClaimComponent extends GenericComponent implements OnInit {
     }
 
     onGetClaimsByTenant(page?: number) {
-        // let user = this.authService.getStoredUser();
-        // if (JSON.parse(user).tenant !== null) {
-        //     let tenant = JSON.parse(user).tenant.id;
-        //     this.claimService.getByTenant(tenant).subscribe({
-        //         next: (masters) => {
-        //             this.masterDtos = masters;
-        //             this.cols = [
-        //                 { field: 'id', header: 'ID' },
-        //                 { field: 'claimNo', header: 'Claim Number' },
-        //                 { field: 'claimDate', header: 'Claim Date' },
-        //                 { field: 'tenantName', header: 'Tenant Name' },
-        //                 { field: 'createdUser', header: 'Created By' },
-        //                 { field: 'statusDate', header: 'Status Date' },
-        //                 { field: 'status', header: 'Status' }
-        //             ];
-        //             this.loading = false;
-        //         },
-        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Error', detail: e.error.message, life: 3000 })
-        //     });
-        // }
-        // else {
-        //     this.claimService.getAll().subscribe({
-        //         next: (masters) => {
-        //             this.masterDtos = masters;
-        //             this.loading = false;
-        //             this.masterDtos.forEach(val => val.cancellable = (val.status != null && val.status == StatusConstants.OPEN_STATUS));
-        //         },
-        //         error: (e) => this.messageService.add({ severity: 'error', summary: 'Server Error', detail: e.error.message, life: 3000 })
-        //     });
-        // }
-
         this.claimService.getClaimsByTenant(page).subscribe(res => {
             //console.log(res, page)
             this.masterDtos = res.reverse();
-            this.fillteredMaster = this.masterDtos;
+
+            if(!this.viewAuth) {
+                this.fillteredMaster = this.masterDtos;
+            } else {
+                this.masterDtos = this.masterDtos.filter(dto => {
+                    return dto.status !== 'Open' && dto.status !== 'Waiting for Approval' && dto.status !== 'Waiting for Survey' && dto.status !== 'Canceled';
+                });
+
+                this.fillteredMaster = this.masterDtos;
+            }
+
             this.setStatusNames(this.masterDtos);
             this.loading = false;
         }, err => this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message, life: 3000 }))
@@ -199,6 +178,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
 
     goToClaimDetails(id: number) {
         localStorage.setItem('claimId', JSON.stringify(id));
+        this.updateRouterLink();
         this.router.navigate(['claim-details']);
     }
 
@@ -211,9 +191,7 @@ export class ClaimComponent extends GenericComponent implements OnInit {
         }
     }
 
-
     filterByStatus(state: any) {
-        console.log('state: ', state);
         this.selectedState = state;
         if (state == 'All') {
             this.fillteredMaster = this.masterDtos;
@@ -236,6 +214,36 @@ export class ClaimComponent extends GenericComponent implements OnInit {
                 }
             });
         }
+    }
+
+    updateRouterLink() {
+        let subs = JSON.parse(localStorage.getItem('subs'));
+
+        let page = subs.find(sub => {
+            return sub.subMenu.routerLink == 'claims';
+        });
+
+        if(page) {
+            console.log('updating router>')
+            page.subMenu.routerLink = 'claim-details';
+        }
+
+        localStorage.setItem('subs', JSON.stringify(subs));
+    }
+
+    resetRouterLink() {
+        console.log('resetting router>')
+        let subs = JSON.parse(localStorage.getItem('subs'));
+
+        let page = subs.find(sub => {
+            return sub.subMenu.routerLink == 'claim-details';
+        });
+
+        if(page) {
+            page.subMenu.routerLink = 'claims';
+        }
+
+        localStorage.setItem('subs', JSON.stringify(subs));
     }
 
 }

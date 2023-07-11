@@ -21,7 +21,7 @@
             </div>
             <div class="field col mb-0">
                 <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
-                    (click)="print()" class=""></button>
+                    (click)="print()" *ngIf="printAuth == true"></button>
             </div>
         </ng-template>
     </p-toolbar>

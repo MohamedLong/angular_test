@@ -88,9 +88,10 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
     }
 
     initActionMenu() {
+        // console.log(this.master.status.id)
         this.menuItems = [
             {
-                label: 'Confirm', icon: 'pi pi-check', visible: ((this.master.status.id == 1 || this.master.status.id == 13 || this.master.status.id == 12)), command: () => {
+                label: 'Confirm', icon: 'pi pi-check', visible: ((this.master.status.id == 1 || this.master.status.id == 13 || this.master.status.id == 12) && this.approveAuth == true), command: () => {
                     const confirmStatus: Status = {
                         id: 11,
                         nameEn: 'Confirmed',
@@ -102,7 +103,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
                 }
             },
             {
-                label: 'Cancel', icon: 'pi pi-times', visible: ((this.master.status.id == 1 || this.master.status.id == 13 || this.master.status.id == 12)), command: () => {
+                label: 'Cancel', icon: 'pi pi-times', visible: ((this.master.status.id == 1 || this.master.status.id == 13 || this.master.status.id == 12)  && this.cancelAuth == true), command: () => {
                     const cancelStatus: Status = {
                         id: 7,
                         nameEn: 'Canceled',
@@ -113,7 +114,7 @@ export class ClaimDetailsComponent extends GenericDetailsComponent implements On
                 }
             },
             {
-                label: 'Print', icon: 'pi pi-print', command: () => {
+                label: 'Print', icon: 'pi pi-print', visible: this.printAuth == true, command: () => {
                     this.print();
                 }
             }

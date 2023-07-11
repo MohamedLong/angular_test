@@ -3,14 +3,13 @@
         <p-toast></p-toast>
         <!-- //Claim Components  -->
         <div class="card">
-            <p-toolbar styleClass="mb-4">
+            <p-toolbar styleClass="mb-4"  *ngIf="newAuth==true">
                 <ng-template pTemplate="left">
-                    <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
+                    <!-- <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
                         class="p-button-success mr-2 mb-2" (click)="new()" [disabled]="newAuth===false" [hidden]="false"
-                        *ngIf="user == 2"></button>
+                        *ngIf="user == 2"></button> -->
                     <button pButton pRipple label="{{ 'operations.new' | translate }}" icon="pi pi-plus"
-                        class="p-button-success mr-2 mb-2" [routerLink]="['/add-claim']" [disabled]="newAuth===false"
-                        [hidden]="false" *ngIf="user == 1"></button>
+                        class="p-button-success mr-2 mb-2" [routerLink]="['/add-claim']"></button>
                 </ng-template>
 
                 <!-- <ng-template pTemplate="right">
@@ -96,9 +95,9 @@
                         </td>
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
-                                (click)="edit(claim)" [disabled]="edituth===false || (claim.status == 'Canceled')  || (claim.status == 'Confirmed')"></button>
+                                (click)="edit(claim)" [disabled]="editAuth == false"></button>
                             <button pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-warning mt-2"
-                                [disabled]="(editAuth===false && deleteAuth===false) || (claim.status == 'Canceled') || (claim.status == 'Confirmed')" (click)="deleteAction(claim)"></button>
+                                [disabled]="deleteAuth == false" (click)="deleteAction(claim)"></button>
                         </td>
                     </tr>
                 </ng-template>
@@ -147,9 +146,7 @@
             </ng-template>
         </p-dialog>
 
-
         <!-- Delete Single Claim dialog  -->
-
         <p-dialog [(visible)]="deleteSingleDialog" header="{{ 'operations.deleteConfirm' | translate }}" [modal]="true"
             [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
@@ -164,9 +161,7 @@
             </ng-template>
         </p-dialog>
 
-
         <!-- Delete Multiple Claims dialog (Not Functioning) -->
-
         <p-dialog [(visible)]="deleteMultipleDialog" header="{{ 'operations.deleteConfirm' | translate }}"
             [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
@@ -180,6 +175,4 @@
                     (click)="confirmDeleteSelected()"></button>
             </ng-template>
         </p-dialog>
-
-
     </div>

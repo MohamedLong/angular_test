@@ -74,33 +74,62 @@ export class GenericComponent {
     viewAuth: boolean;
 
     constructor(public route: ActivatedRoute, public datePipe: DatePipe, public breadcrumbService: AppBreadcrumbService) {
-        this.extractPermissions();
+        setTimeout(() => {
+            this.extractPermissions();
+        }, 500);
     }
 
 
     extractPermissions() {
         if (localStorage.getItem('subs')) {
             let subs = JSON.parse(localStorage.getItem('subs'));
-            // console.log(JSON.parse(localStorage.getItem('subs')))
-            // console.log(this.route.routeConfig)
+            console.log(JSON.parse(localStorage.getItem('subs')))
+            console.log(this.route.routeConfig)
 
             const filtered = subs.filter(sub => this.route.routeConfig.path === sub.subMenu.routerLink);
-            if (filtered && filtered.length > 0) {
-                this.route.routeConfig.data = { newAuth: filtered[0].newAuth, printAuth: filtered[0].printAuth, editAuth: filtered[0].editAuth, deleteAuth: filtered[0].deleteAuth, approveAuth: filtered[0].approveAuth, acceptAuth: filtered[0].acceptAuth, cancelAuth: filtered[0].cancelAuth, completeAuth: filtered[0].completeAuth, viewAuth: filtered[0].viewAuth}
-            } else {
-                this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completeAuth: false, viewAuth: false };
-            }
-            this.editAuth = this.route.routeConfig.data && this.route.routeConfig.data.editAuth ? this.route.routeConfig.data.editAuth : false;
-            this.newAuth = this.route.routeConfig.data && this.route.routeConfig.data.newAuth ? this.route.routeConfig.data.newAuth : false;
-            this.printAuth = this.route.routeConfig.data && this.route.routeConfig.data.printAuth ? this.route.routeConfig.data.printAuth : false;
-            this.deleteAuth = this.route.routeConfig.data && this.route.routeConfig.data.deleteAuth ? this.route.routeConfig.data.deleteAuth : false;
-            this.approveAuth = this.route.routeConfig.data && this.route.routeConfig.data.approveAuth ? this.route.routeConfig.data.approveAuth : false;
-            this.cancelAuth = this.route.routeConfig.data && this.route.routeConfig.data.cancelAuth ? this.route.routeConfig.data.cancelAuth : false;
-            this.acceptAuth = this.route.routeConfig.data && this.route.routeConfig.data.acceptAuth ? this.route.routeConfig.data.acceptAuth : false;
-            this.completeAuth = this.route.routeConfig.data && this.route.routeConfig.data.completeAuth ? this.route.routeConfig.data.completeAuth : false;
-            this.viewAuth = this.route.routeConfig.data && this.route.routeConfig.data.viewAuth ? !this.route.routeConfig.data.viewAuth : true;
-        }
 
+            if (filtered && filtered.length > 0) {
+                //console.log('filtered found', filtered)
+                this.route.routeConfig.data = {
+                    newAuth: filtered[0].newAuth,
+                    printAuth: filtered[0].printAuth,
+                    editAuth: filtered[0].editAuth,
+                    deleteAuth: filtered[0].deleteAuth,
+                    approveAuth: filtered[0].approveAuth,
+                    acceptAuth: filtered[0].acceptAuth,
+                    cancelAuth: filtered[0].cancelAuth,
+                    completeAuth: filtered[0].completeAuth,
+                    viewAuth: filtered[0].viewAuth
+                }
+            } else {
+                this.route.routeConfig.data = { newAuth: false, printAuth: false, editAuth: false, deleteAuth: false, approveAuth: false, acceptAuth: false, cancelAuth: false, completeAuth: false, viewAuth: false }
+            }
+
+
+            if(this.route.routeConfig.data) {
+                this.editAuth = this.route.routeConfig.data.editAuth;
+                this.newAuth = this.route.routeConfig.data.newAuth;
+                this.printAuth = this.route.routeConfig.data.printAuth;
+                this.deleteAuth = this.route.routeConfig.data.deleteAuth;
+                this.approveAuth = this.route.routeConfig.data.approveAuth;
+                this.cancelAuth = this.route.routeConfig.data.cancelAuth;
+                this.acceptAuth = this.route.routeConfig.data.acceptAuth;
+                this.completeAuth = this.route.routeConfig.data.completeAuth;
+                this.viewAuth = this.route.routeConfig.data.viewAuth;
+            }
+
+            // this.editAuth = this.route.routeConfig.data && this.route.routeConfig.data.editAuth ? !this.route.routeConfig.data.editAuth : true;
+            // this.newAuth = this.route.routeConfig.data && this.route.routeConfig.data.newAuth ? !this.route.routeConfig.data.newAuth : true;
+            // this.printAuth = this.route.routeConfig.data && this.route.routeConfig.data.printAuth ? !this.route.routeConfig.data.printAuth : true;
+            // this.deleteAuth = this.route.routeConfig.data && this.route.routeConfig.data.deleteAuth ? !this.route.routeConfig.data.deleteAuth : true;
+            // this.approveAuth = this.route.routeConfig.data && this.route.routeConfig.data.approveAuth ? !this.route.routeConfig.data.approveAuth : true;
+            // this.cancelAuth = this.route.routeConfig.data && this.route.routeConfig.data.cancelAuth ? !this.route.routeConfig.data.cancelAuth : true;
+            // this.acceptAuth = this.route.routeConfig.data && this.route.routeConfig.data.acceptAuth ? !this.route.routeConfig.data.acceptAuth : true;
+            // this.completeAuth = this.route.routeConfig.data && this.route.routeConfig.data.completeAuth ? !this.route.routeConfig.data.completeAuth : true;
+            // this.viewAuth = this.route.routeConfig.data && this.route.routeConfig.data.viewAuth ? !this.route.routeConfig.data.viewAuth : true;
+
+            //console.log(this.route.routeConfig.data)
+        }
     }
 
     callInsideOnInit(): void {

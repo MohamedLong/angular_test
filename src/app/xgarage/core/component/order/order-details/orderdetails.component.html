@@ -20,7 +20,7 @@
                     label="{{ 'operations.actions' | translate }}" (click)="menu.toggle($event)"></button>
             </div>
             <div class="field col mb-0">
-                <button pButton pRipple type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
+                <button pButton pRipple [disabled]="printAuth == false" type="button" label="{{ 'operations.print' | translate }}" icon="pi pi-print"
                     (click)="print()" class=""></button>
             </div>
         </ng-template>

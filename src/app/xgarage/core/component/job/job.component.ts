@@ -39,6 +39,8 @@ export class JobComponent extends GenericComponent implements OnInit {
     selectedState = 'All';
     pageNo: number = 0;
     ngOnInit(): void {
+        this.resetRouterLink();
+
         if (localStorage.getItem('jobId') || localStorage.getItem('bidView')) {
             localStorage.removeItem('jobId');
             localStorage.removeItem('bidView');
@@ -158,6 +160,7 @@ export class JobComponent extends GenericComponent implements OnInit {
 
     goDetails(dto: any) {
         localStorage.setItem('jobId', dto.id);
+        this.updateRouterLink();
         this.router.navigate(['job-details']);
     }
 
@@ -195,6 +198,37 @@ export class JobComponent extends GenericComponent implements OnInit {
         } else {
             this.fillteredDto = this.masterDtos.filter(master => master.jobStatus == state);
         }
+    }
+
+    updateRouterLink() {
+        let subs = JSON.parse(localStorage.getItem('subs'));
+
+        let page = subs.find(sub => {
+            return sub.subMenu.routerLink == 'jobs';
+        });
+
+        if(page) {
+            console.log('updating router>>')
+            page.subMenu.routerLink = 'job-details';
+        }
+
+        localStorage.setItem('subs', JSON.stringify(subs));
+    }
+
+    resetRouterLink() {
+
+        let subs = JSON.parse(localStorage.getItem('subs'));
+
+        let page = subs.find(sub => {
+            return sub.subMenu.routerLink == 'job-details';
+        });
+
+        if(page) {
+            console.log('resetting router>>')
+            page.subMenu.routerLink = 'jobs';
+        }
+
+        localStorage.setItem('subs', JSON.stringify(subs));
     }
 
 }

@@ -46,6 +46,8 @@ export class OrderComponent extends GenericComponent implements OnInit {
     delivaryTotal = 0;
 
     ngOnInit(): void {
+        this.resetRouterLink();
+
         if(localStorage.getItem('order')) {
             localStorage.removeItem('order')
         }
@@ -106,7 +108,38 @@ export class OrderComponent extends GenericComponent implements OnInit {
 
     goOrderDetails(order: any) {
         localStorage.setItem('order', JSON.stringify(order));
+        this.updateRouterLink();
         this.router.navigate(['order-details'], {queryParams: {}});
+    }
+
+    updateRouterLink() {
+        let subs = JSON.parse(localStorage.getItem('subs'));
+
+        let page = subs.find(sub => {
+            return sub.subMenu.routerLink == 'orders';
+        });
+
+        if(page) {
+            console.log('updating router>')
+            page.subMenu.routerLink = 'order-details';
+        }
+
+        localStorage.setItem('subs', JSON.stringify(subs));
+    }
+
+    resetRouterLink() {
+        console.log('resetting router>')
+        let subs = JSON.parse(localStorage.getItem('subs'));
+
+        let page = subs.find(sub => {
+            return sub.subMenu.routerLink == 'order-details';
+        });
+
+        if(page) {
+            page.subMenu.routerLink = 'orders';
+        }
+
+        localStorage.setItem('subs', JSON.stringify(subs));
     }
 
 }

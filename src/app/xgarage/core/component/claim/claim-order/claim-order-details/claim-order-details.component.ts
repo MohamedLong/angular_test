@@ -48,6 +48,8 @@ export class ClaimOrderDetailsComponent extends GenericDetailsComponent implemen
             console.log(this.masterDto)
         }
 
+        //this.resetRouterLink();
+
         this.dataCols = [
             { field: 'bidId', header: 'SL.NO' },
             { field: 'partName', header: 'PRODUCT NAME' },
@@ -62,7 +64,7 @@ export class ClaimOrderDetailsComponent extends GenericDetailsComponent implemen
         ];
 
         this.initActionMenu();
-        this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['claim-orders'] }, { 'label': 'Order Details', routerLink: ['claim-order-details'] }]);
+        this.breadcrumbService.setItems([{ 'label': 'Claim Orders', routerLink: ['claim-orders'] }, { 'label': 'Order Details', routerLink: ['claim-order-details'] }]);
     }
 
     getClaimOrder(id: number) {
@@ -83,20 +85,8 @@ export class ClaimOrderDetailsComponent extends GenericDetailsComponent implemen
     }
 
     getClaimBids(bidId: number) {
-        //old implemnetaion
         this.claimService.getClaimBidByBidId(bidId).subscribe(res => {
             console.log('bid lists', res)
-            // if (res.length == 1 && res[0].part == null) {
-            //     this.claimService.getClaimParts(this.masterDto.id).subscribe(parts => {
-
-            //         this.bidList = parts;
-            //         console.log('parts', parts);
-
-            //     }, err => console.log(err))
-            // } else {
-            //     this.bidList = res;
-            // }
-
             this.bidList = res;
 
             this.bidList.forEach(order => {
@@ -114,9 +104,10 @@ export class ClaimOrderDetailsComponent extends GenericDetailsComponent implemen
     }
 
     initActionMenu() {
+        //console.log(this.acceptAuth)
         this.menuItems = [
             {
-                label: 'Send Order', icon: 'pi pi-envelope', visible: (this.masterDto.orderStatus == 'ACTIVE' && this.printAuth == true), command: () => {
+                label: 'Send Order', icon: 'pi pi-envelope', visible: this.printAuth == true, command: () => {
                     this.confirmType = 'email';
                     this.confirmActionDialog = true;
                 }
@@ -186,70 +177,19 @@ export class ClaimOrderDetailsComponent extends GenericDetailsComponent implemen
         this.confirmActionDialog = false;
     }
 
-    // getPdf() {
-    //     this.sending = true;
-    //     this.isPdf = true;
-    //     const width = this.invoice.nativeElement.clientWidth;
-    //     const height = this.invoice.nativeElement.clientHeight + 40;
+    resetRouterLink() {
+        let subs = JSON.parse(localStorage.getItem('subs'));
 
-    //     domtoimage
-    //         .toPng(this.invoice.nativeElement, {
-    //             width: width,
-    //             height: height
-    //         })
-    //         .then(result => {
-    //             let pdf;
-    //             if (width > height) {
-    //                 pdf = new jsPDF('l', 'pt', [width + 50, height + 220]);
-    //             } else {
-    //                 pdf = new jsPDF('p', 'pt', [width + 50, height + 220]);
-    //             }
+        let page = subs.find(sub => {
+            return sub.subMenu.routerLink == 'claim-orders';
+        });
 
-    //             pdf.setFontSize(48);
-    //             pdf.setTextColor('#2585fe');
-    //             pdf.text('', 25, 75);
-    //             pdf.setFontSize(24);
-    //             pdf.setTextColor('#131523');
-    //             // pdf.text('Report date: ' + moment().format('ll'), 25, 115);
-    //             pdf.addImage(result, 'PNG', 25, 185, width, height);
-    //             //pdf.save('lpo' + '.pdf');
+        if (page) {
+            console.log(page)
+            page.subMenu.routerLink = 'claim-order-details';
+        }
 
-    //             //send pdf to the server
-    //             var blob = pdf.output('blob');
-    //             var formData = new FormData();
-
-    //             let orderInfo: OrderInfo = {
-    //                 orderId: this.masterDto.id,
-    //                 jobTitle: this.masterDto.jobTitle,
-    //                 jobNumber: this.masterDto.jobNumber,
-    //                 vinNumber: this.masterDto.chassisNumber,
-    //                 supplierEmail: this.masterDto.supplierEmail,
-    //                 customerName: this.masterDto.customerName,
-    //                 netAmount: this.masterDto.totalAmount
-    //             }
-
-    //             let stringOrderInfo = JSON.stringify(orderInfo);
-
-    //             let req = { "orderInfo": stringOrderInfo, "lpo": blob };
-
-    //             for (var key in req) {
-    //                 formData.append(key, req[key]);
-    //             }
-
-    //             console.log(formData)
-    //             this.orderService.notify(formData).subscribe((res: MessageResponse) => {
-    //                 console.log(res)
-    //                 this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
-    //                 this.sending = false;
-    //                 this.isPdf = false;
-    //             }, (err: MessageResponse) => {
-    //                 this.messageService.add({ severity: 'error', summary: 'Server Error', detail: err.message });
-    //                 this.sending = false;
-    //                 this.isPdf = false;
-    //             })
-    //         })
-    //         .catch(error => {
-    //         });
-    // }
+        localStorage.setItem('subs', JSON.stringify(subs));
+    }
 
 }

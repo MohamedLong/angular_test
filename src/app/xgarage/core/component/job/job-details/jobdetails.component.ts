@@ -137,7 +137,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
     initActionMenu() {
         this.menuItems = [
             {
-                label: 'Approve', icon: 'pi pi-check', visible: (this.master.status.id == 1), command: () => {
+                label: 'Approve', icon: 'pi pi-check', visible: (this.master.status.id == 1 && this.approveAuth == true), command: () => {
                     const confirmStatus: Status = {
                         id: 6,
                         nameEn: 'Approved',
@@ -149,7 +149,7 @@ export class JobDetailsComponent extends GenericDetailsComponent implements OnIn
                 }
             },
             {
-                label: 'Cancel', icon: 'pi pi-times', visible: (this.master.status.id == 1), command: () => {
+                label: 'Cancel', icon: 'pi pi-times', visible: (this.master.status.id == 1 && this.cancelAuth == true), command: () => {
                     const cancelStatus: Status = {
                         id: 7,
                         nameEn: 'Canceled',

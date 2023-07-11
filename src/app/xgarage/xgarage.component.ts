@@ -63,11 +63,12 @@ export class XgarageComponent implements AfterViewInit, OnInit, OnDestroy {
 
         //get user subMenu permissions & statuses
         if (this.authService.isLoggedIn()) {
-            this.authService.getAuth();
+            if(!localStorage.getItem('subs')) {
+                this.authService.getAuth();
+            }
+
             this.getAllStatuses();
         }
-
-
     }
 
     ngAfterViewInit() {

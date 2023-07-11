@@ -51,7 +51,6 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
             //masterDTO
             this.masterDto = JSON.parse(localStorage.getItem('order'));
             this.getOrder(this.masterDto.id);
-            //console.log(this.masterDto)
         }
 
         this.dataCols = [
@@ -169,9 +168,10 @@ export class OrderDetailsComponent extends GenericDetailsComponent implements On
     }
 
     initActionMenu() {
+        //console.log(this.printAuth)
         this.menuItems = [
             {
-                label: 'Send Order', icon: 'pi pi-envelope', visible: (this.masterDto.orderStatus == 'ACTIVE' && this.printAuth == true), command: () => {
+                label: 'Send Order', icon: 'pi pi-envelope', visible: this.printAuth == true, command: () => {
                     this.confirmType = 'email';
                     this.confirmActionDialog = true;
                 }

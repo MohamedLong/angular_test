@@ -25,9 +25,12 @@ export class ClaimOrderComponent extends GenericComponent implements OnInit {
     role: number = JSON.parse(this.authService.getStoredUser()).roles[0].id;
 
     ngOnInit(): void {
+        this.resetRouterLink();
+
         if(localStorage.getItem('claim-order')) {
             localStorage.removeItem('claim-order')
         }
+
         this.getClaimOrders();
         this.breadcrumbService.setItems([{ 'label': 'Orders', routerLink: ['orders'] }]);
     }
@@ -48,6 +51,38 @@ export class ClaimOrderComponent extends GenericComponent implements OnInit {
 
     goOrderDetails(order: any) {
         localStorage.setItem('claim-order', JSON.stringify(order));
+        this.updateRouterLink();
         this.router.navigate(['claim-order-details'], {queryParams: {}});
+
+    }
+
+    updateRouterLink() {
+        let subs = JSON.parse(localStorage.getItem('subs'));
+
+        let page = subs.find(sub => {
+            return sub.subMenu.routerLink == 'claim-orders';
+        });
+
+        if(page) {
+            console.log('updating router>')
+            page.subMenu.routerLink = 'claim-order-details';
+        }
+
+        localStorage.setItem('subs', JSON.stringify(subs));
+    }
+
+    resetRouterLink() {
+        console.log('resetting router>')
+        let subs = JSON.parse(localStorage.getItem('subs'));
+
+        let page = subs.find(sub => {
+            return sub.subMenu.routerLink == 'claim-order-details';
+        });
+
+        if(page) {
+            page.subMenu.routerLink = 'claim-orders';
+        }
+
+        localStorage.setItem('subs', JSON.stringify(subs));
     }
 }

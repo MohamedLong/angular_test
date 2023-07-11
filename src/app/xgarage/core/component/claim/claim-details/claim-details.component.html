@@ -5,7 +5,7 @@
         <ng-template pTemplate="left">
             <app-details-card [master]="master" type="claim"></app-details-card>
         </ng-template>
-        <ng-template pTemplate="right">
+        <ng-template pTemplate="right" *ngIf="editAuth==true">
             <div class="field col">
                 <p-confirmPopup></p-confirmPopup>
                 <p-menu #menu [popup]="true" [model]="menuItems" [style]="{'width':'200px'}"></p-menu>
@@ -80,7 +80,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="viewAuth == true"
+                    <p-tabPanel  *ngIf="viewAuth !== true"
                         header="{{ 'job.tableColumn.receivedBids' | translate }}">
                         <div class="py-5 px-3">
                             <button [disabled]="bidDto.length == 0" (click)="onCompareBids()" pButton pRipple
@@ -131,7 +131,7 @@
                             </ng-template>
                         </p-table>
                     </p-tabPanel>
-                    <p-tabPanel *ngIf="newAuth == true"
+                    <p-tabPanel *ngIf="viewAuth == true"
                         header="{{ 'job.tableColumn.addBids' | translate }}">
                         <app-new-bid type="new claimBid" *ngIf="details.length > 0" [requests]="details"></app-new-bid>
                         <div class="py-5 text-center" *ngIf="!isFetching && details.length == 0">
